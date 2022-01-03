@@ -1,12 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import App from './components/foo';
 import "./styles.scss";
 
-const Index = () => {
-    return <div>Hello React!</div>;
-};
-
 ReactDOM.render(
-    <Index />,
+    <App />,
     document.getElementById('app')
 );
