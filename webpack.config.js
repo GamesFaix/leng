@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = [
+    // Electron main process
     {
         mode: 'development',
         entry: './src/electron.ts',
@@ -17,16 +18,32 @@ module.exports = [
           filename: 'electron.js'
         }
     },
+    // React renderer process
     {
         mode: 'development',
         entry: './src/react.tsx',
         target: 'electron-renderer',
         devtool: 'source-map',
-        module: { rules: [{
-          test: /\.ts(x?)$/,
-          include: /src/,
-          use: [{ loader: 'ts-loader' }]
-        }] },
+        module: {
+          rules: [
+            {
+              test: /\.ts(x?)$/,
+              include: /src/,
+              use: [{ loader: 'ts-loader' }]
+            },
+            {
+              test: /\.s[ac]ss$/i,
+              use: [
+                // Creates `style` nodes from JS strings
+                "style-loader",
+                // Translates CSS into CommonJS
+                "css-loader",
+                // Compiles Sass to CSS
+                "sass-loader"
+              ]
+            }
+          ]
+        },
         output: {
           path: __dirname + '/dist',
           filename: 'react.js'
