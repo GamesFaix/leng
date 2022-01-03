@@ -10,7 +10,7 @@ const CardResultList = (props: Props) =>
 {
     return (
         <div>
-            {props.Cards.map(c => <CardResult Card={c}/>)}
+            {props.Cards.map((c, i) => <CardResult Card={c} key={i.toString()} />)}
         </div>
     );
 }
