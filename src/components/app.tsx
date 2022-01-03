@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Card } from '../model';
 import CardResultList from './card-results-list';
 import * as Scryfall from 'scryfall-api';
+import { DebounceInput } from 'react-debounce-input';
 
 async function queryCards(query: string) : Promise<Array<Card>> {
     const pageLength = 175; // Cannot be changed
@@ -15,11 +16,11 @@ const App = () =>
 {
     let [cards, setCards] = React.useState([]);
 
-    const onQueryChanged : (e: React.FormEvent<HTMLInputElement>) => Promise<void> = e => {
-        const query = e.currentTarget.value.trim();
-        if (query) {
-            return queryCards(query)
-                .then(cards => setCards(cards))
+    const onQueryChanged : (e: any) => Promise<void> = async e => {
+        const query = e.target.value?.trim() || "";
+        if (query !== "") {
+            const cards = await queryCards(query);
+            return setCards(cards);
         }
     }
 
@@ -27,7 +28,11 @@ const App = () =>
         <div>
             <div>
                 <span>Query: </span>
-                <input type="text" onChange={onQueryChanged}/>
+                <DebounceInput
+                    onChange={onQueryChanged}
+                    minLength={3}
+                    debounceTimeout={300}
+                />
             </div>
             <CardResultList Cards={cards}/>
         </div>
