@@ -10,6 +10,7 @@ const CardResultList = (props: Props) =>
 {
     return (
         <div>
+            <h2>Results: </h2>
             {props.Cards.map((c, i) => <CardResult Card={c} key={i.toString()} />)}
         </div>
     );

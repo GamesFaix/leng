@@ -2,34 +2,33 @@ import * as React from 'react';
 import { Card } from '../model';
 import CardResultList from './card-results-list';
 import * as Scryfall from 'scryfall-api';
-import * as Axios from 'axios';
 
-type Props = {
+async function queryCards(query: string) : Promise<Array<Card>> {
+    const pageLength = 175; // Cannot be changed
+
+    const cards = await Scryfall.Cards.search(query).all();
+
+    return cards.map(c => { return { Name: c.name }; });
 }
 
-const App = (props: Props) =>
+const App = () =>
 {
-    const defaultCards: Card[] = [
-        { Name: "Black Lotus" },
-        { Name: "Lightning Bolt" }
-    ];
+    let [cards, setCards] = React.useState([]);
 
-    let [cards, setCards] = React.useState(defaultCards);
-
-    React.useEffect(() => {
-        const pageLength = 175; // Cannot be changed
-
-        const query = "type:Goblin";
-
-        Scryfall.Cards.search(query).all()
-            .then(cards => {
-                const models : Card[] = cards.map(c => { return { Name: c.name }; });
-                setCards(models);
-            });
-    });
+    const onQueryChanged : (e: React.FormEvent<HTMLInputElement>) => Promise<void> = e => {
+        const query = e.currentTarget.value.trim();
+        if (query) {
+            return queryCards(query)
+                .then(cards => setCards(cards))
+        }
+    }
 
     return (
         <div>
+            <div>
+                <span>Query: </span>
+                <input type="text" onChange={onQueryChanged}/>
+            </div>
             <CardResultList Cards={cards}/>
         </div>
     );
