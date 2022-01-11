@@ -4,3 +4,28 @@ body {
     background-color: $bodyColor;
     font-family: Arial, Helvetica, sans-serif;
 }
+
+
+.app {
+
+}
+
+.card-search {
+    width: 300px;
+}
+
+.card-search-input {
+    width: 100%;
+}
+
+.card-search-result-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: scroll;
+}
+
+.card-suggestion {
+    text-align: left;
+}
