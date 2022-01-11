@@ -5,7 +5,9 @@ const App = () =>
 {
     return (
         <div className='app'>
-            <CardSearch />
+            <CardSearch
+                onSelection={card => console.log(`selected ${card.name}`)}
+            />
         </div>
     );
 }

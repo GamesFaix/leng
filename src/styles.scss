@@ -28,4 +28,12 @@ body {
 
 .card-suggestion {
     text-align: left;
+
+    color: darkslategray;
+    background-color: gainsboro;
+
+    &.active {
+        color: gainsboro;
+        background-color: darkslategray;
+    }
 }
