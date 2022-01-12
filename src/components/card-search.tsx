@@ -4,18 +4,23 @@ import { DebounceInput } from "react-debounce-input";
 import CardSuggestion from "./card-suggestion";
 import { CardName } from "../logic/model";
 import { orderBy } from "lodash";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
+import { CurrentSelectionActionTypes } from "../store/currentSelection";
 
 type Props = {
-    onSelection: (card: CardName) => void
 };
 
 const CardSearch = (props: Props) => {
+    const dispatch = useDispatch();
 
     const cardNames : CardName[] = useSelector(
         (state: RootState) => state.encyclopedia.cardNames
     );
+
+    const [suggestions, setSuggestions] = React.useState([]);
+    const [query, setQuery] = React.useState('');
+    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(null);
 
     function queryCardsLocal(query: string) : Array<CardName> {
         const q = query.toLowerCase();
@@ -24,18 +29,14 @@ const CardSearch = (props: Props) => {
         return sorted;
     }
 
-    const [cards, setCards] = React.useState([]);
-    const [activeIndex, setActiveIndex] = React.useState(null);
-    const [query, setQuery] = React.useState('');
-
-    const updateCards = (cards) => {
+    const updateSuggestions = (cards) => {
         console.log(cards);
-        setCards(cards);
+        setSuggestions(cards);
         if (cards.length === 0) {
-            setActiveIndex(null);
-
-        } else {
-            setActiveIndex(0);
+            setActiveSuggestionIndex(null);
+        }
+        else {
+            setActiveSuggestionIndex(0);
         }
     }
 
@@ -43,29 +44,36 @@ const CardSearch = (props: Props) => {
         const q = query?.trim() || "";
         setQuery(q);
         const cards = q === "" ? [] : queryCardsLocal(q);
-        return updateCards(cards);
+        return updateSuggestions(cards);
     }
 
-    const onCardClicked : (index: number, card: Card) => Promise<void> = async (index, card) => {
+    const onSuggestionClicked : (card: Card) => Promise<void> = async card => {
         console.log(`You clicked ${card.name}`);
-        setActiveIndex(index);
+
+        dispatch({
+            type: CurrentSelectionActionTypes.SelectCardName,
+            card: card
+        });
     }
 
     const onKeyDown = (e: React.KeyboardEvent) => {
         switch(e.code) {
             case 'ArrowUp':
-                if (cards.length > 0 && activeIndex > 0) {
-                    setActiveIndex(activeIndex - 1);
+                if (suggestions.length > 0 && activeSuggestionIndex > 0) {
+                    setActiveSuggestionIndex(activeSuggestionIndex - 1);
                 }
                 break;
             case 'ArrowDown':
-                if (cards.length > 0 && activeIndex < cards.length - 1){
-                    setActiveIndex(activeIndex + 1);
+                if (suggestions.length > 0 && activeSuggestionIndex < suggestions.length - 1){
+                    setActiveSuggestionIndex(activeSuggestionIndex + 1);
                 }
                 break;
             case 'Enter':
-                if (activeIndex !== null) {
-                    props.onSelection(cards[activeIndex]);
+                if (activeSuggestionIndex >= 0) {
+                    dispatch({
+                        type: CurrentSelectionActionTypes.SelectCardName,
+                        card: suggestions[activeSuggestionIndex]
+                    });
                     updateQuery('');
                 }
                 break;
@@ -85,14 +93,14 @@ const CardSearch = (props: Props) => {
                 value={query}
             />
             <div className="card-search-result-list">
-                {cards.map((c, i) => { return (
+                {suggestions.map((c, i) => (
                     <CardSuggestion
                         key={i.toString()}
                         card={c}
-                        onClick={c => onCardClicked(i, c)}
-                        isActive={activeIndex === i}
+                        onClick={onSuggestionClicked}
+                        isActive={activeSuggestionIndex === i}
                     />
-                );})}
+                ))}
             </div>
         </div>
     );

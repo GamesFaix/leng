@@ -28,9 +28,7 @@ const App = () =>
 
     return (
         <div className='app'>
-            <CardSearch
-                onSelection={card => console.log(`selected ${card.name}`)}
-            />
+            <CardSearch />
         </div>
     );
 }
