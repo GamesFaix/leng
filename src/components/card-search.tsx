@@ -4,17 +4,22 @@ import { DebounceInput } from "react-debounce-input";
 import CardSuggestion from "./card-suggestion";
 import { CardName } from "../logic/model";
 import { orderBy } from "lodash";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 
 type Props = {
-    cards: CardName[],
     onSelection: (card: CardName) => void
 };
 
 const CardSearch = (props: Props) => {
 
+    const cardNames : CardName[] = useSelector(
+        (state: RootState) => state.encyclopedia.cardNames
+    );
+
     function queryCardsLocal(query: string) : Array<CardName> {
         const q = query.toLowerCase();
-        const matches = props.cards.filter(c => c.normalizedName.includes(q));
+        const matches = cardNames.filter(c => c.normalizedName.includes(q));
         const sorted = orderBy(matches, x => x.normalizedName);
         return sorted;
     }

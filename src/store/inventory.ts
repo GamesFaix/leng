@@ -1,9 +1,9 @@
-type InventoryCard = {
+export type InventoryCard = {
     multiverseId: string,
     count: number
 }
 
-type InventoryState = {
+export type InventoryState = {
     cards: InventoryCard[]
 }
 
@@ -11,28 +11,28 @@ const inventoryDefaultState : InventoryState = {
     cards: []
 }
 
-enum InventoryActionTypes {
+export enum InventoryActionTypes {
     AddCard = 'ADD_CARD',
     ChangeCount = 'CHANGE_COUNT',
     RemoveCard = 'REMOVE_CARD'
 }
 
-type InventoryAddCardAction = {
+export type InventoryAddCardAction = {
     type: InventoryActionTypes.AddCard,
     card: InventoryCard
 }
 
-type InventoryChangeCountAction = {
+export type InventoryChangeCountAction = {
     type: InventoryActionTypes.ChangeCount,
     card: InventoryCard
 }
 
-type InventoryRemoveCardAction = {
+export type InventoryRemoveCardAction = {
     type: InventoryActionTypes.RemoveCard,
     multiverseId: string
 }
 
-type InventoryAction =
+export type InventoryAction =
     InventoryAddCardAction |
     InventoryChangeCountAction |
     InventoryRemoveCardAction

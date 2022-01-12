@@ -1,29 +1,34 @@
 import * as React from 'react';
-import { Card } from 'scryfall-api';
+import { useDispatch } from 'react-redux';
 import { loadCards } from '../logic/bulk-data-controller';
-import { CardName, toCardNames } from '../logic/model';
 import CardSearch from './card-search';
+import { EncyclopediaAction, EncyclopediaActionTypes } from '../store/encyclopedia';
+
+async function loadEncyclopedia(dispatch: (action: EncyclopediaAction) => void) {
+    dispatch({
+        type: EncyclopediaActionTypes.LoadStart
+    });
+
+    const cards = await loadCards();
+
+    dispatch({
+        type: EncyclopediaActionTypes.LoadSuccess,
+        cards: cards
+    });
+}
+
 
 const App = () =>
 {
-    const [cards, setCards] = React.useState<Card[]>([]);
-    const [cardNames, setCardNames] = React.useState<CardName[]>([]);
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
-        loadCards()
-            .then(() => {
-                console.log('setCards', cards);
-                setCards(cards);
-                const cardNames = toCardNames(cards);
-                console.log('setCardNames', cardNames);
-                setCardNames(cardNames);
-            });
+        loadEncyclopedia(dispatch);
     });
 
     return (
         <div className='app'>
             <CardSearch
-                cards={cardNames}
                 onSelection={card => console.log(`selected ${card.name}`)}
             />
         </div>

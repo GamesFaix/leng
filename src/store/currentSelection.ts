@@ -1,6 +1,6 @@
 import { CardName } from '../logic/model';
 
-type CurrentSelectionState = {
+export type CurrentSelectionState = {
     cardName: CardName | null,
     set: string | null,
     count: number | null,
@@ -14,7 +14,7 @@ const currentSelectionDefaultState : CurrentSelectionState = {
     multiverseId: null
 };
 
-enum CurrentSelectionActionTypes {
+export enum CurrentSelectionActionTypes {
     SelectCardName = "SELECT_CARD_NAME",
     SelectSet = "SELECT_SET",
     SelectVersion = "SELECT_VERSION",
@@ -22,31 +22,31 @@ enum CurrentSelectionActionTypes {
     Clear = "CLEAR_SELECTION",
 }
 
-type SelectCardNameAction = {
+export type SelectCardNameAction = {
     type: CurrentSelectionActionTypes.SelectCardName,
     cardName: CardName
 }
 
-type SelectSetAction = {
+export type SelectSetAction = {
     type: CurrentSelectionActionTypes.SelectSet,
     set: string
 }
 
-type SelectVersionAction = {
+export type SelectVersionAction = {
     type: CurrentSelectionActionTypes.SelectVersion,
     multiverseId: string
 }
 
-type SelectCountAction = {
+export type SelectCountAction = {
     type: CurrentSelectionActionTypes.SelectCount,
     count: number
 }
 
-type ClearSelectionAction = {
+export type ClearSelectionAction = {
     type: CurrentSelectionActionTypes.Clear
 }
 
-type CurrentSelectionActions =
+export type CurrentSelectionActions =
     SelectCardNameAction |
     SelectSetAction |
     SelectVersionAction |
@@ -81,5 +81,8 @@ export function currentSelectionReducer(state: CurrentSelectionState = currentSe
 
         case CurrentSelectionActionTypes.Clear:
             return currentSelectionDefaultState;
+
+        default:
+            return state;
     }
 }

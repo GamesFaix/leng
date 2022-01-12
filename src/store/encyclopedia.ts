@@ -1,30 +1,33 @@
 import { Card } from 'scryfall-api';
+import { CardName, toCardNames } from '../logic/model';
 
-type EncyclopediaState = {
+export type EncyclopediaState = {
     isLoading: boolean,
-    cards: Card[]
+    cards: Card[],
+    cardNames: CardName[]
 }
 
 const encyclopediaDefaultState : EncyclopediaState = {
     isLoading: false,
-    cards: []
+    cards: [],
+    cardNames: []
 }
 
-enum EncyclopediaActionTypes {
+export enum EncyclopediaActionTypes {
     LoadStart = 'LOAD_ENCYCLOPEDIA_START',
     LoadSuccess = 'LOAD_ENCYCLOPEDIA_SUCCESS'
 }
 
-type LoadEncyclopediaStartAction = {
+export type LoadEncyclopediaStartAction = {
     type: EncyclopediaActionTypes.LoadStart
 }
 
-type LoadEncyclopediaSuccessAction = {
+export type LoadEncyclopediaSuccessAction = {
     type: EncyclopediaActionTypes.LoadSuccess
     cards: Card[]
 }
 
-type EncyclopediaAction =
+export type EncyclopediaAction =
     LoadEncyclopediaStartAction |
     LoadEncyclopediaSuccessAction
 
@@ -39,7 +42,8 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
             return {
                 ...state,
                 isLoading: false,
-                cards: action.cards
+                cards: action.cards,
+                cardNames: toCardNames(action.cards)
             };
         default:
             return state;
