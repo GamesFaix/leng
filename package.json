@@ -35,7 +35,9 @@
     "webpack-cli": "^4.9.1"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.178",
     "fs": "0.0.1-security",
+    "lodash": "^4.17.21",
     "react-debounce-input": "^3.2.5",
     "scryfall-api": "^2.2.2"
   }

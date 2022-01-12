@@ -2,24 +2,28 @@ import * as React from "react";
 import { Card } from 'scryfall-api';
 import { DebounceInput } from "react-debounce-input";
 import CardSuggestion from "./card-suggestion";
+import { CardName } from "../logic/model";
+import { orderBy } from "lodash";
 
 type Props = {
-    cards: Card[],
-    onSelection: (card: Card) => void
+    cards: CardName[],
+    onSelection: (card: CardName) => void
 };
 
 const CardSearch = (props: Props) => {
 
-    function queryCardsLocal(query: string) : Array<Card> {
+    function queryCardsLocal(query: string) : Array<CardName> {
         const q = query.toLowerCase();
-        const matches = props.cards.filter(c => c.name.toLowerCase().includes(q));
-        return matches;
+        const matches = props.cards.filter(c => c.normalizedName.includes(q));
+        const sorted = orderBy(matches, x => x.normalizedName);
+        return sorted;
     }
 
-    let [cards, setCards] = React.useState([]);
+    const [cards, setCards] = React.useState([]);
     const [activeIndex, setActiveIndex] = React.useState(null);
 
     const updateCards = (cards) => {
+        console.log(cards);
         setCards(cards);
         if (cards.length === 0) {
             setActiveIndex(null);
