@@ -1,18 +1,20 @@
 import * as React from "react";
-import * as Scryfall from 'scryfall-api';
+import { Card } from 'scryfall-api';
 import { DebounceInput } from "react-debounce-input";
 import CardSuggestion from "./card-suggestion";
 
 type Props = {
-    onSelection: (card: Scryfall.Card) => void
+    cards: Card[],
+    onSelection: (card: Card) => void
 };
 
-async function queryCards(query: string) : Promise<Array<Scryfall.Card>> {
-    // Page size is fixed at 175, at least in the client library
-    return await Scryfall.Cards.search(query).all();
-}
-
 const CardSearch = (props: Props) => {
+
+    function queryCardsLocal(query: string) : Array<Card> {
+        const q = query.toLowerCase();
+        const matches = props.cards.filter(c => c.name.toLowerCase().includes(q));
+        return matches;
+    }
 
     let [cards, setCards] = React.useState([]);
     const [activeIndex, setActiveIndex] = React.useState(null);
@@ -27,15 +29,15 @@ const CardSearch = (props: Props) => {
         }
     }
 
-    const onQueryChanged : (e: any) => Promise<void> = async e => {
+    const onQueryChanged : (e: any) => void = e => {
         const query = e.target.value?.trim() || "";
         if (query !== "") {
-            const cards = await queryCards(query);
+            const cards = queryCardsLocal(query);
             return updateCards(cards);
         }
     }
 
-    const onCardClicked : (index: number, card: Scryfall.Card) => Promise<void> = async (index, card) => {
+    const onCardClicked : (index: number, card: Card) => Promise<void> = async (index, card) => {
         console.log(`You clicked ${card.name}`);
         setActiveIndex(index);
     }

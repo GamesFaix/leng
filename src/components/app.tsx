@@ -4,10 +4,19 @@ import CardSearch from './card-search';
 
 const App = () =>
 {
+    const [cards, setCards] = React.useState([]);
+
     return (
         <div className='app'>
-            <BulkDataFetcher/>
+            <BulkDataFetcher
+                cards={cards}
+                onLoad={cards => {
+                    console.log('setCards', cards);
+                    setCards(cards)
+                }}
+            />
             <CardSearch
+                cards={cards}
                 onSelection={card => console.log(`selected ${card.name}`)}
             />
         </div>
