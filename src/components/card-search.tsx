@@ -21,6 +21,7 @@ const CardSearch = (props: Props) => {
 
     const [cards, setCards] = React.useState([]);
     const [activeIndex, setActiveIndex] = React.useState(null);
+    const [query, setQuery] = React.useState('');
 
     const updateCards = (cards) => {
         console.log(cards);
@@ -33,12 +34,11 @@ const CardSearch = (props: Props) => {
         }
     }
 
-    const onQueryChanged : (e: any) => void = e => {
-        const query = e.target.value?.trim() || "";
-        if (query !== "") {
-            const cards = queryCardsLocal(query);
-            return updateCards(cards);
-        }
+    const updateQuery = (query) => {
+        const q = query?.trim() || "";
+        setQuery(q);
+        const cards = q === "" ? [] : queryCardsLocal(q);
+        return updateCards(cards);
     }
 
     const onCardClicked : (index: number, card: Card) => Promise<void> = async (index, card) => {
@@ -61,6 +61,7 @@ const CardSearch = (props: Props) => {
             case 'Enter':
                 if (activeIndex !== null) {
                     props.onSelection(cards[activeIndex]);
+                    updateQuery('');
                 }
                 break;
             default:
@@ -72,10 +73,11 @@ const CardSearch = (props: Props) => {
         <div className="card-search">
             <DebounceInput
                 className="card-search-input"
-                onChange={onQueryChanged}
+                onChange={e => updateQuery(e.target.value)}
                 minLength={3}
                 debounceTimeout={300}
                 onKeyDown={onKeyDown}
+                value={query}
             />
             <div className="card-search-result-list">
                 {cards.map((c, i) => { return (
