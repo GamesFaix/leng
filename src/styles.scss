@@ -10,15 +10,15 @@ body {
 
 }
 
-.card-search {
+.search {
     width: 300px;
 }
 
-.card-search-input {
+.search-input {
     width: 100%;
 }
 
-.card-search-result-list {
+.search-result-list {
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -26,7 +26,7 @@ body {
     overflow-y: scroll;
 }
 
-.card-suggestion {
+.suggestion {
     text-align: left;
 
     color: darkslategray;
