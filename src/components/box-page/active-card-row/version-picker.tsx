@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { CardName } from '../logic/model';
-import { RootState } from '../store';
+import { CardName } from '../../../logic/model';
+import { RootState } from '../../../store';
 import { Card } from 'scryfall-api';
 import SuggestionList from './suggestion-list';
-import { currentSelectionActions } from '../store/currentSelection';
-import { FrameEffect } from '../logic/bulk-data-controller';
+import { currentSelectionActions } from '../../../store/currentSelection';
+import { FrameEffect } from '../../../logic/bulk-data-controller';
 
 type Props = {
     cardName: CardName,

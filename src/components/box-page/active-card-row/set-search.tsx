@@ -1,11 +1,11 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { orderBy, uniqBy } from "lodash";
-import { currentSelectionActions } from "../store/currentSelection";
-import { RootState } from "../store";
+import { currentSelectionActions } from "../../../store/currentSelection";
+import { RootState } from "../../../store";
 import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
-import { CardName } from "../logic/model";
+import { CardName } from "../../../logic/model";
 
 type Props = {
 };

@@ -1,9 +1,9 @@
 import * as React from "react";
-import { CardName, normalizeName } from "../logic/model";
+import { CardName, normalizeName } from "../../../logic/model";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../store";
+import { RootState } from "../../../store";
 import { orderBy } from "lodash";
-import { currentSelectionActions } from "../store/currentSelection";
+import { currentSelectionActions } from "../../../store/currentSelection";
 import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
 
