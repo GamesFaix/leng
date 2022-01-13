@@ -30,6 +30,7 @@ const BoxPage = () => {
                 }
             </div>
             <br/>
+            <br/>
             <Link to="/">
                 <button title="Home">
                     <FontAwesomeIcon icon={icons.home} />

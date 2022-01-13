@@ -26,7 +26,7 @@ const SettingsPage = () => {
         <div>
             <h2>Settings</h2>
             <form>
-                <label>
+                <label className="form-label">
                     Data path
                 </label>
                 <input
@@ -34,6 +34,7 @@ const SettingsPage = () => {
                     value={newSettings?.dataPath ?? ''}
                     onChange={e => updateDataPath(e.target.value)}
                 />
+                <br/>
                 <div>
                     <button
                         type="button"
@@ -50,6 +51,7 @@ const SettingsPage = () => {
                     </button>
                 </div>
             </form>
+            <br/>
             <Link to ="/">
                 <button title="Home">
                     <FontAwesomeIcon icon={icons.home} />

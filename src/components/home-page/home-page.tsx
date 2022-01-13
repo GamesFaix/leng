@@ -14,6 +14,7 @@ const HomePage = () => {
                 </button>
             </Link>
             <br/>
+            <br/>
             <Link to="/settings">
                 <button title="Settings">
                     <FontAwesomeIcon icon={icons.settings} />
