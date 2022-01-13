@@ -1,5 +1,7 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { Link, useParams } from 'react-router-dom';
+import { icons } from '../../fontawesome';
 
 const BoxPage = () => {
     const { id } = useParams()
@@ -9,7 +11,9 @@ const BoxPage = () => {
             <h2>Box {id}</h2>
             <br/>
             <Link to="/">
-                Home
+                <button title="Home">
+                    <FontAwesomeIcon icon={icons.home} />
+                </button>
             </Link>
         </div>
     );

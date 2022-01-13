@@ -1,6 +1,8 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { icons } from '../../fontawesome';
 import { RootState } from '../../store';
 import { SettingsActionTypes } from '../../store/settings';
 
@@ -55,7 +57,9 @@ const SettingsPage = () => {
                 </div>
             </form>
             <Link to ="/">
-                Home
+                <button title="Home">
+                    <FontAwesomeIcon icon={icons.home} />
+                </button>
             </Link>
         </div>
     )
