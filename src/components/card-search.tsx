@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CardName } from "../logic/model";
+import { CardName, normalizeName } from "../logic/model";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { orderBy } from "lodash";
@@ -40,7 +40,8 @@ const CardSearch = (props: Props) => {
     }
 
     const updateQuery = (query: string) => {
-        const q = query?.trim() || "";
+        let q = query?.trim() || "";
+        q = normalizeName(q);
         setQuery(q);
         dispatch(currentSelectionActions.clear());
         const suggestions = q === ""

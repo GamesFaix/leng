@@ -15,7 +15,7 @@ export type CardName = {
     cards: Card[]
 }
 
-function normalizeName(name: string) : string {
+export function normalizeName(name: string) : string {
     return name
         .toLowerCase()
         .replace(/[^\w\s]|_/g, "")
