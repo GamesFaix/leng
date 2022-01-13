@@ -4,14 +4,16 @@ export type CurrentSelectionState = {
     cardName: CardName | null,
     setAbbrev: string | null,
     count: number | null,
-    multiverseId: string | null
+    scryfallId: string | null,
+    isFoil: boolean | null
 }
 
 const currentSelectionDefaultState : CurrentSelectionState = {
     cardName: null,
     setAbbrev: null,
     count: null,
-    multiverseId: null
+    scryfallId: null,
+    isFoil: null
 };
 
 // TODO: Need separate selection for isFoil flag
@@ -36,7 +38,8 @@ type SelectSetAbbrevAction = {
 
 type SelectVersionAction = {
     type: CurrentSelectionActionTypes.SelectVersion,
-    multiverseId: string
+    scryfallId: string
+    isFoil: boolean
 }
 
 type SelectCountAction = {
@@ -68,10 +71,11 @@ export const currentSelectionActions = {
             setAbbrev
         };
     },
-    selectVersion(multiverseId: string) : SelectVersionAction {
+    selectVersion(scryfallId: string, isFoil: boolean) : SelectVersionAction {
         return {
             type: CurrentSelectionActionTypes.SelectVersion,
-            multiverseId
+            scryfallId: scryfallId,
+            isFoil: isFoil
         };
     },
     selectCount(count: number): SelectCountAction {
@@ -104,7 +108,8 @@ export function currentSelectionReducer(state: CurrentSelectionState = currentSe
         case CurrentSelectionActionTypes.SelectVersion:
             return {
                 ...state,
-                multiverseId: action.multiverseId
+                scryfallId: action.scryfallId,
+                isFoil: action.isFoil
             };
 
         case CurrentSelectionActionTypes.SelectCount:

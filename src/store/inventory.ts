@@ -1,6 +1,13 @@
 export type InventoryCard = {
-    multiverseId: string,
+    scryfallId: string,
+    isFoil: boolean,
     count: number
+}
+
+function areSameCard(a: InventoryCard, b: InventoryCard) : boolean {
+    return
+        a.scryfallId === b.scryfallId &&
+        a.isFoil === b.isFoil;
 }
 
 export type InventoryState = {
@@ -29,7 +36,7 @@ export type InventoryChangeCountAction = {
 
 export type InventoryRemoveCardAction = {
     type: InventoryActionTypes.RemoveCard,
-    multiverseId: string
+    card: InventoryCard
 }
 
 export type InventoryAction =
@@ -43,7 +50,7 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
             return {
                 ...state,
                 cards: state.cards.map(c => {
-                    if (c.multiverseId === action.card.multiverseId) {
+                    if (areSameCard(c, action.card)) {
                         return { ...c, count: c.count + action.card.count };
                     } else {
                         return c;
@@ -55,7 +62,7 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
             return {
                 ...state,
                 cards: state.cards.map(c => {
-                    if (c.multiverseId === action.card.multiverseId) {
+                    if (areSameCard(c, action.card)) {
                         return { ...c, count: action.card.count };
                     } else {
                         return c;
@@ -66,7 +73,7 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
         case InventoryActionTypes.RemoveCard:
             return {
                 ...state,
-                cards: state.cards.filter(c => c.multiverseId !== action.multiverseId)
+                cards: state.cards.filter(c => !areSameCard(c, action.card))
             };
 
         default:

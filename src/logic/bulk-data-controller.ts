@@ -80,3 +80,21 @@ export async function loadCards() : Promise<Card[]> {
         return parseData(data);
     }
 }
+
+export type FrameEffect =
+    | 'legendary'
+    | 'miracle'
+    | 'nyxtouched'
+    | 'draft'
+    | 'devoid'
+    | 'tombstone'
+    | 'colorshifted'
+    | 'inverted'
+    | 'sunmoondfc'
+    | 'compasslanddfc'
+    | 'originpwdfc'
+    | 'mooneldrazidfc'
+    | 'moonreversemoondfc'
+    | 'showcase'
+    | 'extendedart'
+

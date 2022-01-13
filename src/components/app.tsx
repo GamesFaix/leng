@@ -6,6 +6,7 @@ import { EncyclopediaAction, EncyclopediaActionTypes, EncyclopediaState } from '
 import SetSearch from './set-search';
 import { RootState } from '../store';
 import { AsyncRequestStatus } from '../logic/model';
+import VersionPicker from './version-picker';
 
 async function loadEncyclopedia(dispatch: (action: EncyclopediaAction) => void) {
     dispatch({
@@ -52,6 +53,7 @@ const App = () =>
                 ? <>
                     <CardSearch />
                     <SetSearch />
+                    <VersionPicker />
                 </>
                 : <div>Loading card data...</div>
             }
