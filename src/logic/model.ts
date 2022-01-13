@@ -1,6 +1,13 @@
 import { Card } from 'scryfall-api';
 import { groupBy } from 'lodash';
 
+export enum AsyncRequestStatus {
+    NotStarted = 'NOT_STARTED',
+    Started = 'STARTED',
+    Success = 'SUCCESS',
+    Failure = 'FAILURE'
+}
+
 export type CardName = {
     name: string,
     normalizedName: string,

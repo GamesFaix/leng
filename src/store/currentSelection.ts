@@ -2,56 +2,90 @@ import { CardName } from '../logic/model';
 
 export type CurrentSelectionState = {
     cardName: CardName | null,
-    set: string | null,
+    setAbbrev: string | null,
     count: number | null,
     multiverseId: string | null
 }
 
 const currentSelectionDefaultState : CurrentSelectionState = {
     cardName: null,
-    set: null,
+    setAbbrev: null,
     count: null,
     multiverseId: null
 };
 
-export enum CurrentSelectionActionTypes {
+// TODO: Need separate selection for isFoil flag
+
+enum CurrentSelectionActionTypes {
     SelectCardName = "SELECT_CARD_NAME",
-    SelectSet = "SELECT_SET",
+    SelectSetAbbrev = "SELECT_SET_ABBREV",
     SelectVersion = "SELECT_VERSION",
     SelectCount = "SELECT_COUNT",
     Clear = "CLEAR_SELECTION",
 }
 
-export type SelectCardNameAction = {
+type SelectCardNameAction = {
     type: CurrentSelectionActionTypes.SelectCardName,
     cardName: CardName
 }
 
-export type SelectSetAction = {
-    type: CurrentSelectionActionTypes.SelectSet,
-    set: string
+type SelectSetAbbrevAction = {
+    type: CurrentSelectionActionTypes.SelectSetAbbrev,
+    setAbbrev: string
 }
 
-export type SelectVersionAction = {
+type SelectVersionAction = {
     type: CurrentSelectionActionTypes.SelectVersion,
     multiverseId: string
 }
 
-export type SelectCountAction = {
+type SelectCountAction = {
     type: CurrentSelectionActionTypes.SelectCount,
     count: number
 }
 
-export type ClearSelectionAction = {
+type ClearSelectionAction = {
     type: CurrentSelectionActionTypes.Clear
 }
 
 export type CurrentSelectionActions =
     SelectCardNameAction |
-    SelectSetAction |
+    SelectSetAbbrevAction |
     SelectVersionAction |
     SelectCountAction |
     ClearSelectionAction
+
+export const currentSelectionActions = {
+    selectCardName(cardName: CardName)  : SelectCardNameAction {
+        return {
+            type: CurrentSelectionActionTypes.SelectCardName,
+            cardName
+        };
+    },
+    selectSetAbbrev(setAbbrev: string) : SelectSetAbbrevAction {
+        return {
+            type: CurrentSelectionActionTypes.SelectSetAbbrev,
+            setAbbrev
+        };
+    },
+    selectVersion(multiverseId: string) : SelectVersionAction {
+        return {
+            type: CurrentSelectionActionTypes.SelectVersion,
+            multiverseId
+        };
+    },
+    selectCount(count: number): SelectCountAction {
+        return {
+            type: CurrentSelectionActionTypes.SelectCount,
+            count
+        };
+    },
+    clear() : ClearSelectionAction {
+        return {
+            type: CurrentSelectionActionTypes.Clear
+        };
+    }
+}
 
 export function currentSelectionReducer(state: CurrentSelectionState = currentSelectionDefaultState, action: CurrentSelectionActions) : CurrentSelectionState {
     switch (action.type) {
@@ -61,10 +95,10 @@ export function currentSelectionReducer(state: CurrentSelectionState = currentSe
                 cardName: action.cardName
             };
 
-        case CurrentSelectionActionTypes.SelectSet:
+        case CurrentSelectionActionTypes.SelectSetAbbrev:
             return {
                 ...state,
-                set: action.set
+                setAbbrev: action.setAbbrev
             };
 
         case CurrentSelectionActionTypes.SelectVersion:

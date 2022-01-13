@@ -2,9 +2,9 @@ import * as React from "react";
 import { CardName } from "../logic/model";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
-import { CurrentSelectionActionTypes } from "../store/currentSelection";
 import Search from "./search";
 import { orderBy } from "lodash";
+import { currentSelectionActions } from "../store/currentSelection";
 
 type Props = {
 };
@@ -28,13 +28,16 @@ const CardSearch = (props: Props) => {
             items={cardNames}
             getLabel={card => card.name}
             search={searchCardNames}
+            debounceMinLength={3}
+            showEmptyIfNoQuery={true}
+            placeholder="Enter card name..."
+            disabled={false}
             onSuggestionClicked={card => {
                 console.log(`You clicked ${card.name}`);
-
-                dispatch({
-                    type: CurrentSelectionActionTypes.SelectCardName,
-                    card: card
-                });
+                dispatch(currentSelectionActions.selectCardName(card));
+            }}
+            onQueryChanged={() => {
+                dispatch(currentSelectionActions.clear());
             }}
         />
     )

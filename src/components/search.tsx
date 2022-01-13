@@ -6,15 +6,20 @@ type Props<T> = {
     items: T[],
     getLabel: (item: T) => string,
     search: (query: string, items:T[]) => T[],
-    onSuggestionClicked: (item: T) => void
+    onQueryChanged: () => void,
+    onSuggestionClicked: (item: T) => void,
+    debounceMinLength: number,
+    showEmptyIfNoQuery: boolean,
+    placeholder: string,
+    disabled: boolean
 };
 
 function Search<T> (props: Props<T>) {
     const [suggestions, setSuggestions] = React.useState([]);
-    const [query, setQuery] = React.useState('');
+    const [query, setQuery] = React.useState("");
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(null);
 
-    const updateSuggestions = (items) => {
+    const updateSuggestions = (items: T[]) => {
         console.log(items);
         setSuggestions(items);
         if (items.length === 0) {
@@ -25,16 +30,14 @@ function Search<T> (props: Props<T>) {
         }
     }
 
-    const updateQuery = (query) => {
+    const updateQuery = (query: string) => {
         const q = query?.trim() || "";
         setQuery(q);
-        const cards = q === "" ? [] : props.search(q, props.items);
-        return updateSuggestions(cards);
-    }
-
-    const onSuggestionClicked : (item: T) => Promise<void> = async item => {
-        console.log(`You clicked ${props.getLabel(item)}`);
-        props.onSuggestionClicked(item);
+        props.onQueryChanged();
+        const suggestions = q === ""
+            ? (props.showEmptyIfNoQuery ? [] : props.items)
+            : props.search(q, props.items);
+        return updateSuggestions(suggestions);
     }
 
     const onKeyDown = (e: React.KeyboardEvent) => {
@@ -51,8 +54,7 @@ function Search<T> (props: Props<T>) {
                 break;
             case 'Enter':
                 if (activeSuggestionIndex >= 0) {
-                    onSuggestionClicked(suggestions[activeSuggestionIndex]);
-                    updateQuery('');
+                    props.onSuggestionClicked(suggestions[activeSuggestionIndex]);
                 }
                 break;
             default:
@@ -60,26 +62,31 @@ function Search<T> (props: Props<T>) {
         }
     }
 
+    const suggestionsElements = props.disabled
+        ? ""
+        : suggestions.map((item, i) => (
+            <Suggestion
+                key={i.toString()}
+                item={item}
+                label={props.getLabel(item)}
+                onClick={props.onSuggestionClicked}
+                isActive={activeSuggestionIndex === i}
+            />));
+
     return (
         <div className="search">
             <DebounceInput
                 className="search-input"
                 onChange={e => updateQuery(e.target.value)}
-                minLength={3}
+                minLength={props.debounceMinLength}
                 debounceTimeout={300}
                 onKeyDown={onKeyDown}
                 value={query}
+                placeholder={props.placeholder}
+                disabled={props.disabled}
             />
             <div className="search-result-list">
-                {suggestions.map((item, i) => (
-                    <Suggestion
-                        key={i.toString()}
-                        item={item}
-                        label={props.getLabel(item)}
-                        onClick={onSuggestionClicked}
-                        isActive={activeSuggestionIndex === i}
-                    />
-                ))}
+                {suggestionsElements}
             </div>
         </div>
     );

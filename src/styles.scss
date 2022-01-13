@@ -7,11 +7,12 @@ body {
 
 
 .app {
-
+    display: flex;
 }
 
 .search {
     width: 300px;
+    padding: 6px;
 }
 
 .search-input {
