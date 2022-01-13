@@ -4,13 +4,14 @@ import { Link } from 'react-router-dom';
 const HomePage = () => {
     return (
         <div>
-            Home page
+            <h2>Home</h2>
             <br/>
             <Link to="/boxes/1">
-                Click here for box 1
+                Box 1
             </Link>
+            <br/>
             <Link to="/settings">
-                Click here for settings
+                Settings
             </Link>
         </div>
     );

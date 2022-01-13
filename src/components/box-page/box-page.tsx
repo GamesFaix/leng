@@ -6,7 +6,7 @@ const BoxPage = () => {
 
     return (
         <div>
-            Box page - {id}
+            <h2>Box {id}</h2>
             <br/>
             <Link to="/">
                 Home

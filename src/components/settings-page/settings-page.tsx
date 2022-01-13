@@ -55,7 +55,7 @@ const SettingsPage = () => {
                 </div>
             </form>
             <Link to ="/">
-                Go back to home
+                Home
             </Link>
         </div>
     )
