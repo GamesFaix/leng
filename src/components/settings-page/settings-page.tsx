@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
+import { saveSettings } from '../../logic/settings-controller';
 import { RootState } from '../../store';
 import { SettingsActionTypes } from '../../store/settings';
 
@@ -18,13 +19,6 @@ const SettingsPage = () => {
         setNewSettings({
             ...newSettings,
             dataPath: path
-        });
-    }
-
-    function save() {
-        dispatch({
-            type: SettingsActionTypes.Updated,
-            settings: newSettings
         });
     }
 
@@ -44,7 +38,7 @@ const SettingsPage = () => {
                     <button
                         type="button"
                         disabled={!anyChanges}
-                        onClick={() => save()}
+                        onClick={() => saveSettings(newSettings, dispatch)}
                     >
                         Save
                     </button>
