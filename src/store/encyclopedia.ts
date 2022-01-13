@@ -1,5 +1,5 @@
 import { Card } from 'scryfall-api';
-import { CardName, toCardNames } from '../logic/model';
+import { AsyncRequestStatus, CardName, toCardNames } from '../logic/model';
 
 export type EncyclopediaState = {
     isLoading: boolean,
@@ -48,4 +48,16 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
         default:
             return state;
     }
+}
+
+export function getEncyclopediaStatus(state: EncyclopediaState) : AsyncRequestStatus {
+    if (state.isLoading) {
+        return AsyncRequestStatus.Started;
+    }
+
+    if (state.cards.length === 0) {
+        return AsyncRequestStatus.NotStarted;
+    }
+
+    return AsyncRequestStatus.Success;
 }

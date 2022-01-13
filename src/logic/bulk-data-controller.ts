@@ -1,5 +1,7 @@
 import { Card } from 'scryfall-api';
 import * as fs from 'fs';
+import { AppSettings } from './settings-controller';
+import { createFileAndDirectoryIfRequired } from './file-controller';
 
 type BulkData = {
     object: string,
@@ -21,12 +23,9 @@ type BulkDataResponse = {
     data: BulkData[]
 }
 
-const dataPath = '/cards.json';
-
-async function getDataCreatedDate() : Promise<Date | null> {
+async function getDataCreatedDate(path: string) : Promise<Date | null> {
     try {
-        const stats = await fs.promises.stat(dataPath);
-        console.log(stats);
+        const stats = await fs.promises.stat(path);
         return stats.mtime;
     }
     catch {
@@ -54,12 +53,12 @@ async function downloadData() : Promise<string> {
     return httpResponse2.text();
 }
 
-async function saveData(json: string) : Promise<void> {
-    return fs.promises.writeFile(dataPath, json);
+async function saveData(json: string, path: string) : Promise<void> {
+    return fs.promises.writeFile(path, json);
 }
 
-async function loadData() : Promise<string> {
-    const buffer = await fs.promises.readFile(dataPath);
+async function loadData(path: string) : Promise<string> {
+    const buffer = await fs.promises.readFile(path);
     return buffer.toString();
 }
 
@@ -67,16 +66,17 @@ function parseData(json: string) : Card[] {
     return JSON.parse(json);
 }
 
-export async function loadCards() : Promise<Card[]> {
-    const dataCreatedDate = await getDataCreatedDate();
+export async function loadCards(settings: AppSettings) : Promise<Card[]> {
+    const path = `${settings.dataPath}/encyclopedia/cards.json`;
+    const dataCreatedDate = await getDataCreatedDate(path);
+
     if (isDataStale(dataCreatedDate)) {
         const data = await downloadData();
-        console.log(data);
-        await saveData(data);
+        createFileAndDirectoryIfRequired(path, data);
         return parseData(data);
     }
     else {
-        const data = await loadData();
+        const data = await loadData(path);
         return parseData(data);
     }
 }

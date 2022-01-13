@@ -1,6 +1,6 @@
 import * as fs from 'fs';
-import { dirname } from 'path';
 import { SettingsAction, SettingsActionTypes } from '../store/settings';
+import { createFileAndDirectoryIfRequired } from './file-controller';
 
 export type AppSettings = {
     dataPath: string
@@ -28,15 +28,6 @@ export function loadSettings(dispatch: (action: SettingsAction) => void) : AppSe
     const settings = loadSettingsOrDefaults();
     dispatch({ type: SettingsActionTypes.LoadSuccess, settings });
     return settings;
-}
-
-function createFileAndDirectoryIfRequired(path: string, content: string) {
-    const dir = dirname(path);
-    if (!fs.existsSync(dir)){
-        console.log("creating dir " + dir);
-        fs.mkdirSync(dir);
-    }
-    fs.writeFileSync(path, content);
 }
 
 export function saveSettings(settings: AppSettings, dispatch: (action: SettingsAction) => void) : void {
