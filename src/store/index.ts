@@ -3,11 +3,13 @@ import { currentSelectionReducer } from './currentSelection';
 import { encyclopediaReducer } from './encyclopedia';
 import { inventoryReducer } from './inventory';
 import logger from 'redux-logger';
+import { settingsReducer } from './settings';
 
 const reducer = combineReducers({
     encyclopedia: encyclopediaReducer,
     inventory: inventoryReducer,
-    currentSelection: currentSelectionReducer
+    currentSelection: currentSelectionReducer,
+    settings: settingsReducer
 });
 
 export const store = createStore(

@@ -11,6 +11,7 @@ import { Route, HashRouter, Routes } from 'react-router-dom';
 import HomePage from './home-page/home-page';
 import BoxPage from './box-page/box-page';
 import SettingsPage from './settings-page/settings-page';
+import { loadSettings } from '../logic/settings-controller';
 
 async function loadEncyclopedia(dispatch: (action: EncyclopediaAction) => void) {
     dispatch({
@@ -38,6 +39,11 @@ function getEncyclopediaStatus(state: EncyclopediaState) : AsyncRequestStatus {
 }
 
 const App2 = () => {
+    const dispatch = useDispatch();
+    React.useEffect(() => {
+        loadSettings(dispatch);
+    });
+
     return (
         <HashRouter>
             <Routes>
