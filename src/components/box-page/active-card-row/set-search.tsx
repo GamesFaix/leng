@@ -55,10 +55,10 @@ function getSetInfos(cardName: NamedCard): SetInfo [] {
 }
 
 const SetSearchEnabled = (props: Props) => {
-    const allSuggestions = getSetInfos(props.selectedCard);
-    const [suggestions, setSuggestions] = React.useState(allSuggestions); // Default to all suggestions if no query
+    const allSuggestions = props.selectedCard ? getSetInfos(props.selectedCard) : [];
+    const [suggestions, setSuggestions] = React.useState<SetInfo[]>(allSuggestions); // Default to all suggestions if no query
     const [query, setQuery] = React.useState("");
-    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(0);
+    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState<number | null>(0);
     console.log(suggestions);
 
     const updateSuggestions = (items: SetInfo[]) => {
@@ -85,17 +85,22 @@ const SetSearchEnabled = (props: Props) => {
     const onKeyDown = (e: React.KeyboardEvent) => {
         switch(e.code) {
             case 'ArrowUp':
-                if (suggestions.length > 0 && activeSuggestionIndex > 0) {
+                if (suggestions.length > 0 &&
+                    activeSuggestionIndex !== null &&
+                    activeSuggestionIndex > 0) {
                     setActiveSuggestionIndex(activeSuggestionIndex - 1);
                 }
                 break;
             case 'ArrowDown':
-                if (suggestions.length > 0 && activeSuggestionIndex < suggestions.length - 1){
+                if (suggestions.length > 0 &&
+                    activeSuggestionIndex !== null &&
+                    activeSuggestionIndex < suggestions.length - 1){
                     setActiveSuggestionIndex(activeSuggestionIndex + 1);
                 }
                 break;
             case 'Enter':
-                if (activeSuggestionIndex >= 0) {
+                if (activeSuggestionIndex !== null &&
+                    activeSuggestionIndex >= 0) {
                     const activeSuggestion = suggestions[activeSuggestionIndex];
                     props.onSetSelected(activeSuggestion.abbrev);
                 }

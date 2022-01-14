@@ -15,6 +15,8 @@ const HomePage = () => {
     const dispatch = useDispatch();
     const [isNewBoxFormVisible, setIsNewBoxFormVisible] = React.useState(false);
 
+    const hideBoxesTable = settings === null || boxes === null;
+
     React.useEffect(() => {
         if (settings !== null && boxes === null) {
             dispatch({ type: InventoryActionTypes.LoadBoxInfosStart });
@@ -47,7 +49,7 @@ const HomePage = () => {
                 </>)
                 : ""
             }
-            {boxes === null
+            {hideBoxesTable
                 ? "Loading box info..."
                 : (<BoxesTable
                     boxes={boxes}

@@ -14,6 +14,8 @@ const NewBoxForm = (props: Props) => {
     const dispatch = useDispatch();
     const [newBoxName, setNewBoxName] = React.useState('');
 
+    const disableButton = settings === null;
+
     return (<div>
         <input
             type="text"
@@ -22,10 +24,11 @@ const NewBoxForm = (props: Props) => {
             placeholder="Enter box name..."
         />
         <button
+            disabled={disableButton}
             type="button"
             title="Create box"
             onClick={() => {
-                createBox(settings, newBoxName, dispatch);
+                createBox(settings!, newBoxName, dispatch);
                 props.close();
             }}
         >

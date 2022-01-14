@@ -22,7 +22,7 @@ type State = {
     count: number
 }
 
-const defaultState = {
+const defaultState : State = {
     name: null,
     setAbbrev: null,
     scryfallId: null,
@@ -76,13 +76,13 @@ const ActiveCardRow = (props: Props) => {
             <CardSearch
                 encyclopediaCards={namedCards}
                 onCardSelected={name => {
-                    const newState = name === null
+                    const newState : State = name === null
                         ? defaultState
                         : {
                             ...card,
                             name,
                             setAbbrev: null,
-                            version: null,
+                            scryfallId: null,
                             foil: false
                         };
                     setCard(newState);
@@ -108,11 +108,11 @@ const ActiveCardRow = (props: Props) => {
                 cardName={selectedNamedCard}
                 setAbbrev={card.setAbbrev}
                 onVersionPicked={(scryfallId) => {
-                    const pickedCard = selectedNamedCard.cards.find(c => c.id === scryfallId);
+                    const pickedCard = selectedNamedCard?.cards.find(c => c.id === scryfallId) ?? null;
 
                     const foil =
-                        (pickedCard.foil && !pickedCard.nonfoil) ? true :
-                        (!pickedCard.foil && pickedCard.nonfoil) ? false :
+                        (pickedCard && pickedCard.foil && !pickedCard.nonfoil) ? true :
+                        (pickedCard && !pickedCard.foil && pickedCard.nonfoil) ? false :
                         card.foil;
 
                     setCard({
@@ -145,12 +145,12 @@ const ActiveCardRow = (props: Props) => {
                 disabled={submitDisabled}
                 onClick={() => {
                     props.onSubmit({
-                        name: card.name,
-                        scryfallId: card.scryfallId,
-                        setAbbrev: card.setAbbrev,
+                        name: card.name!,
+                        scryfallId: card.scryfallId!,
+                        setAbbrev: card.setAbbrev!,
                         count: card.count,
                         foil: card.foil,
-                        version: getVersionLabel(selectedVersion)
+                        version: getVersionLabel(selectedVersion!)
                     });
                     setCard(startingState);
                 }}

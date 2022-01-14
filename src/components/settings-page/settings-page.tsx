@@ -5,10 +5,9 @@ import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { saveSettings } from '../../logic/settings-controller';
 import { RootState } from '../../store';
-import { SettingsActionTypes } from '../../store/settings';
 
 const SettingsPage = () => {
-    const oldSettings = useSelector((state: RootState) => state.settings.settings);
+    const oldSettings = useSelector((state: RootState) => state.settings.settings) ?? { dataPath: '' };
     const [newSettings, setNewSettings] = React.useState(oldSettings);
 
     const anyChanges = JSON.stringify(oldSettings) !== JSON.stringify(newSettings);

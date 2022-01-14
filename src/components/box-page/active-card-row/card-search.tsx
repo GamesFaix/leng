@@ -17,9 +17,9 @@ function searchCardNames(query: string, cardNames: NamedCard[]) : NamedCard[] {
 }
 
 const CardSearch = (props: Props) => {
-    const [suggestions, setSuggestions] = React.useState([]);
+    const [suggestions, setSuggestions] = React.useState<NamedCard[]>([]);
     const [query, setQuery] = React.useState("");
-    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(null);
+    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState<number | null>(null);
 
     const updateSuggestions = (items: NamedCard[]) => {
         console.log(items);
@@ -46,17 +46,22 @@ const CardSearch = (props: Props) => {
     const onKeyDown = (e: React.KeyboardEvent) => {
         switch(e.code) {
             case 'ArrowUp':
-                if (suggestions.length > 0 && activeSuggestionIndex > 0) {
+                if (suggestions.length > 0 &&
+                    activeSuggestionIndex !== null &&
+                    activeSuggestionIndex > 0) {
                     setActiveSuggestionIndex(activeSuggestionIndex - 1);
                 }
                 break;
             case 'ArrowDown':
-                if (suggestions.length > 0 && activeSuggestionIndex < suggestions.length - 1){
+                if (suggestions.length > 0 &&
+                    activeSuggestionIndex !== null &&
+                    activeSuggestionIndex < suggestions.length - 1){
                     setActiveSuggestionIndex(activeSuggestionIndex + 1);
                 }
                 break;
             case 'Enter':
-                if (activeSuggestionIndex >= 0) {
+                if (activeSuggestionIndex !== null &&
+                    activeSuggestionIndex >= 0) {
                     const activeSuggestion = suggestions[activeSuggestionIndex];
                     props.onCardSelected(activeSuggestion.name);
                 }

@@ -132,20 +132,20 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
             return { ...state, loading: true };
 
         case InventoryActionTypes.LoadBoxSuccess: {
-            const boxes : BoxState[] = state.boxes.map(b => {
+            const boxes = state.boxes?.map(b => {
                 if (b.name === action.box.name) {
                     return { ...action.box };
                 } else {
                     return b;
                 }
-            });
+            }) ?? null;
 
             return { ...state, boxes };
         }
         case InventoryActionTypes.AddCard: {
-            const boxes : BoxState[] = state.boxes.map(b => {
+            const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
-                    const cards = b.cards.map(c => {
+                    const cards = b.cards?.map(c => {
                         if (areSameCard(c, action.card)){
                             return {
                                 ...c,
@@ -154,21 +154,23 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                         } else {
                             return c;
                         }
-                    });
-                    cards.push(action.card);
+                    }) ?? null;
+                    if (cards) {
+                        cards.push(action.card);
+                    }
 
                     return { ...b, cards };
                 } else {
                     return b;
                 }
-            });
+            }) ?? null;
 
             return { ...state, boxes };
         }
         case InventoryActionTypes.ChangeCount: {
-            const boxes : BoxState[] = state.boxes.map(b => {
+            const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
-                    const cards = b.cards.map(c => {
+                    const cards = b.cards?.map(c => {
                         if (areSameCard(c, action.card)){
                             return {
                                 ...c,
@@ -177,25 +179,25 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                         } else {
                             return c;
                         }
-                    })
+                    }) ?? null;
 
                     return { ...b, cards };
                 } else {
                     return b;
                 }
-            });
+            }) ?? null;
 
             return { ...state, boxes };
         }
         case InventoryActionTypes.RemoveCard: {
-            const boxes : BoxState[] = state.boxes.map(b => {
+            const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
-                    const cards = b.cards.filter(c => !areSameCard(c, action.card));
+                    const cards = b.cards?.filter(c => !areSameCard(c, action.card)) ?? null;
                     return { ...b, cards };
                 } else {
                     return b;
                 }
-            });
+            }) ?? null;
 
             return { ...state, boxes };
         }
@@ -203,13 +205,13 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
             return { ...state, loading: true };
 
         case InventoryActionTypes.SaveBoxSuccess: {
-            const boxes = state.boxes.map(b => {
+            const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
                     return { ...b, lastModified: action.boxInfo.lastModified };
                 } else {
                     return b;
                 }
-            });
+            }) ?? null;
             return { ...state, boxes };
         }
         case InventoryActionTypes.CreateBox: {
@@ -219,11 +221,11 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                 cards: [],
                 description: ''
             };
-            const boxes = orderBy([...state.boxes, newBox ], b => b.name);
+            const boxes = state.boxes ? orderBy([...state.boxes, newBox ], b => b.name) : null;
             return { ...state, boxes };
         }
         case InventoryActionTypes.DeleteBox: {
-            const boxes = state.boxes.filter(b => b.name !== action.boxInfo.name);
+            const boxes = state.boxes?.filter(b => b.name !== action.boxInfo.name) ?? null;
             return { ...state, boxes };
         }
         default:

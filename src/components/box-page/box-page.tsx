@@ -14,42 +14,44 @@ const BoxPage = () => {
     const { name } = useParams();
     const encyclopediaState = useSelector((state: RootState) => state.encyclopedia);
     const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
-    const boxState = useSelector((state: RootState) => state.inventory.boxes.find(b => b.name === name));
+    const boxState = useSelector((state: RootState) => state.inventory.boxes?.find(b => b.name === name)) ?? null;
     const settings = useSelector((state: RootState) => state.settings.settings);
     const dispatch = useDispatch();
 
     React.useEffect(() => {
-        if (settings !== null && boxState.cards === null){
+        if (settings !== null && boxState?.cards === null && name){
             console.log('loading box');
             loadBox(settings, name, dispatch);
         }
     })
 
     function addCard(card: BoxCard) {
-        const action : InventoryAction = {
-            type: InventoryActionTypes.AddCard,
-            card,
-            boxInfo: {
-                name: boxState.name,
-                lastModified: boxState.lastModified
-            }
-        };
-        dispatch(action);
+        if (boxState) {
+            const action : InventoryAction = {
+                type: InventoryActionTypes.AddCard,
+                card,
+                boxInfo: {
+                    name: boxState.name,
+                    lastModified: boxState.lastModified
+                }
+            };
+            dispatch(action);
+        }
     }
 
-    const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || !boxState.cards;
+    const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || !(boxState?.cards);
 
     return (
         <div>
             <h2>Box <span className="box-name">{name}</span></h2>
-            {boxState.description
+            {boxState?.description
                 ? <h3>{boxState.description}</h3>
                 : ""
             }
             <br/>
             {disabled ? "" :
                 <CardsTable
-                    cards={boxState.cards}
+                    cards={boxState.cards!}
                     showNewCardRow={true}
                     onAddCard={addCard}
                 />

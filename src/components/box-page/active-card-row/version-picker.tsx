@@ -26,7 +26,7 @@ export function getVersionLabel(card: Card) : string {
 }
 
 const EnabledVersionPicker = (props: Props) => {
-    const suggestions = props.cardName.cards.filter(c => c.set === props.setAbbrev);
+    const suggestions = props.cardName?.cards.filter(c => c.set === props.setAbbrev) ?? [];
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(0);
 
     const onKeyDown = (e: React.KeyboardEvent) => {

@@ -6,7 +6,7 @@ export type AppSettings = {
     dataPath: string
 };
 
-const dir = `${process.env.USERPROFILE.replace('\\', '/')}/leng`;
+const dir = `${(process.env as any).USERPROFILE.replace('\\', '/')}/leng`;
 const settingsPath = `${dir}/settings.json`;
 
 export const defaultSettings = {

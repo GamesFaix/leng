@@ -48,7 +48,7 @@ async function downloadData() : Promise<string> {
     const bulkDataResponse : BulkDataResponse = await httpResponse1.json();
     console.log(bulkDataResponse);
     const defaultCardsInfo = bulkDataResponse.data.find(x => x.type === "default_cards");
-
+    if (!defaultCardsInfo) { throw Error('Could not find bulk data file info.'); }
     const httpResponse2 = await fetch(defaultCardsInfo.download_uri);
     return httpResponse2.text();
 }
