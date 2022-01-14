@@ -2,7 +2,7 @@
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import { faCheck, faCog, faHome, faPencilAlt, faPlus, faTrash, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faCheck, faCog, faHome, faPlus, faTrash, faWindowClose);
+library.add(faCheck, faCog, faHome, faPencilAlt, faPlus, faTrash, faWindowClose);
 
 export const icons = {
     home: <IconProp>'home',
