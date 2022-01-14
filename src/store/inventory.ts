@@ -1,5 +1,5 @@
 import { orderBy } from "lodash";
-import { Box, BoxCard, BoxInfo } from "../logic/inventoryController";
+import { Box, BoxCard, BoxInfo } from "../logic/model";
 
 function areSameCard(a: BoxCard, b: BoxCard) : boolean {
     return

@@ -2,11 +2,12 @@ import * as React from "react";
 import { orderBy, uniqBy } from "lodash";
 import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
-import { CardName } from "../../../logic/model";
+import { NamedCard } from "../../../logic/model";
 
 type Props = {
-    selectedCard: CardName,
-    onSetSelected: (setAbbrev:string) => void
+    selectedCard: NamedCard | null,
+    onSetSelected: (setAbbrev:string) => void,
+    disabled: boolean
 };
 
 type SetInfo = {
@@ -39,7 +40,7 @@ const SetSearchDisabled = () => {
     );
 }
 
-function getSetInfos(cardName: CardName): SetInfo [] {
+function getSetInfos(cardName: NamedCard): SetInfo [] {
     let sets = cardName.cards.map(c => [c.set, c.set_name]);
     sets = uniqBy(sets, tup => tup[0]);
 
@@ -126,7 +127,7 @@ const SetSearchEnabled = (props: Props) => {
 }
 
 const SetSearch = (props: Props) => {
-    return props.selectedCard === null
+    return props.disabled
         ? <SetSearchDisabled/>
         : SetSearchEnabled(props);
 };

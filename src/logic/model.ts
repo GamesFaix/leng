@@ -8,11 +8,38 @@ export enum AsyncRequestStatus {
     Failure = 'FAILURE'
 }
 
-export type CardName = {
+/* Represents the group of all printings of a card with a given name */
+export type NamedCard = {
     name: string,
     normalizedName: string,
     oracleId: string,
     cards: Card[]
+}
+
+/* Represents the number of copies of a given printing of a card in a box. */
+export type BoxCard = {
+    scryfallId: string,
+    count: number,
+    foil: boolean,
+
+    // for user readability, can be looked up w/ scryfallId
+    name: string,
+    setAbbrev: string,
+    version: string
+}
+
+/* A group of cards in a collection, saved in a single box file. (It could represent a binder, bulk box, deck, etc.) */
+export type Box = {
+    name: string,
+    lastModified: Date,
+    description: string,
+    cards: BoxCard[]
+}
+
+/* Basic info about a box file on disk. */
+export type BoxInfo = {
+    name: string
+    lastModified: Date
 }
 
 export function normalizeName(name: string) : string {
@@ -22,7 +49,7 @@ export function normalizeName(name: string) : string {
         .replace(/\s+/g, " ");
 }
 
-export function toCardNames(cards: Card[]) : CardName[] {
+export function toNamedCards(cards: Card[]) : NamedCard[] {
     const groups = groupBy(cards, c => normalizeName(c.name));
 
     return Object.entries(groups)

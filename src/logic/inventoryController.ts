@@ -3,26 +3,7 @@ import * as fs from 'fs';
 import { createDirIfMissing } from "./file-controller";
 import { parse } from 'path';
 import { InventoryAction, InventoryActionTypes } from "../store/inventory";
-
-export type BoxCard = {
-    scryfallId: string,
-    count: number,
-    foil: boolean,
-    name: string, // for user readability
-    version: string, // for user readability
-}
-
-export type Box = {
-    name: string,
-    lastModified: Date,
-    description: string,
-    cards: BoxCard[]
-}
-
-export type BoxInfo = {
-    name: string
-    lastModified: Date
-}
+import { Box, BoxInfo } from "./model";
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;

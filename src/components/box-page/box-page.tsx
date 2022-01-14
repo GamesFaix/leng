@@ -33,7 +33,7 @@ const BoxPage = () => {
             <br/>
             <div className='app'>
                 {encyclopediaStatus === AsyncRequestStatus.Success
-                    ? <ActiveCardRow/>
+                    ? <ActiveCardRow card={null}/>
                     : <div>Loading card data...</div>
                 }
             </div>

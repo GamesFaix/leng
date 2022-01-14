@@ -1,75 +1,32 @@
 import * as React from 'react';
-import { CardName } from '../../../logic/model';
+import { NamedCard } from '../../../logic/model';
 import { Card } from 'scryfall-api';
 import SuggestionList from './suggestion-list';
-import { FrameEffect } from '../../../logic/bulk-data-controller';
 
 type Props = {
-    cardName: CardName | null,
+    cardName: NamedCard | null,
     setAbbrev: string | null,
-    onVersionPicked: (scryfallId: string, isFoil: boolean) => void
+    onVersionPicked: (scryfallId: string, isFoil: boolean) => void,
+    disabled: boolean
 }
 
-type VersionModel = {
-    scryfallId: string,
-    collectorsNumber: string,
-    frame: string,
-    frameEffects: FrameEffect[],
-    foil: boolean
-}
-
-function toVersionModels(cards: Card[]) : VersionModel[] {
-    const models = cards
-        .map(c => {
-            const nonFoilVersion = {
-                scryfallId: c.id,
-                collectorsNumber: c.collector_number,
-                frame: c.frame,
-                frameEffects: c.frame_effects || [],
-                foil: false
-            };
-
-            const foilVersion = {
-                ...nonFoilVersion,
-                foil: true
-            };
-
-            return c.foil
-                ? [ nonFoilVersion, foilVersion ]
-                : [ nonFoilVersion ];
-        })
-        .reduce((a, b) => a.concat(b));
-
-    return models.sort(compareVersionModels);
-}
-
-function compareVersionModels(a: VersionModel, b: VersionModel) : number {
-    if (a.collectorsNumber < b.collectorsNumber) return -1;
-    if (a.collectorsNumber > b.collectorsNumber) return 1;
-    if (!a.foil && b.foil) return -1;
-    if (a.foil && !b.foil) return 1;
-    return 0;
-}
-
-function getVersionLabel(version: VersionModel) : string {
-    const numberStr = `#${version.collectorsNumber}`;
-    const frameStr = `${version.frame}-frame`;
-    const foilStr = version.foil ? " (Foil)" : "";
+function getVersionLabel(card: Card) : string {
+    const numberStr = `#${card.collector_number}`;
+    const frameStr = `${card.frame}-frame`;
 
     let frameEffectsStr = "";
-    if (version.frameEffects.includes("showcase")) {
+    if (card.frame_effects?.includes("showcase")) {
         frameEffectsStr += " Showcase";
     }
-    if (version.frameEffects.includes("extendedart")){
+    if (card.frame_effects?.includes("extendedart")){
         frameEffectsStr += " Extended Art"
     }
 
-    return `${numberStr} ${frameStr}${foilStr}${frameEffectsStr}`;
+    return `${numberStr} ${frameStr}${frameEffectsStr}`;
 }
 
 const EnabledVersionPicker = (props: Props) => {
-    const cards = props.cardName.cards.filter(c => c.set === props.setAbbrev);
-    const suggestions = toVersionModels(cards);
+    const suggestions = props.cardName.cards.filter(c => c.set === props.setAbbrev);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(0);
 
     const onKeyDown = (e: React.KeyboardEvent) => {
@@ -87,7 +44,7 @@ const EnabledVersionPicker = (props: Props) => {
             case 'Enter':
                 if (activeSuggestionIndex >= 0) {
                     const activeSuggestion = suggestions[activeSuggestionIndex];
-                    props.onVersionPicked(activeSuggestion.scryfallId, activeSuggestion.foil);
+                    props.onVersionPicked(activeSuggestion.id, activeSuggestion.foil);
                 }
                 break;
             default:
@@ -100,7 +57,7 @@ const EnabledVersionPicker = (props: Props) => {
             items={suggestions}
             activeIndex={activeSuggestionIndex}
             getItemLabel={getVersionLabel}
-            onItemClicked={version => props.onVersionPicked(version.scryfallId, version.foil)}
+            onItemClicked={version => props.onVersionPicked(version.id, version.foil)}
         />
     )
 };
@@ -114,14 +71,10 @@ const DisabledVersionPicker = () => {
 };
 
 const VersionPicker = (props: Props) => {
-    const isEnabled =
-        props.cardName !== null &&
-        props.setAbbrev !== null;
-
     return (
-        isEnabled
-            ? EnabledVersionPicker(props)
-            : <DisabledVersionPicker/>
+        props.disabled
+            ? <DisabledVersionPicker/>
+            : EnabledVersionPicker(props)
     );
 }
 export default VersionPicker;

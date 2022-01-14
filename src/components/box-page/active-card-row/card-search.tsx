@@ -1,15 +1,15 @@
 import * as React from "react";
-import { CardName, normalizeName } from "../../../logic/model";
+import { NamedCard, normalizeName } from "../../../logic/model";
 import { orderBy } from "lodash";
 import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
 
 type Props = {
-    encyclopediaCards: CardName[],
+    encyclopediaCards: NamedCard[],
     onCardSelected: (name: string | null) => void
 };
 
-function searchCardNames(query: string, cardNames: CardName[]) : CardName[] {
+function searchCardNames(query: string, cardNames: NamedCard[]) : NamedCard[] {
     const q = query.toLowerCase();
     const matches = cardNames.filter(c => c.normalizedName.includes(q));
     const sorted = orderBy(matches, x => x.normalizedName);
@@ -21,7 +21,7 @@ const CardSearch = (props: Props) => {
     const [query, setQuery] = React.useState("");
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(null);
 
-    const updateSuggestions = (items: CardName[]) => {
+    const updateSuggestions = (items: NamedCard[]) => {
         console.log(items);
         setSuggestions(items);
         if (items.length === 0) {
