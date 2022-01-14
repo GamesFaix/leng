@@ -28,7 +28,11 @@ const BoxesTable = (props: Props) => {
                     <td>
                         <button
                             title="Delete box"
-                            onClick={() => props.deleteBox(b.name)}
+                            onClick={() => {
+                                if (confirm("Are you sure you want to exile this box?")) {
+                                    props.deleteBox(b.name);
+                                }
+                            }}
                         >
                             <FontAwesomeIcon icon={icons.delete}/>
                         </button>
