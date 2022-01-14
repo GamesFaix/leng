@@ -7,9 +7,7 @@ import { loadBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
-import CardSearch from './active-card-row/card-search';
-import SetSearch from './active-card-row/set-search';
-import VersionPicker from './active-card-row/version-picker';
+import ActiveCardRow from './active-card-row/active-card-row';
 import CardsTable from './cards-table';
 
 const BoxPage = () => {
@@ -35,11 +33,7 @@ const BoxPage = () => {
             <br/>
             <div className='app'>
                 {encyclopediaStatus === AsyncRequestStatus.Success
-                    ? <>
-                        <CardSearch />
-                        <SetSearch />
-                        <VersionPicker />
-                    </>
+                    ? <ActiveCardRow/>
                     : <div>Loading card data...</div>
                 }
             </div>

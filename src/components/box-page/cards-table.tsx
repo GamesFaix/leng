@@ -1,4 +1,6 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
+import { icons } from '../../fontawesome';
 import { BoxCard } from '../../logic/inventoryController';
 
 type Props = {
@@ -10,8 +12,10 @@ const CardsTable = (props: Props) => {
         <thead>
             <th>Qty.</th>
             <th>Name</th>
+            <th>Set</th>
             <th>Version</th>
             <th>Foil</th>
+            <th>Actions</th>
         </thead>
         <tbody>
             {props.cards.map((c, i) =>
@@ -23,10 +27,23 @@ const CardsTable = (props: Props) => {
                         {c.name}
                     </td>
                     <td>
+                        (set)
+                    </td>
+                    <td>
                         {c.version}
                     </td>
                     <td>
                         {c.foil}
+                    </td>
+                    <td>
+                        <button
+                            type="button"
+                            onClick={() => {
+                                //edit this row
+                            }}
+                        >
+                            <FontAwesomeIcon icon={icons.edit}/>
+                        </button>
                     </td>
                 </tr>
             )}
