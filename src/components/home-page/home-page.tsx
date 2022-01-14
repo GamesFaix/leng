@@ -39,6 +39,7 @@ const HomePage = () => {
                 <FontAwesomeIcon icon={icons.add} />
             </button>
             <br/>
+            <br/>
             {isNewBoxFormVisible
                 ? (<>
                     <NewBoxForm close={() => setIsNewBoxFormVisible(false)}/>
