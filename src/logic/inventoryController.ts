@@ -76,7 +76,12 @@ export async function deleteBox(settings: AppSettings, name: string, dispatch: (
     });
 }
 
-export async function loadBox(settings: AppSettings, name: string) : Promise<Box> {
+export async function loadBox(settings: AppSettings, name: string, dispatch: (action:InventoryAction) => void) : Promise<Box> {
+    dispatch({
+        type: InventoryActionTypes.LoadBoxStart,
+        name
+    });
+
     const dir = getInventoryDir(settings);
     const path = `${dir}/${name}.json`;
     const exists = fs.existsSync(path);
@@ -86,15 +91,24 @@ export async function loadBox(settings: AppSettings, name: string) : Promise<Box
     }
 
     const buffer = await fs.promises.readFile(path);
+    const json = buffer.toString();
+    console.log(json);
+    const box: Box = JSON.parse(json);
 
-    const box: Box = JSON.parse(buffer.toString());
-
-    // Add to store
+    dispatch({
+        type: InventoryActionTypes.LoadBoxSuccess,
+        box
+    });
 
     return box;
 }
 
-export async function updateBox(settings: AppSettings, box: Box) : Promise<BoxInfo> {
+export async function updateBox(settings: AppSettings, box: Box, dispatch: (action: InventoryAction) => void) : Promise<BoxInfo> {
+    dispatch({
+        type: InventoryActionTypes.SaveBoxStart,
+        box
+    });
+
     const dir = getInventoryDir(settings);
     const path = `${dir}/${box.name}.json`;
     const exists = fs.existsSync(path);
@@ -108,7 +122,13 @@ export async function updateBox(settings: AppSettings, box: Box) : Promise<BoxIn
 
     await fs.promises.writeFile(path, json);
 
-    // Update store
+    dispatch({
+        type: InventoryActionTypes.SaveBoxSuccess,
+        boxInfo: {
+            name: box.name,
+            lastModified
+        }
+    });
 
     return {
         name: box.name,

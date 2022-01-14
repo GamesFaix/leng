@@ -10,7 +10,7 @@ type Props = {
     disabled: boolean
 }
 
-function getVersionLabel(card: Card) : string {
+export function getVersionLabel(card: Card) : string {
     const numberStr = `#${card.collector_number}`;
     const frameStr = `${card.frame}-frame`;
 

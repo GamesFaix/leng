@@ -1,13 +1,13 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { loadBox } from '../../logic/inventoryController';
-import { AsyncRequestStatus } from '../../logic/model';
+import { AsyncRequestStatus, BoxCard } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
-import ActiveCardRow from './active-card-row/active-card-row';
+import { InventoryAction, InventoryActionTypes } from '../../store/inventory';
 import CardsTable from './cards-table';
 
 const BoxPage = () => {
@@ -16,12 +16,28 @@ const BoxPage = () => {
     const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
     const boxState = useSelector((state: RootState) => state.inventory.boxes.find(b => b.name === name));
     const settings = useSelector((state: RootState) => state.settings.settings);
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         if (settings !== null && boxState.cards === null){
-            loadBox(settings, name);
+            console.log('loading box');
+            loadBox(settings, name, dispatch);
         }
     })
+
+    function addCard(card: BoxCard) {
+        const action : InventoryAction = {
+            type: InventoryActionTypes.AddCard,
+            card,
+            boxInfo: {
+                name: boxState.name,
+                lastModified: boxState.lastModified
+            }
+        };
+        dispatch(action);
+    }
+
+    const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || !boxState.cards;
 
     return (
         <div>
@@ -31,16 +47,12 @@ const BoxPage = () => {
                 : ""
             }
             <br/>
-            <div className='app'>
-                {encyclopediaStatus === AsyncRequestStatus.Success
-                    ? <ActiveCardRow card={null}/>
-                    : <div>Loading card data...</div>
-                }
-            </div>
-            <br/>
-            {boxState.cards !== null
-                ? <CardsTable cards={boxState.cards}/>
-                : ""
+            {disabled ? "" :
+                <CardsTable
+                    cards={boxState.cards}
+                    showNewCardRow={true}
+                    onAddCard={addCard}
+                />
             }
             <br/>
             <Link to="/">

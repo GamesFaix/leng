@@ -1,13 +1,17 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+import { icons } from '../../../fontawesome';
 import { BoxCard, NamedCard } from '../../../logic/model';
 import { RootState } from '../../../store';
 import CardSearch from './card-search';
 import SetSearch from './set-search';
-import VersionPicker from './version-picker';
+import VersionPicker, { getVersionLabel } from './version-picker';
 
 type Props = {
     card: BoxCard | null // null if creating, non-null if editing
+    onSubmit: (card: BoxCard) => void,
+    onCancel: () => void
 }
 
 type State = {
@@ -49,8 +53,8 @@ const ActiveCardRow = (props: Props) => {
 
     const setSearchDisabled = card.name === null;
     const versionPickerDisabled = setSearchDisabled || card.setAbbrev === null;
-    const foilCheckboxDisabled = versionPickerDisabled || selectedVersion === null ||
-        !selectedVersion.foil || !selectedVersion.nonfoil;
+    const submitDisabled = versionPickerDisabled || selectedVersion === null;
+    const foilCheckboxDisabled = submitDisabled || !selectedVersion.foil || !selectedVersion.nonfoil;
 
     return (<tr>
         <td>
@@ -135,8 +139,34 @@ const ActiveCardRow = (props: Props) => {
             />
         </td>
         <td>
-            (save)
-            (cancel)
+            <button
+                title="Submit"
+                type="button"
+                disabled={submitDisabled}
+                onClick={() => {
+                    props.onSubmit({
+                        name: card.name,
+                        scryfallId: card.scryfallId,
+                        setAbbrev: card.setAbbrev,
+                        count: card.count,
+                        foil: card.foil,
+                        version: getVersionLabel(selectedVersion)
+                    });
+                    setCard(startingState);
+                }}
+            >
+                <FontAwesomeIcon icon={icons.ok}/>
+            </button>
+            <button
+                title="Cancel"
+                type="button"
+                onClick={() => {
+                    props.onCancel();
+                    setCard(startingState);
+                }}
+            >
+                <FontAwesomeIcon icon={icons.cancel}/>
+            </button>
         </td>
     </tr>);
 }

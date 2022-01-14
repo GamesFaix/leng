@@ -51,7 +51,7 @@ export type LoadBoxInfosSuccessAction = {
 
 export type LoadBoxStartAction = {
     type: InventoryActionTypes.LoadBoxStart,
-    boxInfo: BoxInfo
+    name: string
 }
 
 export type LoadBoxSuccessAction = {
