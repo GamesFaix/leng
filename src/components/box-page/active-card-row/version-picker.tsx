@@ -1,15 +1,13 @@
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { CardName } from '../../../logic/model';
-import { RootState } from '../../../store';
 import { Card } from 'scryfall-api';
 import SuggestionList from './suggestion-list';
-import { currentSelectionActions } from '../../../store/currentSelection';
 import { FrameEffect } from '../../../logic/bulk-data-controller';
 
 type Props = {
-    cardName: CardName,
-    setAbbrev: string
+    cardName: CardName | null,
+    setAbbrev: string | null,
+    onVersionPicked: (scryfallId: string, isFoil: boolean) => void
 }
 
 type VersionModel = {
@@ -73,7 +71,6 @@ const EnabledVersionPicker = (props: Props) => {
     const cards = props.cardName.cards.filter(c => c.set === props.setAbbrev);
     const suggestions = toVersionModels(cards);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(0);
-    const dispatch = useDispatch();
 
     const onKeyDown = (e: React.KeyboardEvent) => {
         switch(e.code) {
@@ -90,7 +87,7 @@ const EnabledVersionPicker = (props: Props) => {
             case 'Enter':
                 if (activeSuggestionIndex >= 0) {
                     const activeSuggestion = suggestions[activeSuggestionIndex];
-                    dispatch(currentSelectionActions.selectVersion(activeSuggestion.scryfallId, activeSuggestion.foil));
+                    props.onVersionPicked(activeSuggestion.scryfallId, activeSuggestion.foil);
                 }
                 break;
             default:
@@ -103,9 +100,7 @@ const EnabledVersionPicker = (props: Props) => {
             items={suggestions}
             activeIndex={activeSuggestionIndex}
             getItemLabel={getVersionLabel}
-            onItemClicked={version => {
-                dispatch(currentSelectionActions.selectVersion(version.scryfallId, version.foil))
-            }}
+            onItemClicked={version => props.onVersionPicked(version.scryfallId, version.foil)}
         />
     )
 };
@@ -118,18 +113,14 @@ const DisabledVersionPicker = () => {
     );
 };
 
-const VersionPicker = () => {
-    const currentSelection = useSelector((state: RootState) => state.currentSelection);
+const VersionPicker = (props: Props) => {
     const isEnabled =
-        currentSelection.cardName !== null &&
-        currentSelection.setAbbrev !== null;
+        props.cardName !== null &&
+        props.setAbbrev !== null;
 
     return (
         isEnabled
-            ? <EnabledVersionPicker
-                cardName={currentSelection.cardName}
-                setAbbrev={currentSelection.setAbbrev}
-            />
+            ? EnabledVersionPicker(props)
             : <DisabledVersionPicker/>
     );
 }

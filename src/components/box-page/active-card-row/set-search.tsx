@@ -1,13 +1,12 @@
 import * as React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { orderBy, uniqBy } from "lodash";
-import { currentSelectionActions } from "../../../store/currentSelection";
-import { RootState } from "../../../store";
 import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
 import { CardName } from "../../../logic/model";
 
 type Props = {
+    selectedCard: CardName,
+    onSetSelected: (setAbbrev:string) => void
 };
 
 type SetInfo = {
@@ -40,10 +39,6 @@ const SetSearchDisabled = () => {
     );
 }
 
-type SetSearchEnabledProps = {
-    selectedCardName: CardName
-}
-
 function getSetInfos(cardName: CardName): SetInfo [] {
     let sets = cardName.cards.map(c => [c.set, c.set_name]);
     sets = uniqBy(sets, tup => tup[0]);
@@ -58,9 +53,8 @@ function getSetInfos(cardName: CardName): SetInfo [] {
     return orderBy(setInfos, "name");
 }
 
-const SetSearchEnabled = (props: SetSearchEnabledProps) => {
-    const dispatch = useDispatch();
-    const allSuggestions = getSetInfos(props.selectedCardName);
+const SetSearchEnabled = (props: Props) => {
+    const allSuggestions = getSetInfos(props.selectedCard);
     const [suggestions, setSuggestions] = React.useState(allSuggestions); // Default to all suggestions if no query
     const [query, setQuery] = React.useState("");
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(0);
@@ -102,7 +96,7 @@ const SetSearchEnabled = (props: SetSearchEnabledProps) => {
             case 'Enter':
                 if (activeSuggestionIndex >= 0) {
                     const activeSuggestion = suggestions[activeSuggestionIndex];
-                    dispatch(currentSelectionActions.selectSetAbbrev(activeSuggestion.abbrev));
+                    props.onSetSelected(activeSuggestion.abbrev);
                 }
                 break;
             default:
@@ -125,21 +119,15 @@ const SetSearchEnabled = (props: SetSearchEnabledProps) => {
                 items={suggestions}
                 activeIndex={activeSuggestionIndex}
                 getItemLabel={setInfo => setInfo.name}
-                onItemClicked={setInfo => {
-                    dispatch(currentSelectionActions.selectSetAbbrev(setInfo.abbrev));
-                }}
+                onItemClicked={setInfo => props.onSetSelected(setInfo.abbrev)}
             />
         </div>
     );
 }
 
 const SetSearch = (props: Props) => {
-    const selectedCardName = useSelector(
-        (state: RootState) => state.currentSelection.cardName
-    );
-
-    return selectedCardName === null
+    return props.selectedCard === null
         ? <SetSearchDisabled/>
-        : <SetSearchEnabled selectedCardName={selectedCardName}/>
+        : SetSearchEnabled(props);
 };
 export default SetSearch;

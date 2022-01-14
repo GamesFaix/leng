@@ -1,13 +1,12 @@
 import * as React from "react";
 import { CardName, normalizeName } from "../../../logic/model";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../store";
 import { orderBy } from "lodash";
-import { currentSelectionActions } from "../../../store/currentSelection";
 import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
 
 type Props = {
+    encyclopediaCards: CardName[],
+    onCardSelected: (name: string | null) => void
 };
 
 function searchCardNames(query: string, cardNames: CardName[]) : CardName[] {
@@ -18,12 +17,6 @@ function searchCardNames(query: string, cardNames: CardName[]) : CardName[] {
 }
 
 const CardSearch = (props: Props) => {
-    const dispatch = useDispatch();
-
-    const cardNames : CardName[] = useSelector(
-        (state: RootState) => state.encyclopedia.cardNames
-    );
-
     const [suggestions, setSuggestions] = React.useState([]);
     const [query, setQuery] = React.useState("");
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(null);
@@ -43,10 +36,10 @@ const CardSearch = (props: Props) => {
         let q = query?.trim() || "";
         q = normalizeName(q);
         setQuery(q);
-        dispatch(currentSelectionActions.clear());
+        props.onCardSelected(null);
         const suggestions = q === ""
             ? []
-            : searchCardNames(q, cardNames);
+            : searchCardNames(q, props.encyclopediaCards);
         return updateSuggestions(suggestions);
     }
 
@@ -65,7 +58,7 @@ const CardSearch = (props: Props) => {
             case 'Enter':
                 if (activeSuggestionIndex >= 0) {
                     const activeSuggestion = suggestions[activeSuggestionIndex];
-                    dispatch(currentSelectionActions.selectCardName(activeSuggestion));
+                    props.onCardSelected(activeSuggestion.name);
                 }
                 break;
             default:
@@ -87,10 +80,8 @@ const CardSearch = (props: Props) => {
             <SuggestionList
                 items={suggestions}
                 activeIndex={activeSuggestionIndex}
-                getItemLabel={cardName => cardName.name}
-                onItemClicked={cardName => {
-                    dispatch(currentSelectionActions.selectCardName(cardName));
-                }}
+                getItemLabel={card => card.name}
+                onItemClicked={card => props.onCardSelected(card.name)}
             />
         </div>
     );
