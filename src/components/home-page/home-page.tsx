@@ -1,11 +1,46 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment = require('moment');
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
-import { createBox, getBoxInfos } from '../../logic/inventoryController';
+import { createBox, deleteBox, getBoxInfos } from '../../logic/inventoryController';
 import { RootState } from '../../store';
 import { BoxState, InventoryActionTypes } from '../../store/inventory';
+
+type BoxesTableProps = {
+    boxes: BoxState[],
+    deleteBox: (name:string) => void
+}
+
+const BoxesTable = (props: BoxesTableProps) => {
+    return (<table>
+        <tbody>
+            {props.boxes.map(b =>
+                <tr key={b.name}>
+                    <td>
+                        <Link to={`/boxes/${b.name}`}>
+                            <button>
+                                {b.name}
+                            </button>
+                        </Link>
+                    </td>
+                    <td>
+                        {moment(b.lastModified).calendar()}
+                    </td>
+                    <td>
+                        <button
+                            title="Delete box"
+                            onClick={() => props.deleteBox(b.name)}
+                        >
+                            <FontAwesomeIcon icon={icons.delete}/>
+                        </button>
+                    </td>
+                </tr>
+            )}
+        </tbody>
+    </table>)
+}
 
 const HomePage = () => {
     const settings = useSelector((state: RootState) => state.settings.settings);
@@ -42,20 +77,17 @@ const HomePage = () => {
         hideNewBoxForm();
     }
 
-    function boxLink(box: BoxState) {
-        return (
-            <Link to={`/boxes/${box.name}`} key={box.name}>
-                <button>
-                    {box.name}
-                </button>
-            </Link>
-        );
+    function deleteBox1(name: string) {
+        deleteBox(settings, name, dispatch);
     }
 
     const boxLinks =
         boxes === null
         ? "Loading box info..."
-        : boxes.map(boxLink);
+        : (<BoxesTable
+            boxes={boxes}
+            deleteBox={deleteBox1}
+        />);
 
     const newBoxForm =
         isNewBoxFormVisible
