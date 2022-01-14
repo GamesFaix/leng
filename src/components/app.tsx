@@ -39,14 +39,17 @@ const App = () => {
     });
 
     return (
-        <HashRouter>
-            <Routes>
-                <Route path="/" element={<HomePage/>} />
-                <Route path="/boxes/:id" element={<BoxPage/>}/>
-                <Route path="/settings" element={<SettingsPage/>}/>
-            </Routes>
-        </HashRouter>
-    )
+        <div>
+            <h1>Leng</h1>
+            <HashRouter>
+                <Routes>
+                    <Route path="/" element={<HomePage/>} />
+                    <Route path="/boxes/:id" element={<BoxPage/>}/>
+                    <Route path="/settings" element={<SettingsPage/>}/>
+                </Routes>
+            </HashRouter>
+        </div>
+    );
 }
 
 export default App;
