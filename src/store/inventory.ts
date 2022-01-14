@@ -1,3 +1,4 @@
+import { orderBy } from "lodash";
 import { Box, BoxCard, BoxInfo } from "../logic/inventoryController";
 
 function areSameCard(a: BoxCard, b: BoxCard) : boolean {
@@ -30,6 +31,8 @@ export enum InventoryActionTypes {
     LoadBoxInfosSuccess = 'LOAD_BOX_INFOS_SUCCESS',
     LoadBoxStart = 'LOAD_BOX_START',
     LoadBoxSuccess = 'LOAD_BOX_SUCCESS',
+    CreateBox = 'CREATE_BOX',
+    DeleteBox = 'DELETE_BOX',
     AddCard = 'ADD_CARD',
     ChangeCount = 'CHANGE_COUNT',
     RemoveCard = 'REMOVE_CARD',
@@ -84,6 +87,16 @@ export type SaveBoxSuccessAction = {
     boxInfo: BoxInfo
 }
 
+export type CreateBoxAction = {
+    type: InventoryActionTypes.CreateBox,
+    boxInfo: BoxInfo
+}
+
+export type DeleteBoxAction = {
+    type: InventoryActionTypes.DeleteBox,
+    boxInfo: BoxInfo
+}
+
 export type InventoryAction =
     LoadBoxInfosStartAction |
     LoadBoxInfosSuccessAction |
@@ -93,7 +106,9 @@ export type InventoryAction =
     ChangeCountAction |
     RemoveCardAction |
     SaveBoxStartAction |
-    SaveBoxSuccessAction
+    SaveBoxSuccessAction |
+    CreateBoxAction |
+    DeleteBoxAction
 
 export function inventoryReducer(state: InventoryState = inventoryDefaultState, action: InventoryAction): InventoryState {
     switch (action.type) {
@@ -195,6 +210,20 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                     return b;
                 }
             });
+            return { ...state, boxes };
+        }
+        case InventoryActionTypes.CreateBox: {
+            const newBox : BoxState = {
+                name: action.boxInfo.name,
+                lastModified: action.boxInfo.lastModified,
+                cards: [],
+                description: ''
+            };
+            const boxes = orderBy([...state.boxes, newBox ], b => b.name);
+            return { ...state, boxes };
+        }
+        case InventoryActionTypes.DeleteBox: {
+            const boxes = state.boxes.filter(b => b.name !== action.boxInfo.name);
             return { ...state, boxes };
         }
         default:
