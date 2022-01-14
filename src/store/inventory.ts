@@ -2,8 +2,7 @@ import { orderBy } from "lodash";
 import { Box, BoxCard, BoxInfo } from "../logic/model";
 
 function areSameCard(a: BoxCard, b: BoxCard) : boolean {
-    return
-        a.scryfallId === b.scryfallId &&
+    return a.scryfallId === b.scryfallId &&
         a.foil === b.foil;
 }
 
@@ -155,7 +154,8 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                         } else {
                             return c;
                         }
-                    })
+                    });
+                    cards.push(action.card);
 
                     return { ...b, cards };
                 } else {
