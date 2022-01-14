@@ -44,7 +44,7 @@ const App = () => {
             <HashRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>} />
-                    <Route path="/boxes/:id" element={<BoxPage/>}/>
+                    <Route path="/boxes/:name" element={<BoxPage/>}/>
                     <Route path="/settings" element={<SettingsPage/>}/>
                 </Routes>
             </HashRouter>
