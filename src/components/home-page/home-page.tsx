@@ -1,46 +1,12 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import moment = require('moment');
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { createBox, deleteBox, getBoxInfos } from '../../logic/inventoryController';
 import { RootState } from '../../store';
-import { BoxState, InventoryActionTypes } from '../../store/inventory';
-
-type BoxesTableProps = {
-    boxes: BoxState[],
-    deleteBox: (name:string) => void
-}
-
-const BoxesTable = (props: BoxesTableProps) => {
-    return (<table>
-        <tbody>
-            {props.boxes.map(b =>
-                <tr key={b.name}>
-                    <td>
-                        <Link to={`/boxes/${b.name}`}>
-                            <button>
-                                {b.name}
-                            </button>
-                        </Link>
-                    </td>
-                    <td>
-                        {moment(b.lastModified).calendar()}
-                    </td>
-                    <td>
-                        <button
-                            title="Delete box"
-                            onClick={() => props.deleteBox(b.name)}
-                        >
-                            <FontAwesomeIcon icon={icons.delete}/>
-                        </button>
-                    </td>
-                </tr>
-            )}
-        </tbody>
-    </table>)
-}
+import { InventoryActionTypes } from '../../store/inventory';
+import BoxesTable from './boxes-table';
 
 const HomePage = () => {
     const settings = useSelector((state: RootState) => state.settings.settings);
