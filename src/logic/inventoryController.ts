@@ -1,6 +1,7 @@
 import { AppSettings } from "./settings-controller";
 import * as fs from 'fs';
 import { createDirIfMissing } from "./file-controller";
+import { parse } from 'path';
 
 export type BoxCard = {
     scryfallId: string,
@@ -28,9 +29,9 @@ export async function getBoxInfos(settings: AppSettings) : Promise<BoxInfo[]> {
     const files = await fs.promises.readdir(dir);
 
     const promises = files.map(async f => {
-        const stats = await fs.promises.stat(f);
+        const stats = await fs.promises.stat(`${dir}/${f}`);
         return {
-            name: f,
+            name: parse(f).name,
             lastModified: stats.mtime
         };
     });

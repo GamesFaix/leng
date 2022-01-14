@@ -6,6 +6,7 @@ import { icons } from '../../fontawesome';
 import { getBoxInfos } from '../../logic/inventoryController';
 import { RootState } from '../../store';
 import { BoxState, InventoryActionTypes } from '../../store/inventory';
+import BoxPage from '../box-page/box-page';
 
 const HomePage = () => {
     const settings = useSelector((state: RootState) => state.settings.settings);
@@ -27,7 +28,7 @@ const HomePage = () => {
 
     function boxLink(box: BoxState) {
         return (
-            <Link to={`/boxes/${box.name}`}>
+            <Link to={`/boxes/${box.name}`} key={box.name}>
                 <button>
                     {box.name}
                 </button>
