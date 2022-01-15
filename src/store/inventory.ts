@@ -83,7 +83,7 @@ export type SaveBoxStartAction = {
 
 export type SaveBoxSuccessAction = {
     type: InventoryActionTypes.SaveBoxSuccess,
-    boxInfo: BoxInfo
+    box: Box
 }
 
 export type CreateBoxAction = {
@@ -206,8 +206,8 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
 
         case InventoryActionTypes.SaveBoxSuccess: {
             const boxes = state.boxes?.map(b => {
-                if (b.name === action.boxInfo.name) {
-                    return { ...b, lastModified: action.boxInfo.lastModified };
+                if (b.name === action.box.name) {
+                    return action.box;
                 } else {
                     return b;
                 }

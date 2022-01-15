@@ -124,10 +124,7 @@ export async function updateBox(settings: AppSettings, box: Box, dispatch: (acti
 
     dispatch({
         type: InventoryActionTypes.SaveBoxSuccess,
-        boxInfo: {
-            name: box.name,
-            lastModified
-        }
+        box
     });
 
     return {
