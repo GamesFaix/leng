@@ -6,10 +6,9 @@ import { RootState } from '../store';
 import { AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
 import HomePage from './home-page/home-page';
-import BoxPage from './box-page/box-page';
 import SettingsPage from './settings-page/settings-page';
 import { AppSettings, loadSettings } from '../logic/settings-controller';
-import BoxPage2 from './box-page/box-page2';
+import BoxPage from './box-page/box-page';
 
 async function loadEncyclopedia(settings: AppSettings, dispatch: (action: EncyclopediaAction) => void) {
     dispatch({
@@ -45,7 +44,7 @@ const App = () => {
             <HashRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>} />
-                    <Route path="/boxes/:name" element={<BoxPage2/>}/>
+                    <Route path="/boxes/:name" element={<BoxPage/>}/>
                     <Route path="/settings" element={<SettingsPage/>}/>
                 </Routes>
             </HashRouter>
