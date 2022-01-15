@@ -87,6 +87,7 @@ const ActiveCardRow = (props: Props) => {
                         };
                     setCard(newState);
                 }}
+                initialQuery={props.card?.name ?? null}
             />
         </td>
         <td>
@@ -101,6 +102,7 @@ const ActiveCardRow = (props: Props) => {
                     });
                 }}
                 disabled={setSearchDisabled}
+                initialQuery={props.card?.setAbbrev.toUpperCase() ?? null}
             />
         </td>
         <td>
@@ -152,7 +154,11 @@ const ActiveCardRow = (props: Props) => {
                         foil: card.foil,
                         version: getVersionLabel(selectedVersion!)
                     });
-                    setCard(startingState);
+
+                    // If add row, clear; if edit, don't
+                    if (!props.card) {
+                        setCard(startingState);
+                    }
                 }}
             >
                 <FontAwesomeIcon icon={icons.ok}/>

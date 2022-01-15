@@ -7,7 +7,8 @@ import { NamedCard } from "../../../logic/model";
 type Props = {
     selectedCard: NamedCard | null,
     onSetSelected: (setAbbrev:string) => void,
-    disabled: boolean
+    disabled: boolean,
+    initialQuery: string | null
 };
 
 type SetInfo = {
@@ -56,8 +57,9 @@ function getSetInfos(cardName: NamedCard): SetInfo [] {
 
 const SetSearchEnabled = (props: Props) => {
     const allSuggestions = props.selectedCard ? getSetInfos(props.selectedCard) : [];
-    const [suggestions, setSuggestions] = React.useState<SetInfo[]>(allSuggestions); // Default to all suggestions if no query
-    const [query, setQuery] = React.useState("");
+    const [query, setQuery] = React.useState(props.initialQuery ?? '');
+    const startingSuggestions = searchSets(query, allSuggestions);
+    const [suggestions, setSuggestions] = React.useState<SetInfo[]>(startingSuggestions);
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState<number | null>(0);
     console.log(suggestions);
 

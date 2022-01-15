@@ -66,6 +66,12 @@ const BoxPage = () => {
         setNewBox({...newBox, cards });
     }
 
+    function deleteCard(card: BoxCard) {
+        if (!newBox?.cards) { return; }
+        const cards = newBox.cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
+        setNewBox({...newBox, cards });
+    }
+
     const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || oldBox === null || newBox === null;
     const anyChanges = true;
     const saveDisabled = false; // TODO: Only enable if any changes pending
@@ -113,8 +119,9 @@ const BoxPage = () => {
             {disabled ? "" :
                 <CardsTable
                     cards={newBox.cards ?? []}
-                    showNewCardRow={true}
-                    onAddCard={addCard}
+                    onAddClicked={addCard}
+                    onSaveEditClicked={updateCard}
+                    onDeleteClicked={deleteCard}
                 />
             }
         </div>

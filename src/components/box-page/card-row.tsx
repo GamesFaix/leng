@@ -5,6 +5,8 @@ import { BoxCard } from '../../logic/model';
 
 type Props = {
     card: BoxCard
+    onEditClicked: (card: BoxCard) => void,
+    onDeleteClicked: (card: BoxCard) => void
 }
 
 const CardRow = (props: Props) => {
@@ -30,12 +32,18 @@ const CardRow = (props: Props) => {
         </td>
         <td>
             <button
+                title="Edit"
                 type="button"
-                onClick={() => {
-                    //edit this row
-                }}
+                onClick={() => props.onEditClicked(props.card)}
             >
                 <FontAwesomeIcon icon={icons.edit}/>
+            </button>
+            <button
+                title="Delete"
+                type="button"
+                onClick={() => props.onDeleteClicked(props.card)}
+            >
+                <FontAwesomeIcon icon={icons.delete}/>
             </button>
         </td>
     </tr>);

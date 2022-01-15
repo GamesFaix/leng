@@ -4,12 +4,50 @@ import ActiveCardRow from './active-card-row/active-card-row';
 import CardRow from './card-row';
 
 type Props = {
-    showNewCardRow: boolean,
     cards: BoxCard[],
-    onAddCard: (card: BoxCard) => void
+    onAddClicked: (card: BoxCard) => void,
+    onSaveEditClicked: (card: BoxCard) => void,
+    onDeleteClicked: (card: BoxCard) => void
+}
+
+function getKey (card: BoxCard) {
+    return `${card.scryfallId}|${card.foil}`;
 }
 
 const CardsTable = (props: Props) => {
+    const [activeRowKey, setActiveRowKey] = React.useState<string | null>(null);
+
+    function addCardRow() {
+        return (<ActiveCardRow
+            key="new-card"
+            card={null}
+            onSubmit={props.onAddClicked}
+            onCancel={() => { return; }}
+        />);
+    }
+
+    function editCardRow(card: BoxCard) {
+        return (<ActiveCardRow
+            key={getKey(card)}
+            card={card}
+            onSubmit={card => {
+                props.onSaveEditClicked(card);
+                setActiveRowKey(null);
+            }}
+            onCancel={() => setActiveRowKey(null)}
+        />);
+    }
+
+    function viewCardRow(card: BoxCard) {
+        const key = getKey(card);
+        return (<CardRow
+            key={key}
+            card={card}
+            onEditClicked={_ => setActiveRowKey(key)}
+            onDeleteClicked={props.onDeleteClicked}
+        />);
+    }
+
     return (<table>
         <thead>
             <tr>
@@ -22,16 +60,14 @@ const CardsTable = (props: Props) => {
             </tr>
         </thead>
         <tbody>
-            {props.showNewCardRow
-                ? <ActiveCardRow
-                        card={null}
-                        onSubmit={props.onAddCard}
-                        onCancel={() => { return; /* maybe hide the row later */ }}
-                    />
-                : ""
+            {activeRowKey === null
+                ? addCardRow()
+                : <></>
             }
-            {props.cards.map((c, i) =>
-                <CardRow key={i.toString()} card={c}/>
+            {props.cards.map(c =>
+                activeRowKey === getKey(c)
+                    ? editCardRow(c)
+                    : viewCardRow(c)
             )}
         </tbody>
     </table>);

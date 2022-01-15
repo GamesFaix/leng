@@ -5,6 +5,7 @@ import { DebounceInput } from "react-debounce-input";
 import SuggestionList from "./suggestion-list";
 
 type Props = {
+    initialQuery: string | null,
     encyclopediaCards: NamedCard[],
     onCardSelected: (name: string | null) => void
 };
@@ -18,7 +19,7 @@ function searchCardNames(query: string, cardNames: NamedCard[]) : NamedCard[] {
 
 const CardSearch = (props: Props) => {
     const [suggestions, setSuggestions] = React.useState<NamedCard[]>([]);
-    const [query, setQuery] = React.useState("");
+    const [query, setQuery] = React.useState(props.initialQuery ?? "");
     const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState<number | null>(null);
 
     const updateSuggestions = (items: NamedCard[]) => {
