@@ -16,13 +16,17 @@ const CardRow = (props: Props) => {
             {props.card.name}
         </td>
         <td>
-            (set)
+            {props.card.setAbbrev.toUpperCase()}
         </td>
         <td>
             {props.card.version}
         </td>
         <td>
-            {props.card.foil}
+            <input
+                type="checkbox"
+                checked={props.card.foil}
+                disabled
+            />
         </td>
         <td>
             <button
