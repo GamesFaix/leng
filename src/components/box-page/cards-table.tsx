@@ -6,7 +6,7 @@ import CardRow from './card-row';
 type Props = {
     cards: BoxCard[],
     onAddClicked: (card: BoxCard) => void,
-    onSaveEditClicked: (card: BoxCard) => void,
+    onSaveEditClicked: (card: BoxCard, index: number) => void,
     onDeleteClicked: (card: BoxCard) => void
 }
 
@@ -26,15 +26,17 @@ const CardsTable = (props: Props) => {
         />);
     }
 
-    function editCardRow(card: BoxCard) {
+    function editCardRow(card: BoxCard, index: number) {
         return (<ActiveCardRow
             key={getKey(card)}
             card={card}
             onSubmit={card => {
-                props.onSaveEditClicked(card);
+                props.onSaveEditClicked(card, index);
                 setActiveRowKey(null);
             }}
-            onCancel={() => setActiveRowKey(null)}
+            onCancel={() => {
+                setActiveRowKey(null);
+            }}
         />);
     }
 
@@ -43,7 +45,9 @@ const CardsTable = (props: Props) => {
         return (<CardRow
             key={key}
             card={card}
-            onEditClicked={_ => setActiveRowKey(key)}
+            onEditClicked={card => {
+                setActiveRowKey(key);
+            }}
             onDeleteClicked={props.onDeleteClicked}
         />);
     }
@@ -64,9 +68,9 @@ const CardsTable = (props: Props) => {
                 ? addCardRow()
                 : <></>
             }
-            {props.cards.map(c =>
+            {props.cards.map((c, i) =>
                 activeRowKey === getKey(c)
-                    ? editCardRow(c)
+                    ? editCardRow(c, i)
                     : viewCardRow(c)
             )}
         </tbody>

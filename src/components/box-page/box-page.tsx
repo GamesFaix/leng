@@ -9,6 +9,21 @@ import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 
+function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
+    const match = cards.find(c => c.name === card.name && c.foil === card.foil);
+    if (match) {
+        const others = cards.filter(c => c.name !== card.name || c.foil !== card.foil);
+        const updated = {
+            ...match,
+            count: match.count + card.count
+        };
+        return [updated].concat(others);
+    }
+    else {
+        return [card].concat(cards);
+    }
+}
+
 const BoxPage = () => {
     const { name } = useParams();
 
@@ -35,40 +50,25 @@ const BoxPage = () => {
 
     function addCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
-
-        const match = newBox.cards.find(c => c.scryfallId === card.scryfallId && c.foil === card.foil);
-
-        let cards = [];
-
-        if (match) {
-            const updatedCard = {
-                ...match,
-                count: match.count + card.count
-            };
-            cards = [ updatedCard ].concat(newBox.cards.filter(c => c !== match));
-        }
-        else {
-            cards = [ card ].concat(newBox.cards);
-        }
-
-        setNewBox({...newBox, cards });
-    }
-
-    function updateCard(card: BoxCard) {
-        if (!newBox?.cards) { return; }
-
-        const match = newBox.cards.find(c => c.scryfallId === card.scryfallId && c.foil === card.foil);
-
-        const cards = match
-            ? [ card ].concat(newBox.cards.filter(c => c !== match))
-            : [ card ].concat(newBox.cards);
-
+        const cards = addOrIncrememnt(newBox.cards, card);
         setNewBox({...newBox, cards });
     }
 
     function deleteCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
         const cards = newBox.cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
+        setNewBox({...newBox, cards });
+    }
+
+    function saveCardEdit(card: BoxCard, index: number) {
+        if (!newBox?.cards) { return; }
+        let cards = [];
+        for (let i=0; i<newBox.cards.length; i++) {
+            if (i !== index) {
+                cards.push(newBox.cards[i]);
+            }
+        }
+        cards = addOrIncrememnt(cards, card);
         setNewBox({...newBox, cards });
     }
 
@@ -81,7 +81,7 @@ const BoxPage = () => {
             <h2>Box <span className="box-name">{name}</span></h2>
             {newBox?.description
                 ? <h3>{newBox.description}</h3>
-                : ""
+                : <></>
             }
             <br/>
             <div>
@@ -120,7 +120,7 @@ const BoxPage = () => {
                 <CardsTable
                     cards={newBox.cards ?? []}
                     onAddClicked={addCard}
-                    onSaveEditClicked={updateCard}
+                    onSaveEditClicked={saveCardEdit}
                     onDeleteClicked={deleteCard}
                 />
             }
