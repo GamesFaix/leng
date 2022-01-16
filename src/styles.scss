@@ -77,3 +77,15 @@ td {
     height: 30px;
     padding: 0;
 }
+
+.boxes-area {
+    padding: 3px;
+    background: white;
+    min-height: 200px;
+    width: 500px;
+
+    td {
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+}

@@ -1,9 +1,6 @@
-import moment = require('moment');
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { icons } from '../../fontawesome';
 import { BoxState } from '../../store/inventory';
-import IconButton from '../common/icon-button';
+import BoxRow from './box-row';
 
 type Props = {
     boxes: BoxState[],
@@ -12,31 +9,21 @@ type Props = {
 
 const BoxesTable = (props: Props) => {
     return (<table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Last modified</th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
             {props.boxes.map(b =>
-                <tr key={b.name}>
-                    <td>
-                        <Link to={`/boxes/${b.name}`}>
-                            <button>
-                                {b.name}
-                            </button>
-                        </Link>
-                    </td>
-                    <td>
-                        {moment(b.lastModified).calendar()}
-                    </td>
-                    <td>
-                        <IconButton
-                            title="Delete box"
-                            onClick={() => {
-                                if (confirm("Are you sure you want to exile this box?")) {
-                                    props.deleteBox(b.name);
-                                }
-                            }}
-                            icon={icons.delete}
-                        />
-                    </td>
-                </tr>
+                <BoxRow
+                    key={b.name}
+                    box={b}
+                    deleteBox={() => props.deleteBox(b.name)}
+                />
             )}
         </tbody>
     </table>)

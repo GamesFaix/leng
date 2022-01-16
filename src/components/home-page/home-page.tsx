@@ -39,6 +39,12 @@ const HomePage = () => {
                 onClick={() => setIsNewBoxFormVisible(true)}
                 icon={icons.add}
             />
+            <Link to="/settings">
+                <IconButton
+                    title="Settings"
+                    icon={icons.settings}
+                />
+            </Link>
             <br/>
             <br/>
             {isNewBoxFormVisible
@@ -48,20 +54,16 @@ const HomePage = () => {
                 </>)
                 : ""
             }
-            {hideBoxesTable
-                ? "Loading box info..."
-                : (<BoxesTable
-                    boxes={boxes}
-                    deleteBox={name => deleteBox(settings, name, dispatch)}
-                />)
-            }
-            <br/>
-            <Link to="/settings">
-                <IconButton
-                    title="Settings"
-                    icon={icons.settings}
-                />
-            </Link>
+            <h3>Your boxes:</h3>
+            <div className="boxes-area">
+                {hideBoxesTable
+                    ? "Loading box info..."
+                    : (<BoxesTable
+                        boxes={boxes}
+                        deleteBox={name => deleteBox(settings, name, dispatch)}
+                    />)
+                }
+            </div>
         </div>
     );
 };
