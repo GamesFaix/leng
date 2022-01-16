@@ -1,9 +1,9 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from '../../../fontawesome';
 import { BoxCard, NamedCard } from '../../../logic/model';
 import { RootState } from '../../../store';
+import IconButton from '../../common/icon-button';
 import CardSearch from './card-search';
 import SetSearch from './set-search';
 import VersionPicker, { getVersionLabel } from './version-picker';
@@ -141,9 +141,8 @@ const ActiveCardRow = (props: Props) => {
             />
         </td>
         <td>
-            <button
+            <IconButton
                 title="Submit"
-                type="button"
                 disabled={submitDisabled}
                 onClick={() => {
                     props.onSubmit({
@@ -160,19 +159,16 @@ const ActiveCardRow = (props: Props) => {
                         setCard(startingState);
                     }
                 }}
-            >
-                <FontAwesomeIcon icon={icons.ok}/>
-            </button>
-            <button
+                icon={icons.ok}
+            />
+            <IconButton
                 title="Cancel"
-                type="button"
                 onClick={() => {
                     props.onCancel();
                     setCard(startingState);
                 }}
-            >
-                <FontAwesomeIcon icon={icons.cancel}/>
-            </button>
+                icon={icons.cancel}
+            />
         </td>
     </tr>);
 }

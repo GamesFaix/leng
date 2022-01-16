@@ -1,7 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { BoxCard } from '../../logic/model';
+import IconButton from '../common/icon-button';
 
 type Props = {
     card: BoxCard
@@ -31,20 +31,16 @@ const CardRow = (props: Props) => {
             />
         </td>
         <td>
-            <button
+            <IconButton
                 title="Edit"
-                type="button"
                 onClick={() => props.onEditClicked(props.card)}
-            >
-                <FontAwesomeIcon icon={icons.edit}/>
-            </button>
-            <button
+                icon={icons.edit}
+            />
+            <IconButton
                 title="Delete"
-                type="button"
                 onClick={() => props.onDeleteClicked(props.card)}
-            >
-                <FontAwesomeIcon icon={icons.delete}/>
-            </button>
+                icon={icons.delete}
+            />
         </td>
     </tr>);
 }

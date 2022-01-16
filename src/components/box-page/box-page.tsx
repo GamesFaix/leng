@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,6 +6,7 @@ import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
+import IconButton from '../common/icon-button';
 import CardsTable from './cards-table';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
@@ -85,18 +85,17 @@ const BoxPage = () => {
             }
             <br/>
             <div>
-                <button
+                <IconButton
                     title="Home"
+                    icon={icons.home}
                     onClick={() => {
                         if (anyChanges && !confirm("There are unsaved changes. Are you sure you want to go back?")) {
                             return;
                         }
                         navigate('/', { replace: true });
                     }}
-                >
-                    <FontAwesomeIcon icon={icons.home} />
-                </button>
-                <button
+                />
+                <IconButton
                     title="Save"
                     onClick={() => {
                         if (settings && newBox) {
@@ -111,9 +110,8 @@ const BoxPage = () => {
                         }
                     }}
                     disabled={saveDisabled}
-                >
-                    <FontAwesomeIcon icon={icons.save} />
-                </button>
+                    icon={icons.save}
+                />
             </div>
             <br/>
             {disabled ? "" :

@@ -1,10 +1,10 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { saveSettings } from '../../logic/settings-controller';
 import { RootState } from '../../store';
+import IconButton from '../common/icon-button';
 
 const SettingsPage = () => {
     const oldSettings = useSelector((state: RootState) => state.settings.settings) ?? { dataPath: '' };
@@ -52,9 +52,10 @@ const SettingsPage = () => {
             </form>
             <br/>
             <Link to ="/">
-                <button title="Home">
-                    <FontAwesomeIcon icon={icons.home} />
-                </button>
+                <IconButton
+                    title="Home"
+                    icon={icons.home}
+                />
             </Link>
         </div>
     )

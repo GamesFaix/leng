@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,6 +5,7 @@ import { icons } from '../../fontawesome';
 import { deleteBox, getBoxInfos } from '../../logic/inventoryController';
 import { RootState } from '../../store';
 import { InventoryActionTypes } from '../../store/inventory';
+import IconButton from '../common/icon-button';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
 
@@ -34,12 +34,11 @@ const HomePage = () => {
         <div>
             <h2>Home</h2>
             <br/>
-            <button
+            <IconButton
                 title="Add box"
                 onClick={() => setIsNewBoxFormVisible(true)}
-            >
-                <FontAwesomeIcon icon={icons.add} />
-            </button>
+                icon={icons.add}
+            />
             <br/>
             <br/>
             {isNewBoxFormVisible
@@ -58,9 +57,10 @@ const HomePage = () => {
             }
             <br/>
             <Link to="/settings">
-                <button title="Settings">
-                    <FontAwesomeIcon icon={icons.settings} />
-                </button>
+                <IconButton
+                    title="Settings"
+                    icon={icons.settings}
+                />
             </Link>
         </div>
     );
