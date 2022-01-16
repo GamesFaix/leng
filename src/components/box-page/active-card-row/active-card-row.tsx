@@ -70,6 +70,8 @@ const ActiveCardRow = (props: Props) => {
                         count: Number(e.target.value)
                     });
                 }}
+                autoFocus
+                onFocus={e => e.target.select()}
             />
         </td>
         <td>
