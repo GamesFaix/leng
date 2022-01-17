@@ -13,7 +13,9 @@ type Props<T> = {
     onSelection: (item: T | null) => void,
     getSuggestions: (items: T[], query: string) => T[],
     defaultSuggestions?: DefaultSuggestionMode,
-    minLength?: number
+    minLength?: number,
+    disabled?: boolean,
+    placeholder?: string
 };
 
 function getStartingQuery<T>(props: Props<T>) {
@@ -34,12 +36,18 @@ function AutocompleteInput<T>(props: Props<T>) {
     const [query, setQuery] = React.useState(getStartingQuery(props));
     const [suggestions, setSuggestions] = React.useState(getStartingSuggestions(props));
 
-    const updateSuggestions = (newQuery: string) => setSuggestions(props.getSuggestions(props.items, newQuery));
-    const debouncedUpdateSuggestions = React.useCallback(debounce(updateSuggestions, 200), []);
+    const updateSuggestions = (newQuery: string) => {
+        const newSuggestions = props.getSuggestions(props.items, newQuery);
+        setSuggestions(newSuggestions);
+    }
+    const debouncedUpdateSuggestions = React.useCallback(
+        debounce(updateSuggestions, 200),
+        [setSuggestions, props]
+    );
 
     return (<div className="new-card-search">
         <input
-            placeholder="Enter card name..."
+            placeholder={props.placeholder}
             value={query}
             onChange={e => {
                 const newQuery = e.target.value;
@@ -51,6 +59,7 @@ function AutocompleteInput<T>(props: Props<T>) {
                     debouncedUpdateSuggestions(newQuery);
                 }
             }}
+            disabled={props.disabled}
         />
         <div className="suggestion-container">
             <ul>

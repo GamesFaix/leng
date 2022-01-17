@@ -1,5 +1,5 @@
 import { Card } from 'scryfall-api';
-import { groupBy } from 'lodash';
+import { groupBy, orderBy, uniqBy } from 'lodash';
 
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
@@ -42,6 +42,12 @@ export type BoxInfo = {
     lastModified: Date
 }
 
+export type SetInfo = {
+    name: string,
+    normalizedName: string,
+    abbrev: string
+}
+
 export function normalizeName(name: string) : string {
     return name
         .toLowerCase()
@@ -49,17 +55,39 @@ export function normalizeName(name: string) : string {
         .replace(/\s+/g, " ");
 }
 
-export function toNamedCards(cards: Card[]) : NamedCard[] {
-    const groups = groupBy(cards, c => normalizeName(c.name));
+export const CardModule = {
+    toNamedCards(cards: Card[]) : NamedCard[] {
+        const groups = groupBy(cards, c => normalizeName(c.name));
 
-    return Object.entries(groups)
-        .map(entry => {
-            const [key, value] = entry;
-            return {
-                normalizedName: key,
-                name: value[0].name,
-                oracleId: value[0].oracle_id,
-                cards: value
-            };
-        });
+        return Object.entries(groups)
+            .map(entry => {
+                const [key, value] = entry;
+                return {
+                    normalizedName: key,
+                    name: value[0].name,
+                    oracleId: value[0].oracle_id,
+                    cards: value
+                };
+            });
+    },
+
+    toSetInfo(card: Card) : SetInfo {
+        return {
+            name: card.set_name,
+            abbrev: card.set,
+            normalizedName: normalizeName(card.set_name)
+        };
+    },
+
+    toSetInfos(cards: Card[]) : SetInfo[] {
+        const oneCardPerSet = uniqBy(cards, c => c.set);
+        const setInfos = oneCardPerSet.map(CardModule.toSetInfo);
+        return orderBy(setInfos, s => s.name);
+    }
+}
+
+export const NamedCardModule = {
+    toSetInfos(namedCard: NamedCard): SetInfo[] {
+        return namedCard.cards.map(CardModule.toSetInfo);
+    }
 }

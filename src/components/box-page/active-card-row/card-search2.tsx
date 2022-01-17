@@ -29,6 +29,7 @@ const CardSearch2 = (props: Props) => {
         getSuggestions={searchCards}
         defaultSuggestions={DefaultSuggestionMode.None}
         minLength={3}
+        placeholder="Enter card name..."
     />);
 };
 export default CardSearch2;
