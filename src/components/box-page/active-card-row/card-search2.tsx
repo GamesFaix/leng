@@ -1,6 +1,6 @@
 import * as React from "react";
 import { NamedCard } from "../../../logic/model";
-import { orderBy } from "lodash";
+import { debounce, orderBy } from "lodash";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 
@@ -23,14 +23,21 @@ const CardSearch2 = (props: Props) => {
     const match = props.selectedCardName ? namedCards.find(c => c.name === props.selectedCardName) ?? null : null;
     const [suggestions, setSuggestions] = React.useState<NamedCard[]>(match ? [ match ] : []);
 
+    const debouncedUpdateSuggestions = React.useCallback(
+        debounce(q => setSuggestions(searchCardNames(q, namedCards)), 200),
+        []);
+
     return (<div className="new-card-search">
         <input
             value={query}
             onChange={e => {
                 const newQuery = e.target.value;
-                const newSuggestions = searchCardNames(newQuery, namedCards);
                 setQuery(newQuery);
-                setSuggestions(newSuggestions);
+                if (query.length >= 3) {
+                    debouncedUpdateSuggestions(newQuery);
+                } else {
+                    setSuggestions([]);
+                }
             }}
             placeholder="Enter card name..."
         />
@@ -39,9 +46,9 @@ const CardSearch2 = (props: Props) => {
                 {suggestions.map(namedCard => (
                     <li key={namedCard.name}
                         onClick={() => {
-                            props.onCardSelected(namedCard.name);
                             setQuery(namedCard.name);
                             setSuggestions([]);
+                            props.onCardSelected(namedCard.name);
                         }}
                     >
                         {namedCard.name}
