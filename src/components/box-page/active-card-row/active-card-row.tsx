@@ -5,6 +5,7 @@ import { BoxCard, NamedCard } from '../../../logic/model';
 import { RootState } from '../../../store';
 import IconButton from '../../common/icon-button';
 import CardSearch from './card-search';
+import CardSearch2 from './card-search2';
 import SetSearch from './set-search';
 import VersionPicker, { getVersionLabel } from './version-picker';
 
@@ -75,8 +76,7 @@ const ActiveCardRow = (props: Props) => {
             />
         </td>
         <td>
-            <CardSearch
-                encyclopediaCards={namedCards}
+            <CardSearch2
                 onCardSelected={name => {
                     const newState : State = name === null
                         ? defaultState
@@ -89,7 +89,7 @@ const ActiveCardRow = (props: Props) => {
                         };
                     setCard(newState);
                 }}
-                initialQuery={props.card?.name ?? null}
+                selectedCardName={props.card?.name ?? null}
             />
         </td>
         <td>
