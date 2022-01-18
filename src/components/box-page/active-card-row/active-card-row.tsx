@@ -108,9 +108,10 @@ const ActiveCardRow = (props: Props) => {
         </td>
         <td>
             <VersionPicker
-                cardName={selectedNamedCard}
+                namedCard={selectedNamedCard}
                 setAbbrev={card.setAbbrev}
-                onVersionPicked={(scryfallId) => {
+                version={selectedVersion}
+                onVersionPicked={(scryfallId: string) => {
                     const pickedCard = selectedNamedCard?.cards.find(c => c.id === scryfallId) ?? null;
 
                     const foil =

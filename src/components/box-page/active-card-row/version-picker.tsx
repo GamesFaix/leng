@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { NamedCard } from '../../../logic/model';
 import { Card } from 'scryfall-api';
-import SuggestionList from './suggestion-list';
+import AutocompleteInput, { DefaultSuggestionMode } from '../../common/autocomplete-input';
 
 type Props = {
-    cardName: NamedCard | null,
+    namedCard: NamedCard | null,
     setAbbrev: string | null,
-    onVersionPicked: (scryfallId: string, isFoil: boolean) => void,
+    version: Card | null,
+    onVersionPicked: (scryfallId: string) => void,
     disabled: boolean
 }
 
@@ -25,56 +26,26 @@ export function getVersionLabel(card: Card) : string {
     return `${numberStr} ${frameStr}${frameEffectsStr}`;
 }
 
-const EnabledVersionPicker = (props: Props) => {
-    const suggestions = props.cardName?.cards.filter(c => c.set === props.setAbbrev) ?? [];
-    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState(0);
-
-    const onKeyDown = (e: React.KeyboardEvent) => {
-        switch(e.code) {
-            case 'ArrowUp':
-                if (suggestions.length > 0 && activeSuggestionIndex > 0) {
-                    setActiveSuggestionIndex(activeSuggestionIndex - 1);
-                }
-                break;
-            case 'ArrowDown':
-                if (suggestions.length > 0 && activeSuggestionIndex < suggestions.length - 1){
-                    setActiveSuggestionIndex(activeSuggestionIndex + 1);
-                }
-                break;
-            case 'Enter':
-                if (activeSuggestionIndex >= 0) {
-                    const activeSuggestion = suggestions[activeSuggestionIndex];
-                    props.onVersionPicked(activeSuggestion.id, activeSuggestion.foil);
-                }
-                break;
-            default:
-                return;
-        }
-    }
-
-    return (
-        <SuggestionList
-            items={suggestions}
-            activeIndex={activeSuggestionIndex}
-            getItemLabel={getVersionLabel}
-            onItemClicked={version => props.onVersionPicked(version.id, version.foil)}
-        />
-    )
-};
-
-const DisabledVersionPicker = () => {
-    return (
-        <div>
-
-        </div>
-    );
-};
+function getSuggestions(cards: Card[], query: string) : Card[] {
+    return cards;
+}
 
 const VersionPicker = (props: Props) => {
-    return (
-        props.disabled
-            ? <DisabledVersionPicker/>
-            : EnabledVersionPicker(props)
-    );
+    const suggestions = props.namedCard?.cards.filter(c => c.set === props.setAbbrev) ?? [];
+
+    return (<AutocompleteInput
+        items={suggestions}
+        selection={props.version}
+        getItemLabel={getVersionLabel}
+        onSelection={c => {
+            if (c) {
+                props.onVersionPicked(c.id);
+            }
+        }}
+        getSuggestions={getSuggestions}
+        defaultSuggestions={DefaultSuggestionMode.All}
+        placeholder="Select version..."
+        disabled={props.disabled}
+    />);
 }
 export default VersionPicker;
