@@ -112,6 +112,7 @@ function AutocompleteInput<T>(props: Props<T>) {
                 moveActiveIndexDown();
                 break;
             case 'Enter':
+            case 'Tab':
                 selectActiveItem();
                 break;
             default:
