@@ -4,8 +4,8 @@ import { icons } from '../../../fontawesome';
 import { BoxCard, NamedCard } from '../../../logic/model';
 import { RootState } from '../../../store';
 import IconButton from '../../common/icon-button';
-import CardSearch2 from './card-search2';
-import SetSearch2 from './set-search2';
+import CardSearch from './card-search';
+import SetSearch from './set-search';
 import VersionPicker, { getVersionLabel } from './version-picker';
 
 type Props = {
@@ -75,7 +75,7 @@ const ActiveCardRow = (props: Props) => {
             />
         </td>
         <td>
-            <CardSearch2
+            <CardSearch
                 onCardSelected={name => {
                     const newState : State = name === null
                         ? defaultState
@@ -92,7 +92,7 @@ const ActiveCardRow = (props: Props) => {
             />
         </td>
         <td>
-            <SetSearch2
+            <SetSearch
                 selectedCard={selectedNamedCard}
                 onSetAbbrevSelected={setAbbrev => {
                     setCard({

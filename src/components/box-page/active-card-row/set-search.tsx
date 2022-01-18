@@ -1,141 +1,40 @@
 import * as React from "react";
-import { orderBy, uniqBy } from "lodash";
-import { DebounceInput } from "react-debounce-input";
-import SuggestionList from "./suggestion-list";
-import { NamedCard } from "../../../logic/model";
+import { orderBy } from "lodash";
+import { NamedCard, NamedCardModule, SetInfo } from "../../../logic/model";
+import AutocompleteInput, { DefaultSuggestionMode } from "../../common/autocomplete-input";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../store";
 
 type Props = {
     selectedCard: NamedCard | null,
-    onSetSelected: (setAbbrev:string) => void,
-    disabled: boolean,
-    initialQuery: string | null
+    selectedSetAbbrev: string | null,
+    onSetAbbrevSelected: (setAbbrev: string | null) => void,
+    disabled: boolean
 };
 
-type SetInfo = {
-    name: string,
-    normalizedName: string,
-    abbrev: string
-}
-
-function searchSets(query: string, sets: SetInfo[]) : SetInfo[] {
+function searchSets(sets: SetInfo[], query: string) : SetInfo[] {
     const q = query.toLowerCase().trim();
     if (q === "") { return sets; }
 
     const matches = sets.filter(s => s.normalizedName.includes(q) || s.abbrev.includes(q));
-    const sorted = orderBy(matches, x => x);
+    const sorted = orderBy(matches, x => x.name);
     return sorted;
 }
 
-const SetSearchDisabled = () => {
-    return (
-        <div className="search">
-            <DebounceInput
-                className="search-input"
-                minLength={0}
-                debounceTimeout={300}
-                placeholder="Enter set name..."
-                disabled={true}
-                onChange={() => { return; }}
-            />
-        </div>
-    );
-}
-
-function getSetInfos(cardName: NamedCard): SetInfo [] {
-    let sets = cardName.cards.map(c => [c.set, c.set_name]);
-    sets = uniqBy(sets, tup => tup[0]);
-
-    const setInfos = sets.map(s => {
-        return {
-            abbrev: s[0],
-            name: s[1],
-            normalizedName: s[1].toLowerCase()
-        };
-    });
-    return orderBy(setInfos, "name");
-}
-
-const SetSearchEnabled = (props: Props) => {
-    const allSuggestions = props.selectedCard ? getSetInfos(props.selectedCard) : [];
-    const [query, setQuery] = React.useState(props.initialQuery ?? '');
-    const startingSuggestions = searchSets(query, allSuggestions);
-    const [suggestions, setSuggestions] = React.useState<SetInfo[]>(startingSuggestions);
-    const [activeSuggestionIndex, setActiveSuggestionIndex] = React.useState<number | null>(0);
-    console.log(suggestions);
-
-    const updateSuggestions = (items: SetInfo[]) => {
-        console.log(items);
-        setSuggestions(items);
-        if (items.length === 0) {
-            setActiveSuggestionIndex(null);
-        }
-        else {
-            setActiveSuggestionIndex(0);
-        }
-    }
-
-    const updateQuery = (query: string) => {
-        const q = query?.trim() || "";
-        setQuery(q);
-
-        const suggestions = q === ""
-            ? allSuggestions
-            : searchSets(q, allSuggestions);
-        return updateSuggestions(suggestions);
-    }
-
-    const onKeyDown = (e: React.KeyboardEvent) => {
-        switch(e.code) {
-            case 'ArrowUp':
-                if (suggestions.length > 0 &&
-                    activeSuggestionIndex !== null &&
-                    activeSuggestionIndex > 0) {
-                    setActiveSuggestionIndex(activeSuggestionIndex - 1);
-                }
-                break;
-            case 'ArrowDown':
-                if (suggestions.length > 0 &&
-                    activeSuggestionIndex !== null &&
-                    activeSuggestionIndex < suggestions.length - 1){
-                    setActiveSuggestionIndex(activeSuggestionIndex + 1);
-                }
-                break;
-            case 'Enter':
-                if (activeSuggestionIndex !== null &&
-                    activeSuggestionIndex >= 0) {
-                    const activeSuggestion = suggestions[activeSuggestionIndex];
-                    props.onSetSelected(activeSuggestion.abbrev);
-                }
-                break;
-            default:
-                return;
-        }
-    }
-
-    return (
-        <div className="search">
-            <DebounceInput
-                className="search-input"
-                onChange={e => updateQuery(e.target.value)}
-                minLength={0}
-                debounceTimeout={300}
-                onKeyDown={onKeyDown}
-                value={query}
-                placeholder="Enter set name..."
-            />
-            <SuggestionList
-                items={suggestions}
-                activeIndex={activeSuggestionIndex}
-                getItemLabel={setInfo => setInfo.name}
-                onItemClicked={setInfo => props.onSetSelected(setInfo.abbrev)}
-            />
-        </div>
-    );
-}
-
 const SetSearch = (props: Props) => {
-    return props.disabled
-        ? <SetSearchDisabled/>
-        : SetSearchEnabled(props);
+    const allSets = useSelector((state: RootState) => state.encyclopedia.sets);
+    const setsOfSelectedCard = props.selectedCard ? NamedCardModule.toSetInfos(props.selectedCard) : [];
+    const selectedSet = props.selectedSetAbbrev ? allSets.find(s => s.abbrev === props.selectedSetAbbrev) ?? null : null;
+
+    return (<AutocompleteInput
+        items={setsOfSelectedCard}
+        selection={selectedSet}
+        getItemLabel={s => s.name}
+        onSelection={s => props.onSetAbbrevSelected(s?.abbrev ?? null)}
+        getSuggestions={searchSets}
+        defaultSuggestions={DefaultSuggestionMode.All}
+        placeholder="Enter set name..."
+        disabled={props.disabled}
+    />);
 };
 export default SetSearch;
