@@ -15,7 +15,8 @@ type Props<T> = {
     defaultSuggestions?: DefaultSuggestionMode,
     minLength?: number,
     disabled?: boolean,
-    placeholder?: string
+    placeholder?: string,
+    debounceMilliseconds?: number
 };
 
 function getStartingQuery<T>(props: Props<T>) {
@@ -48,8 +49,14 @@ function AutocompleteInput<T>(props: Props<T>) {
         setSuggestions(newSuggestions);
         setActiveIndex(0);
     }
-    const debouncedUpdateSuggestions = React.useCallback(
-        debounce(updateSuggestions, 200),
+
+    const maybeDebounced_updateSuggestions =
+        props.debounceMilliseconds
+            ? debounce(updateSuggestions, props.debounceMilliseconds)
+            : updateSuggestions;
+
+    const updateSuggestionsCallback = React.useCallback(
+        maybeDebounced_updateSuggestions,
         [setSuggestions, props]
     );
 
@@ -101,7 +108,7 @@ function AutocompleteInput<T>(props: Props<T>) {
         if (props.minLength && query.length < props.minLength) {
             setSuggestions([]);
         } else {
-            debouncedUpdateSuggestions(newQuery);
+            updateSuggestionsCallback(newQuery);
         }
     }
 

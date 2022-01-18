@@ -30,6 +30,7 @@ const CardSearch = (props: Props) => {
         defaultSuggestions={DefaultSuggestionMode.None}
         minLength={3}
         placeholder="Enter card name..."
+        debounceMilliseconds={200}
     />);
 };
 export default CardSearch;
