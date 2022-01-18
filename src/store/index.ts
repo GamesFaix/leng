@@ -12,7 +12,7 @@ const reducer = combineReducers({
 
 export const store = createStore(
     reducer,
-    applyMiddleware(logger)
+  //  applyMiddleware(logger)
 );
 
 export type RootState = ReturnType<typeof store.getState>

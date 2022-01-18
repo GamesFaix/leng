@@ -92,7 +92,6 @@ export async function loadBox(settings: AppSettings, name: string, dispatch: (ac
 
     const buffer = await fs.promises.readFile(path);
     const json = buffer.toString();
-    console.log(json);
     const box: Box = JSON.parse(json);
 
     dispatch({

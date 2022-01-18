@@ -39,7 +39,6 @@ const BoxPage = () => {
 
     React.useLayoutEffect(() => {
         if (settings !== null && oldBox?.cards === null && name){
-            console.log('loading box');
             loadBox(settings, name, dispatch)
                 .then(box => {
                     setOldBox(box);

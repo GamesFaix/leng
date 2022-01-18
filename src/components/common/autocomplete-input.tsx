@@ -60,6 +60,15 @@ function AutocompleteInput<T>(props: Props<T>) {
         [setSuggestions, props]
     );
 
+    React.useLayoutEffect(() => {
+        if (props.defaultSuggestions === DefaultSuggestionMode.All &&
+            props.items.length > 0 &&
+            query === '') {
+
+            maybeDebounced_updateSuggestions(query);
+        }
+    }, [setSuggestions, suggestions, props, query]);
+
     const onSelection = (item: T) => {
         setQuery(props.getItemLabel(item));
         setSuggestions([]);

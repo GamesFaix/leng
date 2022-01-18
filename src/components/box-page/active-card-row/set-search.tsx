@@ -35,6 +35,7 @@ const SetSearch = (props: Props) => {
         defaultSuggestions={DefaultSuggestionMode.All}
         placeholder="Enter set name..."
         disabled={props.disabled}
+        debounceMilliseconds={10}
     />);
 };
 export default SetSearch;
