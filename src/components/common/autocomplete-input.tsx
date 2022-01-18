@@ -105,7 +105,7 @@ function AutocompleteInput<T>(props: Props<T>) {
         const newQuery = e.target.value;
         setQuery(newQuery);
 
-        if (props.minLength && query.length < props.minLength) {
+        if (props.minLength && newQuery.length < props.minLength) {
             setSuggestions([]);
         } else {
             updateSuggestionsCallback(newQuery);
