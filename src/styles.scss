@@ -21,35 +21,6 @@ h2 {
     display: flex;
 }
 
-.search {
-    width: 300px;
-    padding: 6px;
-}
-
-.search-input {
-    width: 100%;
-}
-
-.search-result-list {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: scroll;
-}
-
-.suggestion {
-    text-align: left;
-
-    color: darkslategray;
-    background-color: gainsboro;
-
-    &.active {
-        color: gainsboro;
-        background-color: darkslategray;
-    }
-}
-
 .svg-inline--fa {
     padding: 3px;
 }
