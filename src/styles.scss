@@ -91,7 +91,7 @@ td {
     }
 }
 
-.new-card-search {
+.autocomplete-input {
     input {
         width: 250px;
         padding: 3px;
@@ -112,7 +112,8 @@ td {
         background: white;
         display: block;
         border-bottom: 1px solid gray;
-        &:hover {
+
+        &.active {
             cursor: pointer;
             background-color: rgba(0, 0, 0, 0.14);
         }

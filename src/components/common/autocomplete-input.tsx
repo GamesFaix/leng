@@ -32,47 +32,97 @@ function getStartingSuggestions<T>(props: Props<T>) {
     }
 }
 
+function getStartingIndex<T>(props: Props<T>) {
+    return props.selection
+        ? props.items.indexOf(props.selection)
+        : 0;
+}
+
 function AutocompleteInput<T>(props: Props<T>) {
     const [query, setQuery] = React.useState(getStartingQuery(props));
     const [suggestions, setSuggestions] = React.useState(getStartingSuggestions(props));
+    const [activeIndex, setActiveIndex] = React.useState(getStartingIndex(props));
 
     const updateSuggestions = (newQuery: string) => {
         const newSuggestions = props.getSuggestions(props.items, newQuery);
         setSuggestions(newSuggestions);
+        setActiveIndex(0);
     }
     const debouncedUpdateSuggestions = React.useCallback(
         debounce(updateSuggestions, 200),
         [setSuggestions, props]
     );
 
-    return (<div className="new-card-search">
+    const onSelection = (item: T) => {
+        setQuery(props.getItemLabel(item));
+        setSuggestions([]);
+        props.onSelection(item);
+    }
+
+    const moveActiveIndexUp = () => {
+        if (activeIndex > 0) {
+            setActiveIndex(activeIndex - 1);
+        }
+    }
+
+    const moveActiveIndexDown = () => {
+        if (suggestions.length > 0 &&
+            activeIndex < suggestions.length - 1){
+            setActiveIndex(activeIndex + 1);
+        }
+    }
+
+    const selectActiveItem = () => {
+        if (suggestions.length > 0) {
+            onSelection(suggestions[activeIndex]);
+        }
+    }
+
+    const onKeyDown = (e: React.KeyboardEvent) => {
+        switch(e.code) {
+            case 'ArrowUp':
+                moveActiveIndexUp();
+                break;
+            case 'ArrowDown':
+                moveActiveIndexDown();
+                break;
+            case 'Enter':
+                selectActiveItem();
+                break;
+            default:
+                return;
+        }
+    }
+
+    const onQueryChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const newQuery = e.target.value;
+        setQuery(newQuery);
+
+        if (props.minLength && query.length < props.minLength) {
+            setSuggestions([]);
+        } else {
+            debouncedUpdateSuggestions(newQuery);
+        }
+    }
+
+    return (<div className="autocomplete-input">
         <input
             placeholder={props.placeholder}
             value={query}
-            onChange={e => {
-                const newQuery = e.target.value;
-                setQuery(newQuery);
-
-                if (props.minLength && query.length < props.minLength) {
-                    setSuggestions([]);
-                } else {
-                    debouncedUpdateSuggestions(newQuery);
-                }
-            }}
+            onChange={onQueryChanged}
             disabled={props.disabled}
+            onKeyDown={onKeyDown}
         />
         <div className="suggestion-container">
             <ul>
-                {suggestions.map(item => {
+                {suggestions.map((item, index) => {
                     const label = props.getItemLabel(item);
                     return (
                         <li
                             key={label}
-                            onClick={() => {
-                                setQuery(label);
-                                setSuggestions([]);
-                                props.onSelection(item);
-                            }}
+                            onClick={_ => onSelection(item)}
+                            className={activeIndex === index ? "active" : ""}
+                            onMouseOver={_ => setActiveIndex(index)}
                         >
                             {label}
                         </li>
