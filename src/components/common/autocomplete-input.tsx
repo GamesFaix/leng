@@ -69,6 +69,15 @@ function AutocompleteInput<T>(props: Props<T>) {
         }
     }, [setSuggestions, suggestions, props, query]);
 
+    const isOnlyOneOption = props.items.length === 1;
+
+    React.useEffect(() => {
+        if (isOnlyOneOption &&
+            props.selection === null) {
+                onSelection(props.items[0]);
+            }
+    }, [setQuery, setSuggestions, props])
+
     const onSelection = (item: T) => {
         setQuery(props.getItemLabel(item));
         setSuggestions([]);
@@ -126,7 +135,7 @@ function AutocompleteInput<T>(props: Props<T>) {
             placeholder={props.placeholder}
             value={query}
             onChange={onQueryChanged}
-            disabled={props.disabled}
+            disabled={props.disabled || isOnlyOneOption}
             onKeyDown={onKeyDown}
         />
         <div className="suggestion-container">
