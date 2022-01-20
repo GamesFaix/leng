@@ -56,6 +56,75 @@ const ActiveCardRow = (props: Props) => {
     const submitDisabled = versionPickerDisabled || selectedVersion === null;
     const foilCheckboxDisabled = submitDisabled || !selectedVersion.foil || !selectedVersion.nonfoil;
 
+    const setCount = (e: React.ChangeEvent<HTMLInputElement>) =>
+        setCard({
+            ...card,
+            count: Number(e.target.value)
+        });
+
+    const setCardName = (name: string | null) => {
+        const newState : State = name === null
+            ? defaultState
+            : {
+                ...card,
+                name,
+                setAbbrev: null,
+                scryfallId: null,
+                foil: false
+            };
+        setCard(newState);
+    }
+
+    const setSetAbbrev = (setAbbrev: string | null) =>
+        setCard({
+            ...card,
+            setAbbrev,
+            scryfallId: null,
+            foil: false
+        });
+
+    const setVersion = (scryfallId: string) =>  {
+        const pickedCard = selectedNamedCard?.cards.find(c => c.id === scryfallId) ?? null;
+
+        const foil =
+            (pickedCard && pickedCard.foil && !pickedCard.nonfoil) ? true :
+            (pickedCard && !pickedCard.foil && pickedCard.nonfoil) ? false :
+            card.foil;
+
+        setCard({
+            ...card,
+            scryfallId,
+            foil
+        });
+    }
+
+    const setFoil = (e: React.ChangeEvent<HTMLInputElement>) =>
+        setCard({
+            ...card,
+            foil: e.target.checked
+        });
+
+    const submit = () => {
+        props.onSubmit({
+            name: card.name!,
+            scryfallId: card.scryfallId!,
+            setAbbrev: card.setAbbrev!,
+            count: card.count,
+            foil: card.foil,
+            version: getVersionLabel(selectedVersion!)
+        });
+
+        // If add row, clear; if edit, don't
+        if (!props.card) {
+            setCard(startingState);
+        }
+    }
+
+    const cancel = () => {
+        props.onCancel();
+        setCard(startingState);
+    }
+
     return (<tr>
         <td>
             <input
@@ -64,44 +133,21 @@ const ActiveCardRow = (props: Props) => {
                 min={1}
                 max={1000}
                 value={card.count}
-                onChange={e => {
-                    setCard({
-                        ...card,
-                        count: Number(e.target.value)
-                    });
-                }}
+                onChange={setCount}
                 autoFocus
                 onFocus={e => e.target.select()}
             />
         </td>
         <td>
             <CardSearch
-                onCardSelected={name => {
-                    const newState : State = name === null
-                        ? defaultState
-                        : {
-                            ...card,
-                            name,
-                            setAbbrev: null,
-                            scryfallId: null,
-                            foil: false
-                        };
-                    setCard(newState);
-                }}
+                onCardSelected={setCardName}
                 selectedCardName={props.card?.name ?? null}
             />
         </td>
         <td>
             <SetSearch
                 selectedCard={selectedNamedCard}
-                onSetAbbrevSelected={setAbbrev => {
-                    setCard({
-                        ...card,
-                        setAbbrev,
-                        scryfallId: null,
-                        foil: false
-                    });
-                }}
+                onSetAbbrevSelected={setSetAbbrev}
                 selectedSetAbbrev={card.setAbbrev}
                 disabled={setSearchDisabled}
             />
@@ -111,20 +157,7 @@ const ActiveCardRow = (props: Props) => {
                 namedCard={selectedNamedCard}
                 setAbbrev={card.setAbbrev}
                 version={selectedVersion}
-                onVersionPicked={(scryfallId: string) => {
-                    const pickedCard = selectedNamedCard?.cards.find(c => c.id === scryfallId) ?? null;
-
-                    const foil =
-                        (pickedCard && pickedCard.foil && !pickedCard.nonfoil) ? true :
-                        (pickedCard && !pickedCard.foil && pickedCard.nonfoil) ? false :
-                        card.foil;
-
-                    setCard({
-                        ...card,
-                        scryfallId,
-                        foil
-                    });
-                }}
+                onVersionPicked={setVersion}
                 disabled={versionPickerDisabled}
             />
         </td>
@@ -133,12 +166,7 @@ const ActiveCardRow = (props: Props) => {
                 type="checkbox"
                 title="Foil"
                 checked={card.foil}
-                onChange={e => {
-                    setCard({
-                        ...card,
-                        foil: e.target.checked
-                    });
-                }}
+                onChange={setFoil}
                 disabled={foilCheckboxDisabled}
             />
         </td>
@@ -146,29 +174,12 @@ const ActiveCardRow = (props: Props) => {
             <IconButton
                 title="Submit"
                 disabled={submitDisabled}
-                onClick={() => {
-                    props.onSubmit({
-                        name: card.name!,
-                        scryfallId: card.scryfallId!,
-                        setAbbrev: card.setAbbrev!,
-                        count: card.count,
-                        foil: card.foil,
-                        version: getVersionLabel(selectedVersion!)
-                    });
-
-                    // If add row, clear; if edit, don't
-                    if (!props.card) {
-                        setCard(startingState);
-                    }
-                }}
+                onClick={submit}
                 icon={icons.ok}
             />
             <IconButton
                 title="Cancel"
-                onClick={() => {
-                    props.onCancel();
-                    setCard(startingState);
-                }}
+                onClick={cancel}
                 icon={icons.cancel}
             />
         </td>
