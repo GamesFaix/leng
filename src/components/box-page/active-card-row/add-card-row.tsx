@@ -29,20 +29,23 @@ const defaultState : State = {
 };
 
 const AddCardRow = (props: Props) => {
-    const [card, setCard] = React.useState<State>(defaultState);
+    const [cardNameQuery, setCardNameQuery] = React.useState('');
+    const [setNameQuery, setSetNameQuery] = React.useState('');
+    const [versionQuery, setVersionQuery] = React.useState('');
+    const [selection, setCard] = React.useState<State>(defaultState);
     const namedCards : NamedCard[] = useStore.namedCards();
 
-    const selectedNamedCard = namedCards.find(c => c.name === card.name) ?? null;
-    const selectedVersion = selectedNamedCard?.cards.find(c => c.id === card.scryfallId) ?? null;
+    const selectedNamedCard = namedCards.find(c => c.name === selection.name) ?? null;
+    const selectedVersion = selectedNamedCard?.cards.find(c => c.id === selection.scryfallId) ?? null;
 
-    const setSearchDisabled = card.name === null;
-    const versionPickerDisabled = setSearchDisabled || card.setAbbrev === null;
+    const setSearchDisabled = selection.name === null;
+    const versionPickerDisabled = setSearchDisabled || selection.setAbbrev === null;
     const submitDisabled = versionPickerDisabled || selectedVersion === null;
     const foilCheckboxDisabled = submitDisabled || !selectedVersion.foil || !selectedVersion.nonfoil;
 
     const setCount = (e: React.ChangeEvent<HTMLInputElement>) =>
         setCard({
-            ...card,
+            ...selection,
             count: Number(e.target.value)
         });
 
@@ -50,18 +53,18 @@ const AddCardRow = (props: Props) => {
         const newState : State = name === null
             ? defaultState
             : {
-                ...card,
+                ...selection,
                 name,
                 setAbbrev: null,
                 scryfallId: null,
                 foil: false
             };
         setCard(newState);
-    }
+    };
 
     const setSetAbbrev = (setAbbrev: string | null) =>
         setCard({
-            ...card,
+            ...selection,
             setAbbrev,
             scryfallId: null,
             foil: false
@@ -73,38 +76,45 @@ const AddCardRow = (props: Props) => {
         const foil =
             (pickedCard && pickedCard.foil && !pickedCard.nonfoil) ? true :
             (pickedCard && !pickedCard.foil && pickedCard.nonfoil) ? false :
-            card.foil;
+            selection.foil;
 
         setCard({
-            ...card,
+            ...selection,
             scryfallId,
             foil
         });
-    }
+    };
 
     const setFoil = (e: React.ChangeEvent<HTMLInputElement>) =>
         setCard({
-            ...card,
+            ...selection,
             foil: e.target.checked
         });
 
+    function clear() {
+        setCard(defaultState);
+        setCardNameQuery('');
+        setSetNameQuery('');
+        setVersionQuery('');
+    }
+
     const submit = () => {
+        const c = { ...selection };
+        clear();
         props.onSubmit({
-            name: card.name!,
-            scryfallId: card.scryfallId!,
-            setAbbrev: card.setAbbrev!,
-            count: card.count,
-            foil: card.foil,
+            name: c.name!,
+            scryfallId: c.scryfallId!,
+            setAbbrev: c.setAbbrev!,
+            count: c.count,
+            foil: c.foil,
             version: getVersionLabel(selectedVersion!)
         });
-
-        setCard(defaultState);
-    }
+    };
 
     const cancel = () => {
+        clear();
         props.onCancel();
-        setCard(defaultState);
-    }
+    };
 
     return (<tr>
         <td>
@@ -113,7 +123,7 @@ const AddCardRow = (props: Props) => {
                 title="Count"
                 min={1}
                 max={1000}
-                value={card.count}
+                value={selection.count}
                 onChange={setCount}
                 autoFocus
                 onFocus={e => e.target.select()}
@@ -122,31 +132,37 @@ const AddCardRow = (props: Props) => {
         <td>
             <CardSearch
                 onCardSelected={setCardName}
-                selectedCardName={card.name}
+                selectedCardName={selection.name}
+                query={cardNameQuery}
+                setQuery={setCardNameQuery}
             />
         </td>
         <td>
             <SetSearch
                 selectedCard={selectedNamedCard}
                 onSetAbbrevSelected={setSetAbbrev}
-                selectedSetAbbrev={card.setAbbrev}
+                selectedSetAbbrev={selection.setAbbrev}
                 disabled={setSearchDisabled}
+                query={setNameQuery}
+                setQuery={setSetNameQuery}
             />
         </td>
         <td>
             <VersionPicker
                 namedCard={selectedNamedCard}
-                setAbbrev={card.setAbbrev}
+                setAbbrev={selection.setAbbrev}
                 version={selectedVersion}
                 onVersionPicked={setVersion}
                 disabled={versionPickerDisabled}
+                query={versionQuery}
+                setQuery={setVersionQuery}
             />
         </td>
         <td>
             <input
                 type="checkbox"
                 title="Foil"
-                checked={card.foil}
+                checked={selection.foil}
                 onChange={setFoil}
                 disabled={foilCheckboxDisabled}
             />

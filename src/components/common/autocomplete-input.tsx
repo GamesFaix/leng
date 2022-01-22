@@ -16,12 +16,10 @@ type Props<T> = {
     minLength?: number,
     disabled?: boolean,
     placeholder?: string,
-    debounceMilliseconds?: number
+    debounceMilliseconds?: number,
+    query: string,
+    setQuery: (query: string) => void
 };
-
-function getStartingQuery<T>(props: Props<T>) {
-    return props.selection ? props.getItemLabel(props.selection) : '';
-}
 
 function getStartingSuggestions<T>(props: Props<T>) {
     switch (props.defaultSuggestions) {
@@ -40,7 +38,6 @@ function getStartingIndex<T>(props: Props<T>) {
 }
 
 function AutocompleteInput<T>(props: Props<T>) {
-    const [query, setQuery] = React.useState(getStartingQuery(props));
     const [suggestions, setSuggestions] = React.useState(getStartingSuggestions(props));
     const [activeIndex, setActiveIndex] = React.useState(getStartingIndex(props));
 
@@ -63,11 +60,11 @@ function AutocompleteInput<T>(props: Props<T>) {
     React.useLayoutEffect(() => {
         if (props.defaultSuggestions === DefaultSuggestionMode.All &&
             props.items.length > 0 &&
-            query === '') {
+            props.query === '') {
 
-            maybeDebounced_updateSuggestions(query);
+            maybeDebounced_updateSuggestions(props.query);
         }
-    }, [setSuggestions, suggestions, props, query]);
+    }, [setSuggestions, suggestions, props]);
 
     const isOnlyOneOption = props.items.length === 1;
 
@@ -76,10 +73,10 @@ function AutocompleteInput<T>(props: Props<T>) {
             props.selection === null) {
                 onSelection(props.items[0]);
             }
-    }, [setQuery, setSuggestions, props])
+    }, [setSuggestions, props])
 
     const onSelection = (item: T) => {
-        setQuery(props.getItemLabel(item));
+        props.setQuery(props.getItemLabel(item));
         setSuggestions([]);
         props.onSelection(item);
     }
@@ -122,7 +119,7 @@ function AutocompleteInput<T>(props: Props<T>) {
 
     const onQueryChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newQuery = e.target.value;
-        setQuery(newQuery);
+        props.setQuery(newQuery);
 
         if (props.minLength && newQuery.length < props.minLength) {
             setSuggestions([]);
@@ -134,7 +131,7 @@ function AutocompleteInput<T>(props: Props<T>) {
     return (<div className="autocomplete-input">
         <input
             placeholder={props.placeholder}
-            value={query}
+            value={props.query}
             onChange={onQueryChanged}
             disabled={props.disabled || isOnlyOneOption}
             onKeyDown={onKeyDown}

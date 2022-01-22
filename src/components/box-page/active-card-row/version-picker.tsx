@@ -8,7 +8,9 @@ type Props = {
     setAbbrev: string | null,
     version: Card | null,
     onVersionPicked: (scryfallId: string) => void,
-    disabled: boolean
+    disabled: boolean,
+    query: string,
+    setQuery: (query: string) => void
 }
 
 export function getVersionLabel(card: Card) : string {
@@ -34,6 +36,8 @@ const VersionPicker = (props: Props) => {
     const suggestions = props.namedCard?.cards.filter(c => c.set === props.setAbbrev) ?? [];
 
     return (<AutocompleteInput
+        query={props.query}
+        setQuery={props.setQuery}
         items={suggestions}
         selection={props.version}
         getItemLabel={getVersionLabel}

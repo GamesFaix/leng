@@ -1,13 +1,14 @@
 import * as React from "react";
 import { NamedCard } from "../../../logic/model";
 import { orderBy } from "lodash";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../store";
 import AutocompleteInput, { DefaultSuggestionMode } from "../../common/autocomplete-input";
+import { useStore } from "../../../hooks";
 
 type Props = {
-    selectedCardName: string | null
-    onCardSelected: (name: string | null) => void
+    selectedCardName: string | null,
+    onCardSelected: (name: string | null) => void,
+    query: string,
+    setQuery: (query: string) => void
 };
 
 function searchCards(namedCards: NamedCard[], query: string) : NamedCard[] {
@@ -18,10 +19,12 @@ function searchCards(namedCards: NamedCard[], query: string) : NamedCard[] {
 }
 
 const CardSearch = (props: Props) => {
-    const namedCards = useSelector((state: RootState) => state.encyclopedia.namedCards);
+    const namedCards = useStore.namedCards();
     const selection = props.selectedCardName ? namedCards.find(c => c.name === props.selectedCardName) ?? null : null;
 
     return (<AutocompleteInput
+        query={props.query}
+        setQuery={props.setQuery}
         items={namedCards}
         selection={selection}
         getItemLabel={c => c.name}

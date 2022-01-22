@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BoxCard } from '../../logic/model';
-import ActiveCardRow from './active-card-row/active-card-row';
+// import ActiveCardRow from './active-card-row/active-card-row';
 import AddCardRow from './active-card-row/add-card-row';
 import CardRow from './card-row';
 
@@ -26,19 +26,19 @@ const CardsTable = (props: Props) => {
         />);
     }
 
-    function editCardRow(card: BoxCard, index: number) {
-        return (<ActiveCardRow
-            key={getKey(card)}
-            card={card}
-            onSubmit={card => {
-                props.onSaveEditClicked(card, index);
-                setActiveRowKey(null);
-            }}
-            onCancel={() => {
-                setActiveRowKey(null);
-            }}
-        />);
-    }
+    // function editCardRow(card: BoxCard, index: number) {
+    //     return (<ActiveCardRow
+    //         key={getKey(card)}
+    //         card={card}
+    //         onSubmit={card => {
+    //             props.onSaveEditClicked(card, index);
+    //             setActiveRowKey(null);
+    //         }}
+    //         onCancel={() => {
+    //             setActiveRowKey(null);
+    //         }}
+    //     />);
+    // }
 
     function viewCardRow(card: BoxCard) {
         const key = getKey(card);
@@ -70,7 +70,7 @@ const CardsTable = (props: Props) => {
             }
             {props.cards.map((c, i) =>
                 activeRowKey === getKey(c)
-                    ? editCardRow(c, i)
+                    ? <></> //editCardRow(c, i)
                     : viewCardRow(c)
             )}
         </tbody>

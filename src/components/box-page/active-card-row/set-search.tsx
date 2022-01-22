@@ -9,7 +9,9 @@ type Props = {
     selectedCard: NamedCard | null,
     selectedSetAbbrev: string | null,
     onSetAbbrevSelected: (setAbbrev: string | null) => void,
-    disabled: boolean
+    disabled: boolean,
+    query: string,
+    setQuery: (query: string) => void
 };
 
 function searchSets(sets: SetInfo[], query: string) : SetInfo[] {
@@ -27,6 +29,8 @@ const SetSearch = (props: Props) => {
     const selectedSet = props.selectedSetAbbrev ? allSets.find(s => s.abbrev === props.selectedSetAbbrev) ?? null : null;
 
     return (<AutocompleteInput
+        query={props.query}
+        setQuery={props.setQuery}
         items={setsOfSelectedCard}
         selection={selectedSet}
         getItemLabel={s => s.name}
