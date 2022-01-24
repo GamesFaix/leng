@@ -1,3 +1,4 @@
+import { Checkbox, TableCell, TableRow } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { BoxCard } from '../../logic/model';
@@ -10,27 +11,26 @@ type Props = {
 }
 
 const CardRow = (props: Props) => {
-    return (<tr>
-        <td>
+    return (<TableRow>
+        <TableCell>
             {`${props.card.count}x`}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             {props.card.name}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             {props.card.setAbbrev.toUpperCase()}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             {props.card.version}
-        </td>
-        <td>
-            <input
-                type="checkbox"
+        </TableCell>
+        <TableCell>
+            <Checkbox
                 checked={props.card.foil}
                 disabled
             />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <IconButton
                 title="Edit"
                 onClick={() => props.onEditClicked(props.card)}
@@ -45,7 +45,7 @@ const CardRow = (props: Props) => {
                 variant='outlined'
                 color='secondary'
             />
-        </td>
-    </tr>);
+        </TableCell>
+    </TableRow>);
 }
 export default CardRow;
