@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { icons } from '../../../fontawesome';
 import { useStore } from '../../../hooks';
-import { BoxCard } from '../../../logic/model';
-import IconButton from '../../common/icon-button';
-import CardSearch from './card-search';
-import SetSearch from './set-search';
-import VersionPicker, { getVersionLabel } from './version-picker';
+import { BoxCard, normalizeName, SetInfo } from '../../../logic/model';
+import { Autocomplete, Button, Checkbox, TableCell, TableRow, TextField } from '@mui/material';
+import { Card, Set } from 'scryfall-api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {
     card: BoxCard,
@@ -14,181 +13,251 @@ type Props = {
 }
 
 type State = {
-    name: string | null,
-    setAbbrev: string | null,
+    cardNameQuery: string,
+    cardName: string | null,
+    setName: string | null,
     scryfallId: string | null,
-    foil: boolean,
+    foil: boolean | null,
     count: number
 }
 
 const defaultState : State = {
-    name: null,
-    setAbbrev: null,
+    cardNameQuery: '',
+    cardName: null,
+    setName: null,
     scryfallId: null,
-    foil: false,
+    foil: null,
     count: 1
 };
 
+function stateFromCard (card: BoxCard, sets: SetInfo[]) : State {
+    const setName = sets.find(s => s.abbrev === card.setAbbrev)?.name ?? '';
+
+    return {
+        cardNameQuery: card.name,
+        cardName: card.name,
+        setName: setName,
+        scryfallId: card.scryfallId,
+        foil: card.foil,
+        count: card.count
+    };
+}
+
+export function getVersionLabel(card: Card) : string {
+    const numberStr = `#${card.collector_number}`;
+    const frameStr = `${card.frame}-frame`;
+
+    let frameEffectsStr = "";
+    if (card.frame_effects?.includes("showcase")) {
+        frameEffectsStr += " Showcase";
+    }
+    if (card.frame_effects?.includes("extendedart")){
+        frameEffectsStr += " Extended Art"
+    }
+
+    return `${numberStr} ${frameStr}${frameEffectsStr}`;
+}
+
+function getFoilOptions(card: Card | null) {
+    const xs = [];
+    if (card?.nonfoil) { xs.push(false); }
+    if (card?.foil) { xs.push(true); }
+    return xs;
+}
+
 const EditCardRow = (props: Props) => {
-    const selectedCard = useStore.cards().find(c => c.id === props.card.scryfallId) ?? null;
-    const selectedNamedCard = useStore.namedCards().find(c => c.name === props.card.name) ?? null;
-    const [cardNameQuery, setCardNameQuery] = React.useState(selectedCard?.name ?? '');
-    const [setNameQuery, setSetNameQuery] = React.useState(selectedCard?.set_name ?? '');
-    const [versionQuery, setVersionQuery] = React.useState(selectedCard ? getVersionLabel(selectedCard) : '');
-    const [selection, setCard] = React.useState<State>({ ...props.card });
+    const sets = useStore.sets();
+    const startingState = stateFromCard(props.card, sets);
+    const [state, setState] = React.useState(startingState);
+    const allCardNames = useStore.cardNames();
+    const [cardNameOptions, setCardNameOptions] = React.useState<string[]>([]);
+    const setNameOptions = useStore.setNamesOfCardName(state.cardName ?? '');
+    const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
+        .map(c => { return { ...c, label: getVersionLabel(c) }});
+    const selectedCard = cardVersionOptions.find(c => c.id === state.scryfallId) ?? null;
+    const foilOptions = getFoilOptions(selectedCard);
 
-    const setSearchDisabled = selection.name === null;
-    const versionPickerDisabled = setSearchDisabled || selection.setAbbrev === null;
-    const submitDisabled = versionPickerDisabled || selectedCard === null;
-    const foilCheckboxDisabled = submitDisabled || !selectedCard.foil || !selectedCard.nonfoil;
+    React.useEffect(() => {
+        if (setNameOptions.length === 1 && !state.setName) {
+            setSetName(setNameOptions[0]);
+        }
+        else if (cardVersionOptions.length === 1 && !state.scryfallId) {
+            setScryfallId(cardVersionOptions[0].id);
+        }
+        else if (foilOptions.length >= 1 && state.foil === null) {
+            setFoil(foilOptions[0]);
+        }
+    });
 
-    const setCount = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setCard({
-            ...selection,
+    const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.foil === null;
+    const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.foil === null;
+
+    const setCount = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setState({
+            ...state,
             count: Number(e.target.value)
         });
+    };
+
+    const updateCardNameQuery = (query: string) => {
+        setState({
+            ...state,
+            cardNameQuery: query
+        });
+
+        const cardNameOptions =
+            query.length < 3
+                ? []
+                : allCardNames.filter(x => normalizeName(x).includes(query.toLowerCase()));
+
+        setCardNameOptions(cardNameOptions);
+    };
 
     const setCardName = (name: string | null) => {
-        const newState : State = name === null
-            ? defaultState
-            : {
-                ...selection,
-                name,
-                setAbbrev: null,
-                scryfallId: null,
-                foil: false
-            };
-        setCard(newState);
-        setCardNameQuery(name ?? '');
-        setSetNameQuery('');
-        setVersionQuery('');
-    };
-
-    const setSetAbbrev = (setAbbrev: string | null) => {
-        setCard({
-            ...selection,
-            setAbbrev,
+        setState({
+            ...state,
+            cardName: name,
+            setName: null,
             scryfallId: null,
-            foil: false
-        });
-        setSetNameQuery(setAbbrev ?? '');
-        setVersionQuery('');
-    }
-
-    const setVersion = (scryfallId: string) =>  {
-        const pickedCard = selectedNamedCard?.cards.find(c => c.id === scryfallId) ?? null;
-
-        const foil =
-            (pickedCard && pickedCard.foil && !pickedCard.nonfoil) ? true :
-            (pickedCard && !pickedCard.foil && pickedCard.nonfoil) ? false :
-            selection.foil;
-
-        setCard({
-            ...selection,
-            scryfallId,
-            foil
+            foil: null,
         });
     };
 
-    const setFoil = (e: React.ChangeEvent<HTMLInputElement>) =>
-        setCard({
-            ...selection,
-            foil: e.target.checked
+    const setSetName = (name: string | null) => {
+        setState({
+            ...state,
+            setName: name,
+            scryfallId: null,
+            foil: null,
         });
+    };
 
-    function clear() {
-        setCard(defaultState);
-        setCardNameQuery('');
-        setSetNameQuery('');
-        setVersionQuery('');
-    }
+    const setScryfallId = (id: string | null) => {
+        setState({
+            ...state,
+            scryfallId: id,
+            foil: null,
+        });
+    };
+
+    const setFoil = (value: boolean) => {
+        setState({
+            ...state,
+            foil: value
+        });
+    };
 
     const submit = () => {
-        const c = { ...selection };
-        clear();
-        props.onSubmit({
-            name: c.name!,
-            scryfallId: c.scryfallId!,
-            setAbbrev: c.setAbbrev!,
-            count: c.count,
-            foil: c.foil,
-            version: getVersionLabel(selectedCard!)
-        });
+        if (!state.cardName || !selectedCard || state.foil === null || !state.scryfallId) {
+            console.log(state);
+            console.log(selectedCard);
+            throw "Card data missing"
+        }
+
+        const card: BoxCard = {
+            name: state.cardName,
+            setAbbrev: selectedCard.set,
+            foil: state.foil,
+            version: selectedCard.label,
+            count: state.count,
+            scryfallId: state.scryfallId
+        };
+
+        props.onSubmit(card);
+        setState(defaultState);
     };
 
     const cancel = () => {
-        clear();
         props.onCancel();
+        setState(defaultState);
     };
 
-    return (<tr>
-        <td>
-            <input
+    return (<TableRow>
+        <TableCell>
+            <TextField
                 type="number"
                 title="Count"
-                min={1}
-                max={1000}
-                value={selection.count}
+                inputProps={{
+                    min: 1,
+                    max: 1000,
+                }}
+                sx={{ width: 100 }}
+                value={state.count}
                 onChange={setCount}
                 autoFocus
                 onFocus={e => e.target.select()}
             />
-        </td>
-        <td>
-            <CardSearch
-                onCardSelected={setCardName}
-                selectedCardName={selection.name}
-                query={cardNameQuery}
-                setQuery={setCardNameQuery}
+        </TableCell>
+        <TableCell>
+            <Autocomplete
+                options={cardNameOptions}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Card" />}
+                onChange={(e, value, reason) => setCardName(value)}
+                value={state.cardName}
+                autoSelect
+                autoHighlight
+                inputValue={state.cardNameQuery}
+                onInputChange={(e, value, reason) => updateCardNameQuery(value)}
+                noOptionsText="Type at least 3 characters to search cards..."
             />
-        </td>
-        <td>
-            <SetSearch
-                selectedCard={selectedNamedCard}
-                onSetAbbrevSelected={setSetAbbrev}
-                selectedSetAbbrev={selection.setAbbrev}
-                disabled={setSearchDisabled}
-                query={setNameQuery}
-                setQuery={setSetNameQuery}
+        </TableCell>
+        <TableCell>
+            <Autocomplete
+                options={setNameOptions}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Set" />}
+                onChange={(e, value, reason) => setSetName(value)}
+                disabled={setNameOptions.length < 2}
+                value={state.setName}
+                autoSelect
+                autoHighlight
+                selectOnFocus
+                openOnFocus
             />
-        </td>
-        <td>
-            <VersionPicker
-                namedCard={selectedNamedCard}
-                setAbbrev={selection.setAbbrev}
-                version={selectedCard}
-                onVersionPicked={setVersion}
-                disabled={versionPickerDisabled}
-                query={versionQuery}
-                setQuery={setVersionQuery}
+        </TableCell>
+        <TableCell>
+            <Autocomplete
+                options={cardVersionOptions}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField {...params} label="Version" />}
+                onChange={(e, card, reason) => setScryfallId(card?.id ?? null)}
+                disabled={cardVersionOptions.length < 2}
+                value={selectedCard}
+                autoSelect
+                autoHighlight
+                selectOnFocus
+                openOnFocus
             />
-        </td>
-        <td>
-            <input
-                type="checkbox"
+        </TableCell>
+        <TableCell>
+            <Checkbox
                 title="Foil"
-                checked={selection.foil}
-                onChange={setFoil}
-                disabled={foilCheckboxDisabled}
+                checked={state.foil ?? false}
+                onChange={e => setFoil(e.target.checked)}
+                disabled={foilOptions.length < 2}
             />
-        </td>
-        <td>
-            <IconButton
-                title="Submit"
-                disabled={submitDisabled}
+        </TableCell>
+        <TableCell>
+            <Button
                 onClick={submit}
-                icon={icons.ok}
+                title="Submit"
+                disabled={isSubmitButtonDisabled}
                 variant="contained"
                 color="success"
-            />
-            <IconButton
-                title="Cancel"
+            >
+                <FontAwesomeIcon icon={icons.ok}/>
+            </Button>
+            <Button
                 onClick={cancel}
-                icon={icons.cancel}
+                title="Cancel"
+                disabled={isCancelButtonDisabled}
                 variant="outlined"
                 color="error"
-            />
-        </td>
-    </tr>);
+            >
+                <FontAwesomeIcon icon={icons.cancel}/>
+            </Button>
+        </TableCell>
+    </TableRow>);
 }
 export default EditCardRow;

@@ -1,7 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import * as React from 'react';
 import { BoxCard } from '../../logic/model';
-import AddCardRow from './active-card-row/add-card-row2';
+import AddCardRow from './active-card-row/add-card-row';
 import EditCardRow from './active-card-row/edit-card-row';
 import CardRow from './card-row';
 

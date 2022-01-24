@@ -1,6 +1,7 @@
 import { Checkbox, TableCell, TableRow } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
+import { useStore } from '../../hooks';
 import { BoxCard } from '../../logic/model';
 import IconButton from '../common/icon-button';
 
@@ -11,19 +12,14 @@ type Props = {
 }
 
 const CardRow = (props: Props) => {
+    const sets = useStore.sets();
+    const setName = sets.find(s => s.abbrev === props.card.setAbbrev)?.name ?? '';
+
     return (<TableRow>
-        <TableCell>
-            {`${props.card.count}x`}
-        </TableCell>
-        <TableCell>
-            {props.card.name}
-        </TableCell>
-        <TableCell>
-            {props.card.setAbbrev.toUpperCase()}
-        </TableCell>
-        <TableCell>
-            {props.card.version}
-        </TableCell>
+        <TableCell>{`${props.card.count}x`}</TableCell>
+        <TableCell>{props.card.name}</TableCell>
+        <TableCell>{setName}</TableCell>
+        <TableCell>{props.card.version}</TableCell>
         <TableCell>
             <Checkbox
                 checked={props.card.foil}
