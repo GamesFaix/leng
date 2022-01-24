@@ -1,3 +1,4 @@
+import { uniq } from 'lodash';
 import { Card } from 'scryfall-api';
 import { AsyncRequestStatus, CardModule, NamedCard, SetInfo } from '../logic/model';
 
@@ -5,14 +6,16 @@ export type EncyclopediaState = {
     isLoading: boolean,
     cards: Card[],
     namedCards: NamedCard[],
-    sets: SetInfo[]
+    sets: SetInfo[],
+    cardNames: string[],
 }
 
 const encyclopediaDefaultState : EncyclopediaState = {
     isLoading: false,
     cards: [],
     namedCards: [],
-    sets: []
+    sets: [],
+    cardNames: [],
 }
 
 export enum EncyclopediaActionTypes {
@@ -33,6 +36,8 @@ export type EncyclopediaAction =
     LoadEncyclopediaStartAction |
     LoadEncyclopediaSuccessAction
 
+const sortAndDeduplicate = (xs: string[])  => uniq(xs).sort();
+
 export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefaultState, action: EncyclopediaAction) : EncyclopediaState {
     switch (action.type) {
         case EncyclopediaActionTypes.LoadStart:
@@ -46,7 +51,8 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
                 isLoading: false,
                 cards: action.cards,
                 namedCards: CardModule.toNamedCards(action.cards),
-                sets: CardModule.toSetInfos(action.cards)
+                sets: CardModule.toSetInfos(action.cards),
+                cardNames: sortAndDeduplicate(action.cards.map(c => c.name)),
             };
         default:
             return state;

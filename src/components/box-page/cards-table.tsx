@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { BoxCard } from '../../logic/model';
 // import ActiveCardRow from './active-card-row/active-card-row';
-import AddCardRow from './active-card-row/add-card-row';
+import AddCardRow from './active-card-row/add-card-row2';
 import EditCardRow from './active-card-row/edit-card-row';
 import CardRow from './card-row';
 
