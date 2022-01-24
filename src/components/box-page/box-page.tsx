@@ -117,14 +117,16 @@ const BoxPage = () => {
                 />
             </div>
             <br/>
-            {disabled ? "" :
-                <CardsTable
-                    cards={newBox.cards ?? []}
-                    onAddClicked={addCard}
-                    onSaveEditClicked={saveCardEdit}
-                    onDeleteClicked={deleteCard}
-                />
-            }
+            <div className="cards-area">
+                {disabled ? "" :
+                    <CardsTable
+                        cards={newBox.cards ?? []}
+                        onAddClicked={addCard}
+                        onSaveEditClicked={saveCardEdit}
+                        onDeleteClicked={deleteCard}
+                    />
+                }
+            </div>
         </div>
     );
 };

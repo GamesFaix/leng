@@ -21,13 +21,11 @@ h2 {
     display: flex;
 }
 
-.box-name {
-    font-style: italic;
-}
-
 .boxes-area {
-    padding: 3px;
-    background: white;
     min-height: 200px;
     width: 500px;
+}
+
+.cards-area {
+    width: 1350px;
 }
