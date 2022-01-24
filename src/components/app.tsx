@@ -9,6 +9,7 @@ import HomePage from './home-page/home-page';
 import SettingsPage from './settings-page/settings-page';
 import { AppSettings, loadSettings } from '../logic/settings-controller';
 import BoxPage from './box-page/box-page';
+import { Typography } from '@mui/material';
 
 async function loadEncyclopedia(settings: AppSettings, dispatch: (action: EncyclopediaAction) => void) {
     dispatch({
@@ -40,7 +41,9 @@ const App = () => {
 
     return (
         <div>
-            <h1>Leng</h1>
+            <Typography variant="h2">
+                Leng
+            </Typography>
             <HashRouter>
                 <Routes>
                     <Route path="/" element={<HomePage/>} />

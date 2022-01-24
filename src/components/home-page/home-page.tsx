@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -32,7 +33,9 @@ const HomePage = () => {
 
     return (
         <div>
-            <h2>Home</h2>
+            <Typography variant="h3">
+                Home
+            </Typography>
             <br/>
             <IconButton
                 title="Add box"
@@ -58,7 +61,9 @@ const HomePage = () => {
                 </>)
                 : ""
             }
-            <h3>Your boxes:</h3>
+            <Typography variant="h4">
+                Your boxes:
+            </Typography>
             <div className="boxes-area">
                 {hideBoxesTable
                     ? "Loading box info..."

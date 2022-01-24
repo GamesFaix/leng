@@ -1,3 +1,4 @@
+import { Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -77,7 +78,9 @@ const BoxPage = () => {
 
     return (
         <div>
-            <h2>Box <span className="box-name">{name}</span></h2>
+            <Typography variant="h3">
+                Box <span className="box-name">{name}</span>
+            </Typography>
             {newBox?.description
                 ? <h3>{newBox.description}</h3>
                 : <></>
