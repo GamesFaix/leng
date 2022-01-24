@@ -91,6 +91,8 @@ const ActiveCardRow = (props: Props) => {
         }
     });
 
+    const countInputRef = React.useRef<HTMLInputElement>(null);
+
     const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.foil === null;
     const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.foil === null;
 
@@ -167,16 +169,19 @@ const ActiveCardRow = (props: Props) => {
 
         props.onSubmit(card);
         setState(defaultState);
+        countInputRef.current?.focus();
     };
 
     const cancel = () => {
         props.onCancel();
         setState(defaultState);
+        countInputRef.current?.focus();
     };
 
     return (<TableRow>
         <TableCell>
             <TextField
+                inputRef={countInputRef}
                 type="number"
                 title="Count"
                 inputProps={{
@@ -186,7 +191,6 @@ const ActiveCardRow = (props: Props) => {
                 sx={{ width: 100 }}
                 value={state.count}
                 onChange={setCount}
-                autoFocus
                 onFocus={e => e.target.select()}
             />
         </TableCell>
@@ -194,7 +198,11 @@ const ActiveCardRow = (props: Props) => {
             <Autocomplete
                 options={cardNameOptions}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Card" />}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        label="Card"
+                        onFocus={e => e.target.select()}
+                    />}
                 onChange={(e, value, reason) => setCardName(value)}
                 value={state.cardName}
                 autoSelect
@@ -208,7 +216,11 @@ const ActiveCardRow = (props: Props) => {
             <Autocomplete
                 options={setNameOptions}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Set" />}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        label="Set"
+                        onFocus={e => e.target.select()}
+                    />}
                 onChange={(e, value, reason) => setSetName(value)}
                 disabled={setNameOptions.length < 2}
                 value={state.setName}
@@ -222,7 +234,11 @@ const ActiveCardRow = (props: Props) => {
             <Autocomplete
                 options={cardVersionOptions}
                 sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params} label="Version" />}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        label="Version"
+                        onFocus={e => e.target.select()}
+                    />}
                 onChange={(e, card, reason) => setScryfallId(card?.id ?? null)}
                 disabled={cardVersionOptions.length < 2}
                 value={selectedCard}
