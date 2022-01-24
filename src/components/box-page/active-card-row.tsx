@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { icons } from '../../../fontawesome';
-import { useStore } from '../../../hooks';
-import { BoxCard, normalizeName, SetInfo } from '../../../logic/model';
+import { icons } from '../../fontawesome';
+import { useStore } from '../../hooks';
+import { BoxCard, normalizeName, SetInfo } from '../../logic/model';
 import { Autocomplete, Button, Checkbox, TableCell, TableRow, TextField } from '@mui/material';
 import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
