@@ -133,7 +133,9 @@ const AddCardRow = (props: Props) => {
     };
 
     const submit = () => {
-        if (!state.cardName || !selectedCard || !state.foil || !state.scryfallId) {
+        if (!state.cardName || !selectedCard || state.foil === null || !state.scryfallId) {
+            console.log(state);
+            console.log(selectedCard);
             throw "Card data missing"
         }
 
