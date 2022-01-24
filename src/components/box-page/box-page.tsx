@@ -93,6 +93,8 @@ const BoxPage = () => {
                         }
                         navigate('/', { replace: true });
                     }}
+                    variant='outlined'
+                    color='secondary'
                 />
                 <IconButton
                     title="Save"
@@ -110,6 +112,8 @@ const BoxPage = () => {
                     }}
                     disabled={saveDisabled}
                     icon={icons.save}
+                    variant='outlined'
+                    color='secondary'
                 />
             </div>
             <br/>

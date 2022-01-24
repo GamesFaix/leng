@@ -35,11 +35,15 @@ const CardRow = (props: Props) => {
                 title="Edit"
                 onClick={() => props.onEditClicked(props.card)}
                 icon={icons.edit}
+                variant='outlined'
+                color='secondary'
             />
             <IconButton
                 title="Delete"
                 onClick={() => props.onDeleteClicked(props.card)}
                 icon={icons.delete}
+                variant='outlined'
+                color='secondary'
             />
         </td>
     </tr>);

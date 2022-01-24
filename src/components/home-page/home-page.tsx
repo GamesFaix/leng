@@ -38,11 +38,15 @@ const HomePage = () => {
                 title="Add box"
                 onClick={() => setIsNewBoxFormVisible(true)}
                 icon={icons.add}
+                variant='outlined'
+                color='secondary'
             />
             <Link to="/settings">
                 <IconButton
                     title="Settings"
                     icon={icons.settings}
+                    variant='outlined'
+                    color='secondary'
                 />
             </Link>
             <br/>

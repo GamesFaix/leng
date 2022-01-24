@@ -31,11 +31,15 @@ const NewBoxForm = (props: Props) => {
                 props.close();
             }}
             icon={icons.ok}
+            variant='contained'
+            color='success'
         />
         <IconButton
             title="Cancel"
             onClick={() => props.close()}
             icon={icons.cancel}
+            variant='outlined'
+            color='error'
         />
     </div>);
 };

@@ -3,8 +3,9 @@ import { icons } from '../../../fontawesome';
 import { useStore } from '../../../hooks';
 import { BoxCard, normalizeName } from '../../../logic/model';
 import IconButton from '../../common/icon-button';
-import { Autocomplete, Checkbox, TextField } from '@mui/material';
+import { Autocomplete, Button, Checkbox, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {
     onSubmit: (card: BoxCard) => void,
@@ -221,18 +222,24 @@ const AddCardRow = (props: Props) => {
             />
         </td>
         <td>
-            <IconButton
-                title="Submit"
+            <Button
                 onClick={submit}
-                icon={icons.ok}
+                title="Submit"
                 disabled={isSubmitButtonDisabled}
-            />
-            <IconButton
-                title="Cancel"
+                variant="contained"
+                color="success"
+            >
+                <FontAwesomeIcon icon={icons.ok}/>
+            </Button>
+            <Button
                 onClick={cancel}
-                icon={icons.cancel}
+                title="Cancel"
                 disabled={isCancelButtonDisabled}
-            />
+                variant="outlined"
+                color="error"
+            >
+                <FontAwesomeIcon icon={icons.cancel}/>
+            </Button>
         </td>
     </tr>);
 }

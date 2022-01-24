@@ -178,11 +178,15 @@ const EditCardRow = (props: Props) => {
                 disabled={submitDisabled}
                 onClick={submit}
                 icon={icons.ok}
+                variant="contained"
+                color="success"
             />
             <IconButton
                 title="Cancel"
                 onClick={cancel}
                 icon={icons.cancel}
+                variant="outlined"
+                color="error"
             />
         </td>
     </tr>);

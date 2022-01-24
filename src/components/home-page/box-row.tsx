@@ -17,6 +17,8 @@ const BoxRow = (props: Props) => {
                 <IconButton
                     title="Open box"
                     icon={icons.open}
+                    variant='outlined'
+                    color='secondary'
                 />
             </Link>
         </td>
@@ -35,6 +37,8 @@ const BoxRow = (props: Props) => {
                     }
                 }}
                 icon={icons.delete}
+                variant='outlined'
+                color='secondary'
             />
         </td>
     </tr>);

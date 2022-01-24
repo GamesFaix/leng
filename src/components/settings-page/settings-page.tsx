@@ -55,6 +55,8 @@ const SettingsPage = () => {
                 <IconButton
                     title="Home"
                     icon={icons.home}
+                    variant='outlined'
+                    color='secondary'
                 />
             </Link>
         </div>
