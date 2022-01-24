@@ -73,7 +73,6 @@ const AddCardRow = (props: Props) => {
         }
     });
 
-    console.log(state);
     const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.foil === null;
     const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.foil === null;
 
@@ -118,9 +117,6 @@ const AddCardRow = (props: Props) => {
     };
 
     const setScryfallId = (id: string | null) => {
-        const card = cardVersionOptions.find(c => c.id === id) ?? null;
-
-
         setState({
             ...state,
             scryfallId: id,
