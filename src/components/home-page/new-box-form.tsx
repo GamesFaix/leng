@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton } from '@mui/material';
+import { IconButton, TextField } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
@@ -18,8 +18,7 @@ const NewBoxForm = (props: Props) => {
     const disableButton = settings === null;
 
     return (<div>
-        <input
-            type="text"
+        <TextField
             onChange={e => setNewBoxName(e.target.value)}
             value={newBoxName}
             placeholder="Enter box name..."
