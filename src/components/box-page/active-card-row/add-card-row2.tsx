@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { icons } from '../../../fontawesome';
 import { useStore } from '../../../hooks';
-import { BoxCard } from '../../../logic/model';
+import { BoxCard, normalizeName } from '../../../logic/model';
 import IconButton from '../../common/icon-button';
 import { Autocomplete, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
@@ -12,6 +12,7 @@ type Props = {
 }
 
 type State = {
+    cardNameQuery: string,
     cardName: string | null,
     setName: string | null,
     scryfallId: string | null,
@@ -20,6 +21,7 @@ type State = {
 }
 
 const defaultState : State = {
+    cardNameQuery: '',
     cardName: null,
     setName: null,
     scryfallId: null,
@@ -44,7 +46,8 @@ export function getVersionLabel(card: Card) : string {
 
 const AddCardRow = (props: Props) => {
     const [state, setState] = React.useState(defaultState);
-    const cardNameOptions = useStore.cardNames();
+    const allCardNames = useStore.cardNames();
+    const [cardNameOptions, setCardNameOptions] = React.useState<string[]>([]);
     const setNameOptions = useStore.setNamesOfCardName(state.cardName ?? '');
     const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
         .map(c => { return { ...c, label: getVersionLabel(c) }});
@@ -68,6 +71,20 @@ const AddCardRow = (props: Props) => {
             ...state,
             count: Number(e.target.value)
         });
+    };
+
+    const updateCardNameQuery = (query: string) => {
+        setState({
+            ...state,
+            cardNameQuery: query
+        });
+
+        const cardNameOptions =
+            query.length < 3
+                ? []
+                : allCardNames.filter(x => normalizeName(x).includes(query.toLowerCase()));
+
+        setCardNameOptions(cardNameOptions);
     };
 
     const setCardName = (name: string | null) => {
@@ -134,6 +151,9 @@ const AddCardRow = (props: Props) => {
                 value={state.cardName}
                 autoSelect
                 autoHighlight
+                inputValue={state.cardNameQuery}
+                onInputChange={(e, value, reason) => updateCardNameQuery(value)}
+                noOptionsText="Type at least 3 characters to search cards..."
             />
         </td>
         <td>
