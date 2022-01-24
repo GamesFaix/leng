@@ -156,11 +156,14 @@ const AddCardRow = (props: Props) => {
 
     return (<tr>
         <td>
-            <input
+            <TextField
                 type="number"
                 title="Count"
-                min={1}
-                max={1000}
+                inputProps={{
+                    min: 1,
+                    max: 1000,
+                }}
+                sx={{ width: 100 }}
                 value={state.count}
                 onChange={setCount}
                 autoFocus
@@ -191,6 +194,8 @@ const AddCardRow = (props: Props) => {
                 value={state.setName}
                 autoSelect
                 autoHighlight
+                selectOnFocus
+                openOnFocus
             />
         </td>
         <td>
@@ -203,6 +208,8 @@ const AddCardRow = (props: Props) => {
                 value={selectedCard}
                 autoSelect
                 autoHighlight
+                selectOnFocus
+                openOnFocus
             />
         </td>
         <td>
