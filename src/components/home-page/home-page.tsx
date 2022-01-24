@@ -40,14 +40,14 @@ const HomePage = () => {
             <IconButton
                 title="Add box"
                 onClick={() => setIsNewBoxFormVisible(true)}
-                color='secondary'
+                color='primary'
             >
                 <FontAwesomeIcon icon={icons.add}/>
             </IconButton>
             <Link to="/settings">
                 <IconButton
                     title="Settings"
-                    color='secondary'
+                    color='primary'
                 >
                     <FontAwesomeIcon icon={icons.settings}/>
                 </IconButton>

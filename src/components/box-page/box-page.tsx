@@ -95,7 +95,7 @@ const BoxPage = () => {
                         }
                         navigate('/', { replace: true });
                     }}
-                    color='secondary'
+                    color='primary'
                 >
                     <FontAwesomeIcon icon={icons.home}/>
                 </IconButton>
@@ -114,7 +114,7 @@ const BoxPage = () => {
                         }
                     }}
                     disabled={saveDisabled}
-                    color='secondary'
+                    color='primary'
                 >
                     <FontAwesomeIcon icon={icons.save}/>
                 </IconButton>

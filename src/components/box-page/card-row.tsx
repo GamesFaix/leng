@@ -30,14 +30,14 @@ const CardRow = (props: Props) => {
             <IconButton
                 title="Edit"
                 onClick={() => props.onEditClicked(props.card)}
-                color='secondary'
+                color='primary'
             >
                 <FontAwesomeIcon icon={icons.edit}/>
             </IconButton>
             <IconButton
                 title="Delete"
                 onClick={() => props.onDeleteClicked(props.card)}
-                color='secondary'
+                color='primary'
             >
                 <FontAwesomeIcon icon={icons.delete}/>
             </IconButton>

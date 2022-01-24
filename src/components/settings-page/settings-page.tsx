@@ -55,7 +55,7 @@ const SettingsPage = () => {
             <Link to ="/">
                 <IconButton
                     title="Home"
-                    color='secondary'
+                    color='primary'
                 >
                     <FontAwesomeIcon icon={icons.home}/>
                 </IconButton>

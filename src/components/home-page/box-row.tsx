@@ -17,7 +17,7 @@ const BoxRow = (props: Props) => {
             <Link to={`/boxes/${props.box.name}`}>
                 <IconButton
                     title="Open box"
-                    color='secondary'
+                    color='primary'
                 >
                     <FontAwesomeIcon icon={icons.open}/>
                 </IconButton>
@@ -37,7 +37,7 @@ const BoxRow = (props: Props) => {
                         props.deleteBox();
                     }
                 }}
-                color='secondary'
+                color='primary'
             >
                 <FontAwesomeIcon icon={icons.delete}/>
             </IconButton>
