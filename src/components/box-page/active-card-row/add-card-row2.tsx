@@ -2,7 +2,7 @@ import * as React from 'react';
 import { icons } from '../../../fontawesome';
 import { useStore } from '../../../hooks';
 import { BoxCard, normalizeName } from '../../../logic/model';
-import { Autocomplete, Button, Checkbox, TextField } from '@mui/material';
+import { Autocomplete, Button, Checkbox, TableCell, TableRow, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -156,8 +156,8 @@ const AddCardRow = (props: Props) => {
         setState(defaultState);
     };
 
-    return (<tr>
-        <td>
+    return (<TableRow>
+        <TableCell>
             <TextField
                 type="number"
                 title="Count"
@@ -171,8 +171,8 @@ const AddCardRow = (props: Props) => {
                 autoFocus
                 onFocus={e => e.target.select()}
             />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <Autocomplete
                 options={cardNameOptions}
                 sx={{ width: 300 }}
@@ -185,8 +185,8 @@ const AddCardRow = (props: Props) => {
                 onInputChange={(e, value, reason) => updateCardNameQuery(value)}
                 noOptionsText="Type at least 3 characters to search cards..."
             />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <Autocomplete
                 options={setNameOptions}
                 sx={{ width: 300 }}
@@ -199,8 +199,8 @@ const AddCardRow = (props: Props) => {
                 selectOnFocus
                 openOnFocus
             />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <Autocomplete
                 options={cardVersionOptions}
                 sx={{ width: 300 }}
@@ -213,16 +213,16 @@ const AddCardRow = (props: Props) => {
                 selectOnFocus
                 openOnFocus
             />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <Checkbox
                 title="Foil"
                 checked={state.foil ?? false}
                 onChange={e => setFoil(e.target.checked)}
                 disabled={foilOptions.length < 2}
             />
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <Button
                 onClick={submit}
                 title="Submit"
@@ -241,7 +241,7 @@ const AddCardRow = (props: Props) => {
             >
                 <FontAwesomeIcon icon={icons.cancel}/>
             </Button>
-        </td>
-    </tr>);
+        </TableCell>
+    </TableRow>);
 }
 export default AddCardRow;

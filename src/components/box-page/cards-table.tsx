@@ -1,4 +1,4 @@
-import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import * as React from 'react';
 import { BoxCard } from '../../logic/model';
 import AddCardRow from './active-card-row/add-card-row2';
@@ -53,28 +53,32 @@ const CardsTable = (props: Props) => {
         />);
     }
 
-    return (<Table>
-        <TableHead>
-            <TableRow>
-                <TableCell>Qty.</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Set</TableCell>
-                <TableCell>Version</TableCell>
-                <TableCell>Foil</TableCell>
-                <TableCell>Actions</TableCell>
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            {activeRowKey === null
-                ? addCardRow()
-                : <></>
-            }
-            {props.cards.map((c, i) =>
-                activeRowKey === getKey(c)
-                    ? editCardRow(c, i)
-                    : viewCardRow(c)
-            )}
-        </TableBody>
-    </Table>);
+    return (
+        <TableContainer component={Paper}>
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>Qty.</TableCell>
+                        <TableCell>Name</TableCell>
+                        <TableCell>Set</TableCell>
+                        <TableCell>Version</TableCell>
+                        <TableCell>Foil</TableCell>
+                        <TableCell>Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {activeRowKey === null
+                        ? addCardRow()
+                        : <></>
+                    }
+                    {props.cards.map((c, i) =>
+                        activeRowKey === getKey(c)
+                            ? editCardRow(c, i)
+                            : viewCardRow(c)
+                    )}
+                </TableBody>
+            </Table>
+        </TableContainer>
+    );
 }
 export default CardsTable;

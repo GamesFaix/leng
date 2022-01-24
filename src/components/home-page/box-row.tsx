@@ -1,3 +1,4 @@
+import { TableCell, TableRow } from '@mui/material';
 import moment = require('moment');
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -11,8 +12,8 @@ type Props = {
 }
 
 const BoxRow = (props: Props) => {
-    return (<tr>
-        <td>
+    return (<TableRow>
+        <TableCell>
             <Link to={`/boxes/${props.box.name}`}>
                 <IconButton
                     title="Open box"
@@ -21,14 +22,14 @@ const BoxRow = (props: Props) => {
                     color='secondary'
                 />
             </Link>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             {props.box.name}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             {moment(props.box.lastModified).calendar()}
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
             <IconButton
                 title="Delete box"
                 onClick={() => {
@@ -40,7 +41,7 @@ const BoxRow = (props: Props) => {
                 variant='outlined'
                 color='secondary'
             />
-        </td>
-    </tr>);
+        </TableCell>
+    </TableRow>);
 }
 export default BoxRow;

@@ -21,72 +21,13 @@ h2 {
     display: flex;
 }
 
-// .svg-inline--fa {
-//     padding: 3px;
-// }
-
-// button {
-//     padding: 3px;
-// }
-
-table {
-    border-spacing: 0;
-}
-
-td {
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
-    padding: 3px;
-    vertical-align: top;
-}
-
 .box-name {
     font-style: italic;
 }
-
-// .icon-button {
-//     width: 30px;
-//     height: 30px;
-//     padding: 0;
-// }
 
 .boxes-area {
     padding: 3px;
     background: white;
     min-height: 200px;
     width: 500px;
-
-    td {
-        padding-left: 6px;
-        padding-right: 6px;
-    }
-}
-
-.autocomplete-input {
-    input {
-        width: 250px;
-        padding: 3px;
-    }
-
-    .suggestion-container {
-        width: 250px;
-        overflow-y: scroll;
-    }
-
-    ul {
-        display: contents;
-    }
-
-    li {
-        width: 250px;
-        padding: 3px;
-        background: white;
-        display: block;
-        border-bottom: 1px solid gray;
-
-        &.active {
-            cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.14);
-        }
-    }
 }
