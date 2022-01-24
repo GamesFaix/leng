@@ -1,6 +1,7 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import * as React from 'react';
 import { BoxCard } from '../../logic/model';
+import ActiveCardRow from './active-card-row/active-card-row';
 import AddCardRow from './active-card-row/add-card-row';
 import EditCardRow from './active-card-row/edit-card-row';
 import CardRow from './card-row';
@@ -20,15 +21,16 @@ const CardsTable = (props: Props) => {
     const [activeRowKey, setActiveRowKey] = React.useState<string | null>(null);
 
     function addCardRow() {
-        return (<AddCardRow
+        return (<ActiveCardRow
             key="new-card"
+            card={null}
             onSubmit={props.onAddClicked}
             onCancel={() => { return; }}
         />);
     }
 
     function editCardRow(card: BoxCard, index: number) {
-        return (<EditCardRow
+        return (<ActiveCardRow
             key={getKey(card)}
             card={card}
             onSubmit={card => {

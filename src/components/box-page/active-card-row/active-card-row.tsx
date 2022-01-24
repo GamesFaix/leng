@@ -7,7 +7,7 @@ import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {
-    card: BoxCard,
+    card: BoxCard | null,
     onSubmit: (card: BoxCard) => void,
     onCancel: () => void
 }
@@ -30,7 +30,9 @@ const defaultState : State = {
     count: 1
 };
 
-function stateFromCard (card: BoxCard, sets: SetInfo[]) : State {
+function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
+    if (!card) { return defaultState; }
+
     const setName = sets.find(s => s.abbrev === card.setAbbrev)?.name ?? '';
 
     return {
@@ -65,7 +67,7 @@ function getFoilOptions(card: Card | null) {
     return xs;
 }
 
-const EditCardRow = (props: Props) => {
+const ActiveCardRow = (props: Props) => {
     const sets = useStore.sets();
     const startingState = stateFromCard(props.card, sets);
     const [state, setState] = React.useState(startingState);
@@ -260,4 +262,4 @@ const EditCardRow = (props: Props) => {
         </TableCell>
     </TableRow>);
 }
-export default EditCardRow;
+export default ActiveCardRow;
