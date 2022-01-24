@@ -9,12 +9,6 @@ export const useStore = {
         );
     },
 
-    namedCards() {
-        return useSelector(
-            (state: RootState) => state.encyclopedia.namedCards
-        );
-    },
-
     sets() {
         return useSelector(
             (state: RootState) => state.encyclopedia.sets

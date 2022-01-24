@@ -1,11 +1,10 @@
 import { uniq } from 'lodash';
 import { Card } from 'scryfall-api';
-import { AsyncRequestStatus, CardModule, NamedCard, SetInfo } from '../logic/model';
+import { AsyncRequestStatus, CardModule, SetInfo } from '../logic/model';
 
 export type EncyclopediaState = {
     isLoading: boolean,
     cards: Card[],
-    namedCards: NamedCard[],
     sets: SetInfo[],
     cardNames: string[],
 }
@@ -13,7 +12,6 @@ export type EncyclopediaState = {
 const encyclopediaDefaultState : EncyclopediaState = {
     isLoading: false,
     cards: [],
-    namedCards: [],
     sets: [],
     cardNames: [],
 }
@@ -50,7 +48,6 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
                 ...state,
                 isLoading: false,
                 cards: action.cards,
-                namedCards: CardModule.toNamedCards(action.cards),
                 sets: CardModule.toSetInfos(action.cards),
                 cardNames: sortAndDeduplicate(action.cards.map(c => c.name)),
             };

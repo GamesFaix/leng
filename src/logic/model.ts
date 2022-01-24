@@ -1,19 +1,11 @@
 import { Card } from 'scryfall-api';
-import { groupBy, orderBy, uniqBy } from 'lodash';
+import { orderBy, uniqBy } from 'lodash';
 
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
     Started = 'STARTED',
     Success = 'SUCCESS',
     Failure = 'FAILURE'
-}
-
-/* Represents the group of all printings of a card with a given name */
-export type NamedCard = {
-    name: string,
-    normalizedName: string,
-    oracleId: string,
-    cards: Card[]
 }
 
 /* Represents the number of copies of a given printing of a card in a box. */
@@ -56,21 +48,6 @@ export function normalizeName(name: string) : string {
 }
 
 export const CardModule = {
-    toNamedCards(cards: Card[]) : NamedCard[] {
-        const groups = groupBy(cards, c => normalizeName(c.name));
-
-        return Object.entries(groups)
-            .map(entry => {
-                const [key, value] = entry;
-                return {
-                    normalizedName: key,
-                    name: value[0].name,
-                    oracleId: value[0].oracle_id,
-                    cards: value
-                };
-            });
-    },
-
     toSetInfo(card: Card) : SetInfo {
         return {
             name: card.set_name,
@@ -83,11 +60,5 @@ export const CardModule = {
         const oneCardPerSet = uniqBy(cards, c => c.set);
         const setInfos = oneCardPerSet.map(CardModule.toSetInfo);
         return orderBy(setInfos, s => s.name);
-    }
-}
-
-export const NamedCardModule = {
-    toSetInfos(namedCard: NamedCard): SetInfo[] {
-        return namedCard.cards.map(CardModule.toSetInfo);
     }
 }
