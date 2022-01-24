@@ -37,6 +37,7 @@ const BoxPage = () => {
     const lastSavedBoxState = useSelector((state: RootState) => state.inventory.boxes?.find(b => b.name === name)) ?? null;
     const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(oldBox);
+    const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
 
     React.useLayoutEffect(() => {
         if (settings !== null && oldBox?.cards === null && name){
@@ -52,12 +53,14 @@ const BoxPage = () => {
         if (!newBox?.cards) { return; }
         const cards = addOrIncrememnt(newBox.cards, card);
         setNewBox({...newBox, cards });
+        setAnyUnsavedChanges(true);
     }
 
     function deleteCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
         const cards = newBox.cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
         setNewBox({...newBox, cards });
+        setAnyUnsavedChanges(true);
     }
 
     function saveCardEdit(card: BoxCard, index: number) {
@@ -70,11 +73,10 @@ const BoxPage = () => {
         }
         cards = addOrIncrememnt(cards, card);
         setNewBox({...newBox, cards });
+        setAnyUnsavedChanges(true);
     }
 
     const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || oldBox === null || newBox === null;
-    const anyChanges = true;
-    const saveDisabled = false; // TODO: Only enable if any changes pending
 
     return (
         <div>
@@ -90,7 +92,7 @@ const BoxPage = () => {
                 <IconButton
                     title="Home"
                     onClick={() => {
-                        if (anyChanges && !confirm("There are unsaved changes. Are you sure you want to go back?")) {
+                        if (anyUnsavedChanges && !confirm("There are unsaved changes. Are you sure you want to go back?")) {
                             return;
                         }
                         navigate('/', { replace: true });
@@ -111,9 +113,10 @@ const BoxPage = () => {
                             };
 
                             updateBox(settings, box, dispatch);
+                            setAnyUnsavedChanges(false);
                         }
                     }}
-                    disabled={saveDisabled}
+                    disabled={!anyUnsavedChanges}
                     color='primary'
                 >
                     <FontAwesomeIcon icon={icons.save}/>
