@@ -16,7 +16,7 @@ type State = {
     cardName: string | null,
     setName: string | null,
     scryfallId: string | null,
-    foil: boolean,
+    foil: boolean | null,
     count: number
 }
 
@@ -25,7 +25,7 @@ const defaultState : State = {
     cardName: null,
     setName: null,
     scryfallId: null,
-    foil: false,
+    foil: null,
     count: 1
 };
 
@@ -44,6 +44,13 @@ export function getVersionLabel(card: Card) : string {
     return `${numberStr} ${frameStr}${frameEffectsStr}`;
 }
 
+function getFoilOptions(card: Card | null) {
+    const xs = [];
+    if (card?.nonfoil) { xs.push(false); }
+    if (card?.foil) { xs.push(true); }
+    return xs;
+}
+
 const AddCardRow = (props: Props) => {
     const [state, setState] = React.useState(defaultState);
     const allCardNames = useStore.cardNames();
@@ -52,6 +59,7 @@ const AddCardRow = (props: Props) => {
     const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
         .map(c => { return { ...c, label: getVersionLabel(c) }});
     const selectedCard = cardVersionOptions.find(c => c.id === state.scryfallId) ?? null;
+    const foilOptions = getFoilOptions(selectedCard);
 
     React.useEffect(() => {
         if (setNameOptions.length === 1 && !state.setName) {
@@ -60,11 +68,14 @@ const AddCardRow = (props: Props) => {
         else if (cardVersionOptions.length === 1 && !state.scryfallId) {
             setScryfallId(cardVersionOptions[0].id);
         }
-    })
+        else if (foilOptions.length >= 1 && state.foil === null) {
+            setFoil(foilOptions[0]);
+        }
+    });
 
-    const isFoilCheckboxDisabled = false;
-    const isSubmitButtonDisabled = false;
-    const isCancelButtonDisabled = false;
+    console.log(state);
+    const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.foil === null;
+    const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.foil === null;
 
     const setCount = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState({
@@ -93,7 +104,7 @@ const AddCardRow = (props: Props) => {
             cardName: name,
             setName: null,
             scryfallId: null,
-            foil: false,
+            foil: null,
         });
     };
 
@@ -102,31 +113,49 @@ const AddCardRow = (props: Props) => {
             ...state,
             setName: name,
             scryfallId: null,
-            foil: false,
+            foil: null,
         });
     };
 
     const setScryfallId = (id: string | null) => {
+        const card = cardVersionOptions.find(c => c.id === id) ?? null;
+
+
         setState({
             ...state,
             scryfallId: id,
-            foil: false,
+            foil: null,
         });
     };
 
-    const setFoil = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const setFoil = (value: boolean) => {
         setState({
             ...state,
-            foil: e.target.checked
+            foil: value
         });
     };
 
     const submit = () => {
-        throw "Not implemented"
+        if (!state.cardName || !selectedCard || !state.foil || !state.scryfallId) {
+            throw "Card data missing"
+        }
+
+        const card: BoxCard = {
+            name: state.cardName,
+            setAbbrev: selectedCard.set,
+            foil: state.foil,
+            version: selectedCard.label,
+            count: state.count,
+            scryfallId: state.scryfallId
+        };
+
+        props.onSubmit(card);
+        setState(defaultState);
     };
 
     const cancel = () => {
-        throw "Not implemented"
+        props.onCancel();
+        setState(defaultState);
     };
 
     return (<tr>
@@ -184,9 +213,9 @@ const AddCardRow = (props: Props) => {
             <input
                 type="checkbox"
                 title="Foil"
-                checked={state.foil}
-                onChange={setFoil}
-                disabled={isFoilCheckboxDisabled}
+                checked={state.foil ?? false}
+                onChange={e => setFoil(e.target.checked)}
+                disabled={foilOptions.length < 2}
             />
         </td>
         <td>
