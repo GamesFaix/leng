@@ -1,9 +1,10 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
 import { createBox } from '../../logic/inventoryController';
 import { RootState } from '../../store';
-import IconButton from '../common/icon-button';
 
 type Props = {
     close: () => void
@@ -30,17 +31,17 @@ const NewBoxForm = (props: Props) => {
                 createBox(settings!, newBoxName, dispatch);
                 props.close();
             }}
-            icon={icons.ok}
-            variant='contained'
             color='success'
-        />
+        >
+            <FontAwesomeIcon icon={icons.ok}/>
+        </IconButton>
         <IconButton
             title="Cancel"
             onClick={() => props.close()}
-            icon={icons.cancel}
-            variant='outlined'
             color='error'
-        />
+        >
+            <FontAwesomeIcon icon={icons.cancel}/>
+        </IconButton>
     </div>);
 };
 export default NewBoxForm;

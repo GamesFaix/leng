@@ -2,8 +2,8 @@ import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { BoxCard, normalizeName, SetInfo } from '../../logic/model';
-import { Autocomplete, Button, Checkbox, TableCell, TableRow, TextField } from '@mui/material';
-import { Card, Set } from 'scryfall-api';
+import { Autocomplete, Checkbox, IconButton, TableCell, TableRow, TextField } from '@mui/material';
+import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 type Props = {
@@ -257,24 +257,22 @@ const ActiveCardRow = (props: Props) => {
             />
         </TableCell>
         <TableCell>
-            <Button
+            <IconButton
                 onClick={submit}
                 title="Submit"
                 disabled={isSubmitButtonDisabled}
-                variant="contained"
                 color="success"
             >
                 <FontAwesomeIcon icon={icons.ok}/>
-            </Button>
-            <Button
+            </IconButton>
+            <IconButton
                 onClick={cancel}
                 title="Cancel"
                 disabled={isCancelButtonDisabled}
-                variant="outlined"
                 color="error"
             >
                 <FontAwesomeIcon icon={icons.cancel}/>
-            </Button>
+            </IconButton>
         </TableCell>
     </TableRow>);
 }

@@ -1,10 +1,10 @@
-import { TableCell, TableRow } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton, TableCell, TableRow } from '@mui/material';
 import moment = require('moment');
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { BoxState } from '../../store/inventory';
-import IconButton from '../common/icon-button';
 
 type Props = {
     box: BoxState,
@@ -17,10 +17,10 @@ const BoxRow = (props: Props) => {
             <Link to={`/boxes/${props.box.name}`}>
                 <IconButton
                     title="Open box"
-                    icon={icons.open}
-                    variant='outlined'
                     color='secondary'
-                />
+                >
+                    <FontAwesomeIcon icon={icons.open}/>
+                </IconButton>
             </Link>
         </TableCell>
         <TableCell>
@@ -37,10 +37,10 @@ const BoxRow = (props: Props) => {
                         props.deleteBox();
                     }
                 }}
-                icon={icons.delete}
-                variant='outlined'
                 color='secondary'
-            />
+            >
+                <FontAwesomeIcon icon={icons.delete}/>
+            </IconButton>
         </TableCell>
     </TableRow>);
 }

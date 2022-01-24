@@ -1,4 +1,5 @@
-import { Typography } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -7,7 +8,6 @@ import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
-import IconButton from '../common/icon-button';
 import CardsTable from './cards-table';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
@@ -89,16 +89,16 @@ const BoxPage = () => {
             <div>
                 <IconButton
                     title="Home"
-                    icon={icons.home}
                     onClick={() => {
                         if (anyChanges && !confirm("There are unsaved changes. Are you sure you want to go back?")) {
                             return;
                         }
                         navigate('/', { replace: true });
                     }}
-                    variant='outlined'
                     color='secondary'
-                />
+                >
+                    <FontAwesomeIcon icon={icons.home}/>
+                </IconButton>
                 <IconButton
                     title="Save"
                     onClick={() => {
@@ -114,10 +114,10 @@ const BoxPage = () => {
                         }
                     }}
                     disabled={saveDisabled}
-                    icon={icons.save}
-                    variant='outlined'
                     color='secondary'
-                />
+                >
+                    <FontAwesomeIcon icon={icons.save}/>
+                </IconButton>
             </div>
             <br/>
             <div className="cards-area">

@@ -1,9 +1,9 @@
-import { Checkbox, TableCell, TableRow } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Checkbox, IconButton, TableCell, TableRow } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { BoxCard } from '../../logic/model';
-import IconButton from '../common/icon-button';
 
 type Props = {
     card: BoxCard
@@ -30,17 +30,17 @@ const CardRow = (props: Props) => {
             <IconButton
                 title="Edit"
                 onClick={() => props.onEditClicked(props.card)}
-                icon={icons.edit}
-                variant='outlined'
                 color='secondary'
-            />
+            >
+                <FontAwesomeIcon icon={icons.edit}/>
+            </IconButton>
             <IconButton
                 title="Delete"
                 onClick={() => props.onDeleteClicked(props.card)}
-                icon={icons.delete}
-                variant='outlined'
                 color='secondary'
-            />
+            >
+                <FontAwesomeIcon icon={icons.delete}/>
+            </IconButton>
         </TableCell>
     </TableRow>);
 }

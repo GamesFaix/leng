@@ -1,4 +1,5 @@
-import { Typography } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -6,7 +7,6 @@ import { icons } from '../../fontawesome';
 import { deleteBox, getBoxInfos } from '../../logic/inventoryController';
 import { RootState } from '../../store';
 import { InventoryActionTypes } from '../../store/inventory';
-import IconButton from '../common/icon-button';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
 
@@ -40,17 +40,17 @@ const HomePage = () => {
             <IconButton
                 title="Add box"
                 onClick={() => setIsNewBoxFormVisible(true)}
-                icon={icons.add}
-                variant='outlined'
                 color='secondary'
-            />
+            >
+                <FontAwesomeIcon icon={icons.add}/>
+            </IconButton>
             <Link to="/settings">
                 <IconButton
                     title="Settings"
-                    icon={icons.settings}
-                    variant='outlined'
                     color='secondary'
-                />
+                >
+                    <FontAwesomeIcon icon={icons.settings}/>
+                </IconButton>
             </Link>
             <br/>
             <br/>
