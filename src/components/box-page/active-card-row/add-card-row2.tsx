@@ -3,7 +3,7 @@ import { icons } from '../../../fontawesome';
 import { useStore } from '../../../hooks';
 import { BoxCard, normalizeName } from '../../../logic/model';
 import IconButton from '../../common/icon-button';
-import { Autocomplete, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 
 type Props = {
@@ -213,8 +213,7 @@ const AddCardRow = (props: Props) => {
             />
         </td>
         <td>
-            <input
-                type="checkbox"
+            <Checkbox
                 title="Foil"
                 checked={state.foil ?? false}
                 onChange={e => setFoil(e.target.checked)}
