@@ -1,8 +1,8 @@
 
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
-import { faCheck, faCog, faHome, faBoxOpen, faPencilAlt, faPlus, faSave, faTrash, faWindowClose } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faCog, faHome, faBoxOpen, faPencilAlt, faPlus, faSave, faSearchPlus, faTrash, faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faBoxOpen, faCheck, faCog, faHome, faPencilAlt, faPlus, faSave, faTrash, faWindowClose);
+library.add(faBoxOpen, faCheck, faCog, faHome, faPencilAlt, faPlus, faSave, faSearchPlus, faTrash, faWindowClose);
 
 export const icons = {
     home: <IconProp>'home',
@@ -13,5 +13,6 @@ export const icons = {
     delete: <IconProp>'trash',
     edit: <IconProp>'pencil-alt',
     save: <IconProp>'save',
-    open: <IconProp>'box-open'
+    open: <IconProp>'box-open',
+    inspect: <IconProp>'search-plus'
 };

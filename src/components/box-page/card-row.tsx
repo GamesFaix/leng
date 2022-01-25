@@ -4,6 +4,7 @@ import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { BoxCard } from '../../logic/model';
+import { shell } from 'electron';
 
 type Props = {
     card: BoxCard
@@ -14,6 +15,7 @@ type Props = {
 const CardRow = (props: Props) => {
     const sets = useStore.sets();
     const setName = sets.find(s => s.abbrev === props.card.setAbbrev)?.name ?? '';
+    const card = useStore.cardById(props.card.scryfallId);
 
     return (<TableRow>
         <TableCell>{`${props.card.count}x`}</TableCell>
@@ -40,6 +42,15 @@ const CardRow = (props: Props) => {
                 color='primary'
             >
                 <FontAwesomeIcon icon={icons.delete}/>
+            </IconButton>
+            <IconButton
+                onClick={() => {
+                    if (card) shell.openExternal(card.scryfall_uri);
+                }}
+                title="View on Scryfall"
+                color="primary"
+            >
+                <FontAwesomeIcon icon={icons.inspect} />
             </IconButton>
         </TableCell>
     </TableRow>);

@@ -28,5 +28,9 @@ export const useStore = {
     cardsOfNameAndSetName(cardName: string, setName: string) {
         const cards = this.cards().filter(c => c.name === cardName && c.set_name === setName);
         return cards;
+    },
+
+    cardById(scryfallId: string) {
+        return this.cards().find(c => c.id === scryfallId) || null;
     }
 }
