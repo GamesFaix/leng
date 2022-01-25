@@ -73,15 +73,17 @@ const ActiveCardRow = (props: Props) => {
     const [state, setState] = React.useState(startingState);
     const allCardNames = useStore.cardNames();
     const [cardNameOptions, setCardNameOptions] = React.useState<string[]>([]);
-    const setNameOptions = useStore.setNamesOfCardName(state.cardName ?? '');
+    const setOptions = useStore.setsOfCard(state.cardName ?? '')
+        .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
     const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
         .map(c => { return { ...c, label: getVersionLabel(c) }});
+    const selectedSet = setOptions.find(s => s.name === state.setName) ?? null;
     const selectedCard = cardVersionOptions.find(c => c.id === state.scryfallId) ?? null;
     const foilOptions = getFoilOptions(selectedCard);
 
     React.useEffect(() => {
-        if (setNameOptions.length === 1 && !state.setName) {
-            setSetName(setNameOptions[0]);
+        if (setOptions.length === 1 && !state.setName) {
+            setSetName(setOptions[0].name);
         }
         else if (cardVersionOptions.length === 1 && !state.scryfallId) {
             setScryfallId(cardVersionOptions[0].id);
@@ -214,16 +216,16 @@ const ActiveCardRow = (props: Props) => {
         </TableCell>
         <TableCell>
             <Autocomplete
-                options={setNameOptions}
+                options={setOptions}
                 sx={{ width: 300 }}
                 renderInput={(params) =>
                     <TextField {...params}
                         label="Set"
                         onFocus={e => e.target.select()}
                     />}
-                onChange={(e, value, reason) => setSetName(value)}
-                disabled={setNameOptions.length < 2}
-                value={state.setName}
+                onChange={(e, value, reason) => setSetName(value?.name ?? null)}
+                disabled={setOptions.length < 2}
+                value={selectedSet}
                 autoSelect
                 autoHighlight
                 selectOnFocus

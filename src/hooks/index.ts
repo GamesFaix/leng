@@ -1,5 +1,5 @@
-import { uniq } from "lodash";
 import { useSelector } from "react-redux";
+import { CardModule } from "../logic/model";
 import { RootState } from "../store";
 
 export const useStore = {
@@ -19,9 +19,10 @@ export const useStore = {
         return useSelector((state: RootState) => state.encyclopedia.cardNames);
     },
 
-    setNamesOfCardName(cardName: string) {
+    setsOfCard(cardName: string) {
         const cards = this.cards().filter(c => c.name === cardName);
-        return uniq(cards.map(c => c.set_name)).sort();
+        const sets = CardModule.toSetInfos(cards);
+        return sets;
     },
 
     cardsOfNameAndSetName(cardName: string, setName: string) {
