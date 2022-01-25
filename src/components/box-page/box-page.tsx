@@ -11,9 +11,9 @@ import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
-    const match = cards.find(c => c.name === card.name && c.foil === card.foil);
+    const match = cards.find(c => c.scryfallId === card.scryfallId && c.foil === card.foil);
     if (match) {
-        const others = cards.filter(c => c.name !== card.name || c.foil !== card.foil);
+        const others = cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
         const updated = {
             ...match,
             count: match.count + card.count
@@ -38,6 +38,8 @@ const BoxPage = () => {
     const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(oldBox);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
+
+    const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
 
     React.useLayoutEffect(() => {
         if (settings !== null && oldBox?.cards === null && name){
@@ -82,6 +84,9 @@ const BoxPage = () => {
         <div>
             <Typography variant="h3">
                 Box <span className="box-name">{name}</span>
+            </Typography>
+            <Typography sx={{ fontStyle: "italic" }}>
+                {cardCount} cards
             </Typography>
             {newBox?.description
                 ? <h3>{newBox.description}</h3>

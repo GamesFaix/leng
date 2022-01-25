@@ -112,7 +112,7 @@ const ActiveCardRow = (props: Props) => {
         const cardNameOptions =
             query.length < 3
                 ? []
-                : allCardNames.filter(x => normalizeName(x).includes(query.toLowerCase()));
+                : allCardNames.filter(x => normalizeName(x).includes(normalizeName(query)));
 
         setCardNameOptions(cardNameOptions);
     };

@@ -4,6 +4,7 @@ import { createDirIfMissing } from "./file-controller";
 import { parse } from 'path';
 import { InventoryAction, InventoryActionTypes } from "../store/inventory";
 import { Box, BoxInfo } from "./model";
+import { orderBy } from "lodash";
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
@@ -117,7 +118,13 @@ export async function updateBox(settings: AppSettings, box: Box, dispatch: (acti
 
     const lastModified = new Date();
 
-    const json = JSON.stringify({ ...box, lastModified });
+    const updatedBox = {
+        ...box,
+        cards: orderBy(box.cards, [ 'name', 'setAbbrev' ]),
+        lastModified
+    };
+
+    const json = JSON.stringify(updatedBox);
 
     await fs.promises.writeFile(path, json);
 
