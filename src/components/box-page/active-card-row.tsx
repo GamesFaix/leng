@@ -67,6 +67,29 @@ function getFoilOptions(card: Card | null) {
     return xs;
 }
 
+function compareCards(a: Card, b: Card) {
+    const pattern = /(\d+)(.*)/
+    const matchA = pattern.exec(a.collector_number);
+    const matchB = pattern.exec(b.collector_number);
+    const numA = Number(matchA![1]);
+    const numB = Number(matchB![1]);
+    if (numA < numB) {
+        return -1;
+    } else if (numA > numB) {
+        return 1;
+    }
+
+    const mscA = matchA![2];
+    const mscB = matchB![2];
+    if (mscA < mscB) {
+        return -1;
+    } else if (mscA > mscB) {
+        return 1;
+    }
+
+    return 0;
+}
+
 const ActiveCardRow = (props: Props) => {
     const sets = useStore.sets();
     const startingState = stateFromCard(props.card, sets);
@@ -76,7 +99,8 @@ const ActiveCardRow = (props: Props) => {
     const setOptions = useStore.setsOfCard(state.cardName ?? '')
         .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
     const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
-        .map(c => { return { ...c, label: getVersionLabel(c) }});
+        .map(c => { return { ...c, label: getVersionLabel(c) }})
+        .sort(compareCards);
     const selectedSet = setOptions.find(s => s.name === state.setName) ?? null;
     const selectedCard = cardVersionOptions.find(c => c.id === state.scryfallId) ?? null;
     const foilOptions = getFoilOptions(selectedCard);
