@@ -52,10 +52,6 @@ async function downloadData() : Promise<string> {
     return httpResponse2.text();
 }
 
-async function saveData(json: string, path: string) : Promise<void> {
-    return fs.promises.writeFile(path, json);
-}
-
 async function loadData(path: string) : Promise<string> {
     const buffer = await fs.promises.readFile(path);
     return buffer.toString();
@@ -69,15 +65,18 @@ export async function loadCards(settings: AppSettings) : Promise<Card[]> {
     const path = `${settings.dataPath}/encyclopedia/cards.json`;
     const dataCreatedDate = await getDataCreatedDate(path);
 
+    let dataJson : string;
     if (isDataStale(dataCreatedDate)) {
-        const data = await downloadData();
-        createFileAndDirectoryIfRequired(path, data);
-        return parseData(data);
+        dataJson = await downloadData();
+        createFileAndDirectoryIfRequired(path, dataJson);
     }
     else {
-        const data = await loadData(path);
-        return parseData(data);
+        dataJson = await loadData(path);
     }
+
+    let data = parseData(dataJson);
+    data = data.filter(c => !c.digital); // Filter out MTGO sets
+    return data;
 }
 
 export type FrameEffect =
