@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton, Typography } from '@mui/material';
+import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -10,10 +10,16 @@ import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 
+function areSame(a: BoxCard, b: BoxCard) {
+    return a.name === b.name
+        && a.foil === b.foil
+        && a.lang === b.lang;
+}
+
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
-    const match = cards.find(c => c.scryfallId === card.scryfallId && c.foil === card.foil);
+    const match = cards.find(c => areSame(c, card));
     if (match) {
-        const others = cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
+        const others = cards.filter(c => !areSame(c, card));
         const updated = {
             ...match,
             count: match.count + card.count
@@ -128,7 +134,7 @@ const BoxPage = () => {
                 </IconButton>
             </div>
             <br/>
-            <div className="cards-area">
+            <Card sx={{ width: 1500 }}>
                 {disabled ? "" :
                     <CardsTable
                         cards={newBox.cards ?? []}
@@ -137,7 +143,7 @@ const BoxPage = () => {
                         onDeleteClicked={deleteCard}
                     />
                 }
-            </div>
+            </Card>
         </div>
     );
 };

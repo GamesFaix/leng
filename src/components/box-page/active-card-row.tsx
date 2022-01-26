@@ -1,12 +1,11 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
-import { BoxCard, normalizeName, SetInfo } from '../../logic/model';
+import { AllLanguages, BoxCard, Language, normalizeName, SetInfo } from '../../logic/model';
 import { Autocomplete, Checkbox, IconButton, TableCell, TableRow, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
-import { Fragment } from 'react';
 
 type Props = {
     card: BoxCard | null,
@@ -20,7 +19,8 @@ type State = {
     setName: string | null,
     scryfallId: string | null,
     foil: boolean | null,
-    count: number
+    count: number,
+    lang: Language
 }
 
 const defaultState : State = {
@@ -29,7 +29,8 @@ const defaultState : State = {
     setName: null,
     scryfallId: null,
     foil: null,
-    count: 1
+    count: 1,
+    lang: Language.English
 };
 
 function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
@@ -43,7 +44,8 @@ function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
         setName: setName,
         scryfallId: card.scryfallId,
         foil: card.foil,
-        count: card.count
+        count: card.count,
+        lang: card.lang ?? Language.English
     };
 }
 
@@ -200,6 +202,13 @@ const ActiveCardRow = (props: Props) => {
         });
     };
 
+    const setLang = (value: Language | null) => {
+        setState({
+            ...state,
+            lang: value ?? Language.English
+        });
+    }
+
     const submit = () => {
         if (!state.cardName || !selectedCard || state.foil === null || !state.scryfallId) {
             console.log(state);
@@ -213,7 +222,8 @@ const ActiveCardRow = (props: Props) => {
             foil: state.foil,
             version: selectedCard.label,
             count: state.count,
-            scryfallId: state.scryfallId
+            scryfallId: state.scryfallId,
+            lang: state.lang
         };
 
         props.onSubmit(card);
@@ -237,7 +247,7 @@ const ActiveCardRow = (props: Props) => {
                     min: 1,
                     max: 1000,
                 }}
-                sx={{ width: 100 }}
+                sx={{ width: 75 }}
                 value={state.count}
                 onChange={setCount}
                 onFocus={e => e.target.select()}
@@ -282,7 +292,7 @@ const ActiveCardRow = (props: Props) => {
         <TableCell>
             <Autocomplete
                 options={cardVersionOptions}
-                sx={{ width: 300 }}
+                sx={{ width: 250 }}
                 renderInput={(params) =>
                     <TextField {...params}
                         label="Version"
@@ -304,6 +314,23 @@ const ActiveCardRow = (props: Props) => {
                 checked={state.foil ?? false}
                 onChange={e => setFoil(e.target.checked)}
                 disabled={foilOptions.length < 2}
+            />
+        </TableCell>
+        <TableCell>
+            <Autocomplete
+                options={AllLanguages}
+                sx={{ width: 150 }}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        label="Language"
+                        onFocus={e => e.target.select()}
+                    />}
+                onChange={(e, lang, reason) => setLang(lang)}
+                value={state.lang}
+                autoSelect
+                autoHighlight
+                selectOnFocus
+                openOnFocus
             />
         </TableCell>
         <TableCell>

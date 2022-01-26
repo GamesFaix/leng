@@ -12,7 +12,7 @@ type Props = {
 }
 
 function getKey (card: BoxCard) {
-    return `${card.scryfallId}|${card.foil}`;
+    return `${card.scryfallId}|${card.foil}|${card.lang}`;
 }
 
 const CardsTable = (props: Props) => {
@@ -63,6 +63,7 @@ const CardsTable = (props: Props) => {
                         <TableCell>Set</TableCell>
                         <TableCell>Version</TableCell>
                         <TableCell>Foil</TableCell>
+                        <TableCell>Language</TableCell>
                         <TableCell>Actions</TableCell>
                     </TableRow>
                 </TableHead>

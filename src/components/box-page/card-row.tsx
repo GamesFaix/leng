@@ -28,6 +28,7 @@ const CardRow = (props: Props) => {
                 disabled
             />
         </TableCell>
+        <TableCell>{props.card.lang}</TableCell>
         <TableCell>
             <IconButton
                 title="Edit"

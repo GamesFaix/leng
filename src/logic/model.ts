@@ -8,6 +8,34 @@ export enum AsyncRequestStatus {
     Failure = 'FAILURE'
 }
 
+export enum Language {
+    English = 'English',
+    ChineseSimplified = 'ChineseSimplified',
+    ChineseTraditional = 'ChineseTraditional',
+    French = 'French',
+    German = 'German',
+    Italian = 'Italian',
+    Japanese = 'Japanese',
+    Korean = 'Korean',
+    Portuguese = 'Portuguese',
+    Russian = 'Russian',
+    Spanish = 'Spanish'
+}
+
+export const AllLanguages = [
+    Language.English,
+    Language.ChineseSimplified,
+    Language.ChineseTraditional,
+    Language.French,
+    Language.German,
+    Language.Italian,
+    Language.Japanese,
+    Language.Korean,
+    Language.Portuguese,
+    Language.Russian,
+    Language.Spanish
+];
+
 /* Represents the number of copies of a given printing of a card in a box. */
 export type BoxCard = {
     scryfallId: string,
@@ -17,7 +45,8 @@ export type BoxCard = {
     // for user readability, can be looked up w/ scryfallId
     name: string,
     setAbbrev: string,
-    version: string
+    version: string,
+    lang: Language | null
 }
 
 /* A group of cards in a collection, saved in a single box file. (It could represent a binder, bulk box, deck, etc.) */
