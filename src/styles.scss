@@ -26,3 +26,17 @@ h2 {
 .box-name {
     font-style: italic;
 }
+
+.autocomplete-option {
+    div {
+        padding: 6px;
+    }
+
+    &:active {
+        background-color: gainsboro;
+    }
+
+    &.selected {
+        background-color: skyblue;
+    }
+}

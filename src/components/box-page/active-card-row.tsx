@@ -5,6 +5,8 @@ import { BoxCard, normalizeName, SetInfo } from '../../logic/model';
 import { Autocomplete, Checkbox, IconButton, TableCell, TableRow, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { shell } from 'electron';
+import { Fragment } from 'react';
 
 type Props = {
     card: BoxCard | null,
@@ -88,6 +90,27 @@ function compareCards(a: Card, b: Card) {
     }
 
     return 0;
+}
+
+const CardOption = (props: any, card: Card & { label: string }, state: any) => {
+    const classes = state.selected
+        ? [ "autocomplete-option", "selected" ]
+        : [ "autocomplete-option" ];
+
+    return (
+        <li {...props} key={card.label} classes={classes}>
+            <div>
+                {card.label}
+            </div>
+            <IconButton
+                onClick={() => shell.openExternal(card.scryfall_uri)}
+                title="View on Scryfall"
+                color="primary"
+            >
+                <FontAwesomeIcon icon={icons.inspect} />
+            </IconButton>
+        </li>
+    );
 }
 
 const ActiveCardRow = (props: Props) => {
@@ -272,6 +295,7 @@ const ActiveCardRow = (props: Props) => {
                 autoHighlight
                 selectOnFocus
                 openOnFocus
+                renderOption={CardOption}
             />
         </TableCell>
         <TableCell>
