@@ -11,7 +11,7 @@ import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 
 function areSame(a: BoxCard, b: BoxCard) {
-    return a.name === b.name
+    return a.scryfallId === b.scryfallId
         && a.foil === b.foil
         && a.lang === b.lang;
 }
