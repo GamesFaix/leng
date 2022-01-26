@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config ./webpack.config.js",
-    "start": "npm run build && electron ./dist/electron.js"
+    "watch": "webpack --config ./webpack.config.js --watch",
+    "serve": "electron ./dist/electron.js",
+    "start": "npm run build && npm run serve"
   },
   "repository": {
     "type": "git",
