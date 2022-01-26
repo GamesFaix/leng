@@ -13,7 +13,8 @@ function getInventoryDir(settings: AppSettings) : string {
 export async function getBoxInfos(settings: AppSettings) : Promise<BoxInfo[]> {
     const dir = getInventoryDir(settings);
     createDirIfMissing(dir);
-    const files = await fs.promises.readdir(dir);
+    let files = await fs.promises.readdir(dir);
+    files = orderBy(files, f => f.toLowerCase());
 
     const promises = files.map(async f => {
         const stats = await fs.promises.stat(`${dir}/${f}`);
