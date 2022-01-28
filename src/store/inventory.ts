@@ -1,9 +1,10 @@
 import { orderBy } from "lodash";
 import { Box, BoxCard, BoxInfo } from "../logic/model";
 
-function areSameCard(a: BoxCard, b: BoxCard) : boolean {
+export function areSameCard(a: BoxCard, b: BoxCard) : boolean {
     return a.scryfallId === b.scryfallId &&
-        a.foil === b.foil;
+        a.foil === b.foil &&
+        a.lang === b.lang;
 }
 
 export type BoxState = {

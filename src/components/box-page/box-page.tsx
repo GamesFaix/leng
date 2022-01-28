@@ -8,11 +8,10 @@ import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
-import CardsTable from './cards-table';
 import CardsTable2 from './cards-table2';
 import 'react-virtualized/styles.css';
 import CardForm from './card-form';
-import { add } from 'lodash';
+import { areSameCard } from '../../store/inventory';
 
 function areSame(a: BoxCard, b: BoxCard) {
     return a.scryfallId === b.scryfallId
@@ -108,7 +107,7 @@ const BoxPage = () => {
 
     function deleteCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
-        const cards = newBox.cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
+        const cards = newBox.cards.filter(c => !areSameCard(c, card));
         setNewBox({...newBox, cards });
         setAnyUnsavedChanges(true);
     }
