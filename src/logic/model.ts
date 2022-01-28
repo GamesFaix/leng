@@ -91,3 +91,13 @@ export const CardModule = {
         return orderBy(setInfos, s => s.name);
     }
 }
+
+export const BoxCardModule = {
+    getKey(card: BoxCard) : string {
+        return `${card.scryfallId}|${card.foil}|${card.lang}`;
+    },
+
+    areSame(a: BoxCard, b: BoxCard) : boolean {
+        return this.getKey(a) === this.getKey(b);
+    }
+}
