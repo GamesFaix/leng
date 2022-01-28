@@ -9,6 +9,8 @@ import { AsyncRequestStatus, Box, BoxCard } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
+import CardsTable2 from './cards-table2';
+import 'react-virtualized/styles.css';
 
 function areSame(a: BoxCard, b: BoxCard) {
     return a.scryfallId === b.scryfallId
@@ -136,10 +138,15 @@ const BoxPage = () => {
             <br/>
             <Card sx={{ width: 1500 }}>
                 {disabled ? "" :
-                    <CardsTable
+                    // <CardsTable
+                    //     cards={newBox.cards ?? []}
+                    //     onAddClicked={addCard}
+                    //     onSaveEditClicked={saveCardEdit}
+                    //     onDeleteClicked={deleteCard}
+                    // />
+                    <CardsTable2
                         cards={newBox.cards ?? []}
-                        onAddClicked={addCard}
-                        onSaveEditClicked={saveCardEdit}
+                        onEditClicked={() => console.log("edit clicked")}
                         onDeleteClicked={deleteCard}
                     />
                 }

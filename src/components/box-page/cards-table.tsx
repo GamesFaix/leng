@@ -54,8 +54,13 @@ const CardsTable = (props: Props) => {
     }
 
     return (
-        <TableContainer component={Paper}>
-            <Table>
+        <TableContainer
+            component={Paper}
+            sx={{ height: 600 }}
+        >
+            <Table
+                sx={{ height: "max-content" }}
+            >
                 <TableHead>
                     <TableRow>
                         <TableCell>Qty.</TableCell>

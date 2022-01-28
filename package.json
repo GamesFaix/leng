@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
+    "@types/react-window": "^1.8.5",
     "css-loader": "^6.5.1",
     "electron": "^16.0.5",
     "html-webpack-plugin": "^5.5.0",
@@ -48,6 +49,7 @@
     "@types/lodash": "^4.14.178",
     "@types/react-redux": "^7.1.22",
     "@types/react-router-dom": "^5.3.2",
+    "@types/react-virtualized": "^9.21.16",
     "@types/redux-logger": "^3.0.9",
     "electron-devtools-installer": "git+https://github.com/MarshallOfSound/electron-devtools-installer.git",
     "fs": "0.0.1-security",
@@ -57,6 +59,8 @@
     "react-debounce-input": "^3.2.5",
     "react-redux": "^7.2.6",
     "react-router-dom": "^6.2.1",
+    "react-virtualized": "^9.22.3",
+    "react-window": "^1.8.6",
     "scryfall-api": "^2.2.2"
   }
 }
