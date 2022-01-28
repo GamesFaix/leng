@@ -357,4 +357,11 @@ const CardForm = (props: Props) => {
         </div>
     </form>);
 }
-export default CardForm;
+
+type AddFormProps = {
+    onSubmit: (card: BoxCard) => void,
+    onCancel: () => void
+}
+
+export const AddCardForm = (props: AddFormProps) => CardForm({ ...props, card: null });
+export const EditCardForm = (props: Props) => CardForm(props);

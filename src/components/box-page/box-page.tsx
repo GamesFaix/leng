@@ -8,9 +8,9 @@ import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
-import CardsTable2 from './cards-table2';
+import CardsTable from './cards-table';
 import 'react-virtualized/styles.css';
-import CardForm from './card-form';
+import { AddCardForm, EditCardForm } from './card-form';
 import { areSameCard } from '../../store/inventory';
 
 function areSame(a: BoxCard, b: BoxCard) {
@@ -95,6 +95,7 @@ const BoxPage = () => {
         }
         setCardToEdit(card);
         deleteCard(card);
+        setMode('edit');
     }
 
     function addCard(card: BoxCard) {
@@ -162,16 +163,22 @@ const BoxPage = () => {
                 </IconButton>
             </div>
             <Card sx={{ width: 700, padding: 1 }}>
-                <CardForm
-                    card={cardToEdit}
-                    onSubmit={submit}
-                    onCancel={cancel}
-                />
+                {mode === 'add'
+                    ? <AddCardForm
+                        onSubmit={submit}
+                        onCancel={cancel}
+                    />
+                    : <EditCardForm
+                        card={cardToEdit}
+                        onSubmit={submit}
+                        onCancel={cancel}
+                    />
+                }
             </Card>
             <br/>
             <Card sx={{ width: 900, padding: 1 }}>
                 {disabled ? "" :
-                    <CardsTable2
+                    <CardsTable
                         cards={newBox.cards ?? []}
                         onEditClicked={checkout}
                         onDeleteClicked={deleteCard}
