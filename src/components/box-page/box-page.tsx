@@ -1,9 +1,7 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, IconButton, Typography } from '@mui/material';
+import { Card } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import { icons } from '../../fontawesome';
 import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard, BoxCardModule } from '../../logic/model';
 import { RootState } from '../../store';
@@ -11,17 +9,13 @@ import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 import 'react-virtualized/styles.css';
 import { AddCardForm, EditCardForm } from './card-form';
-
-function areSame(a: BoxCard, b: BoxCard) {
-    return a.scryfallId === b.scryfallId
-        && a.foil === b.foil
-        && a.lang === b.lang;
-}
+import { useStore } from '../../hooks';
+import BoxHeaderCard from './box-header-card';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
-    const match = cards.find(c => areSame(c, card));
+    const match = cards.find(c => BoxCardModule.areSame(c, card));
     if (match) {
-        const others = cards.filter(c => !areSame(c, card));
+        const others = cards.filter(c => !BoxCardModule.areSame(c, card));
         const updated = {
             ...match,
             count: match.count + card.count
@@ -40,7 +34,7 @@ const BoxPage = () => {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const settings = useSelector((state: RootState) => state.settings.settings);
+    const settings = useStore.settings();
     const encyclopediaState = useSelector((state: RootState) => state.encyclopedia);
     const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
 
@@ -112,55 +106,33 @@ const BoxPage = () => {
         setAnyUnsavedChanges(true);
     }
 
+    function save() {
+        if (settings && newBox) {
+            const box : Box = {
+                name: newBox.name,
+                description: newBox.description ?? '',
+                cards: newBox.cards ?? [],
+                lastModified: newBox.lastModified
+            };
+
+            updateBox(settings, box, dispatch);
+            setAnyUnsavedChanges(false);
+        }
+    }
+
     const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || oldBox === null || newBox === null;
+
+    if (!name) { return <div>Loading...</div>; }
 
     return (
         <div>
-            <Typography variant="h3">
-                Box <span className="box-name">{name}</span>
-            </Typography>
-            <Typography sx={{ fontStyle: "italic" }}>
-                {cardCount} cards
-            </Typography>
-            {newBox?.description
-                ? <h3>{newBox.description}</h3>
-                : <></>
-            }
+            <BoxHeaderCard
+                name={name}
+                cardCount={cardCount}
+                unsavedChanges={anyUnsavedChanges}
+                save={save}
+            />
             <br/>
-            <div>
-                <IconButton
-                    title="Home"
-                    onClick={() => {
-                        if (anyUnsavedChanges && !confirm("There are unsaved changes. Are you sure you want to go back?")) {
-                            return;
-                        }
-                        navigate('/', { replace: true });
-                    }}
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.home}/>
-                </IconButton>
-                <IconButton
-                    title="Save"
-                    onClick={() => {
-                        if (settings && newBox) {
-                            const box : Box = {
-                                name: newBox.name,
-                                description: newBox.description ?? '',
-                                cards: newBox.cards ?? [],
-                                lastModified: newBox.lastModified
-                            };
-
-                            updateBox(settings, box, dispatch);
-                            setAnyUnsavedChanges(false);
-                        }
-                    }}
-                    disabled={!anyUnsavedChanges}
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.save}/>
-                </IconButton>
-            </div>
             <Card sx={{ width: 700, padding: 1 }}>
                 {mode === 'add'
                     ? <AddCardForm

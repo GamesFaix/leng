@@ -32,5 +32,11 @@ export const useStore = {
 
     cardById(scryfallId: string) {
         return this.cards().find(c => c.id === scryfallId) || null;
+    },
+
+    settings() {
+        return useSelector(
+            (state: RootState) => state.settings.settings
+        );
     }
 }
