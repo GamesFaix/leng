@@ -1,85 +1,103 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Checkbox, IconButton } from '@mui/material';
 import * as React from 'react';
-import { BoxCard } from '../../logic/model';
-import ActiveCardRow from './active-card-row';
-import CardRow from './card-row';
+import { Column, Table, TableCellProps } from 'react-virtualized';
+import { icons } from '../../fontawesome';
+import { useStore } from '../../hooks';
+import { BoxCard, SetInfo } from '../../logic/model';
 
 type Props = {
     cards: BoxCard[],
-    onAddClicked: (card: BoxCard) => void,
-    onSaveEditClicked: (card: BoxCard, index: number) => void,
+    onEditClicked: (card: BoxCard) => void,
     onDeleteClicked: (card: BoxCard) => void
 }
 
-function getKey (card: BoxCard) {
-    return `${card.scryfallId}|${card.foil}|${card.lang}`;
-}
-
-const CardsTable = (props: Props) => {
-    const [activeRowKey, setActiveRowKey] = React.useState<string | null>(null);
-
-    function addCardRow() {
-        return (<ActiveCardRow
-            key="new-card"
-            card={null}
-            onSubmit={props.onAddClicked}
-            onCancel={() => { return; }}
-        />);
-    }
-
-    function editCardRow(card: BoxCard, index: number) {
-        return (<ActiveCardRow
-            key={getKey(card)}
-            card={card}
-            onSubmit={card => {
-                props.onSaveEditClicked(card, index);
-                setActiveRowKey(null);
-            }}
-            onCancel={() => {
-                setActiveRowKey(null);
-            }}
-        />);
-    }
-
-    function viewCardRow(card: BoxCard) {
-        const key = getKey(card);
-        return (<CardRow
-            key={key}
-            card={card}
-            onEditClicked={card => {
-                setActiveRowKey(key);
-            }}
-            onDeleteClicked={props.onDeleteClicked}
-        />);
-    }
-
+function CheckboxCell(props: TableCellProps) {
     return (
-        <TableContainer component={Paper}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Qty.</TableCell>
-                        <TableCell>Name</TableCell>
-                        <TableCell>Set</TableCell>
-                        <TableCell>Version</TableCell>
-                        <TableCell>Foil</TableCell>
-                        <TableCell>Language</TableCell>
-                        <TableCell>Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {activeRowKey === null
-                        ? addCardRow()
-                        : <></>
-                    }
-                    {props.cards.map((c, i) =>
-                        activeRowKey === getKey(c)
-                            ? editCardRow(c, i)
-                            : viewCardRow(c)
-                    )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Checkbox
+            checked={props.cellData}
+            disabled
+        />
     );
 }
-export default CardsTable;
+
+function SetCell (props: TableCellProps, sets: SetInfo[]) {
+    const set = sets.find(s => s.abbrev === props.cellData);
+    return (
+        <div>
+            {set?.name}
+        </div>
+    )
+}
+
+function ActionsCell (props: TableCellProps, tableProps: Props) {
+    return (
+        <div>
+            <IconButton
+                onClick={() => tableProps.onEditClicked(props.rowData)}
+            >
+                <FontAwesomeIcon icon={icons.edit}/>
+            </IconButton>
+            <IconButton
+                onClick={() => tableProps.onDeleteClicked(props.rowData)}
+            >
+                <FontAwesomeIcon icon={icons.delete}/>
+            </IconButton>
+        </div>
+    );
+}
+
+const CardsTable2 = (props: Props) => {
+    const sets = useStore.sets();
+
+    return (
+        <Table
+            width={900}
+            height={600}
+            headerHeight={20}
+            rowHeight={30}
+            rowCount={props.cards.length}
+            rowGetter={({ index }) => props.cards[index]}
+        >
+            <Column
+                label='Ct.'
+                dataKey='count'
+                width={50}
+            />
+            <Column
+                label='Name'
+                dataKey='name'
+                width={300}
+            />
+            <Column
+                width={200}
+                label='Set'
+                dataKey='setAbbrev'
+                cellRenderer={cellProps => SetCell(cellProps, sets)}
+            />
+            <Column
+                width={150}
+                label='Version'
+                dataKey='version'
+            />
+            <Column
+                width={50}
+                label='Foil'
+                dataKey='foil'
+                cellRenderer={CheckboxCell}
+            />
+            <Column
+                width={100}
+                label='Lang.'
+                dataKey='lang'
+            />
+            <Column
+                width={100}
+                label='Actions'
+                dataKey='name' // not used
+                cellRenderer={cellProps => ActionsCell(cellProps, props)}
+            />
+        </Table>
+    );
+};
+export default CardsTable2;

@@ -36,3 +36,11 @@ h2 {
         background-color: skyblue;
     }
 }
+
+.form-row {
+    display: flex;
+
+    .control {
+        padding: 6px;
+    }
+}

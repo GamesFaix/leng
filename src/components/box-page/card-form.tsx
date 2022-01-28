@@ -2,7 +2,7 @@ import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { AllLanguages, BoxCard, Language, normalizeName, SetInfo } from '../../logic/model';
-import { Autocomplete, Checkbox, IconButton, TableCell, TableRow, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, FormControlLabel, IconButton, TableCell, TableRow, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
@@ -115,7 +115,7 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
     );
 }
 
-const ActiveCardRow = (props: Props) => {
+const CardForm = (props: Props) => {
     const sets = useStore.sets();
     const startingState = stateFromCard(props.card, sets);
     const [state, setState] = React.useState(startingState);
@@ -237,9 +237,10 @@ const ActiveCardRow = (props: Props) => {
         countInputRef.current?.focus();
     };
 
-    return (<TableRow>
-        <TableCell>
+    return (<form>
+        <div className="form-row">
             <TextField
+                className="control"
                 inputRef={countInputRef}
                 type="number"
                 title="Count"
@@ -252,9 +253,8 @@ const ActiveCardRow = (props: Props) => {
                 onChange={setCount}
                 onFocus={e => e.target.select()}
             />
-        </TableCell>
-        <TableCell>
             <Autocomplete
+                className="control"
                 options={cardNameOptions}
                 sx={{ width: 300 }}
                 renderInput={(params) =>
@@ -270,9 +270,8 @@ const ActiveCardRow = (props: Props) => {
                 onInputChange={(e, value, reason) => updateCardNameQuery(value)}
                 noOptionsText="Type at least 3 characters to search cards..."
             />
-        </TableCell>
-        <TableCell>
             <Autocomplete
+                className="control"
                 options={setOptions}
                 sx={{ width: 300 }}
                 renderInput={(params) =>
@@ -288,9 +287,10 @@ const ActiveCardRow = (props: Props) => {
                 selectOnFocus
                 openOnFocus
             />
-        </TableCell>
-        <TableCell>
+        </div>
+        <div className="form-row">
             <Autocomplete
+                className="control"
                 options={cardVersionOptions}
                 sx={{ width: 250 }}
                 renderInput={(params) =>
@@ -307,17 +307,21 @@ const ActiveCardRow = (props: Props) => {
                 openOnFocus
                 renderOption={CardOption}
             />
-        </TableCell>
-        <TableCell>
-            <Checkbox
-                title="Foil"
-                checked={state.foil ?? false}
-                onChange={e => setFoil(e.target.checked)}
-                disabled={foilOptions.length < 2}
+            <FormControlLabel
+                label="Foil"
+                labelPlacement='top'
+                control={
+                    <Checkbox
+                        className="control"
+                        title="Foil"
+                        checked={state.foil ?? false}
+                        onChange={e => setFoil(e.target.checked)}
+                        disabled={foilOptions.length < 2}
+                    />
+                }
             />
-        </TableCell>
-        <TableCell>
             <Autocomplete
+                className="control"
                 options={AllLanguages}
                 sx={{ width: 150 }}
                 renderInput={(params) =>
@@ -332,9 +336,8 @@ const ActiveCardRow = (props: Props) => {
                 selectOnFocus
                 openOnFocus
             />
-        </TableCell>
-        <TableCell>
             <IconButton
+                className="control"
                 onClick={submit}
                 title="Submit"
                 disabled={isSubmitButtonDisabled}
@@ -343,6 +346,7 @@ const ActiveCardRow = (props: Props) => {
                 <FontAwesomeIcon icon={icons.ok}/>
             </IconButton>
             <IconButton
+                className="control"
                 onClick={cancel}
                 title="Cancel"
                 disabled={isCancelButtonDisabled}
@@ -350,7 +354,14 @@ const ActiveCardRow = (props: Props) => {
             >
                 <FontAwesomeIcon icon={icons.cancel}/>
             </IconButton>
-        </TableCell>
-    </TableRow>);
+        </div>
+    </form>);
 }
-export default ActiveCardRow;
+
+type AddFormProps = {
+    onSubmit: (card: BoxCard) => void,
+    onCancel: () => void
+}
+
+export const AddCardForm = (props: AddFormProps) => CardForm({ ...props, card: null });
+export const EditCardForm = (props: Props) => CardForm(props);
