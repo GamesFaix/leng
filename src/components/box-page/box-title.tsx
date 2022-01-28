@@ -74,7 +74,8 @@ const BoxTitle = (props: Props) => {
                 .then(() => {
                     setName(newName);
                     setIsEditing(false);
-                });
+                })
+                .catch(err => alert(err));
         }
     }
 
