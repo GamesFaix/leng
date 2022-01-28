@@ -11,6 +11,8 @@ import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 import CardsTable2 from './cards-table2';
 import 'react-virtualized/styles.css';
+import CardForm from './card-form';
+import { add } from 'lodash';
 
 function areSame(a: BoxCard, b: BoxCard) {
     return a.scryfallId === b.scryfallId
@@ -32,6 +34,8 @@ function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
         return [card].concat(cards);
     }
 }
+
+type Mode = 'add' | 'edit'
 
 const BoxPage = () => {
     const { name } = useParams();
@@ -57,31 +61,54 @@ const BoxPage = () => {
                     setNewBox(box);
                 });
         }
-    })
+    });
+
+    const [mode, setMode] = React.useState<Mode>('add');
+    const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
+
+    function cancel() {
+        if (mode === 'add') {
+
+        }
+        else {
+            if (cardToEdit) {
+                addCard(cardToEdit);
+                setCardToEdit(null);
+            }
+            setMode('add');
+        }
+    }
+
+    function submit(card: BoxCard) {
+        if (mode === 'add') {
+            addCard(card);
+        }
+        else {
+            addCard(card);
+            setCardToEdit(null);
+            setMode('add');
+        }
+    }
+
+    function checkout(card: BoxCard) {
+        if (cardToEdit) {
+            addCard(cardToEdit);
+        }
+        setCardToEdit(card);
+        deleteCard(card);
+    }
 
     function addCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
         const cards = addOrIncrememnt(newBox.cards, card);
         setNewBox({...newBox, cards });
         setAnyUnsavedChanges(true);
+        setCardToEdit(null);
     }
 
     function deleteCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
         const cards = newBox.cards.filter(c => c.scryfallId !== card.scryfallId || c.foil !== card.foil);
-        setNewBox({...newBox, cards });
-        setAnyUnsavedChanges(true);
-    }
-
-    function saveCardEdit(card: BoxCard, index: number) {
-        if (!newBox?.cards) { return; }
-        let cards = [];
-        for (let i=0; i<newBox.cards.length; i++) {
-            if (i !== index) {
-                cards.push(newBox.cards[i]);
-            }
-        }
-        cards = addOrIncrememnt(cards, card);
         setNewBox({...newBox, cards });
         setAnyUnsavedChanges(true);
     }
@@ -135,18 +162,19 @@ const BoxPage = () => {
                     <FontAwesomeIcon icon={icons.save}/>
                 </IconButton>
             </div>
+            <Card sx={{ width: 700, padding: 1 }}>
+                <CardForm
+                    card={cardToEdit}
+                    onSubmit={submit}
+                    onCancel={cancel}
+                />
+            </Card>
             <br/>
-            <Card sx={{ width: 1500 }}>
+            <Card sx={{ width: 900, padding: 1 }}>
                 {disabled ? "" :
-                    // <CardsTable
-                    //     cards={newBox.cards ?? []}
-                    //     onAddClicked={addCard}
-                    //     onSaveEditClicked={saveCardEdit}
-                    //     onDeleteClicked={deleteCard}
-                    // />
                     <CardsTable2
                         cards={newBox.cards ?? []}
-                        onEditClicked={() => console.log("edit clicked")}
+                        onEditClicked={checkout}
                         onDeleteClicked={deleteCard}
                     />
                 }
