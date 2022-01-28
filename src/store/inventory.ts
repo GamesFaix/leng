@@ -1,11 +1,5 @@
 import { orderBy } from "lodash";
-import { Box, BoxCard, BoxInfo } from "../logic/model";
-
-export function areSameCard(a: BoxCard, b: BoxCard) : boolean {
-    return a.scryfallId === b.scryfallId &&
-        a.foil === b.foil &&
-        a.lang === b.lang;
-}
+import { Box, BoxCard, BoxCardModule, BoxInfo } from "../logic/model";
 
 export type BoxState = {
     name: string,
@@ -33,6 +27,8 @@ export enum InventoryActionTypes {
     LoadBoxSuccess = 'LOAD_BOX_SUCCESS',
     CreateBox = 'CREATE_BOX',
     DeleteBox = 'DELETE_BOX',
+    RenameBox = 'RENAME_BOX',
+    MergeBoxes = 'MERGE_BOXES',
     AddCard = 'ADD_CARD',
     ChangeCount = 'CHANGE_COUNT',
     RemoveCard = 'REMOVE_CARD',
@@ -97,6 +93,18 @@ export type DeleteBoxAction = {
     boxInfo: BoxInfo
 }
 
+export type RenameBoxAction = {
+    type: InventoryActionTypes.RenameBox,
+    oldName: string,
+    newName: string
+}
+
+export type MergeBoxesAction = {
+    type: InventoryActionTypes.MergeBoxes,
+    updatedBox: Box,
+    removedBoxName: string
+}
+
 export type InventoryAction =
     LoadBoxInfosStartAction |
     LoadBoxInfosSuccessAction |
@@ -108,7 +116,9 @@ export type InventoryAction =
     SaveBoxStartAction |
     SaveBoxSuccessAction |
     CreateBoxAction |
-    DeleteBoxAction
+    DeleteBoxAction |
+    RenameBoxAction |
+    MergeBoxesAction
 
 export function inventoryReducer(state: InventoryState = inventoryDefaultState, action: InventoryAction): InventoryState {
     switch (action.type) {
@@ -147,7 +157,7 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
             const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
                     const cards = b.cards?.map(c => {
-                        if (areSameCard(c, action.card)){
+                        if (BoxCardModule.areSame(c, action.card)){
                             return {
                                 ...c,
                                 count: c.count + action.card.count
@@ -172,7 +182,7 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
             const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
                     const cards = b.cards?.map(c => {
-                        if (areSameCard(c, action.card)){
+                        if (BoxCardModule.areSame(c, action.card)){
                             return {
                                 ...c,
                                 count: action.card.count
@@ -193,7 +203,7 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
         case InventoryActionTypes.RemoveCard: {
             const boxes = state.boxes?.map(b => {
                 if (b.name === action.boxInfo.name) {
-                    const cards = b.cards?.filter(c => !areSameCard(c, action.card)) ?? null;
+                    const cards = b.cards?.filter(c => !BoxCardModule.areSame(c, action.card)) ?? null;
                     return { ...b, cards };
                 } else {
                     return b;
@@ -227,6 +237,26 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
         }
         case InventoryActionTypes.DeleteBox: {
             const boxes = state.boxes?.filter(b => b.name !== action.boxInfo.name) ?? null;
+            return { ...state, boxes };
+        }
+        case InventoryActionTypes.RenameBox: {
+            if (!state.boxes) { return state; }
+
+            let boxes = state.boxes.map(b =>
+                b.name === action.oldName
+                    ? { ...b, name: action.newName }
+                    : b
+            );
+            boxes = orderBy(boxes, b => b.name);
+            return { ...state, boxes };
+        }
+        case InventoryActionTypes.MergeBoxes: {
+            if (!state.boxes) { return state; }
+
+            let boxes = state.boxes.filter(b => b.name !== action.removedBoxName && b.name !== action.updatedBox.name);
+            boxes.push(action.updatedBox);
+            boxes = orderBy(boxes, b => b.name);
+
             return { ...state, boxes };
         }
         default:

@@ -5,13 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { loadBox, updateBox } from '../../logic/inventoryController';
-import { AsyncRequestStatus, Box, BoxCard } from '../../logic/model';
+import { AsyncRequestStatus, Box, BoxCard, BoxCardModule } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
 import CardsTable from './cards-table';
 import 'react-virtualized/styles.css';
 import { AddCardForm, EditCardForm } from './card-form';
-import { areSameCard } from '../../store/inventory';
 
 function areSame(a: BoxCard, b: BoxCard) {
     return a.scryfallId === b.scryfallId
@@ -108,7 +107,7 @@ const BoxPage = () => {
 
     function deleteCard(card: BoxCard) {
         if (!newBox?.cards) { return; }
-        const cards = newBox.cards.filter(c => !areSameCard(c, card));
+        const cards = newBox.cards.filter(c => !BoxCardModule.areSame(c, card));
         setNewBox({...newBox, cards });
         setAnyUnsavedChanges(true);
     }

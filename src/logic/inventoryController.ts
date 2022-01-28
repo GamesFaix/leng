@@ -3,11 +3,15 @@ import * as fs from 'fs';
 import { createDirIfMissing } from "./file-controller";
 import { parse } from 'path';
 import { InventoryAction, InventoryActionTypes } from "../store/inventory";
-import { Box, BoxInfo } from "./model";
-import { orderBy } from "lodash";
+import { Box, BoxCardModule, BoxInfo } from "./model";
+import { groupBy, orderBy } from "lodash";
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
+}
+
+function getBoxPath(settings: AppSettings, name: string) : string {
+    return `${getInventoryDir(settings)}/${name}.json`;
 }
 
 export async function getBoxInfos(settings: AppSettings) : Promise<BoxInfo[]> {
@@ -28,13 +32,6 @@ export async function getBoxInfos(settings: AppSettings) : Promise<BoxInfo[]> {
 }
 
 export async function createBox(settings: AppSettings, name: string, dispatch: (action:InventoryAction) => void) : Promise<BoxInfo> {
-    const dir = getInventoryDir(settings);
-    const path = `${dir}/${name}.json`;
-    const exists = fs.existsSync(path);
-    if (exists) {
-        throw Error(`Box already exists: ${name}`);
-    }
-
     const box: Box = {
         name,
         description: '',
@@ -42,9 +39,7 @@ export async function createBox(settings: AppSettings, name: string, dispatch: (
         lastModified: new Date()
     };
 
-    const json = JSON.stringify(box);
-
-    await fs.promises.writeFile(path, json);
+    await saveBox(settings, box, false);
 
     dispatch({
         type: InventoryActionTypes.CreateBox,
@@ -61,8 +56,7 @@ export async function createBox(settings: AppSettings, name: string, dispatch: (
 }
 
 export async function deleteBox(settings: AppSettings, name: string, dispatch: (action: InventoryAction) => void) : Promise<void> {
-    const dir = getInventoryDir(settings);
-    const path = `${dir}/${name}.json`;
+    const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
 
     if (exists) {
@@ -78,14 +72,8 @@ export async function deleteBox(settings: AppSettings, name: string, dispatch: (
     });
 }
 
-export async function loadBox(settings: AppSettings, name: string, dispatch: (action:InventoryAction) => void) : Promise<Box> {
-    dispatch({
-        type: InventoryActionTypes.LoadBoxStart,
-        name
-    });
-
-    const dir = getInventoryDir(settings);
-    const path = `${dir}/${name}.json`;
+async function openBox(settings: AppSettings, name: string) : Promise<Box> {
+    const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
 
     if (!exists) {
@@ -95,6 +83,32 @@ export async function loadBox(settings: AppSettings, name: string, dispatch: (ac
     const buffer = await fs.promises.readFile(path);
     const json = buffer.toString();
     const box: Box = JSON.parse(json);
+    return box;
+}
+
+async function saveBox(settings: AppSettings, box: Box, overwrite: boolean) : Promise<void> {
+    const path = getBoxPath(settings, box.name);
+    const exists = fs.existsSync(path);
+    if (exists) {
+        if (overwrite) {
+            await fs.promises.rm(path);
+        } else {
+            throw Error(`Box already exists: ${box.name}`);
+        }
+    }
+
+    const json = JSON.stringify(box);
+
+    await fs.promises.writeFile(path, json);
+}
+
+export async function loadBox(settings: AppSettings, name: string, dispatch: (action:InventoryAction) => void) : Promise<Box> {
+    dispatch({
+        type: InventoryActionTypes.LoadBoxStart,
+        name
+    });
+
+    const box = await openBox(settings, name);
 
     dispatch({
         type: InventoryActionTypes.LoadBoxSuccess,
@@ -110,13 +124,6 @@ export async function updateBox(settings: AppSettings, box: Box, dispatch: (acti
         box
     });
 
-    const dir = getInventoryDir(settings);
-    const path = `${dir}/${box.name}.json`;
-    const exists = fs.existsSync(path);
-    if (exists) {
-        await fs.promises.rm(path);
-    }
-
     const lastModified = new Date();
 
     const updatedBox = {
@@ -125,9 +132,7 @@ export async function updateBox(settings: AppSettings, box: Box, dispatch: (acti
         lastModified
     };
 
-    const json = JSON.stringify(updatedBox);
-
-    await fs.promises.writeFile(path, json);
+    await saveBox(settings, updatedBox, true);
 
     dispatch({
         type: InventoryActionTypes.SaveBoxSuccess,
@@ -138,4 +143,61 @@ export async function updateBox(settings: AppSettings, box: Box, dispatch: (acti
         name: box.name,
         lastModified
     };
+}
+
+export async function renameBox(settings: AppSettings, oldName: string, newName: string, dispatch: (action: InventoryAction) => void) : Promise<BoxInfo> {
+    const oldPath = getBoxPath(settings, oldName);
+    const newPath = getBoxPath(settings, newName);
+
+    if (fs.existsSync(newPath)) {
+        throw `Box named ${newName} already exists.`;
+    }
+
+    let box = await openBox(settings, oldName);
+
+    box = { ...box, name: newName };
+
+    await saveBox(settings, box, true);
+
+    await fs.promises.rm(oldPath);
+
+    dispatch({
+        type: InventoryActionTypes.RenameBox,
+        oldName,
+        newName
+    });
+
+    return box;
+}
+
+export async function mergeBoxes(settings: AppSettings, fromBoxName: string, toBoxName: string, dispatch: (action: InventoryAction) => void) : Promise<BoxInfo> {
+    const fromBox = await openBox(settings, fromBoxName);
+    const toBox = await openBox(settings, toBoxName);
+
+    let cards = fromBox.cards.concat(toBox.cards);
+    let groups = groupBy(cards, BoxCardModule.getKey);
+    cards = Object.entries(groups).map(entry => {
+        const [_, items] = entry;
+        return {
+            ...items[0],
+            count: items.map(c => c.count).reduce((a, b) => a + b, 0)
+        }
+    });
+    cards = orderBy(cards, c => c.name);
+
+    const merged = {
+        ...toBox,
+        cards
+    };
+
+    await saveBox(settings, merged, true);
+    await fs.promises.rm(getBoxPath(settings, fromBoxName));
+
+    dispatch({
+        type: InventoryActionTypes.MergeBoxes,
+        removedBoxName: fromBoxName,
+        updatedBox: merged
+    });
+
+    return merged;
 }
