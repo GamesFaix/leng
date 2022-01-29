@@ -2,7 +2,7 @@ import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { AllLanguages, BoxCard, Language, normalizeName, SetInfo } from '../../logic/model';
-import { Autocomplete, Checkbox, FormControlLabel, IconButton, TableCell, TableRow, TextField } from '@mui/material';
+import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
@@ -160,8 +160,8 @@ const CardForm = (props: Props) => {
         });
     };
 
-    const filterCardNames = () => {
-        const query = state.cardNameQuery;
+    const filterCardNames = (options: string[], state: FilterOptionsState<string>) => {
+        const query = state.inputValue;
 
         if (query.length < 3) {
             return [];
@@ -169,11 +169,11 @@ const CardForm = (props: Props) => {
 
         if (query.endsWith('\"')) {
             const normalizedQuery = query.toLowerCase().replace('\"', '');
-            return allCardNames.filter(c => c.toLowerCase() === normalizedQuery);
+            return options.filter(c => c.toLowerCase() === normalizedQuery);
         }
         else {
             const normalizedQuery = normalizeName(query);
-            return allCardNames.filter(c => normalizeName(c).includes(normalizedQuery));
+            return options.filter(c => normalizeName(c).includes(normalizedQuery));
         }
     }
 
