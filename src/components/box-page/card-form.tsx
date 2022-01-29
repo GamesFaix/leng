@@ -120,7 +120,6 @@ const CardForm = (props: Props) => {
     const startingState = stateFromCard(props.card, sets);
     const [state, setState] = React.useState(startingState);
     const allCardNames = useStore.cardNames();
-    const [cardNameOptions, setCardNameOptions] = React.useState<string[]>([]);
     const setOptions = useStore.setsOfCard(state.cardName ?? '')
         .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
     const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
@@ -159,14 +158,24 @@ const CardForm = (props: Props) => {
             ...state,
             cardNameQuery: query
         });
-
-        const cardNameOptions =
-            query.length < 3
-                ? []
-                : allCardNames.filter(x => normalizeName(x).includes(normalizeName(query)));
-
-        setCardNameOptions(cardNameOptions);
     };
+
+    const filterCardNames = () => {
+        const query = state.cardNameQuery;
+
+        if (query.length < 3) {
+            return [];
+        }
+
+        if (query.endsWith('\"')) {
+            const normalizedQuery = query.toLowerCase().replace('\"', '');
+            return allCardNames.filter(c => c.toLowerCase() === normalizedQuery);
+        }
+        else {
+            const normalizedQuery = normalizeName(query);
+            return allCardNames.filter(c => normalizeName(c).includes(normalizedQuery));
+        }
+    }
 
     const setCardName = (name: string | null) => {
         setState({
@@ -255,7 +264,7 @@ const CardForm = (props: Props) => {
             />
             <Autocomplete
                 className="control"
-                options={cardNameOptions}
+                options={allCardNames}
                 sx={{ width: 300 }}
                 renderInput={(params) =>
                     <TextField {...params}
@@ -269,6 +278,7 @@ const CardForm = (props: Props) => {
                 inputValue={state.cardNameQuery}
                 onInputChange={(e, value, reason) => updateCardNameQuery(value)}
                 noOptionsText="Type at least 3 characters to search cards..."
+                filterOptions={filterCardNames}
             />
             <Autocomplete
                 className="control"
