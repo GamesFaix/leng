@@ -94,6 +94,23 @@ function compareCards(a: Card, b: Card) {
     return 0;
 }
 
+function filterCardNames (options: string[], state: FilterOptionsState<string>) {
+    const query = state.inputValue;
+
+    if (query.length < 3) {
+        return [];
+    }
+
+    if (query.endsWith('\"')) {
+        const normalizedQuery = query.toLowerCase().replace('\"', '');
+        return options.filter(c => c.toLowerCase() === normalizedQuery);
+    }
+    else {
+        const normalizedQuery = normalizeName(query);
+        return options.filter(c => normalizeName(c).includes(normalizedQuery));
+    }
+}
+
 const CardOption = (props: any, card: Card & { label: string }, state: any) => {
     const classes = state.selected
         ? [ "autocomplete-option", "selected" ]
@@ -159,23 +176,6 @@ const CardForm = (props: Props) => {
             cardNameQuery: query
         });
     };
-
-    const filterCardNames = (options: string[], state: FilterOptionsState<string>) => {
-        const query = state.inputValue;
-
-        if (query.length < 3) {
-            return [];
-        }
-
-        if (query.endsWith('\"')) {
-            const normalizedQuery = query.toLowerCase().replace('\"', '');
-            return options.filter(c => c.toLowerCase() === normalizedQuery);
-        }
-        else {
-            const normalizedQuery = normalizeName(query);
-            return options.filter(c => normalizeName(c).includes(normalizedQuery));
-        }
-    }
 
     const setCardName = (name: string | null) => {
         setState({
