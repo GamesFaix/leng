@@ -128,7 +128,6 @@ export async function updateBox(settings: AppSettings, box: Box, dispatch: (acti
 
     const updatedBox = {
         ...box,
-        cards: orderBy(box.cards, [ 'name', 'setAbbrev' ]),
         lastModified
     };
 
