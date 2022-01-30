@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import { createDirIfMissing } from "./file-controller";
 import { parse } from 'path';
 import { InventoryAction, InventoryActionTypes } from "../store/inventory";
-import { Box, BoxCardModule, BoxInfo } from "./model";
+import { Box, BoxCardModule, BoxInfo, normalizeName } from "./model";
 import { groupBy, orderBy } from "lodash";
 
 function getInventoryDir(settings: AppSettings) : string {
@@ -182,7 +182,7 @@ export async function mergeBoxes(settings: AppSettings, fromBoxName: string, toB
             count: items.map(c => c.count).reduce((a, b) => a + b, 0)
         }
     });
-    cards = orderBy(cards, c => c.name);
+    cards = orderBy(cards, c => normalizeName(c.name));
 
     const merged = {
         ...toBox,
