@@ -2,9 +2,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Checkbox, IconButton } from '@mui/material';
 import * as React from 'react';
 import { Column, Table, TableCellProps } from 'react-virtualized';
+import { Card } from 'scryfall-api';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { BoxCard, SetInfo } from '../../logic/model';
+import { getVersionLabel } from './card-form';
 
 type Props = {
     cards: BoxCard[],
@@ -30,6 +32,16 @@ function SetCell (props: TableCellProps, sets: SetInfo[]) {
     )
 }
 
+function VersionCell (props: TableCellProps, cards: Card[]) {
+    const card = cards.find(c => c.id === props.rowData.scryfallId);
+    const version = card ? getVersionLabel(card) : '';
+    return (
+        <div>
+            {version}
+        </div>
+    );
+}
+
 function ActionsCell (props: TableCellProps, tableProps: Props) {
     return (
         <div>
@@ -49,6 +61,7 @@ function ActionsCell (props: TableCellProps, tableProps: Props) {
 
 const CardsTable2 = (props: Props) => {
     const sets = useStore.sets();
+    const cards = useStore.cards();
 
     return (
         <Table
@@ -76,9 +89,10 @@ const CardsTable2 = (props: Props) => {
                 cellRenderer={cellProps => SetCell(cellProps, sets)}
             />
             <Column
-                width={150}
+                width={100}
                 label='Version'
                 dataKey='version'
+                cellRenderer={cellProps => VersionCell(cellProps, cards)}
             />
             <Column
                 width={50}

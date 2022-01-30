@@ -51,7 +51,6 @@ function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
 
 export function getVersionLabel(card: Card) : string {
     const numberStr = `#${card.collector_number}`;
-    const frameStr = `${card.frame}-frame`;
 
     let frameEffectsStr = "";
     if (card.frame_effects?.includes("showcase")) {
@@ -61,7 +60,7 @@ export function getVersionLabel(card: Card) : string {
         frameEffectsStr += " Extended Art"
     }
 
-    return `${numberStr} ${frameStr}${frameEffectsStr}`;
+    return `${numberStr}${frameEffectsStr}`;
 }
 
 function getFoilOptions(card: Card | null) {
