@@ -1,12 +1,12 @@
 
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faBook,
     faBoxOpen,
     faCheck,
     faCog,
     faHome,
     faIdBadge,
+    faPalette,
     faPencilAlt,
     faPlus,
     faSave,
@@ -16,12 +16,12 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
-    faBook,
     faBoxOpen,
     faCheck,
     faCog,
     faHome,
     faIdBadge,
+    faPalette,
     faPencilAlt,
     faPlus,
     faSave,
@@ -42,5 +42,5 @@ export const icons = {
     open: <IconProp>'box-open',
     inspect: <IconProp>'search-plus',
     badge: <IconProp>'id-badge',
-    book: <IconProp>'book'
+    art: <IconProp>'palette'
 };
