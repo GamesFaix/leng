@@ -1,6 +1,6 @@
-import { uniq } from 'lodash';
+import { orderBy, uniq } from 'lodash';
 import { Card } from 'scryfall-api';
-import { AsyncRequestStatus, CardModule, SetInfo } from '../logic/model';
+import { AsyncRequestStatus, CardModule, normalizeName, SetInfo } from '../logic/model';
 
 export type EncyclopediaState = {
     isLoading: boolean,

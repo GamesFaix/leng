@@ -6,6 +6,7 @@ import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButto
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
+import { orderBy } from 'lodash';
 
 type Props = {
     card: BoxCard | null,
@@ -100,14 +101,20 @@ function filterCardNames (options: string[], state: FilterOptionsState<string>) 
         return [];
     }
 
+    let results = options;
+
     if (query.endsWith('\"')) {
         const normalizedQuery = query.toLowerCase().replace('\"', '');
-        return options.filter(c => c.toLowerCase() === normalizedQuery);
+        results = results.filter(c => normalizeName(c) === normalizedQuery);
     }
     else {
         const normalizedQuery = normalizeName(query);
-        return options.filter(c => normalizeName(c).includes(normalizedQuery));
+        results = results.filter(c => normalizeName(c).includes(normalizedQuery));
     }
+
+    results = orderBy(results, normalizeName);
+
+    return results;
 }
 
 const CardOption = (props: any, card: Card & { label: string }, state: any) => {
