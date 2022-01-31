@@ -24,6 +24,12 @@ type State = {
     lang: Language
 }
 
+enum SubmitMode {
+    ClearAll,
+    ClearAllButName,
+    ClearAllButNameAndSet
+}
+
 const defaultState : State = {
     cardNameQuery: '',
     cardName: null,
@@ -224,7 +230,7 @@ const CardForm = (props: Props) => {
         });
     }
 
-    const submit = () => {
+    const submit = (mode: SubmitMode) => {
         if (!state.cardName || !selectedCard || state.foil === null || !state.scryfallId) {
             console.log(state);
             console.log(selectedCard);
@@ -242,7 +248,25 @@ const CardForm = (props: Props) => {
         };
 
         props.onSubmit(card);
-        setState(defaultState);
+
+        const newState = {
+            ...defaultState
+        };
+
+        switch (mode) {
+            case SubmitMode.ClearAll:
+                break;
+            case SubmitMode.ClearAllButName:
+                newState.cardName = card.name;
+                break;
+            case SubmitMode.ClearAllButNameAndSet:
+                newState.cardName = card.name;
+                newState.setName = selectedCard.set_name;
+                break;
+        }
+
+        setState(newState);
+
         countInputRef.current?.focus();
     };
 
@@ -352,15 +376,48 @@ const CardForm = (props: Props) => {
                 selectOnFocus
                 openOnFocus
             />
-            <IconButton
-                className="control"
-                onClick={submit}
-                title="Submit"
-                disabled={isSubmitButtonDisabled}
-                color="success"
-            >
-                <FontAwesomeIcon icon={icons.ok}/>
-            </IconButton>
+            {props.card === null ? <>
+                <IconButton
+                    className="control"
+                    onClick={() => submit(SubmitMode.ClearAll)}
+                    title="Add"
+                    disabled={isSubmitButtonDisabled}
+                    color="success"
+                >
+                    <FontAwesomeIcon icon={icons.add}/>
+                </IconButton>
+                <IconButton
+                    className="control"
+                    onClick={() => submit(SubmitMode.ClearAllButName)}
+                    title="Add, then add another card with the same name"
+                    disabled={isSubmitButtonDisabled}
+                    color="secondary"
+                >
+                    <FontAwesomeIcon icon={icons.add}/>
+                    <FontAwesomeIcon icon={icons.badge}/>
+                </IconButton>
+                <IconButton
+                    className="control"
+                    onClick={() => submit(SubmitMode.ClearAllButNameAndSet)}
+                    title="Add, then add another card with the same name and set"
+                    disabled={isSubmitButtonDisabled}
+                    color="secondary"
+                >
+                    <FontAwesomeIcon icon={icons.add}/>
+                    <FontAwesomeIcon icon={icons.badge}/>
+                    <FontAwesomeIcon icon={icons.book}/>
+                </IconButton>
+            </> : <>
+                <IconButton
+                    className="control"
+                    onClick={() => submit(SubmitMode.ClearAll)}
+                    title="Done editing"
+                    disabled={isSubmitButtonDisabled}
+                    color="success"
+                >
+                    <FontAwesomeIcon icon={icons.ok}/>
+                </IconButton>
+            </>}
             <IconButton
                 className="control"
                 onClick={cancel}
