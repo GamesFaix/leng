@@ -34,7 +34,7 @@ const HomePage = () => {
     return (
         <div>
             <Typography variant="h3">
-                Home
+                Your boxes
             </Typography>
             <br/>
             <IconButton
@@ -61,9 +61,6 @@ const HomePage = () => {
                 </>)
                 : ""
             }
-            <Typography variant="h4">
-                Your boxes:
-            </Typography>
             <div className="boxes-area">
                 {hideBoxesTable
                     ? "Loading box info..."
