@@ -170,7 +170,7 @@ const CardForm = (props: Props) => {
         }
     });
 
-    const countInputRef = React.useRef<HTMLInputElement>(null);
+    const formStartRef = React.useRef<HTMLInputElement>(null);
 
     const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.foil === null;
     const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.foil === null;
@@ -267,37 +267,24 @@ const CardForm = (props: Props) => {
 
         setState(newState);
 
-        countInputRef.current?.focus();
+        formStartRef.current?.focus();
     };
 
     const cancel = () => {
         props.onCancel();
         setState(defaultState);
-        countInputRef.current?.focus();
+        formStartRef.current?.focus();
     };
 
     return (<form>
         <div className="form-row">
-            <TextField
-                className="control"
-                inputRef={countInputRef}
-                type="number"
-                title="Count"
-                inputProps={{
-                    min: 1,
-                    max: 1000,
-                }}
-                sx={{ width: 75 }}
-                value={state.count}
-                onChange={setCount}
-                onFocus={e => e.target.select()}
-            />
             <Autocomplete
                 className="control"
                 options={allCardNames}
                 sx={{ width: 300 }}
                 renderInput={(params) =>
                     <TextField {...params}
+                        inputRef={formStartRef}
                         label="Card"
                         onFocus={e => e.target.select()}
                     />}
@@ -322,6 +309,22 @@ const CardForm = (props: Props) => {
                 onChange={(e, value, reason) => setSetName(value?.name ?? null)}
                 disabled={setOptions.length < 2}
                 value={selectedSet}
+                autoSelect
+                autoHighlight
+                selectOnFocus
+                openOnFocus
+            />
+            <Autocomplete
+                className="control"
+                options={AllLanguages}
+                sx={{ width: 150 }}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        label="Language"
+                        onFocus={e => e.target.select()}
+                    />}
+                onChange={(e, lang, reason) => setLang(lang)}
+                value={state.lang}
                 autoSelect
                 autoHighlight
                 selectOnFocus
@@ -360,21 +363,18 @@ const CardForm = (props: Props) => {
                     />
                 }
             />
-            <Autocomplete
+            <TextField
                 className="control"
-                options={AllLanguages}
-                sx={{ width: 150 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        label="Language"
-                        onFocus={e => e.target.select()}
-                    />}
-                onChange={(e, lang, reason) => setLang(lang)}
-                value={state.lang}
-                autoSelect
-                autoHighlight
-                selectOnFocus
-                openOnFocus
+                type="number"
+                title="Count"
+                inputProps={{
+                    min: 1,
+                    max: 1000,
+                }}
+                sx={{ width: 75 }}
+                value={state.count}
+                onChange={setCount}
+                onFocus={e => e.target.select()}
             />
             {props.card === null ? <>
                 <IconButton
@@ -404,8 +404,7 @@ const CardForm = (props: Props) => {
                     color="secondary"
                 >
                     <FontAwesomeIcon icon={icons.add}/>
-                    <FontAwesomeIcon icon={icons.badge}/>
-                    <FontAwesomeIcon icon={icons.book}/>
+                    <FontAwesomeIcon icon={icons.art}/>
                 </IconButton>
             </> : <>
                 <IconButton
