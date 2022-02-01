@@ -1,7 +1,7 @@
 import { Card } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard, BoxCardModule } from '../../logic/model';
 import { RootState } from '../../store';
@@ -11,6 +11,7 @@ import 'react-virtualized/styles.css';
 import { AddCardForm, EditCardForm } from './card-form';
 import { useStore } from '../../hooks';
 import BoxHeaderCard from './box-header-card';
+import LoadingMessage from '../loading-message';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -33,7 +34,6 @@ const BoxPage = () => {
     const { name } = useParams();
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const settings = useStore.settings();
     const encyclopediaState = useSelector((state: RootState) => state.encyclopedia);
     const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
@@ -42,6 +42,8 @@ const BoxPage = () => {
     const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(oldBox);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
+
+    const isLoading = lastSavedBoxState?.cards === null;
 
     const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
 
@@ -133,29 +135,31 @@ const BoxPage = () => {
                 save={save}
             />
             <br/>
-            <Card sx={{ width: 700, padding: 1 }}>
-                {mode === 'add'
-                    ? <AddCardForm
-                        onSubmit={submit}
-                        onCancel={cancel}
-                    />
-                    : <EditCardForm
-                        card={cardToEdit}
-                        onSubmit={submit}
-                        onCancel={cancel}
-                    />
-                }
-            </Card>
-            <br/>
-            <Card sx={{ width: 900, padding: 1 }}>
-                {disabled ? "" :
-                    <CardsTable
-                        cards={newBox.cards ?? []}
-                        onEditClicked={checkout}
-                        onDeleteClicked={deleteCard}
-                    />
-                }
-            </Card>
+            {isLoading ? <LoadingMessage message="Loading box details..."/> : <>
+                <Card sx={{ width: 700, padding: 1 }}>
+                    {mode === 'add'
+                        ? <AddCardForm
+                            onSubmit={submit}
+                            onCancel={cancel}
+                        />
+                        : <EditCardForm
+                            card={cardToEdit}
+                            onSubmit={submit}
+                            onCancel={cancel}
+                        />
+                    }
+                </Card>
+                <br/>
+                <Card sx={{ width: 900, padding: 1 }}>
+                    {disabled ? "" :
+                        <CardsTable
+                            cards={newBox.cards ?? []}
+                            onEditClicked={checkout}
+                            onDeleteClicked={deleteCard}
+                        />
+                    }
+                </Card>
+            </>}
         </div>
     );
 };

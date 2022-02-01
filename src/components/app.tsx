@@ -10,6 +10,7 @@ import SettingsPage from './settings-page/settings-page';
 import { AppSettings, loadSettings } from '../logic/settings-controller';
 import BoxPage from './box-page/box-page';
 import { Typography } from '@mui/material';
+import LoadingMessage from './loading-message';
 
 async function loadEncyclopedia(settings: AppSettings, dispatch: (action: EncyclopediaAction) => void) {
     dispatch({
@@ -39,18 +40,24 @@ const App = () => {
         }
     });
 
+    const isLoading = encyclopediaStatus === AsyncRequestStatus.NotStarted
+        || encyclopediaStatus === AsyncRequestStatus.Started;
+
     return (
         <div>
             <Typography variant="h2">
                 Leng
             </Typography>
-            <HashRouter>
-                <Routes>
-                    <Route path="/" element={<HomePage/>} />
-                    <Route path="/boxes/:name" element={<BoxPage/>}/>
-                    <Route path="/settings" element={<SettingsPage/>}/>
-                </Routes>
-            </HashRouter>
+            {isLoading
+                ? <LoadingMessage message="Loading Scryfall card data..."/>
+                : <HashRouter>
+                    <Routes>
+                        <Route path="/" element={<HomePage/>} />
+                        <Route path="/boxes/:name" element={<BoxPage/>}/>
+                        <Route path="/settings" element={<SettingsPage/>}/>
+                    </Routes>
+                </HashRouter>
+            }
         </div>
     );
 }
