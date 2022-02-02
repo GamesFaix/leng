@@ -6,6 +6,7 @@ import {
     faCog,
     faHome,
     faIdBadge,
+    faLayerGroup,
     faPalette,
     faPencilAlt,
     faPlus,
@@ -21,6 +22,7 @@ library.add(
     faCog,
     faHome,
     faIdBadge,
+    faLayerGroup,
     faPalette,
     faPencilAlt,
     faPlus,
@@ -42,5 +44,6 @@ export const icons = {
     open: <IconProp>'box-open',
     inspect: <IconProp>'search-plus',
     badge: <IconProp>'id-badge',
-    art: <IconProp>'palette'
+    art: <IconProp>'palette',
+    collection: <IconProp>'layer-group'
 };

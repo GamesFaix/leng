@@ -40,6 +40,14 @@ const HomePage = () => {
             >
                 <FontAwesomeIcon icon={icons.add}/>
             </IconButton>
+            <Link to="/collection">
+                <IconButton
+                    title="Collection"
+                    color='primary'
+                >
+                    <FontAwesomeIcon icon={icons.collection}/>
+                </IconButton>
+            </Link>
             <Link to="/settings">
                 <IconButton
                     title="Settings"
@@ -48,6 +56,7 @@ const HomePage = () => {
                     <FontAwesomeIcon icon={icons.settings}/>
                 </IconButton>
             </Link>
+
             <br/>
             <br/>
             {isNewBoxFormVisible

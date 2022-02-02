@@ -10,6 +10,7 @@ import BoxPage from './box-page/box-page';
 import { Typography } from '@mui/material';
 import LoadingMessage from './loading-message';
 import { settingsActions } from '../store/settings';
+import CollectionPage from './collection-page/collection-page';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const App = () => {
                         <Route path="/" element={<HomePage/>} />
                         <Route path="/boxes/:name" element={<BoxPage/>}/>
                         <Route path="/settings" element={<SettingsPage/>}/>
+                        <Route path="/collection" element={<CollectionPage/>}/>
                     </Routes>
                 </HashRouter>
             }

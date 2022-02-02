@@ -1,33 +1,11 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton } from '@mui/material';
 import * as React from 'react';
-import { Column, Table, TableCellProps } from 'react-virtualized';
-import { icons } from '../../fontawesome';
+import { Column, Table } from 'react-virtualized';
 import { useStore } from '../../hooks';
 import { BoxCard } from '../../logic/model';
 import { CheckboxCell, SetCell, VersionCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
-    onEditClicked: (card: BoxCard) => void,
-    onDeleteClicked: (card: BoxCard) => void
-}
-
-function ActionsCell (props: TableCellProps, tableProps: Props) {
-    return (
-        <div>
-            <IconButton
-                onClick={() => tableProps.onEditClicked(props.rowData)}
-            >
-                <FontAwesomeIcon icon={icons.edit}/>
-            </IconButton>
-            <IconButton
-                onClick={() => tableProps.onDeleteClicked(props.rowData)}
-            >
-                <FontAwesomeIcon icon={icons.delete}/>
-            </IconButton>
-        </div>
-    );
 }
 
 const CardsTable = (props: Props) => {
@@ -75,12 +53,6 @@ const CardsTable = (props: Props) => {
                 width={100}
                 label='Lang.'
                 dataKey='lang'
-            />
-            <Column
-                width={100}
-                label='Actions'
-                dataKey='name' // not used
-                cellRenderer={cellProps => ActionsCell(cellProps, props)}
             />
         </Table>
     );
