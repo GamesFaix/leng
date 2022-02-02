@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton, TableCell, TableRow } from '@mui/material';
+import { CircularProgress, IconButton, TableCell, TableRow } from '@mui/material';
 import moment = require('moment');
 import * as React from 'react';
 import { Link } from 'react-router-dom';
@@ -12,6 +12,8 @@ type Props = {
 }
 
 const BoxRow = (props: Props) => {
+    const cardCount = props.box.cards?.map(c => c.count).reduce((a,b) => a+b, 0) ?? null;
+
     return (<TableRow>
         <TableCell>
             <Link to={`/boxes/${props.box.name}`}>
@@ -28,6 +30,12 @@ const BoxRow = (props: Props) => {
         </TableCell>
         <TableCell>
             {moment(props.box.lastModified).calendar()}
+        </TableCell>
+        <TableCell>
+            {cardCount === null
+                ? <CircularProgress/>
+                : cardCount
+            }
         </TableCell>
         <TableCell>
             <IconButton

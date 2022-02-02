@@ -17,6 +17,7 @@ const BoxesTable = (props: Props) => {
                         <TableCell></TableCell>
                         <TableCell>Name</TableCell>
                         <TableCell>Last modified</TableCell>
+                        <TableCell>Size</TableCell>
                         <TableCell></TableCell>
                     </TableRow>
                 </TableHead>

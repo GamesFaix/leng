@@ -33,14 +33,15 @@ async function loadBoxInfosInner(settings: AppSettings) : Promise<BoxInfo[]> {
 }
 
 function* loadBoxInfos(action: BoxInfosLoadAction) {
-    if (action.value.status !== AsyncRequestStatus.Started) {
-        return;
-    }
+    if (action.value.status !== AsyncRequestStatus.Started) { return; }
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
         const boxInfos : BoxInfo[] = yield call(() => loadBoxInfosInner(settings));
         yield put(inventoryActions.boxInfosLoadSuccess(boxInfos));
+        for (let b of boxInfos) {
+            yield put(inventoryActions.boxLoadStart(b.name));
+        }
     }
     catch (error) {
         yield put(inventoryActions.boxInfosLoadFailure(`${error}`));
@@ -187,7 +188,7 @@ function* deleteBox(action: BoxDeleteAction) {
 
 function* inventorySaga() {
     yield takeLeading(InventoryActionTypes.BoxInfosLoad, loadBoxInfos);
-    yield takeLeading(InventoryActionTypes.BoxLoad, loadBox);
+    yield takeEvery(InventoryActionTypes.BoxLoad, loadBox);
     yield takeEvery(InventoryActionTypes.BoxSave, saveBox);
     yield takeEvery(InventoryActionTypes.BoxRename, renameBox);
     yield takeEvery(InventoryActionTypes.BoxCreate, createBox);
