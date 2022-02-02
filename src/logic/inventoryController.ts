@@ -1,4 +1,4 @@
-import { AppSettings } from "./settings-controller";
+import { AppSettings } from "./model";
 import * as fs from 'fs';
 import { createDirIfMissing } from "./file-controller";
 import { parse } from 'path';

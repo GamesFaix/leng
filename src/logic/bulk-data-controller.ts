@@ -1,7 +1,7 @@
 import { Card } from 'scryfall-api';
 import * as fs from 'fs';
-import { AppSettings } from './settings-controller';
 import { createFileAndDirectoryIfRequired } from './file-controller';
+import { AppSettings } from './model';
 
 type BulkData = {
     object: string,

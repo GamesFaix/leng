@@ -1,7 +1,9 @@
-import { combineReducers, createStore, StoreEnhancer } from '@reduxjs/toolkit';
+import { applyMiddleware, combineReducers, compose, createStore, StoreEnhancer } from '@reduxjs/toolkit';
 import { EncyclopediaAction, EncyclopediaActionTypes, encyclopediaReducer } from './encyclopedia';
 import { InventoryAction, inventoryReducer } from './inventory';
 import { SettingsAction, settingsReducer } from './settings';
+import createSagaMiddleware from 'redux-saga'
+import settingsSaga from '../sagas/settings';
 
 type Action =
   EncyclopediaAction |
@@ -32,16 +34,24 @@ const stateSanitizer = (state: any /* RootState is defined below */) => {
   }
 }
 
-const enhancer = (window as any).__REDUX_DEVTOOLS_EXTENSION__
+const devToolsEnhancer = (window as any).__REDUX_DEVTOOLS_EXTENSION__
   && (window as any).__REDUX_DEVTOOLS_EXTENSION__({
     actionSanitizer,
     stateSanitizer
   });
 
+const sagaMiddleware = createSagaMiddleware();
+
+const middlewareEnhancer = applyMiddleware(sagaMiddleware);
+
+const enhancers = compose(middlewareEnhancer, devToolsEnhancer);
+
 export const store = createStore(
     reducer,
-    enhancer
+    enhancers
 );
+
+sagaMiddleware.run(settingsSaga);
 
 export type RootState = ReturnType<typeof store.getState>
 

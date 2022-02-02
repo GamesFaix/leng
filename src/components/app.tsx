@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loadCards } from '../logic/bulk-data-controller';
 import { EncyclopediaAction, EncyclopediaActionTypes, getEncyclopediaStatus } from '../store/encyclopedia';
 import { RootState } from '../store';
-import { AsyncRequestStatus } from '../logic/model';
+import { AppSettings, AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
 import HomePage from './home-page/home-page';
 import SettingsPage from './settings-page/settings-page';
-import { AppSettings, loadSettings } from '../logic/settings-controller';
 import BoxPage from './box-page/box-page';
 import { Typography } from '@mui/material';
 import LoadingMessage from './loading-message';
+import { settingsActions } from '../store/settings';
 
 async function loadEncyclopedia(settings: AppSettings, dispatch: (action: EncyclopediaAction) => void) {
     dispatch({
@@ -33,7 +33,7 @@ const App = () => {
 
     React.useEffect(() => {
         if (settings === null) {
-            loadSettings(dispatch);
+            dispatch(settingsActions.loadStart());
         }
         else if (encyclopediaStatus === AsyncRequestStatus.NotStarted) {
             loadEncyclopedia(settings, dispatch);
