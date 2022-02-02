@@ -35,6 +35,10 @@ function search(cards: BoxCard[], filter: CardFilter) {
         cards = cards.filter(c => normalizeName(c.name).includes(filter.nameQuery));
     }
 
+    if (filter.set) {
+        cards = cards.filter(c => c.details?.set_name === filter.set!.name);
+    }
+
     return cards;
 }
 

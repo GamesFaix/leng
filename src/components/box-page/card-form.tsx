@@ -7,6 +7,7 @@ import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
 import { orderBy } from 'lodash';
+import SetSelector from '../common/set-selector';
 
 type Props = {
     card: BoxCard | null,
@@ -244,7 +245,8 @@ const CardForm = (props: Props) => {
             version: selectedCard.label,
             count: state.count,
             scryfallId: state.scryfallId,
-            lang: state.lang
+            lang: state.lang,
+            details: selectedCard
         };
 
         props.onSubmit(card);
@@ -297,22 +299,10 @@ const CardForm = (props: Props) => {
                 noOptionsText="Type at least 3 characters to search cards..."
                 filterOptions={filterCardNames}
             />
-            <Autocomplete
-                className="control"
-                options={setOptions}
-                sx={{ width: 300 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        label="Set"
-                        onFocus={e => e.target.select()}
-                    />}
-                onChange={(e, value, reason) => setSetName(value?.name ?? null)}
-                disabled={setOptions.length < 2}
+            <SetSelector
+                setOptions={setOptions}
                 value={selectedSet}
-                autoSelect
-                autoHighlight
-                selectOnFocus
-                openOnFocus
+                onChange={value => setSetName(value?.name ?? null)}
             />
             <Autocomplete
                 className="control"

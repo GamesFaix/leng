@@ -95,7 +95,9 @@ export type BoxCard = {
     name: string,
     setAbbrev: string,
     version: string,
-    lang: Language | null
+    lang: Language | null,
+
+    details: Card | null
 }
 
 /* A group of cards in a collection, saved in a single box file. (It could represent a binder, bulk box, deck, etc.) */

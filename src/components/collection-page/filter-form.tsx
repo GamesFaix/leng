@@ -1,13 +1,16 @@
 import { Card, FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
-import { BoxCard, normalizeName } from '../../logic/model';
+import { normalizeName, SetInfo } from '../../logic/model';
+import SetSelector from '../common/set-selector';
 
 export type CardFilter = {
-    nameQuery: string
+    nameQuery: string,
+    set: SetInfo | null
 }
 
 export const defaultCardFilter : CardFilter = {
-    nameQuery: ''
+    nameQuery: '',
+    set: null,
 }
 
 type Props = {
@@ -20,6 +23,14 @@ const FilterForm = (props: Props) => {
         const newFilter = {
             ...props.filter,
             nameQuery: normalizeName(e.target.value)
+        };
+        props.onChange(newFilter);
+    }
+
+    function updateSet(set: SetInfo | null) {
+        const newFilter = {
+            ...props.filter,
+            set
         };
         props.onChange(newFilter);
     }
@@ -37,6 +48,21 @@ const FilterForm = (props: Props) => {
                     />
                 }
             />
+            <SetSelector
+                value={props.filter.set}
+                onChange={updateSet}
+            />
+            {/* <FormControlLabel
+                label="Set"
+                labelPlacement='top'
+                control={
+                    <TextField
+                        title="Name includes"
+                        value={props.filter.nameQuery}
+                        onChange={updateNameQuery}
+                    />
+                }
+            /> */}
             {/* <TextField
                 title="Types"
             />

@@ -2,6 +2,7 @@ import * as fs from 'fs';
 import { orderBy } from 'lodash';
 import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
+import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, Box, BoxInfo, Language } from "../logic/model";
 import { RootState } from '../store';
@@ -48,7 +49,7 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
     }
 }
 
-async function loadBoxInner(settings: AppSettings, name: string) : Promise<Box> {
+async function loadBoxInner(settings: AppSettings, name: string, encyclopediaCards: Card[]) : Promise<Box> {
     const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
 
@@ -63,6 +64,7 @@ async function loadBoxInner(settings: AppSettings, name: string) : Promise<Box> 
         if (!c.lang) {
             c.lang = Language.English
         }
+        c.details = encyclopediaCards.find(ec => ec.id === c.scryfallId) ?? null;
     });
     return box;
 }
@@ -74,8 +76,9 @@ function* loadBox(action: BoxLoadAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const encyclopediaCards : Card[] = yield select((state: RootState) => state.encyclopedia.cards);
         const name = action.value.data;
-        const box : Box = yield call(() => loadBoxInner(settings, name));
+        const box : Box = yield call(() => loadBoxInner(settings, name, encyclopediaCards));
         yield put(inventoryActions.boxLoadSuccess(box));
     }
     catch (error) {
@@ -93,8 +96,18 @@ async function saveBoxInner(settings: AppSettings, box: Box, overwrite: boolean)
             throw Error(`Box already exists: ${box.name}`);
         }
     }
-
-    const json = JSON.stringify(box);
+    const sanitized = {
+        ...box,
+        cards: [
+            box.cards.map(c => {
+                return {
+                    ...c,
+                    details: null
+                };
+            })
+        ]
+    };
+    const json = JSON.stringify(sanitized);
 
     await fs.promises.writeFile(path, json);
 }
@@ -125,6 +138,7 @@ function* renameBox(action: BoxRenameAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const encyclopediaCards : Card[] = yield select((state: RootState) => state.encyclopedia.cards);
         const [oldName, newName] = action.value.data;
         const oldPath = getBoxPath(settings, oldName);
         const newPath = getBoxPath(settings, newName);
@@ -133,7 +147,7 @@ function* renameBox(action: BoxRenameAction) {
             throw `Box named ${newName} already exists.`;
         }
 
-        let box : Box = yield call(() => loadBoxInner(settings, oldName));
+        let box : Box = yield call(() => loadBoxInner(settings, oldName, encyclopediaCards));
         box = { ...box, name: newName };
 
         yield call(() => saveBoxInner(settings, box, true));
