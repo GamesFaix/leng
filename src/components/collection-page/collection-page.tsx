@@ -102,26 +102,6 @@ function search(cards: BoxCard[], filter: CardFilter) {
 
     cards = filterCardsByColor(cards, filter.colors, filter.colorRule);
 
-    cards = cards.filter(c => {
-        const colors = c?.details?.colors ?? [];
-
-        // If its colorless and you explicitly selected colorless, include it
-        if (colors.length === 0 && filter.colors.includes('C')) {
-            return true;
-        }
-
-        // If any of its colors match any colors in the filter, include it
-        for (let cc of colors) {
-            for (let fc of filter.colors) {
-                if (cc === fc) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    })
-
     return cards;
 }
 

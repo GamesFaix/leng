@@ -4,19 +4,24 @@ import { normalizeName, SetInfo } from '../../logic/model';
 import ColorFilterRuleSelector, { Rule } from '../common/color-filter-rule-selector';
 import ColorsSelector, { allColors, Color } from '../common/colors-selector';
 import SetSelector from '../common/set-selector';
+import BoxSelector from './box-selector';
 
 export type CardFilter = {
     nameQuery: string,
     set: SetInfo | null,
     colors: Color[],
-    colorRule: Rule
+    colorRule: Rule,
+    fromBoxes: string[],
+    exceptBoxes: string[]
 }
 
 export const defaultCardFilter : CardFilter = {
     nameQuery: '',
     set: null,
     colors: allColors,
-    colorRule: Rule.ContainsAny
+    colorRule: Rule.ContainsAny,
+    fromBoxes: [],
+    exceptBoxes: []
 }
 
 type Props = {
@@ -48,11 +53,27 @@ const FilterForm = (props: Props) => {
         };
         props.onChange(newFilter);
     }
-    
+
     function updateColorRule(colorRule: Rule) {
         const newFilter = {
             ...props.filter,
             colorRule
+        };
+        props.onChange(newFilter);
+    }
+
+    function updateFromBoxes(fromBoxes: string[]) {
+        const newFilter = {
+            ...props.filter,
+            fromBoxes
+        };
+        props.onChange(newFilter);
+    }
+
+    function updateExceptBoxes(exceptBoxes: string[]) {
+        const newFilter = {
+            ...props.filter,
+            exceptBoxes
         };
         props.onChange(newFilter);
     }
@@ -81,6 +102,14 @@ const FilterForm = (props: Props) => {
             <ColorsSelector
                 value={props.filter.colors}
                 onChange={updateColors}
+            />
+            <BoxSelector
+                value={props.filter.fromBoxes}
+                onChange={updateFromBoxes}
+            />
+            <BoxSelector
+                value={props.filter.exceptBoxes}
+                onChange={updateExceptBoxes}
             />
             {/* <FormControlLabel
                 label="Set"
