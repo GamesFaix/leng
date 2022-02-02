@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import { put, takeEvery, takeLeading } from 'redux-saga/effects';
-import { createFileAndDirectoryIfRequired } from '../logic/file-controller';
+import { createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AsyncRequestStatus } from '../logic/model';
 import { settingsActions, SettingsActionTypes, SettingsLoadAction, SettingsSaveAction } from '../store/settings';
 
