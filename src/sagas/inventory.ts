@@ -3,7 +3,7 @@ import { orderBy } from 'lodash';
 import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxInfo } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxInfo, Language } from "../logic/model";
 import { RootState } from '../store';
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 
@@ -59,6 +59,11 @@ async function loadBoxInner(settings: AppSettings, name: string) : Promise<Box> 
     const buffer = await fs.promises.readFile(path);
     const json = buffer.toString();
     const box: Box = JSON.parse(json);
+    box.cards.forEach(c => {
+        if (!c.lang) {
+            c.lang = Language.English
+        }
+    });
     return box;
 }
 
