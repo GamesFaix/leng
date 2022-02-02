@@ -1,6 +1,6 @@
-import { orderBy, uniq } from 'lodash';
+import { uniq } from 'lodash';
 import { Card } from 'scryfall-api';
-import { AsyncRequestStatus, CardModule, normalizeName, SetInfo } from '../logic/model';
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, CardModule, SetInfo } from '../logic/model';
 
 export type EncyclopediaState = {
     isLoading: boolean,
@@ -17,40 +17,65 @@ const encyclopediaDefaultState : EncyclopediaState = {
 }
 
 export enum EncyclopediaActionTypes {
-    LoadStart = 'LOAD_ENCYCLOPEDIA_START',
-    LoadSuccess = 'LOAD_ENCYCLOPEDIA_SUCCESS'
+    Load = 'ENCYCLOPEDIA_LOAD'
 }
 
-export type LoadEncyclopediaStartAction = {
-    type: EncyclopediaActionTypes.LoadStart
-}
-
-export type LoadEncyclopediaSuccessAction = {
-    type: EncyclopediaActionTypes.LoadSuccess
-    cards: Card[]
+export type EncyclopediaLoadAction = {
+    type: EncyclopediaActionTypes.Load,
+    value: AsyncRequest<void, Card[]>
 }
 
 export type EncyclopediaAction =
-    LoadEncyclopediaStartAction |
-    LoadEncyclopediaSuccessAction
+    EncyclopediaLoadAction;
+
+export const encyclopediaActions = {
+    loadStart() : EncyclopediaLoadAction {
+        return {
+            type: EncyclopediaActionTypes.Load,
+            value: asyncRequest.started(undefined)
+        };
+    },
+    loadSuccess(cards: Card[]) : EncyclopediaLoadAction {
+        return {
+            type: EncyclopediaActionTypes.Load,
+            value: asyncRequest.success(cards)
+        };
+    },
+    loadError(error: string) : EncyclopediaLoadAction {
+        return {
+            type: EncyclopediaActionTypes.Load,
+            value: asyncRequest.failure(error)
+        };
+    }
+}
 
 const sortAndDeduplicate = (xs: string[])  => uniq(xs).sort();
 
 export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefaultState, action: EncyclopediaAction) : EncyclopediaState {
     switch (action.type) {
-        case EncyclopediaActionTypes.LoadStart:
-            return {
-                ...state,
-                isLoading: true
-            };
-        case EncyclopediaActionTypes.LoadSuccess:
-            return {
-                ...state,
-                isLoading: false,
-                cards: action.cards,
-                sets: CardModule.toSetInfos(action.cards),
-                cardNames: sortAndDeduplicate(action.cards.map(c => c.name)),
-            };
+        case EncyclopediaActionTypes.Load: {
+            switch (action.value.status) {
+                case AsyncRequestStatus.Started:
+                    return {
+                        ...state,
+                        isLoading: true
+                    };
+                case AsyncRequestStatus.Success:
+                    const cards = action.value.data;
+                    return {
+                        ...state,
+                        isLoading: false,
+                        cards,
+                        sets: CardModule.toSetInfos(cards),
+                        cardNames: sortAndDeduplicate(cards.map(c => c.name)),
+                    };
+                case AsyncRequestStatus.Failure:
+                    return {
+                        ...state,
+                        isLoading: false
+                    };
+            }
+        }
         default:
             return state;
     }

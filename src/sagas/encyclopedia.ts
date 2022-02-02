@@ -1,7 +1,27 @@
-import { Card } from 'scryfall-api';
 import * as fs from 'fs';
-import { AppSettings } from './settings-controller';
-import { createFileAndDirectoryIfRequired } from './file-controller';
+import { call, put, select, takeLeading, } from "redux-saga/effects";
+import { Card } from 'scryfall-api';
+import { createFileAndDirectoryIfRequired } from '../logic/file-helpers';
+import { AppSettings, AsyncRequestStatus } from "../logic/model";
+import { RootState } from "../store";
+import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";
+
+export type FrameEffect =
+    | 'legendary'
+    | 'miracle'
+    | 'nyxtouched'
+    | 'draft'
+    | 'devoid'
+    | 'tombstone'
+    | 'colorshifted'
+    | 'inverted'
+    | 'sunmoondfc'
+    | 'compasslanddfc'
+    | 'originpwdfc'
+    | 'mooneldrazidfc'
+    | 'moonreversemoondfc'
+    | 'showcase'
+    | 'extendedart'
 
 type BulkData = {
     object: string,
@@ -61,7 +81,7 @@ function parseData(json: string) : Card[] {
     return JSON.parse(json);
 }
 
-export async function loadCards(settings: AppSettings) : Promise<Card[]> {
+async function loadCards(settings: AppSettings) : Promise<Card[]> {
     const path = `${settings.dataPath}/encyclopedia/cards.json`;
     const dataCreatedDate = await getDataCreatedDate(path);
 
@@ -79,20 +99,22 @@ export async function loadCards(settings: AppSettings) : Promise<Card[]> {
     return data;
 }
 
-export type FrameEffect =
-    | 'legendary'
-    | 'miracle'
-    | 'nyxtouched'
-    | 'draft'
-    | 'devoid'
-    | 'tombstone'
-    | 'colorshifted'
-    | 'inverted'
-    | 'sunmoondfc'
-    | 'compasslanddfc'
-    | 'originpwdfc'
-    | 'mooneldrazidfc'
-    | 'moonreversemoondfc'
-    | 'showcase'
-    | 'extendedart'
+function* loadEncyclopedia(action: EncyclopediaLoadAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
 
+    try {
+        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const cards : Card[] = yield call(() => loadCards(settings));
+        yield put(encyclopediaActions.loadSuccess(cards));
+    }
+    catch (error) {
+        yield put(encyclopediaActions.loadError(`${error}`));
+    }
+}
+
+function* encyclopediaSaga() {
+    yield takeLeading(EncyclopediaActionTypes.Load, loadEncyclopedia);
+}
+export default encyclopediaSaga;

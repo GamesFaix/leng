@@ -2,7 +2,6 @@ import { Card } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { loadBox, updateBox } from '../../logic/inventoryController';
 import { AsyncRequestStatus, Box, BoxCard, BoxCardModule } from '../../logic/model';
 import { RootState } from '../../store';
 import { getEncyclopediaStatus } from '../../store/encyclopedia';
@@ -12,6 +11,7 @@ import { AddCardForm, EditCardForm } from './card-form';
 import { useStore } from '../../hooks';
 import BoxHeaderCard from './box-header-card';
 import LoadingMessage from '../loading-message';
+import { inventoryActions } from '../../store/inventory';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -34,26 +34,27 @@ const BoxPage = () => {
     const { name } = useParams();
 
     const dispatch = useDispatch();
-    const settings = useStore.settings();
     const encyclopediaState = useSelector((state: RootState) => state.encyclopedia);
     const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
 
-    const lastSavedBoxState = useSelector((state: RootState) => state.inventory.boxes?.find(b => b.name === name)) ?? null;
+    const lastSavedBoxState = useStore.box(name ?? null);
     const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
-    const [newBox, setNewBox] = React.useState(oldBox);
+    const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
-
-    const isLoading = lastSavedBoxState?.cards === null;
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
 
     React.useLayoutEffect(() => {
-        if (settings !== null && oldBox?.cards === null && name){
-            loadBox(settings, name, dispatch)
-                .then(box => {
-                    setOldBox(box);
-                    setNewBox(box);
-                });
+        if (oldBox?.cards === null && name && !isLoading) {
+            dispatch(inventoryActions.boxLoadStart(name));
+            setIsLoading(true);
+        }
+        else if (oldBox?.cards === null
+            && oldBox !== lastSavedBoxState) {
+            setOldBox(lastSavedBoxState);
+            setNewBox(lastSavedBoxState);
+            setIsLoading(false);
         }
     });
 
@@ -109,15 +110,14 @@ const BoxPage = () => {
     }
 
     function save() {
-        if (settings && newBox) {
+        if (newBox) {
             const box : Box = {
                 name: newBox.name,
                 description: newBox.description ?? '',
                 cards: newBox.cards ?? [],
                 lastModified: newBox.lastModified
             };
-
-            updateBox(settings, box, dispatch);
+            dispatch(inventoryActions.boxSaveStart(box));
             setAnyUnsavedChanges(false);
         }
     }

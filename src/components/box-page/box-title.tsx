@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
-import { renameBox } from '../../logic/inventoryController';
+import { inventoryActions } from '../../store/inventory';
 
 type Props = {
     name: string
@@ -63,30 +63,38 @@ function ReadMode(props: ReadModeProps) {
 }
 
 const BoxTitle = (props: Props) => {
-    const [name, setName] = React.useState(props.name);
+    const [oldName, setOldName] = React.useState(props.name);
+    const [newName, setNewName] = React.useState<string | null>(null);
     const [isEditing, setIsEditing] = React.useState(false);
     const dispatch = useDispatch();
-    const settings = useStore.settings();
+    const oldBox = useStore.box(oldName);
+    const newBox = useStore.box(newName);
 
-    function rename(newName: string) {
-        if (settings) {
-            renameBox(settings, props.name, newName, dispatch)
-                .then(() => {
-                    setName(newName);
-                    setIsEditing(false);
-                })
-                .catch(err => alert(err));
-        }
+    function renameStart(newName: string) {
+        dispatch(inventoryActions.boxRenameStart(props.name, newName));
+        setNewName(newName);
     }
+
+    function renameFinish() {
+        setOldName(newName!);
+        setIsEditing(false);
+        setNewName(null);
+    }
+
+    React.useLayoutEffect(() => {
+        if (newBox && !oldBox) {
+            renameFinish();
+        }
+    });
 
     return isEditing
         ? <EditMode
-            oldName={name}
-            submit={rename}
+            oldName={oldName}
+            submit={renameStart}
             cancel={() => setIsEditing(false)}
         />
         : <ReadMode
-            name={name}
+            name={oldName}
             edit={() => setIsEditing(true)}
         />;
 }

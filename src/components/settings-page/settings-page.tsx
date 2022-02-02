@@ -4,8 +4,8 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
-import { saveSettings } from '../../logic/settings-controller';
 import { RootState } from '../../store';
+import { settingsActions } from '../../store/settings';
 
 const SettingsPage = () => {
     const oldSettings = useSelector((state: RootState) => state.settings.settings) ?? { dataPath: '' };
@@ -20,6 +20,10 @@ const SettingsPage = () => {
             ...newSettings,
             dataPath: path
         });
+    }
+
+    function save() {
+        dispatch(settingsActions.saveStart(newSettings));
     }
 
     return (
@@ -39,7 +43,7 @@ const SettingsPage = () => {
                     <button
                         type="button"
                         disabled={!anyChanges}
-                        onClick={() => saveSettings(newSettings, dispatch)}
+                        onClick={save}
                     >
                         Save
                     </button>

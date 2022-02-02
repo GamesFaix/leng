@@ -38,5 +38,11 @@ export const useStore = {
         return useSelector(
             (state: RootState) => state.settings.settings
         );
+    },
+
+    box(name: string | null) {
+        return useSelector(
+            (state: RootState) => state.inventory.boxes?.find(b => b.name === name) ?? null
+        );
     }
 }
