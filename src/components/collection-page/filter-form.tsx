@@ -1,6 +1,7 @@
 import { Card, FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
 import { normalizeName, SetInfo } from '../../logic/model';
+import ColorFilterRuleSelector, { Rule } from '../common/color-filter-rule-selector';
 import ColorsSelector, { allColors, Color } from '../common/colors-selector';
 import SetSelector from '../common/set-selector';
 
@@ -8,12 +9,14 @@ export type CardFilter = {
     nameQuery: string,
     set: SetInfo | null,
     colors: Color[],
+    colorRule: Rule
 }
 
 export const defaultCardFilter : CardFilter = {
     nameQuery: '',
     set: null,
-    colors: allColors
+    colors: allColors,
+    colorRule: Rule.ContainsAny
 }
 
 type Props = {
@@ -45,6 +48,14 @@ const FilterForm = (props: Props) => {
         };
         props.onChange(newFilter);
     }
+    
+    function updateColorRule(colorRule: Rule) {
+        const newFilter = {
+            ...props.filter,
+            colorRule
+        };
+        props.onChange(newFilter);
+    }
 
     return (
         <Card sx={{ width: 700, padding: 1 }}>
@@ -62,6 +73,10 @@ const FilterForm = (props: Props) => {
             <SetSelector
                 value={props.filter.set}
                 onChange={updateSet}
+            />
+            <ColorFilterRuleSelector
+                value={props.filter.colorRule}
+                onChange={updateColorRule}
             />
             <ColorsSelector
                 value={props.filter.colors}

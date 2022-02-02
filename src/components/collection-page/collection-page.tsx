@@ -3,13 +3,15 @@ import * as React from 'react';
 import CardsTable from './cards-table';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { groupBy, orderBy } from 'lodash';
+import { difference, groupBy, intersection, orderBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { BoxCard, BoxCardModule, normalizeName } from '../../logic/model';
 import { BoxState } from '../../store/inventory';
 import FilterForm, { CardFilter, defaultCardFilter } from './filter-form';
+import { Rule } from '../common/color-filter-rule-selector';
+import { Color } from '../common/colors-selector';
 
 type Props = {
 
@@ -30,6 +32,65 @@ function combineBoxes(boxes: BoxState[]) : BoxCard[] {
     return cards;
 }
 
+function containsAny(cardColors: Color[], filterColors: Color[]) {
+    if (cardColors.length === 0 && filterColors.includes('C')) {
+        return true;
+    }
+
+    return intersection(cardColors, filterColors).length > 0;
+}
+
+function containsAll(cardColors: Color[], filterColors: Color[]) {
+    if (cardColors.length === 0 && filterColors.length === 1 && filterColors[0] === 'C') {
+        return true;
+    }
+
+    return intersection(cardColors, filterColors).length === filterColors.length;
+}
+
+function containsOnly(cardColors: Color[], filterColors: Color[]) {
+    if (cardColors.length === 0) {
+        return true;
+    }
+
+    return difference(cardColors, filterColors).length === 0;
+}
+
+function isColorExactly(cardColors: Color[], filterColors: Color[]) {
+    if (cardColors.length === 0 && filterColors.length === 1 && filterColors[0] === 'C') {
+        return true;
+    }
+
+    for (let fc of filterColors) {
+        if (!cardColors.includes(fc as any)) {
+            return false;
+        }
+    }
+
+    return cardColors.length === filterColors.length;
+}
+
+function filterCardsByColor(cards: BoxCard[], colors: Color[], rule: Rule) : BoxCard[] {
+    switch (rule) {
+        case Rule.ContainsAny:
+            return cards.filter(c => containsAny(c.details?.colors ?? [], colors));
+        case Rule.ContainsAll:
+            return cards.filter(c => containsAll(c.details?.colors ?? [], colors));
+        case Rule.ContainsOnly:
+            return cards.filter(c => containsOnly(c.details?.colors ?? [], colors));
+        case Rule.IsExactly:
+            return cards.filter(c => isColorExactly(c.details?.colors ?? [], colors));
+        case Rule.IdentityContainsAny:
+            return cards.filter(c => containsAny(c.details?.color_identity ?? [], colors));
+        case Rule.IdentityContainsAll:
+            return cards.filter(c => containsAll(c.details?.color_identity ?? [], colors));
+        case Rule.IdentityContainsOnly:
+            return cards.filter(c => containsOnly(c.details?.color_identity ?? [], colors));
+        case Rule.IdentityIsExactly:
+            return cards.filter(c => isColorExactly(c.details?.color_identity ?? [], colors));
+    }
+}
+
 function search(cards: BoxCard[], filter: CardFilter) {
     if (filter.nameQuery.length > 0) {
         cards = cards.filter(c => normalizeName(c.name).includes(filter.nameQuery));
@@ -38,6 +99,8 @@ function search(cards: BoxCard[], filter: CardFilter) {
     if (filter.set) {
         cards = cards.filter(c => c.details?.set_name === filter.set!.name);
     }
+
+    cards = filterCardsByColor(cards, filter.colors, filter.colorRule);
 
     cards = cards.filter(c => {
         const colors = c?.details?.colors ?? [];
