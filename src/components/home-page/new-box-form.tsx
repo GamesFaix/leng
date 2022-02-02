@@ -3,8 +3,8 @@ import { IconButton, TextField } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
-import { createBox } from '../../logic/inventoryController';
 import { RootState } from '../../store';
+import { inventoryActions } from '../../store/inventory';
 
 type Props = {
     close: () => void
@@ -17,6 +17,11 @@ const NewBoxForm = (props: Props) => {
 
     const disableButton = settings === null;
 
+    function submit() {
+        dispatch(inventoryActions.boxCreateStart(newBoxName));
+        props.close();
+    }
+
     return (<div>
         <TextField
             onChange={e => setNewBoxName(e.target.value)}
@@ -26,10 +31,7 @@ const NewBoxForm = (props: Props) => {
         <IconButton
             disabled={disableButton}
             title="Create box"
-            onClick={() => {
-                createBox(settings!, newBoxName, dispatch);
-                props.close();
-            }}
+            onClick={submit}
             color='success'
         >
             <FontAwesomeIcon icon={icons.ok}/>

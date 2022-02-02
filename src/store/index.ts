@@ -6,6 +6,7 @@ import createSagaMiddleware from 'redux-saga'
 import settingsSaga from '../sagas/settings';
 import { AsyncRequestStatus } from '../logic/model';
 import encyclopediaSaga from '../sagas/encyclopedia';
+import inventorySaga from '../sagas/inventory';
 
 type Action =
   EncyclopediaAction |
@@ -61,6 +62,7 @@ export const store = createStore(
 
 sagaMiddleware.run(settingsSaga);
 sagaMiddleware.run(encyclopediaSaga);
+sagaMiddleware.run(inventorySaga);
 
 export type RootState = ReturnType<typeof store.getState>
 

@@ -4,9 +4,8 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
-import { deleteBox, getBoxInfos } from '../../logic/inventoryController';
 import { RootState } from '../../store';
-import { InventoryActionTypes } from '../../store/inventory';
+import { inventoryActions } from '../../store/inventory';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
 
@@ -20,16 +19,13 @@ const HomePage = () => {
 
     React.useEffect(() => {
         if (settings !== null && boxes === null) {
-            dispatch({ type: InventoryActionTypes.LoadBoxInfosStart });
-            getBoxInfos(settings)
-                .then(boxInfos => {
-                    dispatch({
-                        type: InventoryActionTypes.LoadBoxInfosSuccess,
-                        boxes: boxInfos
-                    });
-                });
+            dispatch(inventoryActions.boxInfosLoadStart());
         }
     });
+
+    function deleteBox(name: string) {
+        dispatch(inventoryActions.boxDeleteStart(name));
+    }
 
     return (
         <div>
@@ -66,7 +62,7 @@ const HomePage = () => {
                     ? "Loading box info..."
                     : (<BoxesTable
                         boxes={boxes}
-                        deleteBox={name => deleteBox(settings, name, dispatch)}
+                        deleteBox={deleteBox}
                     />)
                 }
             </div>

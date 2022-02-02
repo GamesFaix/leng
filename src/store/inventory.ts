@@ -1,5 +1,5 @@
 import { orderBy } from "lodash";
-import { Box, BoxCard, BoxCardModule, BoxInfo } from "../logic/model";
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo } from "../logic/model";
 
 export type BoxState = {
     name: string,
@@ -21,243 +21,238 @@ const inventoryDefaultState : InventoryState = {
 };
 
 export enum InventoryActionTypes {
-    LoadBoxInfosStart = 'LOAD_BOX_INFOS_START',
-    LoadBoxInfosSuccess = 'LOAD_BOX_INFOS_SUCCESS',
-    LoadBoxStart = 'LOAD_BOX_START',
-    LoadBoxSuccess = 'LOAD_BOX_SUCCESS',
-    CreateBox = 'CREATE_BOX',
-    DeleteBox = 'DELETE_BOX',
-    RenameBox = 'RENAME_BOX',
-    MergeBoxes = 'MERGE_BOXES',
-    AddCard = 'ADD_CARD',
-    ChangeCount = 'CHANGE_COUNT',
-    RemoveCard = 'REMOVE_CARD',
-    SaveBoxStart = 'SAVE_BOX_START',
-    SaveBoxSuccess = 'SAVE_BOX_SUCCESS'
+    BoxInfosLoad = 'INVENTORY_BOXINFOS_LOAD',
+    BoxLoad = 'INVENTORY_BOX_LOAD',
+    BoxSave = 'INVENTORY_BOX_SAVE',
+    BoxCreate = 'INVENTORY_BOX_CREATE',
+    BoxDelete = 'INVENTORY_BOX_DELETE',
+    BoxRename = 'INVENTORY_BOX_RENAME'
 }
 
-export type LoadBoxInfosStartAction = {
-    type: InventoryActionTypes.LoadBoxInfosStart
+export type BoxInfosLoadAction = {
+    type: InventoryActionTypes.BoxInfosLoad,
+    value: AsyncRequest<undefined, BoxInfo[]>
 }
 
-export type LoadBoxInfosSuccessAction = {
-    type: InventoryActionTypes.LoadBoxInfosSuccess,
-    boxes: BoxInfo[]
+export type BoxLoadAction = {
+    type: InventoryActionTypes.BoxLoad,
+    value: AsyncRequest<string, Box>
 }
 
-export type LoadBoxStartAction = {
-    type: InventoryActionTypes.LoadBoxStart,
-    name: string
+export type BoxSaveAction = {
+    type: InventoryActionTypes.BoxSave,
+    value: AsyncRequest<Box, Box>
 }
 
-export type LoadBoxSuccessAction = {
-    type: InventoryActionTypes.LoadBoxSuccess,
-    box: Box
+export type BoxCreateAction = {
+    type: InventoryActionTypes.BoxCreate,
+    value: AsyncRequest<string, Box>
 }
 
-export type AddCardAction = {
-    type: InventoryActionTypes.AddCard,
-    boxInfo: BoxInfo,
-    card: BoxCard
+export type BoxDeleteAction = {
+    type: InventoryActionTypes.BoxDelete,
+    value: AsyncRequest<string, string>
 }
 
-export type ChangeCountAction = {
-    type: InventoryActionTypes.ChangeCount,
-    boxInfo: BoxInfo,
-    card: BoxCard
+export type BoxRenameAction = {
+    type: InventoryActionTypes.BoxRename,
+    value: AsyncRequest<[string, string], [string, string]>
 }
 
-export type RemoveCardAction = {
-    type: InventoryActionTypes.RemoveCard,
-    boxInfo: BoxInfo,
-    card: BoxCard
-}
-
-export type SaveBoxStartAction = {
-    type: InventoryActionTypes.SaveBoxStart,
-    box: Box
-}
-
-export type SaveBoxSuccessAction = {
-    type: InventoryActionTypes.SaveBoxSuccess,
-    box: Box
-}
-
-export type CreateBoxAction = {
-    type: InventoryActionTypes.CreateBox,
-    boxInfo: BoxInfo
-}
-
-export type DeleteBoxAction = {
-    type: InventoryActionTypes.DeleteBox,
-    boxInfo: BoxInfo
-}
-
-export type RenameBoxAction = {
-    type: InventoryActionTypes.RenameBox,
-    oldName: string,
-    newName: string
-}
-
-export type MergeBoxesAction = {
-    type: InventoryActionTypes.MergeBoxes,
-    updatedBox: Box,
-    removedBoxName: string
+export const inventoryActions = {
+    boxInfosLoadStart() : BoxInfosLoadAction {
+        return {
+            type: InventoryActionTypes.BoxInfosLoad,
+            value: asyncRequest.started(undefined)
+        };
+    },
+    boxInfosLoadSuccess(boxInfos: BoxInfo[]) : BoxInfosLoadAction {
+        return {
+            type: InventoryActionTypes.BoxInfosLoad,
+            value: asyncRequest.success(boxInfos)
+        };
+    },
+    boxInfosLoadFailure(error: string) : BoxInfosLoadAction {
+        return {
+            type: InventoryActionTypes.BoxInfosLoad,
+            value: asyncRequest.failure(error)
+        };
+    },
+    boxLoadStart(name: string) : BoxLoadAction {
+        return {
+            type: InventoryActionTypes.BoxLoad,
+            value: asyncRequest.started(name)
+        };
+    },
+    boxLoadSuccess(box: Box) : BoxLoadAction {
+        return {
+            type: InventoryActionTypes.BoxLoad,
+            value: asyncRequest.success(box)
+        };
+    },
+    boxLoadFailure(error: string) : BoxLoadAction {
+        return {
+            type: InventoryActionTypes.BoxLoad,
+            value: asyncRequest.failure(error)
+        };
+    },
+    boxSaveStart(box: Box) : BoxSaveAction {
+        return {
+            type: InventoryActionTypes.BoxSave,
+            value: asyncRequest.started(box)
+        };
+    },
+    boxSaveSuccess(box: Box) : BoxSaveAction {
+        return {
+            type: InventoryActionTypes.BoxSave,
+            value: asyncRequest.success(box)
+        };
+    },
+    boxSaveFailure(error: string) : BoxSaveAction {
+        return {
+            type: InventoryActionTypes.BoxSave,
+            value: asyncRequest.failure(error)
+        };
+    },
+    boxCreateStart(name: string) : BoxCreateAction {
+        return {
+            type: InventoryActionTypes.BoxCreate,
+            value: asyncRequest.started(name)
+        };
+    },
+    boxCreateSuccess(box: Box) : BoxCreateAction {
+        return {
+            type: InventoryActionTypes.BoxCreate,
+            value: asyncRequest.success(box)
+        };
+    },
+    boxCreateFailure(error: string) : BoxCreateAction {
+        return {
+            type: InventoryActionTypes.BoxCreate,
+            value: asyncRequest.failure(error)
+        };
+    },
+    boxDeleteStart(name: string) : BoxDeleteAction {
+        return {
+            type: InventoryActionTypes.BoxDelete,
+            value: asyncRequest.started(name)
+        };
+    },
+    boxDeleteSuccess(name: string) : BoxDeleteAction {
+        return {
+            type: InventoryActionTypes.BoxDelete,
+            value: asyncRequest.success(name)
+        };
+    },
+    boxDeleteFailure(error: string) : BoxDeleteAction {
+        return {
+            type: InventoryActionTypes.BoxDelete,
+            value: asyncRequest.failure(error)
+        };
+    },
+    boxRenameStart(oldName: string, newName: string) : BoxRenameAction {
+        return {
+            type: InventoryActionTypes.BoxRename,
+            value: asyncRequest.started([oldName, newName])
+        };
+    },
+    boxRenameSuccess(oldName: string, newName: string) : BoxRenameAction {
+        return {
+            type: InventoryActionTypes.BoxRename,
+            value: asyncRequest.success([oldName, newName])
+        };
+    },
+    boxRenameFailure(error: string) : BoxRenameAction {
+        return {
+            type: InventoryActionTypes.BoxRename,
+            value: asyncRequest.failure(error)
+        };
+    }
 }
 
 export type InventoryAction =
-    LoadBoxInfosStartAction |
-    LoadBoxInfosSuccessAction |
-    LoadBoxStartAction |
-    LoadBoxSuccessAction |
-    AddCardAction |
-    ChangeCountAction |
-    RemoveCardAction |
-    SaveBoxStartAction |
-    SaveBoxSuccessAction |
-    CreateBoxAction |
-    DeleteBoxAction |
-    RenameBoxAction |
-    MergeBoxesAction
+    BoxInfosLoadAction |
+    BoxLoadAction |
+    BoxSaveAction |
+    BoxCreateAction |
+    BoxDeleteAction |
+    BoxRenameAction
 
 export function inventoryReducer(state: InventoryState = inventoryDefaultState, action: InventoryAction): InventoryState {
-    switch (action.type) {
-        case InventoryActionTypes.LoadBoxInfosStart:
+    switch (action?.value?.status) {
+        case AsyncRequestStatus.Started:
             return { ...state, loading: true };
-
-        case InventoryActionTypes.LoadBoxInfosSuccess: {
-            return {
-                ...state,
-                loading: false,
-                boxes: action.boxes.map(b => {
+        case AsyncRequestStatus.Failure:
+            return { ...state, loading: false };
+        case AsyncRequestStatus.Success: {
+            switch (action.type) {
+                case InventoryActionTypes.BoxInfosLoad: {
                     return {
-                        name: b.name,
-                        lastModified: b.lastModified,
-                        description: null,
-                        cards: null
+                        ...state,
+                        loading: false,
+                        boxes: action.value.data.map(b => {
+                            return {
+                                name: b.name,
+                                lastModified: b.lastModified,
+                                description: null,
+                                cards: null
+                            };
+                        })
                     };
-                 })
-            };
-        }
-        case InventoryActionTypes.LoadBoxStart:
-            return { ...state, loading: true };
-
-        case InventoryActionTypes.LoadBoxSuccess: {
-            const boxes = state.boxes?.map(b => {
-                if (b.name === action.box.name) {
-                    return { ...action.box };
-                } else {
-                    return b;
                 }
-            }) ?? null;
-
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.AddCard: {
-            const boxes = state.boxes?.map(b => {
-                if (b.name === action.boxInfo.name) {
-                    const cards = b.cards?.map(c => {
-                        if (BoxCardModule.areSame(c, action.card)){
-                            return {
-                                ...c,
-                                count: c.count + action.card.count
-                            };
+                case InventoryActionTypes.BoxLoad: {
+                    const box = action.value.data as Box;
+                    const boxes = state.boxes?.map(b => {
+                        if (b.name === box.name) {
+                            return { ...box };
                         } else {
-                            return c;
-                        }
-                    }) ?? null;
-                    if (cards) {
-                        cards.push(action.card);
-                    }
-
-                    return { ...b, cards };
-                } else {
-                    return b;
-                }
-            }) ?? null;
-
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.ChangeCount: {
-            const boxes = state.boxes?.map(b => {
-                if (b.name === action.boxInfo.name) {
-                    const cards = b.cards?.map(c => {
-                        if (BoxCardModule.areSame(c, action.card)){
-                            return {
-                                ...c,
-                                count: action.card.count
-                            };
-                        } else {
-                            return c;
+                            return b;
                         }
                     }) ?? null;
 
-                    return { ...b, cards };
-                } else {
-                    return b;
+                    return { ...state, boxes };
                 }
-            }) ?? null;
-
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.RemoveCard: {
-            const boxes = state.boxes?.map(b => {
-                if (b.name === action.boxInfo.name) {
-                    const cards = b.cards?.filter(c => !BoxCardModule.areSame(c, action.card)) ?? null;
-                    return { ...b, cards };
-                } else {
-                    return b;
+                case InventoryActionTypes.BoxSave: {
+                    const box = action.value.data as Box;
+                    const boxes = state.boxes?.map(b => {
+                        if (b.name === box.name) {
+                            return box;
+                        } else {
+                            return b;
+                        }
+                    }) ?? null;
+                    return { ...state, boxes };
                 }
-            }) ?? null;
-
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.SaveBoxStart:
-            return { ...state, loading: true };
-
-        case InventoryActionTypes.SaveBoxSuccess: {
-            const boxes = state.boxes?.map(b => {
-                if (b.name === action.box.name) {
-                    return action.box;
-                } else {
-                    return b;
+                case InventoryActionTypes.BoxCreate: {
+                    const box = action.value.data as Box;
+                    const newBox : BoxState = {
+                        name: box.name,
+                        lastModified: box.lastModified,
+                        cards: [],
+                        description: ''
+                    };
+                    const boxes = state.boxes ? orderBy([...state.boxes, newBox ], b => b.name) : null;
+                    return { ...state, boxes };
                 }
-            }) ?? null;
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.CreateBox: {
-            const newBox : BoxState = {
-                name: action.boxInfo.name,
-                lastModified: action.boxInfo.lastModified,
-                cards: [],
-                description: ''
-            };
-            const boxes = state.boxes ? orderBy([...state.boxes, newBox ], b => b.name) : null;
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.DeleteBox: {
-            const boxes = state.boxes?.filter(b => b.name !== action.boxInfo.name) ?? null;
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.RenameBox: {
-            if (!state.boxes) { return state; }
-
-            let boxes = state.boxes.map(b =>
-                b.name === action.oldName
-                    ? { ...b, name: action.newName }
-                    : b
-            );
-            boxes = orderBy(boxes, b => b.name);
-            return { ...state, boxes };
-        }
-        case InventoryActionTypes.MergeBoxes: {
-            if (!state.boxes) { return state; }
-
-            let boxes = state.boxes.filter(b => b.name !== action.removedBoxName && b.name !== action.updatedBox.name);
-            boxes.push(action.updatedBox);
-            boxes = orderBy(boxes, b => b.name);
-
-            return { ...state, boxes };
+                case InventoryActionTypes.BoxDelete: {
+                    const boxName = action.value.data as string;
+                    const boxes = state.boxes?.filter(b => b.name !== boxName) ?? null;
+                    return { ...state, boxes };
+                }
+                case InventoryActionTypes.BoxRename: {
+                    if (!state.boxes) { return state; }
+                    const [oldName, newName] = action.value.data as [string, string];
+                    let boxes = state.boxes.map(b =>
+                        b.name === oldName
+                            ? { ...b, name: newName }
+                            : b
+                    );
+                    boxes = orderBy(boxes, b => b.name);
+                    return { ...state, boxes };
+                }
+                default:
+                    return state;
+            }
         }
         default:
             return state;
