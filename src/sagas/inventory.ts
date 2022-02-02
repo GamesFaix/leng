@@ -96,16 +96,14 @@ async function saveBoxInner(settings: AppSettings, box: Box, overwrite: boolean)
             throw Error(`Box already exists: ${box.name}`);
         }
     }
-    const sanitized = {
+    const sanitized : Box = {
         ...box,
-        cards: [
-            box.cards.map(c => {
-                return {
-                    ...c,
-                    details: null
-                };
-            })
-        ]
+        cards: box.cards.map(c => {
+            return {
+                ...c,
+                details: null
+            };
+        })
     };
     const json = JSON.stringify(sanitized);
 
