@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { call, put, select, takeLeading, } from "redux-saga/effects";
 import { Card } from 'scryfall-api';
-import { createFileAndDirectoryIfRequired } from '../logic/file-controller';
+import { createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus } from "../logic/model";
 import { RootState } from "../store";
 import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";

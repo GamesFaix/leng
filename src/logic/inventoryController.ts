@@ -1,6 +1,6 @@
 import { AppSettings } from "./model";
 import * as fs from 'fs';
-import { createDirIfMissing } from "./file-controller";
+import { createDirIfMissing } from "./file-helpers";
 import { parse } from 'path';
 import { InventoryAction, InventoryActionTypes } from "../store/inventory";
 import { Box, BoxCardModule, BoxInfo, normalizeName } from "./model";
