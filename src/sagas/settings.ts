@@ -1,8 +1,8 @@
 import * as fs from 'fs';
-import { put, takeEvery } from 'redux-saga/effects';
+import { put, takeEvery, takeLeading } from 'redux-saga/effects';
 import { createFileAndDirectoryIfRequired } from '../logic/file-controller';
 import { AsyncRequestStatus } from '../logic/model';
-import { SettingsActionTypes, SettingsLoadAction, SettingsSaveAction } from '../store/settings';
+import { settingsActions, SettingsActionTypes, SettingsLoadAction, SettingsSaveAction } from '../store/settings';
 
 const dir = `${(process.env as any).USERPROFILE.replace('\\', '/')}/leng`;
 const settingsPath = `${dir}/settings.json`;
@@ -29,22 +29,10 @@ function* saveSettings(action: SettingsSaveAction) {
     try {
         const json = JSON.stringify(action.value.data);
         createFileAndDirectoryIfRequired(settingsPath, json);
-        yield put({
-            type: SettingsActionTypes.Save,
-            value: {
-                status: AsyncRequestStatus.Success,
-                data: action.value.data
-            }
-        });
+        yield put(settingsActions.saveSuccess(action.value.data));
     }
     catch (error) {
-        yield put({
-            type: SettingsActionTypes.Save,
-            value: {
-                status: AsyncRequestStatus.Failure,
-                error
-            }
-        });
+        yield put(settingsActions.saveError(`${error}`));
     }
 }
 
@@ -55,28 +43,16 @@ function* loadSettings(action: SettingsLoadAction) {
 
     try {
         const settings = loadSettingsOrDefaults();
-        yield put({
-            type: SettingsActionTypes.Load,
-            value: {
-                status: AsyncRequestStatus.Success,
-                data: settings
-            }
-        });
+        yield put(settingsActions.loadSuccess(settings));
 
     }
     catch (error) {
-        yield put({
-            type: SettingsActionTypes.Load,
-            value: {
-                status: AsyncRequestStatus.Failure,
-                error
-            }
-        });
+        yield put(settingsActions.loadError(`${error}`));
     }
 }
 
 function* settingsSaga() {
-    yield takeEvery(SettingsActionTypes.Load, loadSettings);
+    yield takeLeading(SettingsActionTypes.Load, loadSettings);
     yield takeEvery(SettingsActionTypes.Save, saveSettings);
 }
 export default settingsSaga;

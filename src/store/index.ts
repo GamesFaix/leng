@@ -1,9 +1,11 @@
-import { applyMiddleware, combineReducers, compose, createStore, StoreEnhancer } from '@reduxjs/toolkit';
+import { applyMiddleware, combineReducers, compose, createStore } from '@reduxjs/toolkit';
 import { EncyclopediaAction, EncyclopediaActionTypes, encyclopediaReducer } from './encyclopedia';
 import { InventoryAction, inventoryReducer } from './inventory';
 import { SettingsAction, settingsReducer } from './settings';
 import createSagaMiddleware from 'redux-saga'
 import settingsSaga from '../sagas/settings';
+import { AsyncRequestStatus } from '../logic/model';
+import encyclopediaSaga from '../sagas/encyclopedia';
 
 type Action =
   EncyclopediaAction |
@@ -19,11 +21,17 @@ const reducer = combineReducers({
 // Large payloads break the devtools
 // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
 const actionSanitizer =  (action: Action) => {
-  switch (action.type) {
-    case EncyclopediaActionTypes.LoadSuccess:
-      return { ...action, cards: '<<LARGE BLOB>>' };
-    default:
-      return action;
+  if (action.type === EncyclopediaActionTypes.Load
+    && action.value.status === AsyncRequestStatus.Success) {
+      return {
+        ...action,
+        value: {
+          ...action.value,
+          data: '<<LARGE BLOB>>'
+        }
+      }
+  } else {
+    return action;
   }
 };
 
@@ -52,6 +60,7 @@ export const store = createStore(
 );
 
 sagaMiddleware.run(settingsSaga);
+sagaMiddleware.run(encyclopediaSaga);
 
 export type RootState = ReturnType<typeof store.getState>
 
