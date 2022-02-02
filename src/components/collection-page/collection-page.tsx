@@ -7,16 +7,15 @@ import { groupBy, orderBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { BoxCardModule } from '../../logic/model';
+import { BoxCard, BoxCardModule, normalizeName } from '../../logic/model';
+import { BoxState } from '../../store/inventory';
+import FilterForm, { CardFilter, defaultCardFilter } from './filter-form';
 
 type Props = {
 
 }
 
-const CollectionPage = (props: Props) => {
-    const navigate = useNavigate();
-
-    const boxes = useSelector((state: RootState) => state.inventory.boxes) ?? [];
+function combineBoxes(boxes: BoxState[]) : BoxCard[] {
     let cards = boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
     const groups = groupBy(cards, BoxCardModule.getKey);
     cards = Object.entries(groups)
@@ -28,7 +27,25 @@ const CollectionPage = (props: Props) => {
             };
         });
     cards = orderBy(cards, ['name', 'set', 'version']);
+    return cards;
+}
 
+function search(cards: BoxCard[], filter: CardFilter) {
+    if (filter.nameQuery.length > 0) {
+        cards = cards.filter(c => normalizeName(c.name).includes(filter.nameQuery));
+    }
+
+    return cards;
+}
+
+const CollectionPage = (props: Props) => {
+    const navigate = useNavigate();
+
+    const boxes = useSelector((state: RootState) => state.inventory.boxes) ?? [];
+    const [filter, setFilter] = React.useState(defaultCardFilter);
+
+    let cards = combineBoxes(boxes);
+    cards = search(cards, filter);
     const cardCount = cards.map(c => c.count).reduce((a,b) => a+b, 0);
 
     return (
@@ -67,6 +84,11 @@ const CollectionPage = (props: Props) => {
                     </IconButton>
                 </div>
             </Card>
+            <br/>
+            <FilterForm
+                filter={filter}
+                onChange={setFilter}
+            />
             <br/>
             <Card sx={{ width: 900, padding: 1 }}>
                 <CardsTable
