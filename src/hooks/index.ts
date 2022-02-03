@@ -31,7 +31,9 @@ export const useStore = {
     },
 
     cardById(scryfallId: string) {
-        return this.cards().find(c => c.id === scryfallId) || null;
+        return useSelector(
+            (state:RootState) => state.encyclopedia.cardIndex[scryfallId] ?? null
+        )
     },
 
     settings() {
