@@ -5,8 +5,8 @@ import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
-import { BoxCard, normalizeName } from '../../logic/model';
-import { CheckboxCell, SetCell, VersionCell } from '../common/card-table-cells';
+import { BoxCard } from '../../logic/model';
+import { CheckboxCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
@@ -36,28 +36,38 @@ function ActionsCell (props: TableCellProps, tableProps: Props) {
     );
 }
 
+
+function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCard[] {
+    const lodashDir = dir.toLowerCase() as any;
+    switch (by) {
+        case 'name':
+            return orderBy(cards, c => c.normalizedName, lodashDir);
+        // TODO: Add strategy to sort by set name not abbrev
+        default:
+            return orderBy(cards, by, lodashDir);
+    }
+}
+
+
 const CardsTable = (props: Props) => {
     const sets = useStore.sets();
-    const cards = useStore.cards();
 
     const [sortBy, setSortBy] = React.useState('name');
-    const [sortDir, setSortDir] = React.useState<SortDirectionType>(SortDirection.ASC);
+    const [sortDirection, setSortDirection] = React.useState<SortDirectionType>(SortDirection.ASC);
+    const [unsortedList, setUnsortedList] = React.useState(props.cards);
     const [sortedList, setSortedList] = React.useState(props.cards);
+
+    React.useEffect(() => {
+        if (props.cards !== unsortedList) {
+            setUnsortedList(props.cards);
+            setSortedList(sortInner(props.cards, sortBy, sortDirection));
+        }
+    })
 
     function sort(args: SortArgs) {
         setSortBy(args.sortBy);
-        setSortDir(args.sortDirection);
-        let sorted : BoxCard[] = [];
-        const lodashDir = sortDir.toLowerCase() as any;
-        switch (args.sortBy) {
-            case 'name':
-                sorted = orderBy(sortedList, c => normalizeName(c.name), lodashDir);
-            // TODO: Add strategy to sort by set name not abbrev
-            default:
-                sorted = orderBy(sortedList, sortBy, lodashDir);
-                break;
-        }
-        setSortedList(sorted);
+        setSortDirection(args.sortDirection);
+        setSortedList(sortInner(props.cards, args.sortBy, args.sortDirection));
     }
 
     return (
@@ -66,11 +76,11 @@ const CardsTable = (props: Props) => {
             height={600}
             headerHeight={20}
             rowHeight={30}
-            rowCount={props.cards.length}
+            rowCount={sortedList.length}
             rowGetter={({index}) => sortedList[index]}
             sort={sort}
             sortBy={sortBy}
-            sortDirection={sortDir}
+            sortDirection={sortDirection}
         >
             <Column
                 label='Ct.'
@@ -91,8 +101,7 @@ const CardsTable = (props: Props) => {
             <Column
                 width={100}
                 label='Version'
-                dataKey='version'
-                cellRenderer={cellProps => VersionCell(cellProps, cards)}
+                dataKey='versionLabel'
             />
             <Column
                 width={50}

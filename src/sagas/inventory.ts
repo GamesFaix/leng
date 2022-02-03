@@ -2,9 +2,8 @@ import * as fs from 'fs';
 import { orderBy } from 'lodash';
 import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
-import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxInfo, Language } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { RootState } from '../store';
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 
@@ -49,7 +48,32 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
     }
 }
 
-async function loadBoxInner(settings: AppSettings, name: string, encyclopediaCards: Card[]) : Promise<Box> {
+function fromFileBox(fileBox: FileBox, cardIndex: CardIndex) : Box {
+    return {
+        name: fileBox.name,
+        lastModified: fileBox.lastModified,
+        description: fileBox.description,
+        cards: fileBox.cards.map(c => {
+            const match = cardIndex[c.scryfallId];
+            return {
+                name: c.name,
+                setAbbrev: c.setAbbrev,
+                setName: match?.set_name ?? '',
+                scryfallId: c.scryfallId,
+                lang: c.lang ?? Language.English,
+                foil: c.foil,
+                collectorsNumber: c.collectorsNumber,
+                count: c.count,
+                color: match?.colors ?? [],
+                colorIdentity: match?.color_identity ?? [],
+                normalizedName: normalizeName(c.name),
+                versionLabel: match ? getVersionLabel(match) : ''
+            };
+        })
+    };
+}
+
+async function loadBoxInner(settings: AppSettings, name: string, cardIndex: CardIndex) : Promise<Box> {
     const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
 
@@ -59,14 +83,8 @@ async function loadBoxInner(settings: AppSettings, name: string, encyclopediaCar
 
     const buffer = await fs.promises.readFile(path);
     const json = buffer.toString();
-    const box: Box = JSON.parse(json);
-    box.cards.forEach(c => {
-        if (!c.lang) {
-            c.lang = Language.English
-        }
-        c.details = encyclopediaCards.find(ec => ec.id === c.scryfallId) ?? null;
-    });
-    return box;
+    const box: FileBox = JSON.parse(json);
+    return fromFileBox(box, cardIndex);
 }
 
 function* loadBox(action: BoxLoadAction) {
@@ -76,14 +94,33 @@ function* loadBox(action: BoxLoadAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const encyclopediaCards : Card[] = yield select((state: RootState) => state.encyclopedia.cards);
+        const cardIndex : CardIndex = yield select((state: RootState) => state.encyclopedia.cardIndex);
         const name = action.value.data;
-        const box : Box = yield call(() => loadBoxInner(settings, name, encyclopediaCards));
+        const box : Box = yield call(() => loadBoxInner(settings, name, cardIndex));
         yield put(inventoryActions.boxLoadSuccess(box));
     }
     catch (error) {
         yield put(inventoryActions.boxLoadFailure(`${error}`));
     }
+}
+
+function toFileBox(box: Box) : FileBox {
+    return {
+        name: box.name,
+        lastModified: box.lastModified,
+        description: box.description,
+        cards: box.cards.map(c => {
+            return {
+                name: c.name,
+                setAbbrev: c.setAbbrev,
+                scryfallId: c.scryfallId,
+                lang: c.lang,
+                foil: c.foil,
+                collectorsNumber: c.collectorsNumber,
+                count: c.count
+            };
+        })
+    };
 }
 
 async function saveBoxInner(settings: AppSettings, box: Box, overwrite: boolean) : Promise<void> {
@@ -96,17 +133,9 @@ async function saveBoxInner(settings: AppSettings, box: Box, overwrite: boolean)
             throw Error(`Box already exists: ${box.name}`);
         }
     }
-    const sanitized : Box = {
-        ...box,
-        cards: box.cards.map(c => {
-            return {
-                ...c,
-                details: null
-            };
-        })
-    };
-    const json = JSON.stringify(sanitized);
 
+    const fileBox = toFileBox(box);
+    const json = JSON.stringify(fileBox);
     await fs.promises.writeFile(path, json);
 }
 
@@ -136,7 +165,7 @@ function* renameBox(action: BoxRenameAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const encyclopediaCards : Card[] = yield select((state: RootState) => state.encyclopedia.cards);
+        const cardIndex: CardIndex = yield select((state: RootState) => state.encyclopedia.cardIndex);
         const [oldName, newName] = action.value.data;
         const oldPath = getBoxPath(settings, oldName);
         const newPath = getBoxPath(settings, newName);
@@ -145,7 +174,7 @@ function* renameBox(action: BoxRenameAction) {
             throw `Box named ${newName} already exists.`;
         }
 
-        let box : Box = yield call(() => loadBoxInner(settings, oldName, encyclopediaCards));
+        let box : Box = yield call(() => loadBoxInner(settings, oldName, cardIndex));
         box = { ...box, name: newName };
 
         yield call(() => saveBoxInner(settings, box, true));

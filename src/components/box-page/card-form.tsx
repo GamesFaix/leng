@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
-import { AllLanguages, BoxCard, Language, normalizeName, SetInfo } from '../../logic/model';
+import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName, SetInfo } from '../../logic/model';
 import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,20 +55,6 @@ function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
         count: card.count,
         lang: card.lang ?? Language.English
     };
-}
-
-export function getVersionLabel(card: Card) : string {
-    const numberStr = `#${card.collector_number}`;
-
-    let frameEffectsStr = "";
-    if (card.frame_effects?.includes("showcase")) {
-        frameEffectsStr += " Showcase";
-    }
-    if (card.frame_effects?.includes("extendedart")){
-        frameEffectsStr += " Extended Art"
-    }
-
-    return `${numberStr}${frameEffectsStr}`;
 }
 
 function getFoilOptions(card: Card | null) {
@@ -241,12 +227,16 @@ const CardForm = (props: Props) => {
         const card: BoxCard = {
             name: state.cardName,
             setAbbrev: selectedCard.set,
+            setName: selectedCard.set_name,
             foil: state.foil,
-            version: selectedCard.label,
             count: state.count,
             scryfallId: state.scryfallId,
             lang: state.lang,
-            details: selectedCard
+            collectorsNumber: selectedCard.collector_number,
+            color: selectedCard.colors ?? [],
+            colorIdentity: selectedCard.color_identity,
+            versionLabel: getVersionLabel(selectedCard),
+            normalizedName: normalizeName(state.cardName)
         };
 
         props.onSubmit(card);

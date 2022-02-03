@@ -1,4 +1,4 @@
-import { Card } from 'scryfall-api';
+import { Card, Color } from 'scryfall-api';
 import { orderBy, uniqBy } from 'lodash';
 
 export enum AsyncRequestStatus {
@@ -85,19 +85,37 @@ export const AllLanguages = [
     Language.Spanish
 ];
 
+export type FileBoxCard = {
+    scryfallId: string,
+    name: string,
+    setAbbrev: string,
+    collectorsNumber: string,
+    lang: Language | null,
+    foil: boolean,
+    count: number,
+}
+
+export type FileBox = {
+    name: string,
+    lastModified: Date,
+    description: string,
+    cards: FileBoxCard[]
+}
+
 /* Represents the number of copies of a given printing of a card in a box. */
 export type BoxCard = {
     scryfallId: string,
-    count: number,
-    foil: boolean,
-
-    // for user readability, can be looked up w/ scryfallId
     name: string,
     setAbbrev: string,
-    version: string,
-    lang: Language | null,
-
-    details: Card | null
+    collectorsNumber: string,
+    lang: Language,
+    foil: boolean,
+    count: number,
+    setName: string,
+    color: Color[],
+    colorIdentity: Color[],
+    versionLabel: string,
+    normalizedName: string
 }
 
 /* A group of cards in a collection, saved in a single box file. (It could represent a binder, bulk box, deck, etc.) */
@@ -126,6 +144,20 @@ export function normalizeName(name: string) : string {
         .normalize("NFD")
         .replace(/[^\w\s]|_/g, "")
         .replace(/\s+/g, " ");
+}
+
+export function getVersionLabel(card: Card) : string {
+    const numberStr = `#${card.collector_number}`;
+
+    let frameEffectsStr = "";
+    if (card.frame_effects?.includes("showcase")) {
+        frameEffectsStr += " Showcase";
+    }
+    if (card.frame_effects?.includes("extendedart")){
+        frameEffectsStr += " Extended Art"
+    }
+
+    return `${numberStr}${frameEffectsStr}`;
 }
 
 export const CardModule = {
@@ -157,3 +189,7 @@ export const BoxCardModule = {
 export type AppSettings = {
     dataPath: string
 };
+
+export type CardIndex = {
+    [id: string]: Card
+}
