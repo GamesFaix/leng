@@ -21,13 +21,3 @@ export function SetCell (props: TableCellProps, sets: SetInfo[]) {
         </div>
     )
 }
-
-export function VersionCell (props: TableCellProps, cards: Card[]) {
-    const card = cards.find(c => c.id === props.rowData.scryfallId);
-    const version = card ? getVersionLabel(card) : '';
-    return (
-        <div>
-            {version}
-        </div>
-    );
-}

@@ -85,12 +85,6 @@ export const AllLanguages = [
     Language.Spanish
 ];
 
-export interface IBoxCard {
-    scryfallId: string,
-    lang: string,
-    foil: boolean
-}
-
 export type FileBoxCard = {
     scryfallId: string,
     name: string,
@@ -183,11 +177,11 @@ export const CardModule = {
 }
 
 export const BoxCardModule = {
-    getKey(card: IBoxCard) : string {
+    getKey(card: BoxCard) : string {
         return `${card.scryfallId}|${card.foil}|${card.lang}`;
     },
 
-    areSame(a: IBoxCard, b: IBoxCard) : boolean {
+    areSame(a: BoxCard, b: BoxCard) : boolean {
         return this.getKey(a) === this.getKey(b);
     }
 }

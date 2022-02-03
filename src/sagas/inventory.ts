@@ -74,7 +74,7 @@ function fromFileBox(fileBox: FileBox, encyclopedia: Card[]) : Box {
     };
 }
 
-async function loadBoxInner(settings: AppSettings, name: string) : Promise<Box> {
+async function loadBoxInner(settings: AppSettings, name: string, encyclopedia: Card[]) : Promise<Box> {
     const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
 
@@ -84,13 +84,8 @@ async function loadBoxInner(settings: AppSettings, name: string) : Promise<Box> 
 
     const buffer = await fs.promises.readFile(path);
     const json = buffer.toString();
-    const box: Box = JSON.parse(json);
-    box.cards.forEach(c => {
-        if (!c.lang) {
-            c.lang = Language.English
-        }
-    });
-    return box;
+    const box: FileBox = JSON.parse(json);
+    return fromFileBox(box, encyclopedia);
 }
 
 function* loadBox(action: BoxLoadAction) {
@@ -100,8 +95,9 @@ function* loadBox(action: BoxLoadAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const encyclopedia : Card[] = yield select((state: RootState) => state.encyclopedia.cards);
         const name = action.value.data;
-        const box : Box = yield call(() => loadBoxInner(settings, name));
+        const box : Box = yield call(() => loadBoxInner(settings, name, encyclopedia));
         yield put(inventoryActions.boxLoadSuccess(box));
     }
     catch (error) {
@@ -170,6 +166,7 @@ function* renameBox(action: BoxRenameAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const encyclopedia: Card[] = yield select((state: RootState) => state.encyclopedia.cards);
         const [oldName, newName] = action.value.data;
         const oldPath = getBoxPath(settings, oldName);
         const newPath = getBoxPath(settings, newName);
@@ -178,7 +175,7 @@ function* renameBox(action: BoxRenameAction) {
             throw `Box named ${newName} already exists.`;
         }
 
-        let box : Box = yield call(() => loadBoxInner(settings, oldName));
+        let box : Box = yield call(() => loadBoxInner(settings, oldName, encyclopedia));
         box = { ...box, name: newName };
 
         yield call(() => saveBoxInner(settings, box, true));

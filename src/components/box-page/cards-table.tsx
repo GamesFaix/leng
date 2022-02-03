@@ -6,7 +6,7 @@ import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
 import { BoxCard } from '../../logic/model';
-import { CheckboxCell, SetCell, VersionCell } from '../common/card-table-cells';
+import { CheckboxCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
@@ -91,8 +91,7 @@ const CardsTable = (props: Props) => {
             <Column
                 width={100}
                 label='Version'
-                dataKey='version'
-                cellRenderer={cellProps => VersionCell(cellProps, cards)}
+                dataKey='versionLabel'
             />
             <Column
                 width={50}
