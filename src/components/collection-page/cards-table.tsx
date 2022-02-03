@@ -14,10 +14,6 @@ type SortArgs = {
     sortDirection: SortDirectionType
 }
 
-type RowGetterArgs = {
-    index: number
-}
-
 const CardsTable = (props: Props) => {
     const sets = useStore.sets();
     const cards = useStore.cards();
@@ -28,11 +24,14 @@ const CardsTable = (props: Props) => {
     function sort(args: SortArgs) {
         setSortBy(args.sortBy);
         setSortDir(args.sortDirection);
-        setSortedList(orderBy(props.cards, sortBy, sortDir.toLowerCase() as any));
-    }
-
-    function getRow(args: RowGetterArgs) : BoxCard {
-        return sortedList[args.index];
+        let sorted : BoxCard[] = [];
+        switch (args.sortBy) {
+            // TODO: Add strategy to sort by set name not abbrev
+            default:
+                sorted = orderBy(props.cards, sortBy, sortDir.toLowerCase() as any);
+                break;
+        }
+        setSortedList(sorted);
     }
 
     return (
@@ -42,7 +41,7 @@ const CardsTable = (props: Props) => {
             headerHeight={20}
             rowHeight={30}
             rowCount={props.cards.length}
-            rowGetter={getRow}
+            rowGetter={({index}) => sortedList[index]}
             sort={sort}
             sortBy={sortBy}
             sortDirection={sortDir}
