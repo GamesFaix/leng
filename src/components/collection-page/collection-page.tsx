@@ -3,11 +3,11 @@ import * as React from 'react';
 import CardsTable from './cards-table';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { difference, groupBy, intersection, orderBy } from 'lodash';
+import { difference, groupBy, intersection, orderBy, uniq } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { BoxCard, BoxCardModule, normalizeName } from '../../logic/model';
+import { Box, BoxCard, BoxCardModule, normalizeName } from '../../logic/model';
 import { BoxState } from '../../store/inventory';
 import FilterForm, { CardFilter, defaultCardFilter } from './filter-form';
 import { Rule } from '../common/color-filter-rule-selector';
@@ -17,10 +17,13 @@ type Props = {
 
 }
 
-function combineBoxes(boxes: BoxState[]) : BoxCard[] {
-    let cards = boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
+function getCards(boxes: BoxState[]) : BoxCard[] {
+    return boxes.map(b => b.cards ?? []).reduce((a,b) => a.concat(b), []);
+}
+
+function mergeDuplicates(cards: BoxCard[]) {
     const groups = groupBy(cards, BoxCardModule.getKey);
-    cards = Object.entries(groups)
+    return Object.entries(groups)
         .map(grp => {
             const [_, cards] = grp;
             return {
@@ -28,6 +31,21 @@ function combineBoxes(boxes: BoxState[]) : BoxCard[] {
                 count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
             };
         });
+}
+
+function combineBoxes(boxes: BoxState[], filter: CardFilter) : BoxCard[] {
+    const includeBoxes = filter.fromBoxes.length > 0
+        ? boxes.filter(b => filter.fromBoxes.includes(b.name))
+        : boxes;
+
+    const exceptBoxes = filter.exceptBoxes.length > 0
+        ? boxes.filter(b => filter.exceptBoxes.includes(b.name))
+        : [];
+
+    const includeCards = mergeDuplicates(getCards(includeBoxes));
+    const exceptKeys = uniq(getCards(exceptBoxes).map(BoxCardModule.getKey));
+
+    let cards = includeCards.filter(c => !exceptKeys.includes(BoxCardModule.getKey(c)));
     cards = orderBy(cards, ['name', 'set', 'version']);
     return cards;
 }
@@ -111,7 +129,7 @@ const CollectionPage = (props: Props) => {
     const boxes = useSelector((state: RootState) => state.inventory.boxes) ?? [];
     const [filter, setFilter] = React.useState(defaultCardFilter);
 
-    let cards = combineBoxes(boxes);
+    let cards = combineBoxes(boxes, filter);
     cards = search(cards, filter);
     const cardCount = cards.map(c => c.count).reduce((a,b) => a+b, 0);
 
