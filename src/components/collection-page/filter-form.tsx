@@ -18,7 +18,7 @@ export type CardFilter = {
 export const defaultCardFilter : CardFilter = {
     nameQuery: '',
     set: null,
-    colors: allColors,
+    colors: [],
     colorRule: Rule.ContainsAny,
     fromBoxes: [],
     exceptBoxes: []
@@ -95,39 +95,54 @@ const FilterForm = (props: Props) => {
                 value={props.filter.set}
                 onChange={updateSet}
             />
-            <ColorFilterRuleSelector
-                value={props.filter.colorRule}
-                onChange={updateColorRule}
-            />
-            <ColorsSelector
-                value={props.filter.colors}
-                onChange={updateColors}
-            />
-            <BoxSelector
-                value={props.filter.fromBoxes}
-                onChange={updateFromBoxes}
-            />
-            <BoxSelector
-                value={props.filter.exceptBoxes}
-                onChange={updateExceptBoxes}
-            />
-            {/* <FormControlLabel
-                label="Set"
+            <FormControlLabel
+                sx={{
+                    border: "1px solid gainsboro",
+                    borderRadius: "3px"
+                }}
+                label="Color"
                 labelPlacement='top'
-                control={
-                    <TextField
-                        title="Name includes"
-                        value={props.filter.nameQuery}
-                        onChange={updateNameQuery}
+                control={<div>
+                    <ColorFilterRuleSelector
+                        value={props.filter.colorRule}
+                        onChange={updateColorRule}
                     />
-                }
-            /> */}
-            {/* <TextField
-                title="Types"
+                    <ColorsSelector
+                        value={props.filter.colors}
+                        onChange={updateColors}
+                    />
+                </div>}
             />
-            <Autocomplete
-                title="Set"
-            /> */}
+            <FormControlLabel
+                sx={{
+                    border: "1px solid gainsboro",
+                    borderRadius: "3px"
+                }}
+                label="Boxes"
+                labelPlacement='top'
+                control={<div>
+                    <FormControlLabel
+                        label="In"
+                        labelPlacement='top'
+                        control={
+                            <BoxSelector
+                                value={props.filter.fromBoxes}
+                                onChange={updateFromBoxes}
+                            />
+                        }
+                    />
+                    <FormControlLabel
+                        label="Except"
+                        labelPlacement='top'
+                        control={
+                            <BoxSelector
+                                value={props.filter.exceptBoxes}
+                                onChange={updateExceptBoxes}
+                            />
+                        }
+                    />
+                </div>}
+            />
         </Card>
     );
 }
