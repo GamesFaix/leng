@@ -4,7 +4,7 @@ import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxInfo, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { RootState } from '../store';
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 
@@ -49,13 +49,13 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
     }
 }
 
-function fromFileBox(fileBox: FileBox, encyclopedia: Card[]) : Box {
+function fromFileBox(fileBox: FileBox, cardIndex: CardIndex) : Box {
     return {
         name: fileBox.name,
         lastModified: fileBox.lastModified,
         description: fileBox.description,
         cards: fileBox.cards.map(c => {
-            const match = encyclopedia.find(ec => ec.id === c.scryfallId);
+            const match = cardIndex[c.scryfallId];
             return {
                 name: c.name,
                 setAbbrev: c.setAbbrev,
@@ -74,7 +74,7 @@ function fromFileBox(fileBox: FileBox, encyclopedia: Card[]) : Box {
     };
 }
 
-async function loadBoxInner(settings: AppSettings, name: string, encyclopedia: Card[]) : Promise<Box> {
+async function loadBoxInner(settings: AppSettings, name: string, cardIndex: CardIndex) : Promise<Box> {
     const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
 
@@ -85,7 +85,7 @@ async function loadBoxInner(settings: AppSettings, name: string, encyclopedia: C
     const buffer = await fs.promises.readFile(path);
     const json = buffer.toString();
     const box: FileBox = JSON.parse(json);
-    return fromFileBox(box, encyclopedia);
+    return fromFileBox(box, cardIndex);
 }
 
 function* loadBox(action: BoxLoadAction) {
@@ -95,9 +95,9 @@ function* loadBox(action: BoxLoadAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const encyclopedia : Card[] = yield select((state: RootState) => state.encyclopedia.cards);
+        const cardIndex : CardIndex = yield select((state: RootState) => state.encyclopedia.cardIndex);
         const name = action.value.data;
-        const box : Box = yield call(() => loadBoxInner(settings, name, encyclopedia));
+        const box : Box = yield call(() => loadBoxInner(settings, name, cardIndex));
         yield put(inventoryActions.boxLoadSuccess(box));
     }
     catch (error) {
@@ -166,7 +166,7 @@ function* renameBox(action: BoxRenameAction) {
 
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const encyclopedia: Card[] = yield select((state: RootState) => state.encyclopedia.cards);
+        const cardIndex: CardIndex = yield select((state: RootState) => state.encyclopedia.cardIndex);
         const [oldName, newName] = action.value.data;
         const oldPath = getBoxPath(settings, oldName);
         const newPath = getBoxPath(settings, newName);
@@ -175,7 +175,7 @@ function* renameBox(action: BoxRenameAction) {
             throw `Box named ${newName} already exists.`;
         }
 
-        let box : Box = yield call(() => loadBoxInner(settings, oldName, encyclopedia));
+        let box : Box = yield call(() => loadBoxInner(settings, oldName, cardIndex));
         box = { ...box, name: newName };
 
         yield call(() => saveBoxInner(settings, box, true));

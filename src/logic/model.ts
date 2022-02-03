@@ -189,3 +189,7 @@ export const BoxCardModule = {
 export type AppSettings = {
     dataPath: string
 };
+
+export type CardIndex = {
+    [id: string]: Card
+}
