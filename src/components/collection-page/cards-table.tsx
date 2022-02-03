@@ -14,9 +14,19 @@ type SortArgs = {
     sortDirection: SortDirectionType
 }
 
+function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCard[] {
+    const lodashDir = dir.toLowerCase() as any;
+    switch (by) {
+        case 'name':
+            return orderBy(cards, c => c.normalizedName, lodashDir);
+        // TODO: Add strategy to sort by set name not abbrev
+        default:
+            return orderBy(cards, by, lodashDir);
+    }
+}
+
 const CardsTable = (props: Props) => {
     const sets = useStore.sets();
-    const cards = useStore.cards();
     const [sortBy, setSortBy] = React.useState('name');
     const [sortDir, setSortDir] = React.useState<SortDirectionType>(SortDirection.ASC);
     const [sortedList, setSortedList] = React.useState(props.cards);
@@ -24,17 +34,7 @@ const CardsTable = (props: Props) => {
     function sort(args: SortArgs) {
         setSortBy(args.sortBy);
         setSortDir(args.sortDirection);
-        let sorted : BoxCard[] = [];
-        const lodashDir = sortDir.toLowerCase() as any;
-        switch (args.sortBy) {
-            case 'name':
-                sorted = orderBy(sortedList, c => c.normalizedName, lodashDir);
-            // TODO: Add strategy to sort by set name not abbrev
-            default:
-                sorted = orderBy(sortedList, sortBy, lodashDir);
-                break;
-        }
-        setSortedList(sorted);
+        setSortedList(sortInner(props.cards, args.sortBy, args.sortDirection));
     }
 
     return (
