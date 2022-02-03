@@ -2,8 +2,9 @@ import * as fs from 'fs';
 import { orderBy } from 'lodash';
 import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
+import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxInfo, Language } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxInfo, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { RootState } from '../store';
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 
@@ -48,6 +49,31 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
     }
 }
 
+function fromFileBox(fileBox: FileBox, encyclopedia: Card[]) : Box {
+    return {
+        name: fileBox.name,
+        lastModified: fileBox.lastModified,
+        description: fileBox.description,
+        cards: fileBox.cards.map(c => {
+            const match = encyclopedia.find(ec => ec.id === c.scryfallId);
+            return {
+                name: c.name,
+                setAbbrev: c.setAbbrev,
+                setName: match?.set_name ?? '',
+                scryfallId: c.scryfallId,
+                lang: c.lang ?? Language.English,
+                foil: c.foil,
+                collectorsNumber: c.collectorsNumber,
+                count: c.count,
+                color: match?.colors ?? [],
+                colorIdentity: match?.color_identity ?? [],
+                normalizedName: normalizeName(c.name),
+                versionLabel: match ? getVersionLabel(match) : ''
+            };
+        })
+    };
+}
+
 async function loadBoxInner(settings: AppSettings, name: string) : Promise<Box> {
     const path = getBoxPath(settings, name);
     const exists = fs.existsSync(path);
@@ -83,6 +109,25 @@ function* loadBox(action: BoxLoadAction) {
     }
 }
 
+function toFileBox(box: Box) : FileBox {
+    return {
+        name: box.name,
+        lastModified: box.lastModified,
+        description: box.description,
+        cards: box.cards.map(c => {
+            return {
+                name: c.name,
+                setAbbrev: c.setAbbrev,
+                scryfallId: c.scryfallId,
+                lang: c.lang,
+                foil: c.foil,
+                collectorsNumber: c.collectorsNumber,
+                count: c.count
+            };
+        })
+    };
+}
+
 async function saveBoxInner(settings: AppSettings, box: Box, overwrite: boolean) : Promise<void> {
     const path = getBoxPath(settings, box.name);
     const exists = fs.existsSync(path);
@@ -94,8 +139,8 @@ async function saveBoxInner(settings: AppSettings, box: Box, overwrite: boolean)
         }
     }
 
-    const json = JSON.stringify(box);
-
+    const fileBox = toFileBox(box);
+    const json = JSON.stringify(fileBox);
     await fs.promises.writeFile(path, json);
 }
 

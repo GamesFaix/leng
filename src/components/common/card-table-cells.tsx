@@ -2,8 +2,7 @@ import { Checkbox } from '@mui/material';
 import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
 import { Card } from 'scryfall-api';
-import { SetInfo } from '../../logic/model';
-import { getVersionLabel } from '../box-page/card-form';
+import { getVersionLabel, SetInfo } from '../../logic/model';
 
 export function CheckboxCell(props: TableCellProps) {
     return (
