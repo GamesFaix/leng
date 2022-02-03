@@ -5,7 +5,7 @@ import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
 import { icons } from '../../fontawesome';
 import { useStore } from '../../hooks';
-import { BoxCard, normalizeName } from '../../logic/model';
+import { BoxCard } from '../../logic/model';
 import { CheckboxCell, SetCell, VersionCell } from '../common/card-table-cells';
 
 type Props = {
@@ -51,7 +51,7 @@ const CardsTable = (props: Props) => {
         const lodashDir = sortDir.toLowerCase() as any;
         switch (args.sortBy) {
             case 'name':
-                sorted = orderBy(sortedList, c => normalizeName(c.name), lodashDir);
+                sorted = orderBy(sortedList, c => c.normalizedName, lodashDir);
             // TODO: Add strategy to sort by set name not abbrev
             default:
                 sorted = orderBy(sortedList, sortBy, lodashDir);
