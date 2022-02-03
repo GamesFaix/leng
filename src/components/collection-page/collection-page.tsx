@@ -91,21 +91,21 @@ function isColorExactly(cardColors: Color[], filterColors: Color[]) {
 function filterCardsByColor(cards: BoxCard[], colors: Color[], rule: Rule) : BoxCard[] {
     switch (rule) {
         case Rule.ContainsAny:
-            return cards.filter(c => containsAny(c.details?.colors ?? [], colors));
+            return cards.filter(c => containsAny(c.color ?? [], colors));
         case Rule.ContainsAll:
-            return cards.filter(c => containsAll(c.details?.colors ?? [], colors));
+            return cards.filter(c => containsAll(c.color ?? [], colors));
         case Rule.ContainsOnly:
-            return cards.filter(c => containsOnly(c.details?.colors ?? [], colors));
+            return cards.filter(c => containsOnly(c.color ?? [], colors));
         case Rule.IsExactly:
-            return cards.filter(c => isColorExactly(c.details?.colors ?? [], colors));
+            return cards.filter(c => isColorExactly(c.color ?? [], colors));
         case Rule.IdentityContainsAny:
-            return cards.filter(c => containsAny(c.details?.color_identity ?? [], colors));
+            return cards.filter(c => containsAny(c.colorIdentity ?? [], colors));
         case Rule.IdentityContainsAll:
-            return cards.filter(c => containsAll(c.details?.color_identity ?? [], colors));
+            return cards.filter(c => containsAll(c.colorIdentity ?? [], colors));
         case Rule.IdentityContainsOnly:
-            return cards.filter(c => containsOnly(c.details?.color_identity ?? [], colors));
+            return cards.filter(c => containsOnly(c.colorIdentity ?? [], colors));
         case Rule.IdentityIsExactly:
-            return cards.filter(c => isColorExactly(c.details?.color_identity ?? [], colors));
+            return cards.filter(c => isColorExactly(c.colorIdentity ?? [], colors));
     }
 }
 
@@ -115,7 +115,7 @@ function search(cards: BoxCard[], filter: CardFilter) {
     }
 
     if (filter.set) {
-        cards = cards.filter(c => c.details?.set_name === filter.set!.name);
+        cards = cards.filter(c => c.setName === filter.set!.name);
     }
 
     cards = filterCardsByColor(cards, filter.colors, filter.colorRule);
