@@ -1,28 +1,25 @@
 import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import CardsTable from './cards-table';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { groupBy, orderBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { BoxCardModule, defaultCardFilter } from '../../logic/model';
+import { BoxCard, BoxCardModule, defaultCardFilter } from '../../logic/model';
 import CardFilterForm from './card-filter-form';
+import { useStore } from '../../hooks';
 
 type Props = {
 
 }
 
-const CollectionPage = (props: Props) => {
-    const navigate = useNavigate();
+function getCards(boxes: BoxState[]) : BoxCard[] {
+    return boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
+}
 
-    const [filter, setFilter] = React.useState(defaultCardFilter);
-
-    const boxes = useSelector((state: RootState) => state.inventory.boxes) ?? [];
-    let cards = boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
+function combineDuplicates(cards: BoxCard[]) : BoxCard[] {
     const groups = groupBy(cards, BoxCardModule.getKey);
-    cards = Object.entries(groups)
+    return Object.entries(groups)
         .map(grp => {
             const [_, cards] = grp;
             return {
@@ -30,6 +27,16 @@ const CollectionPage = (props: Props) => {
                 count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
             };
         });
+}
+
+const CollectionPage = (props: Props) => {
+    const navigate = useNavigate();
+
+    const [filter, setFilter] = React.useState(defaultCardFilter);
+    const boxes = useStore.boxes();
+
+    let cards = getCards(boxes);
+    cards = combineDuplicates(cards);
     cards = orderBy(cards, ['name', 'set', 'version']);
 
     const cardCount = cards.map(c => c.count).reduce((a,b) => a+b, 0);
