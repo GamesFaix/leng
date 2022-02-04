@@ -1,6 +1,8 @@
 import { Card, FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
 import { CardFilter } from '../../logic/model';
+import ColorRuleSelector, { ColorFilterRule } from './color-rule-selector';
+import ColorsSelector, { ColorFilter } from './color-selector';
 import SetFilter from './set-filter';
 
 type Props = {
@@ -23,6 +25,19 @@ const CardFilterForm = (props: Props) => {
         })
     }
 
+    function updateColorRule(colorRule: ColorFilterRule) {
+        props.onChange({
+            ...props.filter,
+            colorRule
+        })
+    }
+
+    function updateColors(colors: ColorFilter[]) {
+        props.onChange({
+            ...props.filter,
+            colors
+        })
+    }
     return (
         <Card
             sx={{
@@ -50,6 +65,25 @@ const CardFilterForm = (props: Props) => {
                         onChange={updateSetAbbrevs}
                     />
                 }
+            />
+            <br/>
+            <FormControlLabel
+                sx={{
+                    border: "1px solid gainsboro",
+                    borderRadius: "3px"
+                }}
+                label="Color"
+                labelPlacement='top'
+                control={<div>
+                    <ColorRuleSelector
+                        value={props.filter.colorRule}
+                        onChange={updateColorRule}
+                    />
+                    <ColorsSelector
+                        value={props.filter.colors}
+                        onChange={updateColors}
+                    />
+                </div>}
             />
         </Card>
     )
