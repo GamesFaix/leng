@@ -117,7 +117,7 @@ async function loadSets(settings: AppSettings) : Promise<Set[]> {
     return await readOrDownloadJsonFile<Set[]>(settings, "sets", downloadSetsData);
 }
 
-function getSetSymbolImagePath(settings: AppSettings, setAbbrev: string) : string {
+export function getSetSymbolImagePath(settings: AppSettings, setAbbrev: string) : string {
     return `${settings.dataPath}/encyclopedia/setSymbols/${setAbbrev}.svg`;
 }
 
