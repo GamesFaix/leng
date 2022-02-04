@@ -7,6 +7,7 @@ import { Card } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
 import { orderBy } from 'lodash';
+import SetSymbol from '../common/set-symbol';
 
 type Props = {
     card: BoxCard | null,
@@ -126,6 +127,21 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
             >
                 <FontAwesomeIcon icon={icons.inspect} />
             </IconButton>
+        </li>
+    );
+}
+
+const SetOption = (props: any, set: SetInfo, state: any) => {
+    const classes = state.selected
+        ? [ "autocomplete-option", "selected", "set-container" ]
+        : [ "autocomplete-option", "set-container" ];
+
+    return (
+        <li {...props} key={set.abbrev} classes={classes}>
+            <SetSymbol setAbbrev={set.abbrev}/>
+            <div>
+                {`${set.name} (${set.abbrev.toUpperCase()})`}
+            </div>
         </li>
     );
 }
@@ -304,6 +320,7 @@ const CardForm = (props: Props) => {
                 autoHighlight
                 selectOnFocus
                 openOnFocus
+                renderOption={SetOption}
             />
             <Autocomplete
                 className="control"

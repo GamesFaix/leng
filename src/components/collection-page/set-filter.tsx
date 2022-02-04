@@ -1,6 +1,7 @@
 import { MenuItem, Select } from '@mui/material';
 import * as React from 'react';
 import { useStore } from '../../hooks';
+import SetSymbol from '../common/set-symbol';
 
 type Props = {
     value: string[],
@@ -24,6 +25,7 @@ const SetFilter = (props: Props) => {
                     key={s.abbrev}
                     value={s.abbrev}
                 >
+                    <SetSymbol setAbbrev={s.abbrev}/>
                     {`${s.name} (${s.abbrev.toUpperCase()})`}
                 </MenuItem>
             )}

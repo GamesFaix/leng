@@ -12,3 +12,8 @@ export function createFileAndDirectoryIfRequired(path: string, content: string) 
     createDirIfMissing(dir);
     fs.writeFileSync(path, content);
 }
+
+export function createDirForFileIfMissing(path: string) {
+    const dir = dirname(path);
+    createDirIfMissing(dir);
+}
