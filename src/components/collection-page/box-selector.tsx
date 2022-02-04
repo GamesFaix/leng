@@ -20,6 +20,9 @@ const BoxSelector = (props: Props) => {
             value={props.value as any}
             multiple
             onChange={onChange}
+            sx={{
+                width: 200
+            }}
         >
             {boxNames.map(b =>
                 <MenuItem
