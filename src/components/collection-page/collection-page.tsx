@@ -1,34 +1,16 @@
 import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import CardsTable from './cards-table';
-import { groupBy, orderBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { BoxCard, BoxCardModule, defaultCardFilter } from '../../logic/model';
+import { BoxCard, defaultCardFilter } from '../../logic/model';
 import CardFilterForm from './card-filter-form';
 import { useStore } from '../../hooks';
-import { BoxState } from '../../store/inventory';
-import { filterCards } from '../../logic/card-filters';
+import { getCards } from '../../logic/card-filters';
 
 type Props = {
 
-}
-
-function getCards(boxes: BoxState[]) : BoxCard[] {
-    return boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
-}
-
-function combineDuplicates(cards: BoxCard[]) : BoxCard[] {
-    const groups = groupBy(cards, BoxCardModule.getKey);
-    return Object.entries(groups)
-        .map(grp => {
-            const [_, cards] = grp;
-            return {
-                ...cards[0],
-                count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
-            };
-        });
 }
 
 function getCount(cards: BoxCard[]) : number {
@@ -41,11 +23,7 @@ const CollectionPage = (props: Props) => {
     const [filter, setFilter] = React.useState(defaultCardFilter);
     const boxes = useStore.boxes();
 
-    let cards = getCards(boxes);
-    cards = combineDuplicates(cards);
-    cards = orderBy(cards, ['name', 'set', 'version']);
-    cards = filterCards(cards, filter);
-
+    const cards = getCards(boxes, filter);
     const cardCount = getCount(cards);
 
     return (

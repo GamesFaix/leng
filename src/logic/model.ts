@@ -200,12 +200,16 @@ export type CardFilter = {
     nameQuery: string,
     setAbbrevs: string[]
     colors: ColorFilter[],
-    colorRule: ColorFilterRule
+    colorRule: ColorFilterRule,
+    fromBoxes: string[],
+    exceptBoxes: string[]
 }
 
 export const defaultCardFilter : CardFilter = {
     nameQuery: '',
     setAbbrevs: [],
     colors: [],
-    colorRule: ColorFilterRule.IdentityContainsOnly
+    colorRule: ColorFilterRule.IdentityContainsOnly,
+    fromBoxes: [],
+    exceptBoxes: []
 }

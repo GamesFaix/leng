@@ -1,6 +1,7 @@
 import { Card, FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
 import { CardFilter } from '../../logic/model';
+import BoxSelector from './box-selector';
 import ColorRuleSelector, { ColorFilterRule } from './color-rule-selector';
 import ColorsSelector, { ColorFilter } from './color-selector';
 import SetFilter from './set-filter';
@@ -12,32 +13,28 @@ type Props = {
 
 const CardFilterForm = (props: Props) => {
     function updateNameQuery(e: React.ChangeEvent<HTMLInputElement>) {
-        props.onChange({
-            ...props.filter,
-            nameQuery: e.target.value
-        })
+        props.onChange({ ...props.filter, nameQuery: e.target.value })
     }
 
     function updateSetAbbrevs(setAbbrevs: string[]) {
-        props.onChange({
-            ...props.filter,
-            setAbbrevs
-        })
+        props.onChange({ ...props.filter, setAbbrevs })
     }
 
     function updateColorRule(colorRule: ColorFilterRule) {
-        props.onChange({
-            ...props.filter,
-            colorRule
-        })
+        props.onChange({ ...props.filter, colorRule })
     }
 
     function updateColors(colors: ColorFilter[]) {
-        props.onChange({
-            ...props.filter,
-            colors
-        })
+        props.onChange({ ...props.filter, colors })
     }
+
+    function updateFromBoxes(fromBoxes: string[]) {
+        props.onChange({ ...props.filter, fromBoxes })
+    }
+    function updateExceptBoxes(exceptBoxes: string[]) {
+        props.onChange({ ...props.filter, exceptBoxes })
+    }
+
     return (
         <Card
             sx={{
@@ -82,6 +79,35 @@ const CardFilterForm = (props: Props) => {
                     <ColorsSelector
                         value={props.filter.colors}
                         onChange={updateColors}
+                    />
+                </div>}
+            />
+            <br/>
+            <FormControlLabel
+                sx={{
+                    border: "1px solid gainsboro",
+                    borderRadius: "3px"
+                }}
+                label="Boxes"
+                labelPlacement='top'
+                control={<div>
+                    <FormControlLabel
+                        label="From"
+                        control={
+                            <BoxSelector
+                                value={props.filter.fromBoxes}
+                                onChange={updateFromBoxes}
+                            />
+                        }
+                    />
+                    <FormControlLabel
+                        label="Except"
+                        control={
+                            <BoxSelector
+                                value={props.filter.exceptBoxes}
+                                onChange={updateExceptBoxes}
+                            />
+                        }
                     />
                 </div>}
             />

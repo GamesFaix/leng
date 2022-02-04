@@ -1,8 +1,9 @@
-import { difference, intersection } from "lodash";
+import { difference, groupBy, intersection, uniq } from "lodash";
 import { Color } from "scryfall-api";
 import { ColorFilterRule } from "../components/collection-page/color-rule-selector";
 import { ColorFilter } from "../components/collection-page/color-selector";
-import { BoxCard, CardFilter, normalizeName } from "./model";
+import { BoxState } from "../store/inventory";
+import { BoxCard, BoxCardModule, CardFilter, normalizeName } from "./model";
 
 function containsAny(cardColors: Color[], filterColors: ColorFilter[]) {
     if (cardColors.length === 0 && filterColors.includes('C')) {
@@ -63,7 +64,7 @@ function filterCardsByColor(cards: BoxCard[], colors: ColorFilter[], rule: Color
     }
 }
 
-export function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
+function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
     if (filter.nameQuery.length > 0) {
         const normalizedQuery = normalizeName(filter.nameQuery);
         cards = cards.filter(c => c.normalizedName.includes(normalizedQuery));
@@ -77,5 +78,43 @@ export function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
         cards = filterCardsByColor(cards, filter.colors, filter.colorRule);
     }
 
+    return cards;
+}
+
+function combineBoxes(boxes: BoxState[], filter: CardFilter) : BoxCard[] {
+    const includeBoxes = filter.fromBoxes.length > 0
+        ? boxes.filter(b => filter.fromBoxes.includes(b.name))
+        : boxes;
+
+    const exceptBoxes = filter.exceptBoxes.length > 0
+        ? boxes.filter(b => filter.exceptBoxes.includes(b.name))
+        : [];
+
+    const includeCards = combineDuplicates(getCardsFromBoxes(includeBoxes));
+    const exceptKeys = uniq(getCardsFromBoxes(exceptBoxes).map(BoxCardModule.getKey));
+
+    return includeCards.filter(c => !exceptKeys.includes(BoxCardModule.getKey(c)));
+}
+
+function getCardsFromBoxes(boxes: BoxState[]) : BoxCard[] {
+    return boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
+}
+
+function combineDuplicates(cards: BoxCard[]) : BoxCard[] {
+    const groups = groupBy(cards, BoxCardModule.getKey);
+    return Object.entries(groups)
+        .map(grp => {
+            const [_, cards] = grp;
+            return {
+                ...cards[0],
+                count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
+            };
+        });
+}
+
+export function getCards(inventory: BoxState[], filter: CardFilter) : BoxCard[] {
+    let cards = combineBoxes(inventory, filter);
+    cards = combineDuplicates(cards);
+    cards = filterCards(cards, filter);
     return cards;
 }
