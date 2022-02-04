@@ -150,15 +150,13 @@ const BoxPage = () => {
                     }
                 </Card>
                 <br/>
-                <Card sx={{ width: 900, padding: 1 }}>
-                    {disabled ? "" :
-                        <CardsTable
-                            cards={newBox.cards ?? []}
-                            onEditClicked={checkout}
-                            onDeleteClicked={deleteCard}
-                        />
-                    }
-                </Card>
+                {disabled ? "" :
+                    <CardsTable
+                        cards={newBox.cards ?? []}
+                        onEditClicked={checkout}
+                        onDeleteClicked={deleteCard}
+                    />
+                }
             </>}
         </div>
     );
