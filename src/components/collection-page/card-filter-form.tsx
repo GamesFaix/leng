@@ -11,7 +11,7 @@ const CardFilterForm = (props: Props) => {
     function updateNameQuery(e: React.ChangeEvent<HTMLInputElement>) {
         props.onChange({
             ...props.filter,
-            nameQuery: normalizeName(e.target.value)
+            nameQuery: e.target.value
         })
     }
 

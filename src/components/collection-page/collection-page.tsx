@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import { BoxCard, BoxCardModule, defaultCardFilter } from '../../logic/model';
 import CardFilterForm from './card-filter-form';
 import { useStore } from '../../hooks';
+import { BoxState } from '../../store/inventory';
+import { filterCards } from '../../logic/card-filters';
 
 type Props = {
 
@@ -29,6 +31,10 @@ function combineDuplicates(cards: BoxCard[]) : BoxCard[] {
         });
 }
 
+function getCount(cards: BoxCard[]) : number {
+    return cards.map(c => c.count).reduce((a,b) => a+b, 0);
+}
+
 const CollectionPage = (props: Props) => {
     const navigate = useNavigate();
 
@@ -38,8 +44,9 @@ const CollectionPage = (props: Props) => {
     let cards = getCards(boxes);
     cards = combineDuplicates(cards);
     cards = orderBy(cards, ['name', 'set', 'version']);
+    cards = filterCards(cards, filter);
 
-    const cardCount = cards.map(c => c.count).reduce((a,b) => a+b, 0);
+    const cardCount = getCount(cards);
 
     return (
         <div>
