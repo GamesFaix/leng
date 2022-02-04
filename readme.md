@@ -1,6 +1,19 @@
 # Leng
 
+Leng is a desktop app for keeping track of your Magic: the Gathering collection.
 
+Leng has a card-entry form that uses auto-complete fields to only allow valid selections, and rot require you to type full card or set names in most cases. If you can type reasonably well, this can be a lot faster and less error prone than other alternatives.
+
+Compared to a basic spreadsheet or file, it can autocomplete card names, and prevent errors like entering a set that a card wasn't printed in.
+
+It also avoids the pitfalls of most mobile scanning apps:
+
+* Holding your phone for a long time
+* Killing your phone battery
+* Slow image-recognition algorithms
+* Glare/lighting problems
+* Misidentification of set symbols, which requires lots of manual fiddling
+* No shortcuts for entering multiple similar cards, like alternate arts
 
 ## Tech stack
 
