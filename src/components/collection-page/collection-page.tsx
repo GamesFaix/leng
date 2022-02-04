@@ -7,7 +7,8 @@ import { groupBy, orderBy } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
 import { useNavigate } from 'react-router-dom';
-import { BoxCardModule } from '../../logic/model';
+import { BoxCardModule, defaultCardFilter } from '../../logic/model';
+import CardFilterForm from './card-filter-form';
 
 type Props = {
 
@@ -15,6 +16,8 @@ type Props = {
 
 const CollectionPage = (props: Props) => {
     const navigate = useNavigate();
+
+    const [filter, setFilter] = React.useState(defaultCardFilter);
 
     const boxes = useSelector((state: RootState) => state.inventory.boxes) ?? [];
     let cards = boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
@@ -67,6 +70,11 @@ const CollectionPage = (props: Props) => {
                     </IconButton>
                 </div>
             </Card>
+            <br/>
+            <CardFilterForm
+                filter={filter}
+                onChange={setFilter}
+            />
             <br/>
             <Card sx={{ width: 900, padding: 1 }}>
                 <CardsTable

@@ -43,7 +43,7 @@ const CardsTable = (props: Props) => {
             height={600}
             headerHeight={20}
             rowHeight={30}
-            rowCount={props.cards.length}
+            rowCount={sortedList.length}
             rowGetter={({index}) => sortedList[index]}
             sort={sort}
             sortBy={sortBy}

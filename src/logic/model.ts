@@ -193,3 +193,11 @@ export type AppSettings = {
 export type CardIndex = {
     [id: string]: Card
 }
+
+export type CardFilter = {
+    nameQuery: string
+}
+
+export const defaultCardFilter : CardFilter = {
+    nameQuery: ''
+}
