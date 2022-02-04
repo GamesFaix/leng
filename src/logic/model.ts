@@ -196,10 +196,10 @@ export type CardIndex = {
 
 export type CardFilter = {
     nameQuery: string,
-    sets: SetInfo[]
+    setAbbrevs: string[]
 }
 
 export const defaultCardFilter : CardFilter = {
     nameQuery: '',
-    sets: []
+    setAbbrevs: []
 }

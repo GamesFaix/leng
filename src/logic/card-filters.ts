@@ -6,8 +6,8 @@ export function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
         cards = cards.filter(c => c.normalizedName.includes(normalizedQuery));
     }
 
-    if (filter.sets.length > 0) {
-        cards = cards.filter(c => filter.sets.find(s => c.setAbbrev === s.abbrev));
+    if (filter.setAbbrevs.length > 0) {
+        cards = cards.filter(c => filter.setAbbrevs.find(s => c.setAbbrev === s));
     }
 
     return cards;
