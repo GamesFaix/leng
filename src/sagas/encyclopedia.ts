@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { call, put, select, takeLeading, } from "redux-saga/effects";
-import { Card } from 'scryfall-api';
-import { createFileAndDirectoryIfRequired } from '../logic/file-helpers';
+import { Card, Set } from 'scryfall-api';
+import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus } from "../logic/model";
 import { RootState } from "../store";
 import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";
@@ -37,13 +37,15 @@ type BulkData = {
     content_encoding: string
 }
 
-type BulkDataResponse = {
+type ScryfallResponse<T> = {
     object: string,
     has_more: boolean,
-    data: BulkData[]
+    data: T
 }
 
-async function getDataCreatedDate(path: string) : Promise<Date | null> {
+const baseUrl = "https://api.scryfall.com";
+
+async function getFileCreatedDate(path: string) : Promise<Date | null> {
     try {
         const stats = await fs.promises.stat(path);
         return stats.mtime;
@@ -53,50 +55,95 @@ async function getDataCreatedDate(path: string) : Promise<Date | null> {
     }
 }
 
-function isDataStale(createdDate: Date | null) {
+const dataRetentionDays = 7;
+
+function isExpired(createdDate: Date | null) {
     if (createdDate === null) { return true; }
 
     const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
+    const oldestAllowedDate = new Date(today);
+    oldestAllowedDate.setDate(oldestAllowedDate.getDate() - dataRetentionDays);
 
-    return createdDate < yesterday;
+    return createdDate < oldestAllowedDate;
 }
 
-async function downloadData() : Promise<string> {
-    const httpResponse1 = await fetch("https://api.scryfall.com/bulk-data");
-    const bulkDataResponse : BulkDataResponse = await httpResponse1.json();
-    const defaultCardsInfo = bulkDataResponse.data.find(x => x.type === "default_cards");
+async function downloadCardsData() : Promise<string> {
+    const httpResponse1 = await fetch(`${baseUrl}/bulk-data`);
+    const scryfallResponse : ScryfallResponse<BulkData[]> = await httpResponse1.json();
+    const defaultCardsInfo = scryfallResponse.data.find(x => x.type === "default_cards");
     if (!defaultCardsInfo) { throw Error('Could not find bulk data file info.'); }
     const httpResponse2 = await fetch(defaultCardsInfo.download_uri);
     return httpResponse2.text();
 }
 
-async function loadData(path: string) : Promise<string> {
+async function downloadSetsData() : Promise<string> {
+    const httpResponse = await fetch(`${baseUrl}/sets`);
+    const scryfallResponse : ScryfallResponse<Set[]> = await httpResponse.json();
+    return JSON.stringify(scryfallResponse.data);
+}
+
+async function readFile(path: string) : Promise<string> {
     const buffer = await fs.promises.readFile(path);
     return buffer.toString();
 }
 
-function parseData(json: string) : Card[] {
-    return JSON.parse(json);
-}
+async function readOrDownloadJsonFile<T>(
+    settings: AppSettings,
+    fileName: string,
+    download: () => Promise<string>)
+    : Promise<T> {
 
-async function loadCards(settings: AppSettings) : Promise<Card[]> {
-    const path = `${settings.dataPath}/encyclopedia/cards.json`;
-    const dataCreatedDate = await getDataCreatedDate(path);
+    const path = `${settings.dataPath}/encyclopedia/${fileName}.json`;
+    const createdDate = await getFileCreatedDate(path);
 
     let dataJson : string;
-    if (isDataStale(dataCreatedDate)) {
-        dataJson = await downloadData();
+    if (isExpired(createdDate)) {
+        dataJson = await download();
         createFileAndDirectoryIfRequired(path, dataJson);
     }
     else {
-        dataJson = await loadData(path);
+        dataJson = await readFile(path);
     }
 
-    let data = parseData(dataJson);
-    data = data.filter(c => !c.digital); // Filter out MTGO sets
-    return data;
+    return JSON.parse(dataJson) as T;
+}
+
+async function loadCards(settings: AppSettings) : Promise<Card[]> {
+    const cards = await readOrDownloadJsonFile<Card[]>(settings, "cards", downloadCardsData);
+    return cards.filter(c => !c.digital); // Filter out MTGO sets
+}
+
+async function loadSets(settings: AppSettings) : Promise<Set[]> {
+    return await readOrDownloadJsonFile<Set[]>(settings, "sets", downloadSetsData);
+}
+
+function getSetSymbolImagePath(settings: AppSettings, setAbbrev: string) : string {
+    return `${settings.dataPath}/encyclopedia/setSymbols/${setAbbrev}.svg`;
+}
+
+async function downloadFile(fromUrl: string, toPath: string) {
+    const response = await fetch(fromUrl);
+    const buffer = await response.arrayBuffer();
+    const data = new Uint8Array(buffer);
+    createDirForFileIfMissing(toPath);
+    await fs.promises.writeFile(toPath, data);
+}
+
+async function downloadSetSymbol(settings: AppSettings, set: Set) : Promise<void> {
+    const path = getSetSymbolImagePath(settings, set.code);
+    await downloadFile(set.icon_svg_uri, path);
+}
+
+async function downloadSetSymbolIfMissing(settings: AppSettings, set: Set) : Promise<void> {
+    const path = getSetSymbolImagePath(settings, set.code);
+    const createdDate = await getFileCreatedDate(path);
+
+    if (isExpired(createdDate)){
+        await downloadSetSymbol(settings, set);
+    }
+    else {
+        return;
+    }
 }
 
 function* loadEncyclopedia(action: EncyclopediaLoadAction) {
@@ -107,6 +154,10 @@ function* loadEncyclopedia(action: EncyclopediaLoadAction) {
     try {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
         const cards : Card[] = yield call(() => loadCards(settings));
+        const sets : Set[] = yield call(() => loadSets(settings));
+        for (let s of sets) {
+            yield call(() => downloadSetSymbolIfMissing(settings, s));
+        }
         yield put(encyclopediaActions.loadSuccess(cards));
     }
     catch (error) {
