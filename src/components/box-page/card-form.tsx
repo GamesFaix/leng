@@ -134,7 +134,7 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
 const SetOption = (props: any, set: SetInfo, state: any) => {
     const classes = state.selected
         ? [ "autocomplete-option", "selected", "set-container" ]
-        : [ "autocomplete-option", "setContainer" ];
+        : [ "autocomplete-option", "set-container" ];
 
     return (
         <li {...props} key={set.abbrev} classes={classes}>
