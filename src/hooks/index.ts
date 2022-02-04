@@ -46,5 +46,11 @@ export const useStore = {
         return useSelector(
             (state: RootState) => state.inventory.boxes?.find(b => b.name === name) ?? null
         );
+    },
+
+    boxes() {
+        return useSelector(
+            (state: RootState) => state.inventory.boxes ?? []
+        );
     }
 }

@@ -28,12 +28,20 @@ function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCa
 const CardsTable = (props: Props) => {
     const sets = useStore.sets();
     const [sortBy, setSortBy] = React.useState('name');
-    const [sortDir, setSortDir] = React.useState<SortDirectionType>(SortDirection.ASC);
+    const [sortDirection, setSortDirection] = React.useState<SortDirectionType>(SortDirection.ASC);
+    const [unsortedList, setUnsortedList] = React.useState(props.cards);
     const [sortedList, setSortedList] = React.useState(props.cards);
+
+    React.useEffect(() => {
+        if (props.cards !== unsortedList) {
+            setUnsortedList(props.cards);
+            setSortedList(sortInner(props.cards, sortBy, sortDirection));
+        }
+    })
 
     function sort(args: SortArgs) {
         setSortBy(args.sortBy);
-        setSortDir(args.sortDirection);
+        setSortDirection(args.sortDirection);
         setSortedList(sortInner(props.cards, args.sortBy, args.sortDirection));
     }
 
@@ -43,11 +51,11 @@ const CardsTable = (props: Props) => {
             height={600}
             headerHeight={20}
             rowHeight={30}
-            rowCount={props.cards.length}
+            rowCount={sortedList.length}
             rowGetter={({index}) => sortedList[index]}
             sort={sort}
             sortBy={sortBy}
-            sortDirection={sortDir}
+            sortDirection={sortDirection}
         >
             <Column
                 label='Ct.'
