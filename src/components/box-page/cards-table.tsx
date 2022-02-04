@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton } from '@mui/material';
+import { Card, Checkbox, FormControlLabel, IconButton } from '@mui/material';
 import { orderBy } from 'lodash';
 import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
@@ -56,6 +56,7 @@ const CardsTable = (props: Props) => {
     const [sortDirection, setSortDirection] = React.useState<SortDirectionType>(SortDirection.ASC);
     const [unsortedList, setUnsortedList] = React.useState(props.cards);
     const [sortedList, setSortedList] = React.useState(props.cards);
+    const [noSort, setNoSort] = React.useState(false);
 
     React.useEffect(() => {
         if (props.cards !== unsortedList) {
@@ -70,57 +71,75 @@ const CardsTable = (props: Props) => {
         setSortedList(sortInner(props.cards, args.sortBy, args.sortDirection));
     }
 
+    function getRow(index: number) {
+        return noSort
+            ? props.cards[index]
+            : sortedList[index];
+    }
+
     return (
-        <Table
-            width={900}
-            height={600}
-            headerHeight={20}
-            rowHeight={30}
-            rowCount={sortedList.length}
-            rowGetter={({index}) => sortedList[index]}
-            sort={sort}
-            sortBy={sortBy}
-            sortDirection={sortDirection}
-        >
-            <Column
-                label='Ct.'
-                dataKey='count'
-                width={50}
+        <Card sx={{ width: 900, padding: 1 }}>
+            <FormControlLabel
+                label='Latest changes first'
+                labelPlacement='end'
+                control={
+                    <Checkbox
+                        checked={noSort}
+                        onChange={e => setNoSort(e.target.checked)}
+                    />
+                }
             />
-            <Column
-                label='Name'
-                dataKey='name'
-                width={300}
-            />
-            <Column
-                width={200}
-                label='Set'
-                dataKey='setAbbrev'
-                cellRenderer={cellProps => SetCell(cellProps, sets)}
-            />
-            <Column
-                width={100}
-                label='Version'
-                dataKey='versionLabel'
-            />
-            <Column
-                width={50}
-                label='Foil'
-                dataKey='foil'
-                cellRenderer={CheckboxCell}
-            />
-            <Column
-                width={100}
-                label='Lang.'
-                dataKey='lang'
-            />
-            <Column
-                width={100}
-                label='Actions'
-                dataKey='name' // not used
-                cellRenderer={cellProps => ActionsCell(cellProps, props)}
-            />
-        </Table>
+            <Table
+                width={900}
+                height={600}
+                headerHeight={20}
+                rowHeight={30}
+                rowCount={sortedList.length}
+                rowGetter={({index}) => getRow(index)}
+                sort={sort}
+                sortBy={sortBy}
+                sortDirection={sortDirection}
+            >
+                <Column
+                    label='Ct.'
+                    dataKey='count'
+                    width={50}
+                />
+                <Column
+                    label='Name'
+                    dataKey='name'
+                    width={300}
+                />
+                <Column
+                    width={200}
+                    label='Set'
+                    dataKey='setAbbrev'
+                    cellRenderer={cellProps => SetCell(cellProps, sets)}
+                />
+                <Column
+                    width={100}
+                    label='Version'
+                    dataKey='versionLabel'
+                />
+                <Column
+                    width={50}
+                    label='Foil'
+                    dataKey='foil'
+                    cellRenderer={CheckboxCell}
+                />
+                <Column
+                    width={100}
+                    label='Lang.'
+                    dataKey='lang'
+                />
+                <Column
+                    width={100}
+                    label='Actions'
+                    dataKey='name' // not used
+                    cellRenderer={cellProps => ActionsCell(cellProps, props)}
+                />
+            </Table>
+        </Card>
     );
 };
 export default CardsTable;
