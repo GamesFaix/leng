@@ -13,8 +13,16 @@ const SetSymbol = (props: Props) => {
     const url = getSetSymbolImagePath(settings!, props.setAbbrev);
 
     return (
-        <Icon>
-            <img src={url}/>
+        <Icon
+            sx={{
+                paddingLeft: 1,
+                paddingRight: 1,
+            }}
+        >
+            <img
+                style={{ height: "25px", width: "25px" }}
+                src={url}
+            />
         </Icon>
     );
 }

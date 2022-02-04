@@ -16,7 +16,7 @@ export function CheckboxCell(props: TableCellProps) {
 export function SetCell (props: TableCellProps, sets: SetInfo[]) {
     const set = sets.find(s => s.abbrev === props.cellData);
     return (
-        <div>
+        <div className="set-container">
             <SetSymbol setAbbrev={set!.abbrev}/>
             {set!.name}
         </div>
