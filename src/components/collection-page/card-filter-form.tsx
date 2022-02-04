@@ -1,6 +1,7 @@
-import { Card, FormControlLabel, TextField } from '@mui/material';
+import { Card, FormControlLabel, Select, TextField } from '@mui/material';
 import * as React from 'react';
-import { CardFilter, normalizeName } from '../../logic/model';
+import { CardFilter, normalizeName, SetInfo } from '../../logic/model';
+import SetFilter from './set-filter';
 
 type Props = {
     filter: CardFilter,
@@ -12,6 +13,13 @@ const CardFilterForm = (props: Props) => {
         props.onChange({
             ...props.filter,
             nameQuery: e.target.value
+        })
+    }
+
+    function updateSets(sets: SetInfo[]) {
+        props.onChange({
+            ...props.filter,
+            sets
         })
     }
 
@@ -32,6 +40,10 @@ const CardFilterForm = (props: Props) => {
                         onChange={updateNameQuery}
                     />
                 }
+            />
+            <SetFilter
+                value={props.filter.sets}
+                onChange={updateSets}
             />
         </Card>
     )
