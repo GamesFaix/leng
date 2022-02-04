@@ -32,6 +32,9 @@ const ColorsSelector = (props: Props) => {
             value={props.value as any}
             multiple
             onChange={onChange}
+            sx={{
+                width: 200
+            }}
         >
             {allColors.map(c =>
                 <MenuItem
