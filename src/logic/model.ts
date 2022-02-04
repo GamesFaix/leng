@@ -1,5 +1,7 @@
 import { Card, Color } from 'scryfall-api';
 import { orderBy, uniqBy } from 'lodash';
+import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
+import { ColorFilter } from '../components/collection-page/color-selector';
 
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
@@ -197,9 +199,13 @@ export type CardIndex = {
 export type CardFilter = {
     nameQuery: string,
     setAbbrevs: string[]
+    colors: ColorFilter[],
+    colorRule: ColorFilterRule
 }
 
 export const defaultCardFilter : CardFilter = {
     nameQuery: '',
-    setAbbrevs: []
+    setAbbrevs: [],
+    colors: [],
+    colorRule: ColorFilterRule.IdentityContainsOnly
 }
