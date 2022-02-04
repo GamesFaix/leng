@@ -1,6 +1,7 @@
 import { Card, FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
-import { CardFilter, normalizeName } from '../../logic/model';
+import { CardFilter } from '../../logic/model';
+import SetFilter from './set-filter';
 
 type Props = {
     filter: CardFilter,
@@ -12,6 +13,13 @@ const CardFilterForm = (props: Props) => {
         props.onChange({
             ...props.filter,
             nameQuery: e.target.value
+        })
+    }
+
+    function updateSetAbbrevs(setAbbrevs: string[]) {
+        props.onChange({
+            ...props.filter,
+            setAbbrevs
         })
     }
 
@@ -30,6 +38,16 @@ const CardFilterForm = (props: Props) => {
                         title="Name includes"
                         value={props.filter.nameQuery}
                         onChange={updateNameQuery}
+                    />
+                }
+            />
+            <FormControlLabel
+                label="Sets"
+                labelPlacement='top'
+                control={
+                    <SetFilter
+                        value={props.filter.setAbbrevs}
+                        onChange={updateSetAbbrevs}
                     />
                 }
             />
