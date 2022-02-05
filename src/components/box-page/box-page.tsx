@@ -42,6 +42,7 @@ const BoxPage = () => {
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
     const [isLoading, setIsLoading] = React.useState(false);
+    const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
 
     const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
 
@@ -107,6 +108,10 @@ const BoxPage = () => {
         const cards = newBox.cards.filter(c => !BoxCardModule.areSame(c, card));
         setNewBox({...newBox, cards });
         setAnyUnsavedChanges(true);
+        const key = BoxCardModule.getKey(card);
+        if (selectedKeys.includes(key)){
+            setSelectedKeys(selectedKeys.filter(k => k !== key));
+        }
     }
 
     function save() {
@@ -155,6 +160,8 @@ const BoxPage = () => {
                         cards={newBox.cards ?? []}
                         onEditClicked={checkout}
                         onDeleteClicked={deleteCard}
+                        selectedKeys={selectedKeys}
+                        onSelectionChanged={setSelectedKeys}
                     />
                 }
             </>}
