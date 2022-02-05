@@ -277,8 +277,22 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                     return { ...state, boxes };
                 }
                 case InventoryActionTypes.BoxTransferBulk: {
-                    // TODO: Implement
-                    return state;
+                    const updatedBoxes = action.value.data;
+                    const boxes = state.boxes?.map(b => {
+                        const matchingUpdatedBox = updatedBoxes.find(ub => ub.name === b.name);
+                        if (matchingUpdatedBox) {
+                            return {
+                                ...b,
+                                cards: matchingUpdatedBox.cards,
+                                lastModified: matchingUpdatedBox.lastModified
+                            };
+                        }
+                        else {
+                            return b;
+                        }
+                    }) ?? [];
+
+                    return { ...state, boxes };
                 }
                 default:
                     return state;

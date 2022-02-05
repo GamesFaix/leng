@@ -4,9 +4,9 @@ import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { RootState } from '../store';
-import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxTransferBulkAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
@@ -239,8 +239,37 @@ function* transferBulk(action: BoxTransferBulkAction) {
     }
 
     try {
-        // TODO: Implement
-        const updatedBoxes : Box[] = [];
+        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const boxes : BoxState[] = yield select((state: RootState) => state.inventory.boxes);
+        const request = action.value.data;
+        const fromBox = boxes.find(b => b.name === request.fromBoxName);
+        const toBox = boxes.find(b => b.name === request.toBoxName);
+        if (!fromBox || !toBox) {
+            throw "Box not found."
+        }
+
+        const cardsToTransfer = fromBox.cards?.filter(c => request.cardKeys.includes(BoxCardModule.getKey(c))) ?? [];
+        const fromBoxCards = fromBox.cards?.filter(c => !request.cardKeys.includes(BoxCardModule.getKey(c))) ?? [];
+        const toBoxCards = BoxCardModule.combineDuplicates(cardsToTransfer.concat(toBox.cards ?? []));
+
+        const updatedFromBox : Box = {
+            name: fromBox.name,
+            description: fromBox.description ?? '',
+            cards: fromBoxCards,
+            lastModified: new Date()
+        };
+
+        const updatedToBox = {
+            name: toBox.name,
+            description: toBox.description ?? '',
+            cards: toBoxCards,
+            lastModified: new Date()
+        };
+
+        yield call(() => saveBoxInner(settings, updatedFromBox, true));
+        yield call(() => saveBoxInner(settings, updatedToBox, true));
+
+        const updatedBoxes : Box[] = [updatedFromBox, updatedToBox];
 
         yield put(inventoryActions.boxTransferBulkSuccess(updatedBoxes));
     }
@@ -256,5 +285,6 @@ function* inventorySaga() {
     yield takeEvery(InventoryActionTypes.BoxRename, renameBox);
     yield takeEvery(InventoryActionTypes.BoxCreate, createBox);
     yield takeEvery(InventoryActionTypes.BoxDelete, deleteBox);
+    yield takeEvery(InventoryActionTypes.BoxTransferBulk, transferBulk);
 }
 export default inventorySaga;

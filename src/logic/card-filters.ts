@@ -90,7 +90,7 @@ function combineBoxes(boxes: BoxState[], filter: CardFilter) : BoxCard[] {
         ? boxes.filter(b => filter.exceptBoxes.includes(b.name))
         : [];
 
-    const includeCards = combineDuplicates(getCardsFromBoxes(includeBoxes));
+    const includeCards = BoxCardModule.combineDuplicates(getCardsFromBoxes(includeBoxes));
     const exceptKeys = uniq(getCardsFromBoxes(exceptBoxes).map(BoxCardModule.getKey));
 
     return includeCards.filter(c => !exceptKeys.includes(BoxCardModule.getKey(c)));
@@ -100,21 +100,9 @@ function getCardsFromBoxes(boxes: BoxState[]) : BoxCard[] {
     return boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
 }
 
-function combineDuplicates(cards: BoxCard[]) : BoxCard[] {
-    const groups = groupBy(cards, BoxCardModule.getKey);
-    return Object.entries(groups)
-        .map(grp => {
-            const [_, cards] = grp;
-            return {
-                ...cards[0],
-                count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
-            };
-        });
-}
-
 export function getCards(inventory: BoxState[], filter: CardFilter) : BoxCard[] {
     let cards = combineBoxes(inventory, filter);
-    cards = combineDuplicates(cards);
+    cards = BoxCardModule.combineDuplicates(cards);
     cards = filterCards(cards, filter);
     return cards;
 }

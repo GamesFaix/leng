@@ -4,20 +4,21 @@ import { useStore } from '../../hooks';
 
 type Props = {
     value: string | null,
-    onChange: (value: string) => void,
+    onChange: (value: string | null) => void,
 }
 
 const TransferFormBoxSelector = (props: Props) => {
     const boxNames = useStore.boxes().map(b => b.name);
 
     function onChange(e: SelectChangeEvent) {
-        const value = e.target.value ?? null as any as string;
+        let value : string | null = e.target.value;
+        if (value === '') { value = null; }
         props.onChange(value);
     }
 
     return (
         <Select
-            value={props.value as any}
+            value={props.value ?? ''}
             onChange={onChange}
             sx={{
                 width: 200
