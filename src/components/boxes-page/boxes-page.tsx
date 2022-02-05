@@ -36,6 +36,14 @@ const BoxesPage = (props: Props) => {
                     <FontAwesomeIcon icon={icons.collection}/>
                 </IconButton>
             </Link>
+            <Link to="/reports">
+                <IconButton
+                    title="Reports"
+                    color='primary'
+                >
+                    <FontAwesomeIcon icon={icons.report}/>
+                </IconButton>
+            </Link>
             <Link to="/settings">
                 <IconButton
                     title="Settings"
