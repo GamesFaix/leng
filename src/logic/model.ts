@@ -213,3 +213,9 @@ export const defaultCardFilter : CardFilter = {
     fromBoxes: [],
     exceptBoxes: []
 }
+
+export type BoxTransferBulkRequest = {
+    fromBoxName: string,
+    toBoxName: string,
+    cardKeys: string[]
+}

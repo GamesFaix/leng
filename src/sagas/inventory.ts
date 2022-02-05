@@ -6,7 +6,7 @@ import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, Box, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { RootState } from '../store';
-import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxTransferBulkAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
@@ -230,6 +230,22 @@ function* deleteBox(action: BoxDeleteAction) {
     }
     catch (error) {
         yield put(inventoryActions.boxDeleteFailure(`${error}`));
+    }
+}
+
+function* transferBulk(action: BoxTransferBulkAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
+
+    try {
+        // TODO: Implement
+        const updatedBoxes : Box[] = [];
+
+        yield put(inventoryActions.boxTransferBulkSuccess(updatedBoxes));
+    }
+    catch (error) {
+        yield put(inventoryActions.boxTransferBulkFailure(`${error}`));
     }
 }
 

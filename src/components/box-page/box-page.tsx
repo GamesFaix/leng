@@ -129,7 +129,11 @@ const BoxPage = () => {
     }
 
     function transferTo(boxName: string) {
-        // dispatch transfer action
+        dispatch(inventoryActions.boxTransferBulkStart({
+            fromBoxName: name!,
+            toBoxName: boxName,
+            cardKeys: selectedKeys
+        }));
     }
 
     const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || oldBox === null || newBox === null;
