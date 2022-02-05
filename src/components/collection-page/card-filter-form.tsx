@@ -64,6 +64,7 @@ const CardFilterForm = (props: Props) => {
                 }
             />
             <br/>
+            <br/>
             <FormControlLabel
                 sx={{
                     border: "1px solid gainsboro",
@@ -83,16 +84,20 @@ const CardFilterForm = (props: Props) => {
                 </div>}
             />
             <br/>
+            <br/>
             <FormControlLabel
                 sx={{
                     border: "1px solid gainsboro",
-                    borderRadius: "3px"
+                    borderRadius: "3px",
+                    marginLeft: "6px",
+                    marginRight: "6px"
                 }}
                 label="Boxes"
                 labelPlacement='top'
                 control={<div>
                     <FormControlLabel
                         label="From"
+                        labelPlacement='start'
                         control={
                             <BoxSelector
                                 value={props.filter.fromBoxes}
@@ -102,6 +107,7 @@ const CardFilterForm = (props: Props) => {
                     />
                     <FormControlLabel
                         label="Except"
+                        labelPlacement='start'
                         control={
                             <BoxSelector
                                 value={props.filter.exceptBoxes}

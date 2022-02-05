@@ -5,6 +5,7 @@ import { useStore } from '../../hooks';
 type Props = {
     value: string[],
     onChange: (value: string[]) => void
+    style?: React.CSSProperties
 }
 
 const BoxSelector = (props: Props) => {
@@ -23,6 +24,7 @@ const BoxSelector = (props: Props) => {
             sx={{
                 width: 200
             }}
+            style={props.style}
         >
             {boxNames.map(b =>
                 <MenuItem
