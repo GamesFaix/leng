@@ -20,7 +20,7 @@ const SetSymbol = (props: Props) => {
             }}
         >
             <img
-                style={{ height: "25px", width: "25px" }}
+                className="set-symbol"
                 src={url}
             />
         </Icon>
