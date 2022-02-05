@@ -12,6 +12,7 @@ import { useStore } from '../../hooks';
 import BoxHeaderCard from './box-header-card';
 import LoadingMessage from '../loading-message';
 import { inventoryActions } from '../../store/inventory';
+import TransferForm from './transfer-form';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -127,6 +128,10 @@ const BoxPage = () => {
         }
     }
 
+    function transferTo(boxName: string) {
+        // dispatch transfer action
+    }
+
     const disabled = encyclopediaStatus !== AsyncRequestStatus.Success || oldBox === null || newBox === null;
 
     if (!name) { return <div>Loading...</div>; }
@@ -154,6 +159,15 @@ const BoxPage = () => {
                         />
                     }
                 </Card>
+                {selectedKeys.length > 0 
+                    ?<>
+                        <br/>
+                        <TransferForm
+                            transferTo={transferTo}
+                        />
+                    </>
+                    :<></>
+                }
                 <br/>
                 {disabled ? "" :
                     <CardsTable
