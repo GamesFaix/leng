@@ -7,7 +7,7 @@ const selectors = {
     settings: (state: RootState) => state.settings.settings  ?? { dataPath: '' },
     cardIndex: (state: RootState) => state.encyclopedia.cardIndex,
     sets: (state: RootState) => state.encyclopedia.sets,
-    setsOfCard(cardName: string) {
+    setsOfCard(cardName: string | null) {
         return (state: RootState) => {
             const cards = state.encyclopedia.cards.filter(c => c.name === cardName);
             const sets = CardModule.toSetInfos(cards);
@@ -15,7 +15,7 @@ const selectors = {
         }
     },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
-    cardsOfNameAndSetName(cardName: string, setName: string) {
+    cardsOfNameAndSetName(cardName: string | null, setName: string | null) {
         return (state: RootState) => {
             const cards = state.encyclopedia.cards.filter(c => c.name === cardName && c.set_name === setName);
             return cards;

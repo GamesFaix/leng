@@ -152,9 +152,9 @@ const CardForm = (props: Props) => {
     const startingState = stateFromCard(props.card, sets);
     const [state, setState] = React.useState(startingState);
     const allCardNames = useSelector(selectors.cardNames);
-    const setOptions = useSelector(selectors.setsOfCard(state.cardName ?? ''))
+    const setOptions = useSelector(selectors.setsOfCard(state.cardName))
         .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
-    const cardVersionOptions = useSelector(selectors.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? ''))
+    const cardVersionOptions = useSelector(selectors.cardsOfNameAndSetName(state.cardName, state.setName))
         .map(c => { return { ...c, label: getVersionLabel(c) }})
         .sort(compareCards);
     const selectedSet = setOptions.find(s => s.name === state.setName) ?? null;

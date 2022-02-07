@@ -27,7 +27,7 @@ const BoxPageContainer = () => {
 
     const dispatch = useDispatch();
 
-    const lastSavedBoxState = useSelector(selectors.box(name ?? null));
+    const lastSavedBoxState = useSelector(selectors.box(name!));
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
