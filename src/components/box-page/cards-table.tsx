@@ -1,18 +1,14 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, Checkbox, FormControlLabel, IconButton } from '@mui/material';
+import { Card, Checkbox, FormControlLabel } from '@mui/material';
 import { orderBy } from 'lodash';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
-import { icons } from '../../fontawesome';
 import { BoxCard, BoxCardModule } from '../../logic/model';
 import selectors from '../../store/selectors';
 import { CheckboxCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
-    onEditClicked: (card: BoxCard) => void,
-    onDeleteClicked: (card: BoxCard) => void,
     selectedKeys: string[],
     onSelectionChanged: (keys: string[]) => void
 }
@@ -20,23 +16,6 @@ type Props = {
 type SortArgs = {
     sortBy: string,
     sortDirection: SortDirectionType
-}
-
-function ActionsCell (props: TableCellProps, tableProps: Props) {
-    return (
-        <div>
-            <IconButton
-                onClick={() => tableProps.onEditClicked(props.rowData)}
-            >
-                <FontAwesomeIcon icon={icons.edit}/>
-            </IconButton>
-            <IconButton
-                onClick={() => tableProps.onDeleteClicked(props.rowData)}
-            >
-                <FontAwesomeIcon icon={icons.delete}/>
-            </IconButton>
-        </div>
-    );
 }
 
 function MultiSelectCell (props: TableCellProps, tableProps: Props) {
@@ -114,22 +93,22 @@ const CardsTable = (props: Props) => {
     return (
         <Card sx={{ width: 900, padding: 1 }}>
             <FormControlLabel
-                label='Latest changes first'
-                labelPlacement='end'
-                control={
-                    <Checkbox
-                        checked={noSort}
-                        onChange={e => setNoSort(e.target.checked)}
-                    />
-                }
-            />
-            <FormControlLabel
                 label='Select all'
                 labelPlacement='end'
                 control={
                     <Checkbox
                         checked={areAllSelected}
                         onChange={selectOrDeselectAll}
+                    />
+                }
+            />
+            <FormControlLabel
+                label='Latest changes first'
+                labelPlacement='end'
+                control={
+                    <Checkbox
+                        checked={noSort}
+                        onChange={e => setNoSort(e.target.checked)}
                     />
                 }
             />
@@ -145,9 +124,10 @@ const CardsTable = (props: Props) => {
                 sortDirection={sortDirection}
             >
                 <Column
-                    label='Ct.'
-                    dataKey='count'
                     width={50}
+                    label=''
+                    dataKey='name' // not used
+                    cellRenderer={cellProps => MultiSelectCell(cellProps, props)}
                 />
                 <Column
                     label='Name'
@@ -177,16 +157,9 @@ const CardsTable = (props: Props) => {
                     dataKey='lang'
                 />
                 <Column
-                    width={100}
-                    label='Actions'
-                    dataKey='name' // not used
-                    cellRenderer={cellProps => ActionsCell(cellProps, props)}
-                />
-                <Column
+                    label='Ct.'
+                    dataKey='count'
                     width={50}
-                    label=''
-                    dataKey='name' // not used
-                    cellRenderer={cellProps => MultiSelectCell(cellProps, props)}
                 />
             </Table>
         </Card>

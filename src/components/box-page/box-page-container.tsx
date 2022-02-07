@@ -86,6 +86,7 @@ const BoxPageContainer = () => {
     }
 
     function transferTo(boxName: string) {
+        setSelectedKeys([]);
         dispatch(inventoryActions.boxTransferBulkStart({
             fromBoxName: name!,
             toBoxName: boxName,
