@@ -1,9 +1,9 @@
 import { put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { AsyncRequestStatus } from "../logic/model";
-import { RootState } from "../store";
 import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";
 import { BoxInfosLoadAction, BoxLoadAction, BoxState, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import { preloadActions, PreloadActionTypes, PreloadStartAction } from "../store/preload";
+import selectors from "../store/selectors";
 import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "../store/settings";
 
 function* onPreloadStart(action: PreloadStartAction) {
@@ -55,7 +55,7 @@ function* onBoxLoad(action: BoxLoadAction) {
         }
         case AsyncRequestStatus.Success: {
             const box = action.value.data;
-            const boxes : BoxState[] = yield select((state: RootState) => state.inventory.boxes);
+            const boxes : BoxState[] = yield select(selectors.boxes);
             const otherBoxes = boxes.filter(b => b.name !== box.name);
             const isLastBox = otherBoxes.every(b => b.cards !== null);
             if (isLastBox) {
