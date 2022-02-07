@@ -84,11 +84,13 @@ export function settingsReducer(state: SettingsState = settingsDefaultState, act
                         settings: req.data,
                         isLoading: false
                     };
-                case AsyncRequestStatus.Success:
+                case AsyncRequestStatus.Failure:
                     return {
                         ...state,
                         isLoading: false
                     };
+                default:
+                    return state;
             }
         }
         case SettingsActionTypes.Save: {
@@ -105,11 +107,13 @@ export function settingsReducer(state: SettingsState = settingsDefaultState, act
                         settings: req.data,
                         isLoading: false
                     };
-                case AsyncRequestStatus.Success:
+                case AsyncRequestStatus.Failure:
                     return {
                         ...state,
                         isLoading: false
                     };
+                default:
+                    return state;
             }
         }
         default:

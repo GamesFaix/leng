@@ -1,4 +1,4 @@
-import { difference, groupBy, intersection, uniq } from "lodash";
+import { difference, intersection, uniq } from "lodash";
 import { Color } from "scryfall-api";
 import { ColorFilterRule } from "../components/collection-page/color-rule-selector";
 import { ColorFilter } from "../components/collection-page/color-selector";
@@ -34,7 +34,7 @@ function isColorExactly(cardColors: Color[], filterColors: ColorFilter[]) {
         return true;
     }
 
-    for (let fc of filterColors) {
+    for (const fc of filterColors) {
         if (!cardColors.includes(fc as any)) {
             return false;
         }

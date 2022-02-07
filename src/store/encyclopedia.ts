@@ -62,7 +62,7 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
                         ...state,
                         isLoading: true
                     };
-                case AsyncRequestStatus.Success:
+                case AsyncRequestStatus.Success: {
                     const cards = action.value.data;
                     const sets = CardModule.toSetInfos(cards);
                     const cardNames = sortAndDeduplicate(cards.map(c => c.name));
@@ -80,11 +80,14 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
                         cardNames,
                         cardIndex
                     };
+                }
                 case AsyncRequestStatus.Failure:
                     return {
                         ...state,
                         isLoading: false
                     };
+                default:
+                    return state;
             }
         }
         default:

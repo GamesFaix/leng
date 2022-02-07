@@ -155,7 +155,7 @@ function* loadEncyclopedia(action: EncyclopediaLoadAction) {
         const settings : AppSettings = yield select(selectors.settings);
         const cards : Card[] = yield call(() => loadCards(settings));
         const sets : Set[] = yield call(() => loadSets(settings));
-        for (let s of sets) {
+        for (const s of sets) {
             yield call(() => downloadSetSymbolIfMissing(settings, s));
         }
         yield put(encyclopediaActions.loadSuccess(cards));
