@@ -8,10 +8,24 @@ type Props = {
 
 const SplashScreen = (props: Props) => {
     return (
-        <Card>
-            <img src={lengArt}/>
+        <Card sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            width: '300px',
+            alignItems: 'center',
+            padding: '50px'
+        }}>
+            <img
+                src={lengArt}
+                style={{
+                    width: '300px'
+                }}
+            />
+            <br/>
+            <br/>
             <CircularProgress/>
-            <Typography variant="h4">
+            <br/>
+            <Typography>
                 {props.message}
             </Typography>
         </Card>
