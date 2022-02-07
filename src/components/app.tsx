@@ -5,13 +5,12 @@ import { RootState } from '../store';
 import { AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
 import HomePage from './home-page/home-page';
-import SettingsPage from './settings-page/settings-page';
 import { Typography } from '@mui/material';
 import LoadingMessage from './common/loading-message';
 import { settingsActions } from '../store/settings';
-import CollectionPage from './collection-page/collection-page';
 import BoxPageContainer from './box-page/box-page-container';
 import CollectionPageContainer from './collection-page/collection-page-container';
+import SettingsPageContainer from './settings-page/settings-page-container';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -42,7 +41,7 @@ const App = () => {
                     <Routes>
                         <Route path="/" element={<HomePage/>} />
                         <Route path="/boxes/:name" element={<BoxPageContainer/>}/>
-                        <Route path="/settings" element={<SettingsPage/>}/>
+                        <Route path="/settings" element={<SettingsPageContainer/>}/>
                         <Route path="/collection" element={<CollectionPageContainer/>}/>
                     </Routes>
                 </HashRouter>
