@@ -10,7 +10,7 @@ import 'react-virtualized/styles.css';
 import { AddCardForm, EditCardForm } from './card-form';
 import { useStore } from '../../hooks';
 import BoxHeaderCard from './box-header-card';
-import LoadingMessage from '../loading-message';
+import LoadingMessage from '../common/loading-message';
 import { inventoryActions } from '../../store/inventory';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {

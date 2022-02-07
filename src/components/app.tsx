@@ -8,7 +8,7 @@ import HomePage from './home-page/home-page';
 import SettingsPage from './settings-page/settings-page';
 import BoxPage from './box-page/box-page';
 import { Typography } from '@mui/material';
-import LoadingMessage from './loading-message';
+import LoadingMessage from './common/loading-message';
 import { settingsActions } from '../store/settings';
 import CollectionPage from './collection-page/collection-page';
 
