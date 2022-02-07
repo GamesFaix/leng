@@ -4,13 +4,13 @@ import { encyclopediaActions, getEncyclopediaStatus } from '../store/encyclopedi
 import { RootState } from '../store';
 import { AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
-import HomePage from './home-page/home-page';
-import SettingsPage from './settings-page/settings-page';
-import BoxPage from './box-page/box-page';
 import { Typography } from '@mui/material';
-import LoadingMessage from './loading-message';
+import LoadingMessage from './common/loading-message';
 import { settingsActions } from '../store/settings';
-import CollectionPage from './collection-page/collection-page';
+import BoxPageContainer from './box-page/box-page-container';
+import CollectionPageContainer from './collection-page/collection-page-container';
+import SettingsPageContainer from './settings-page/settings-page-container';
+import BoxesPageContainer from './boxes-page/boxes-page-container';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -39,10 +39,10 @@ const App = () => {
                 ? <LoadingMessage message="Loading Scryfall card data..."/>
                 : <HashRouter>
                     <Routes>
-                        <Route path="/" element={<HomePage/>} />
-                        <Route path="/boxes/:name" element={<BoxPage/>}/>
-                        <Route path="/settings" element={<SettingsPage/>}/>
-                        <Route path="/collection" element={<CollectionPage/>}/>
+                        <Route path="/" element={<BoxesPageContainer/>} />
+                        <Route path="/boxes/:name" element={<BoxPageContainer/>}/>
+                        <Route path="/settings" element={<SettingsPageContainer/>}/>
+                        <Route path="/collection" element={<CollectionPageContainer/>}/>
                     </Routes>
                 </HashRouter>
             }
