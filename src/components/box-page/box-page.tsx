@@ -5,7 +5,7 @@ import CardsTable from './cards-table';
 import 'react-virtualized/styles.css';
 import { AddCardForm, EditCardForm } from './card-form';
 import BoxHeaderCard from './box-header-card';
-import TransferForm from './transfer-form';
+import CardSelectionActionsForm from './card-selection-actions-form';
 
 type Props = {
     name: string,
@@ -34,15 +34,15 @@ const BoxPage = (props: Props) => {
                 unsavedChanges={props.anyUnsavedChanges}
                 save={props.save}
             />
-            {props.selectedKeys.length > 0 && !props.anyUnsavedChanges
-                ?<>
-                    <br/>
-                    <TransferForm
-                        transferTo={props.transfer}
-                    />
-                </>
-                :<></>
-            }
+            <br/>
+            <CardSelectionActionsForm
+                cards={props.cards}
+                selectedKeys={props.selectedKeys}
+                anyUnsavedChanges={props.anyUnsavedChanges}
+                startEdit={props.startEdit}
+                delete={props.delete}
+                transferTo={props.transfer}
+            />
             <br/>
             <Card sx={{ width: 700, padding: 1 }}>
                 {props.cardToEdit === null
@@ -60,8 +60,6 @@ const BoxPage = (props: Props) => {
             <br/>
             <CardsTable
                 cards={props.cards}
-                onEditClicked={props.startEdit}
-                onDeleteClicked={props.delete}
                 selectedKeys={props.selectedKeys}
                 onSelectionChanged={props.select}
             />

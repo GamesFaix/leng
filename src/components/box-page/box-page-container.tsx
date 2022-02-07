@@ -6,6 +6,7 @@ import 'react-virtualized/styles.css';
 import { inventoryActions } from '../../store/inventory';
 import BoxPage from './box-page';
 import selectors from '../../store/selectors';
+import { difference } from 'lodash';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -86,6 +87,7 @@ const BoxPageContainer = () => {
     }
 
     function transferTo(boxName: string) {
+        setSelectedKeys([]);
         dispatch(inventoryActions.boxTransferBulkStart({
             fromBoxName: name!,
             toBoxName: boxName,
