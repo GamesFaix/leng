@@ -26,13 +26,23 @@ const BoxPageContainer = () => {
     const { name } = useParams();
 
     const dispatch = useDispatch();
-
     const lastSavedBoxState = useSelector(selectors.box(name!));
+
+    const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
-    const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
     const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
+
+    const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
+
+    React.useEffect(() => {
+        // Updated data after transfer saga finishes
+        if (oldBox !== lastSavedBoxState) {
+            setOldBox(lastSavedBoxState);
+            setNewBox(lastSavedBoxState);
+        }
+    })
 
     function cancel() {
         if (cardToEdit) {
