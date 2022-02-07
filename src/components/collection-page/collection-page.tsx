@@ -3,29 +3,20 @@ import * as React from 'react';
 import CardsTable from './cards-table';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../../fontawesome';
-import { useNavigate } from 'react-router-dom';
-import { BoxCard, defaultCardFilter } from '../../logic/model';
+import { BoxCard, CardFilter } from '../../logic/model';
 import CardFilterForm from './card-filter-form';
-import { useStore } from '../../hooks';
-import { getCards } from '../../logic/card-filters';
+import { NavigateOptions } from 'react-router-dom';
 
 type Props = {
+    cards: BoxCard[],
+    cardCount: number,
+    navigate: (url: string, options: NavigateOptions) => void,
+    filter: CardFilter,
+    setFilter: (filter: CardFilter) => void,
 
-}
-
-function getCount(cards: BoxCard[]) : number {
-    return cards.map(c => c.count).reduce((a,b) => a+b, 0);
 }
 
 const CollectionPage = (props: Props) => {
-    const navigate = useNavigate();
-
-    const [filter, setFilter] = React.useState(defaultCardFilter);
-    const boxes = useStore.boxes();
-
-    const cards = getCards(boxes, filter);
-    const cardCount = getCount(cards);
-
     return (
         <div>
             <Card
@@ -41,7 +32,7 @@ const CollectionPage = (props: Props) => {
                         Your collection
                     </Typography>
                     <Typography sx={{ fontStyle: "italic" }}>
-                        {cardCount} cards
+                        {props.cardCount} cards
                     </Typography>
                 </div>
                 <div
@@ -53,9 +44,7 @@ const CollectionPage = (props: Props) => {
                 >
                     <IconButton
                         title="Home"
-                        onClick={() => {
-                            navigate('/', { replace: true });
-                        }}
+                        onClick={() => props.navigate('/', { replace: true })}
                         color='primary'
                     >
                         <FontAwesomeIcon icon={icons.home}/>
@@ -64,13 +53,13 @@ const CollectionPage = (props: Props) => {
             </Card>
             <br/>
             <CardFilterForm
-                filter={filter}
-                onChange={setFilter}
+                filter={props.filter}
+                onChange={props.setFilter}
             />
             <br/>
             <Card sx={{ width: 900, padding: 1 }}>
                 <CardsTable
-                    cards={cards}
+                    cards={props.cards}
                 />
             </Card>
         </div>
