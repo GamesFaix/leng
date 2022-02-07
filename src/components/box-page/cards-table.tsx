@@ -5,14 +5,16 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
 import { icons } from '../../fontawesome';
-import { BoxCard } from '../../logic/model';
+import { BoxCard, BoxCardModule } from '../../logic/model';
 import selectors from '../../store/selectors';
 import { CheckboxCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
     onEditClicked: (card: BoxCard) => void,
-    onDeleteClicked: (card: BoxCard) => void
+    onDeleteClicked: (card: BoxCard) => void,
+    selectedKeys: string[],
+    onSelectionChanged: (keys: string[]) => void
 }
 
 type SortArgs = {
@@ -37,6 +39,29 @@ function ActionsCell (props: TableCellProps, tableProps: Props) {
     );
 }
 
+function MultiSelectCell (props: TableCellProps, tableProps: Props) {
+    const card : BoxCard = props.rowData;
+    const key = BoxCardModule.getKey(card);
+    const isSelected = tableProps.selectedKeys.includes(key);
+
+    function onChange (e: React.ChangeEvent<HTMLInputElement>) {
+        if (e.target.checked && !isSelected) {
+            tableProps.onSelectionChanged([...tableProps.selectedKeys, key]);
+        }
+        else if (!e.target.checked && isSelected) {
+            tableProps.onSelectionChanged(tableProps.selectedKeys.filter(k => k !== key));
+        }
+    }
+
+    return (
+        <div>
+            <Checkbox
+                checked={isSelected}
+                onChange={onChange}
+            />
+        </div>
+    );
+}
 
 function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCard[] {
     const lodashDir = dir.toLowerCase() as any;
@@ -48,7 +73,6 @@ function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCa
             return orderBy(cards, by, lodashDir);
     }
 }
-
 
 const CardsTable = (props: Props) => {
     const sets = useSelector(selectors.sets);
@@ -77,6 +101,16 @@ const CardsTable = (props: Props) => {
             : sortedList[index];
     }
 
+    const areAllSelected = props.selectedKeys.length === props.cards.length;
+    function selectOrDeselectAll(e: React.ChangeEvent<HTMLInputElement>) {
+        const newSelection =
+            e.target.checked
+                ? props.cards.map(BoxCardModule.getKey)
+                : [];
+
+        props.onSelectionChanged(newSelection);
+    }
+
     return (
         <Card sx={{ width: 900, padding: 1 }}>
             <FormControlLabel
@@ -86,6 +120,16 @@ const CardsTable = (props: Props) => {
                     <Checkbox
                         checked={noSort}
                         onChange={e => setNoSort(e.target.checked)}
+                    />
+                }
+            />
+            <FormControlLabel
+                label='Select all'
+                labelPlacement='end'
+                control={
+                    <Checkbox
+                        checked={areAllSelected}
+                        onChange={selectOrDeselectAll}
                     />
                 }
             />
@@ -137,6 +181,12 @@ const CardsTable = (props: Props) => {
                     label='Actions'
                     dataKey='name' // not used
                     cellRenderer={cellProps => ActionsCell(cellProps, props)}
+                />
+                <Column
+                    width={50}
+                    label=''
+                    dataKey='name' // not used
+                    cellRenderer={cellProps => MultiSelectCell(cellProps, props)}
                 />
             </Table>
         </Card>

@@ -26,12 +26,23 @@ const BoxPageContainer = () => {
     const { name } = useParams();
 
     const dispatch = useDispatch();
-
     const lastSavedBoxState = useSelector(selectors.box(name!));
+
+    const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
+    const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
+
     const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
+
+    React.useEffect(() => {
+        // Updated data after transfer saga finishes
+        if (oldBox !== lastSavedBoxState) {
+            setOldBox(lastSavedBoxState);
+            setNewBox(lastSavedBoxState);
+        }
+    })
 
     function cancel() {
         if (cardToEdit) {
@@ -68,6 +79,18 @@ const BoxPageContainer = () => {
         const cards = newBox.cards.filter(c => !BoxCardModule.areSame(c, card));
         setNewBox({...newBox, cards });
         setAnyUnsavedChanges(true);
+        const key = BoxCardModule.getKey(card);
+        if (selectedKeys.includes(key)){
+            setSelectedKeys(selectedKeys.filter(k => k !== key));
+        }
+    }
+
+    function transferTo(boxName: string) {
+        dispatch(inventoryActions.boxTransferBulkStart({
+            fromBoxName: name!,
+            toBoxName: boxName,
+            cardKeys: selectedKeys
+        }));
     }
 
     function save() {
@@ -90,6 +113,7 @@ const BoxPageContainer = () => {
             cards={newBox?.cards ?? []}
             cardCount={cardCount}
             cardToEdit={cardToEdit}
+            selectedKeys={selectedKeys}
             add={submit}
             cancelAdd={cancel}
             startEdit={checkout}
@@ -97,6 +121,8 @@ const BoxPageContainer = () => {
             cancelEdit={cancel}
             delete={deleteCard}
             save={save}
+            transfer={transferTo}
+            select={setSelectedKeys}
         />
     );
 };

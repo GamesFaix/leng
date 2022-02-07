@@ -1,5 +1,5 @@
 import { Card, Color } from 'scryfall-api';
-import { orderBy, uniqBy } from 'lodash';
+import { groupBy, orderBy, uniqBy } from 'lodash';
 import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
 import { ColorFilter } from '../components/collection-page/color-selector';
 
@@ -185,6 +185,18 @@ export const BoxCardModule = {
 
     areSame(a: BoxCard, b: BoxCard) : boolean {
         return this.getKey(a) === this.getKey(b);
+    },
+
+    combineDuplicates(cards: BoxCard[]) : BoxCard[] {
+        const groups = groupBy(cards, BoxCardModule.getKey);
+        return Object.entries(groups)
+            .map(grp => {
+                const [_, cards] = grp;
+                return {
+                    ...cards[0],
+                    count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
+                };
+            });
     }
 }
 
@@ -212,4 +224,10 @@ export const defaultCardFilter : CardFilter = {
     colorRule: ColorFilterRule.IdentityContainsOnly,
     fromBoxes: [],
     exceptBoxes: []
+}
+
+export type BoxTransferBulkRequest = {
+    fromBoxName: string,
+    toBoxName: string,
+    cardKeys: string[]
 }
