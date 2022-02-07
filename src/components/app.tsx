@@ -6,11 +6,11 @@ import { AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
 import HomePage from './home-page/home-page';
 import SettingsPage from './settings-page/settings-page';
-import BoxPage from './box-page/box-page';
 import { Typography } from '@mui/material';
 import LoadingMessage from './common/loading-message';
 import { settingsActions } from '../store/settings';
 import CollectionPage from './collection-page/collection-page';
+import BoxPageContainer from './box-page/box-page-container';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -40,7 +40,7 @@ const App = () => {
                 : <HashRouter>
                     <Routes>
                         <Route path="/" element={<HomePage/>} />
-                        <Route path="/boxes/:name" element={<BoxPage/>}/>
+                        <Route path="/boxes/:name" element={<BoxPageContainer/>}/>
                         <Route path="/settings" element={<SettingsPage/>}/>
                         <Route path="/collection" element={<CollectionPage/>}/>
                     </Routes>
