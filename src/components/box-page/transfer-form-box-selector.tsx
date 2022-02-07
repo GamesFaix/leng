@@ -1,6 +1,7 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import * as React from 'react';
-import { useStore } from '../../hooks';
+import { useSelector } from 'react-redux';
+import selectors from '../../store/selectors';
 
 type Props = {
     value: string | null,
@@ -8,7 +9,7 @@ type Props = {
 }
 
 const TransferFormBoxSelector = (props: Props) => {
-    const boxNames = useStore.boxes().map(b => b.name);
+    const boxNames = useSelector(selectors.boxes).map(b => b.name);
 
     function onChange(e: SelectChangeEvent) {
         let value : string | null = e.target.value;
