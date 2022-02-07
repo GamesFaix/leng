@@ -34,7 +34,7 @@ const BoxPage = (props: Props) => {
                 unsavedChanges={props.anyUnsavedChanges}
                 save={props.save}
             />
-            {props.selectedKeys.length > 0
+            {props.selectedKeys.length > 0 && !props.anyUnsavedChanges
                 ?<>
                     <br/>
                     <TransferForm
