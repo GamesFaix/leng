@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
-import { useStore } from '../../hooks';
 import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName, SetInfo } from '../../logic/model';
 import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
 import { Card } from 'scryfall-api';
@@ -8,6 +7,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
 import { orderBy } from 'lodash';
 import SetSymbol from '../common/set-symbol';
+import { useSelector } from 'react-redux';
+import selectors from '../../store/selectors';
 
 type Props = {
     card: BoxCard | null,
@@ -147,13 +148,13 @@ const SetOption = (props: any, set: SetInfo, state: any) => {
 }
 
 const CardForm = (props: Props) => {
-    const sets = useStore.sets();
+    const sets = useSelector(selectors.sets);
     const startingState = stateFromCard(props.card, sets);
     const [state, setState] = React.useState(startingState);
-    const allCardNames = useStore.cardNames();
-    const setOptions = useStore.setsOfCard(state.cardName ?? '')
+    const allCardNames = useSelector(selectors.cardNames);
+    const setOptions = useSelector(selectors.setsOfCard(state.cardName ?? ''))
         .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
-    const cardVersionOptions = useStore.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? '')
+    const cardVersionOptions = useSelector(selectors.cardsOfNameAndSetName(state.cardName ?? '', state.setName ?? ''))
         .map(c => { return { ...c, label: getVersionLabel(c) }})
         .sort(compareCards);
     const selectedSet = setOptions.find(s => s.name === state.setName) ?? null;

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import selectors from '../../store/selectors';
 import { settingsActions } from '../../store/settings';
 import SettingsPage from './settings-page';
 
 const SettingsPageContainer = () => {
-    const oldSettings = useSelector((state: RootState) => state.settings.settings) ?? { dataPath: '' };
+    const oldSettings = useSelector(selectors.settings);
     const [newSettings, setNewSettings] = React.useState(oldSettings);
 
     const anyChanges = JSON.stringify(oldSettings) !== JSON.stringify(newSettings);

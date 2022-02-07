@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import { inventoryActions } from '../../store/inventory';
+import selectors from '../../store/selectors';
 import BoxesPage from './boxes-page';
 
 const BoxesPageContainer = () => {
-    const boxes = useSelector((state: RootState) => state.inventory.boxes);
+    const boxes = useSelector(selectors.boxes);
     const dispatch = useDispatch();
     const [isNewBoxFormVisible, setIsNewBoxFormVisible] = React.useState(false);
 

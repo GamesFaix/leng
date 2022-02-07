@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { AsyncRequestStatus, Box, BoxCard, BoxCardModule } from '../../logic/model';
-import { RootState } from '../../store';
-import { getEncyclopediaStatus } from '../../store/encyclopedia';
+import { Box, BoxCard, BoxCardModule } from '../../logic/model';
 import 'react-virtualized/styles.css';
-import { useStore } from '../../hooks';
 import { inventoryActions } from '../../store/inventory';
 import BoxPage from './box-page';
+import selectors from '../../store/selectors';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -28,11 +26,8 @@ const BoxPageContainer = () => {
     const { name } = useParams();
 
     const dispatch = useDispatch();
-    const encyclopediaState = useSelector((state: RootState) => state.encyclopedia);
-    const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
 
-    const lastSavedBoxState = useStore.box(name ?? null);
-    const [oldBox, _] = React.useState(lastSavedBoxState);
+    const lastSavedBoxState = useSelector(selectors.box(name ?? null));
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
@@ -88,16 +83,9 @@ const BoxPageContainer = () => {
         }
     }
 
-    const disabled = !name
-        || encyclopediaStatus !== AsyncRequestStatus.Success
-        || oldBox === null
-        || newBox === null;
-
-    if (disabled) { return <div>Loading...</div>; }
-
     return (
         <BoxPage
-            name={name}
+            name={name!}
             anyUnsavedChanges={anyUnsavedChanges}
             cards={newBox?.cards ?? []}
             cardCount={cardCount}
