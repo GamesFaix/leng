@@ -4,13 +4,13 @@ import { encyclopediaActions, getEncyclopediaStatus } from '../store/encyclopedi
 import { RootState } from '../store';
 import { AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
-import BoxesPage from './boxes-page/boxes-page';
 import { Typography } from '@mui/material';
 import LoadingMessage from './common/loading-message';
 import { settingsActions } from '../store/settings';
 import BoxPageContainer from './box-page/box-page-container';
 import CollectionPageContainer from './collection-page/collection-page-container';
 import SettingsPageContainer from './settings-page/settings-page-container';
+import BoxesPageContainer from './boxes-page/boxes-page-container';
 
 const App = () => {
     const dispatch = useDispatch();
@@ -39,7 +39,7 @@ const App = () => {
                 ? <LoadingMessage message="Loading Scryfall card data..."/>
                 : <HashRouter>
                     <Routes>
-                        <Route path="/" element={<BoxesPage/>} />
+                        <Route path="/" element={<BoxesPageContainer/>} />
                         <Route path="/boxes/:name" element={<BoxPageContainer/>}/>
                         <Route path="/settings" element={<SettingsPageContainer/>}/>
                         <Route path="/collection" element={<CollectionPageContainer/>}/>

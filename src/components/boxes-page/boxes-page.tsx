@@ -1,32 +1,20 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
-import { RootState } from '../../store';
-import { inventoryActions } from '../../store/inventory';
+import { BoxState } from '../../store/inventory';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
 
-const BoxesPage = () => {
-    const settings = useSelector((state: RootState) => state.settings.settings);
-    const boxes = useSelector((state: RootState) => state.inventory.boxes);
-    const dispatch = useDispatch();
-    const [isNewBoxFormVisible, setIsNewBoxFormVisible] = React.useState(false);
+type Props = {
+    boxes: BoxState[],
+    isNewBoxFormVisible: boolean,
+    setIsNewBoxFormVisible: (value: boolean) => void
+    delete: (boxName: string) => void
+}
 
-    const hideBoxesTable = settings === null || boxes === null;
-
-    React.useEffect(() => {
-        if (settings !== null && boxes === null) {
-            dispatch(inventoryActions.boxInfosLoadStart());
-        }
-    });
-
-    function deleteBox(name: string) {
-        dispatch(inventoryActions.boxDeleteStart(name));
-    }
-
+const BoxesPage = (props: Props) => {
     return (
         <div>
             <Typography variant="h3">
@@ -35,7 +23,7 @@ const BoxesPage = () => {
             <br/>
             <IconButton
                 title="Add box"
-                onClick={() => setIsNewBoxFormVisible(true)}
+                onClick={() => props.setIsNewBoxFormVisible(true)}
                 color='primary'
             >
                 <FontAwesomeIcon icon={icons.add}/>
@@ -59,21 +47,18 @@ const BoxesPage = () => {
 
             <br/>
             <br/>
-            {isNewBoxFormVisible
+            {props.isNewBoxFormVisible
                 ? (<>
-                    <NewBoxForm close={() => setIsNewBoxFormVisible(false)}/>
+                    <NewBoxForm close={() => props.setIsNewBoxFormVisible(false)}/>
                     <br/>
                 </>)
                 : ""
             }
             <div className="boxes-area">
-                {hideBoxesTable
-                    ? "Loading box info..."
-                    : (<BoxesTable
-                        boxes={boxes}
-                        deleteBox={deleteBox}
-                    />)
-                }
+                <BoxesTable
+                    boxes={props.boxes}
+                    deleteBox={props.delete}
+                />
             </div>
         </div>
     );
