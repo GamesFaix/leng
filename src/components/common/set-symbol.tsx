@@ -1,16 +1,16 @@
 import { Icon } from '@mui/material';
 import * as React from 'react';
-import { useStore } from '../../hooks';
+import { useSelector } from 'react-redux';
 import { getSetSymbolImagePath } from '../../sagas/encyclopedia';
+import selectors from '../../store/selectors';
 
 type Props = {
     setAbbrev: string
 }
 
 const SetSymbol = (props: Props) => {
-    const settings = useStore.settings();
-
-    const url = getSetSymbolImagePath(settings!, props.setAbbrev);
+    const settings = useSelector(selectors.settings);
+    const url = getSetSymbolImagePath(settings, props.setAbbrev);
 
     return (
         <Icon

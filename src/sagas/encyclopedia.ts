@@ -3,8 +3,8 @@ import { call, put, select, takeLeading, } from "redux-saga/effects";
 import { Card, Set } from 'scryfall-api';
 import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus } from "../logic/model";
-import { RootState } from "../store";
 import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";
+import selectors from '../store/selectors';
 
 export type FrameEffect =
     | 'legendary'
@@ -152,7 +152,7 @@ function* loadEncyclopedia(action: EncyclopediaLoadAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const settings : AppSettings = yield select(selectors.settings);
         const cards : Card[] = yield call(() => loadCards(settings));
         const sets : Set[] = yield call(() => loadSets(settings));
         for (let s of sets) {

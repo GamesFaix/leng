@@ -2,11 +2,10 @@ import * as fs from 'fs';
 import { orderBy } from 'lodash';
 import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
-import { Card } from 'scryfall-api';
 import { createDirIfMissing } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
-import { RootState } from '../store';
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import selectors from '../store/selectors';
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
@@ -37,12 +36,9 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
     if (action.value.status !== AsyncRequestStatus.Started) { return; }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const settings : AppSettings = yield select(selectors.settings);
         const boxInfos : BoxInfo[] = yield call(() => loadBoxInfosInner(settings));
         yield put(inventoryActions.boxInfosLoadSuccess(boxInfos));
-        for (let b of boxInfos) {
-            yield put(inventoryActions.boxLoadStart(b.name));
-        }
     }
     catch (error) {
         yield put(inventoryActions.boxInfosLoadFailure(`${error}`));
@@ -94,8 +90,8 @@ function* loadBox(action: BoxLoadAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const cardIndex : CardIndex = yield select((state: RootState) => state.encyclopedia.cardIndex);
+        const settings : AppSettings = yield select(selectors.settings);
+        const cardIndex : CardIndex = yield select(selectors.cardIndex);
         const name = action.value.data;
         const box : Box = yield call(() => loadBoxInner(settings, name, cardIndex));
         yield put(inventoryActions.boxLoadSuccess(box));
@@ -146,7 +142,7 @@ function* saveBox(action: BoxSaveAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const settings : AppSettings = yield select(selectors.settings);
         const box = {
             ...action.value.data,
             lastModified: new Date()
@@ -165,8 +161,8 @@ function* renameBox(action: BoxRenameAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const cardIndex: CardIndex = yield select((state: RootState) => state.encyclopedia.cardIndex);
+        const settings : AppSettings = yield select(selectors.settings);
+        const cardIndex: CardIndex = yield select(selectors.cardIndex);
         const [oldName, newName] = action.value.data;
         const oldPath = getBoxPath(settings, oldName);
         const newPath = getBoxPath(settings, newName);
@@ -195,7 +191,7 @@ function* createBox(action: BoxCreateAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const settings : AppSettings = yield select(selectors.settings);
         const box: Box = {
             name: action.value.data,
             description: '',
@@ -217,7 +213,7 @@ function* deleteBox(action: BoxDeleteAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
+        const settings : AppSettings = yield select(selectors.settings);
         const name = action.value.data;
         const path = getBoxPath(settings, name);
         const exists = fs.existsSync(path);
@@ -239,8 +235,8 @@ function* transferBulk(action: BoxTransferBulkAction) {
     }
 
     try {
-        const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
-        const boxes : BoxState[] = yield select((state: RootState) => state.inventory.boxes);
+        const settings : AppSettings = yield select(selectors.settings);
+        const boxes : BoxState[] = yield select(selectors.boxes);
         const request = action.value.data;
         const fromBox = boxes.find(b => b.name === request.fromBoxName);
         const toBox = boxes.find(b => b.name === request.toBoxName);

@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField, Typography } from '@mui/material';
 import * as React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
-import { useStore } from '../../hooks';
 import { inventoryActions } from '../../store/inventory';
+import selectors from '../../store/selectors';
 
 type Props = {
     name: string
@@ -67,8 +67,8 @@ const BoxTitle = (props: Props) => {
     const [newName, setNewName] = React.useState<string | null>(null);
     const [isEditing, setIsEditing] = React.useState(false);
     const dispatch = useDispatch();
-    const oldBox = useStore.box(oldName);
-    const newBox = useStore.box(newName);
+    const oldBox = useSelector(selectors.box(oldName));
+    const newBox = useSelector(selectors.box(newName));
 
     function renameStart(newName: string) {
         dispatch(inventoryActions.boxRenameStart(props.name, newName));

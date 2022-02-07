@@ -50,6 +50,12 @@ module.exports = [
                 // Translates CSS into CommonJS
                 "css-loader",
               ]
+            },
+            {
+              test: /\.(png|jpg|jpeg|gif)$/i,
+              use: [
+                'url-loader'
+              ]
             }
           ]
         },

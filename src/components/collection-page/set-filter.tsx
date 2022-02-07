@@ -1,6 +1,7 @@
 import { MenuItem, Select } from '@mui/material';
 import * as React from 'react';
-import { useStore } from '../../hooks';
+import { useSelector } from 'react-redux';
+import selectors from '../../store/selectors';
 import SetSymbol from '../common/set-symbol';
 
 type Props = {
@@ -9,7 +10,7 @@ type Props = {
 }
 
 const SetFilter = (props: Props) => {
-    const sets = useStore.sets();
+    const sets = useSelector(selectors.sets);
 
     return (
         <Select
