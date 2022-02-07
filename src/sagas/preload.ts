@@ -6,7 +6,7 @@ import { preloadActions, PreloadActionTypes, PreloadStartAction } from "../store
 import selectors from "../store/selectors";
 import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "../store/settings";
 
-function* onPreloadStart(action: PreloadStartAction) {
+function* onPreloadStart(_: PreloadStartAction) {
     yield put(settingsActions.loadStart());
 }
 
@@ -37,12 +37,13 @@ function* onBoxInfosLoad(action: BoxInfosLoadAction) {
         case AsyncRequestStatus.Started:
             yield put(preloadActions.update("Loading box metadata..."));
             break;
-        case AsyncRequestStatus.Success:
+        case AsyncRequestStatus.Success: {
             const boxInfos = action.value.data ?? [];
-            for (let b of boxInfos) {
+            for (const b of boxInfos) {
                 yield put(inventoryActions.boxLoadStart(b.name));
             }
             break;
+        }
     }
 }
 
