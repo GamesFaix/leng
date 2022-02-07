@@ -4,7 +4,7 @@ import { encyclopediaActions, getEncyclopediaStatus } from '../store/encyclopedi
 import { RootState } from '../store';
 import { AsyncRequestStatus } from '../logic/model';
 import { Route, HashRouter, Routes } from 'react-router-dom';
-import HomePage from './home-page/home-page';
+import BoxesPage from './boxes-page/boxes-page';
 import { Typography } from '@mui/material';
 import LoadingMessage from './common/loading-message';
 import { settingsActions } from '../store/settings';
@@ -39,7 +39,7 @@ const App = () => {
                 ? <LoadingMessage message="Loading Scryfall card data..."/>
                 : <HashRouter>
                     <Routes>
-                        <Route path="/" element={<HomePage/>} />
+                        <Route path="/" element={<BoxesPage/>} />
                         <Route path="/boxes/:name" element={<BoxPageContainer/>}/>
                         <Route path="/settings" element={<SettingsPageContainer/>}/>
                         <Route path="/collection" element={<CollectionPageContainer/>}/>

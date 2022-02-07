@@ -9,7 +9,7 @@ import { inventoryActions } from '../../store/inventory';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
 
-const HomePage = () => {
+const BoxesPage = () => {
     const settings = useSelector((state: RootState) => state.settings.settings);
     const boxes = useSelector((state: RootState) => state.inventory.boxes);
     const dispatch = useDispatch();
@@ -78,4 +78,4 @@ const HomePage = () => {
         </div>
     );
 };
-export default HomePage;
+export default BoxesPage;
