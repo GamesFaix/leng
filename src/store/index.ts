@@ -7,7 +7,8 @@ import settingsSaga from '../sagas/settings';
 import { AsyncRequestStatus } from '../logic/model';
 import encyclopediaSaga from '../sagas/encyclopedia';
 import inventorySaga from '../sagas/inventory';
-import { PreloadAction } from './preload';
+import { PreloadAction, preloadReducer } from './preload';
+import preloadSaga from '../sagas/preload';
 
 type Action =
   EncyclopediaAction |
@@ -63,9 +64,13 @@ export const store = createStore(
     enhancers
 );
 
-sagaMiddleware.run(settingsSaga);
-sagaMiddleware.run(encyclopediaSaga);
-sagaMiddleware.run(inventorySaga);
+const sagas = [
+  settingsSaga,
+  encyclopediaSaga,
+  inventorySaga,
+  preloadSaga
+];
+sagas.forEach(sagaMiddleware.run);
 
 export type RootState = ReturnType<typeof store.getState>
 
