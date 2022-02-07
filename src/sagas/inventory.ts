@@ -40,9 +40,6 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
         const settings : AppSettings = yield select((state: RootState) => state.settings.settings);
         const boxInfos : BoxInfo[] = yield call(() => loadBoxInfosInner(settings));
         yield put(inventoryActions.boxInfosLoadSuccess(boxInfos));
-        for (let b of boxInfos) {
-            yield put(inventoryActions.boxLoadStart(b.name));
-        }
     }
     catch (error) {
         yield put(inventoryActions.boxInfosLoadFailure(`${error}`));

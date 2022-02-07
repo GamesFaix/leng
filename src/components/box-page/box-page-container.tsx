@@ -32,25 +32,11 @@ const BoxPageContainer = () => {
     const encyclopediaStatus = getEncyclopediaStatus(encyclopediaState);
 
     const lastSavedBoxState = useStore.box(name ?? null);
-    const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
+    const [oldBox, _] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
-    const [isLoading, setIsLoading] = React.useState(false);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
     const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
-
-    React.useLayoutEffect(() => {
-        if (oldBox?.cards === null && name && !isLoading) {
-            dispatch(inventoryActions.boxLoadStart(name));
-            setIsLoading(true);
-        }
-        else if (oldBox?.cards === null
-            && oldBox !== lastSavedBoxState) {
-            setOldBox(lastSavedBoxState);
-            setNewBox(lastSavedBoxState);
-            setIsLoading(false);
-        }
-    });
 
     function cancel() {
         if (cardToEdit) {
