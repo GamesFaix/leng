@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, FormControlLabel, IconButton, Typography } from '@mui/material';
+import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { BoxCard, BoxCardModule } from '../../logic/model';
-import TransferFormBoxSelector from './transfer-form-box-selector';
+import CardTransferForm from './card-transfer-form';
 
 type Props = {
     selectedKeys: string[],
@@ -11,17 +11,11 @@ type Props = {
     anyUnsavedChanges: boolean,
     startEdit: (card: BoxCard) => void,
     delete: (card: BoxCard) => void,
-    transferTo: (boxName: string) => void
+    bulkTransferTo: (boxName: string) => void
+    singleTransferTo: (count: number, boxName: string) => void
 }
 
 const CardSelectionActionsForm = (props: Props) => {
-    const [transferToBoxName, setTransferToBoxName] = React.useState<string | null>(null)
-
-    function transfer() {
-        if (transferToBoxName) {
-            props.transferTo(transferToBoxName);
-        }
-    }
 
     function startEdit() {
         const key = props.selectedKeys[0];
@@ -38,7 +32,6 @@ const CardSelectionActionsForm = (props: Props) => {
     const canEdit = props.selectedKeys.length === 1;
     const canDelete = props.selectedKeys.length > 0;
     const canTransfer = props.selectedKeys.length > 0
-        && transferToBoxName
         && !props.anyUnsavedChanges;
 
     return (
@@ -67,23 +60,13 @@ const CardSelectionActionsForm = (props: Props) => {
                 >
                     <FontAwesomeIcon icon={icons.delete}/>
                 </IconButton>
-                <FormControlLabel
-                    label="Transfer to"
-                    labelPlacement='start'
-                    control={
-                        <TransferFormBoxSelector
-                            value={transferToBoxName}
-                            onChange={setTransferToBoxName}
-                        />
-                    }
-                />
-                <IconButton
-                    title="Transfer"
-                    onClick={transfer}
+                <CardTransferForm
+                    selectedKeys={props.selectedKeys}
+                    cards={props.cards}
+                    singleTransfer={props.singleTransferTo}
+                    bulkTransfer={props.bulkTransferTo}
                     disabled={!canTransfer}
-                >
-                    <FontAwesomeIcon icon={icons.ok}/>
-                </IconButton>
+                />
             </div>
         </Card>
     );

@@ -1,5 +1,5 @@
 import { orderBy } from "lodash";
-import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo, BoxTransferBulkRequest } from "../logic/model";
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo, BoxTransferBulkRequest, BoxTransferSingleRequest } from "../logic/model";
 
 export type BoxState = {
     name: string,
@@ -28,7 +28,7 @@ export enum InventoryActionTypes {
     BoxDelete = 'INVENTORY_BOX_DELETE',
     BoxRename = 'INVENTORY_BOX_RENAME',
     BoxTransferBulk = 'INVENTORY_BOX_TRANSFER_BULK',
-    // TODO: Add single transfer action type, for moving only N copies of a specific card
+    BoxTransferSingle = 'INVENTORY_BOX_TRANSFER_SINGLE'
 }
 
 export type BoxInfosLoadAction = {
@@ -64,6 +64,11 @@ export type BoxRenameAction = {
 export type BoxTransferBulkAction = {
     type: InventoryActionTypes.BoxTransferBulk,
     value: AsyncRequest<BoxTransferBulkRequest, Box[]>
+}
+
+export type BoxTransferSingleAction = {
+    type: InventoryActionTypes.BoxTransferSingle,
+    value: AsyncRequest<BoxTransferSingleRequest, Box[]>
 }
 
 export const inventoryActions = {
@@ -193,6 +198,24 @@ export const inventoryActions = {
             value: asyncRequest.failure(error)
         };
     },
+    boxTransferSingleStart(request: BoxTransferSingleRequest) : BoxTransferSingleAction {
+        return {
+            type: InventoryActionTypes.BoxTransferSingle,
+            value: asyncRequest.started(request)
+        };
+    },
+    boxTransferSingleSuccess(updatedBoxes: Box[]) : BoxTransferSingleAction {
+        return {
+            type: InventoryActionTypes.BoxTransferSingle,
+            value: asyncRequest.success(updatedBoxes)
+        };
+    },
+    boxTransferSingleFailure(error: string) : BoxTransferSingleAction {
+        return {
+            type: InventoryActionTypes.BoxTransferSingle,
+            value: asyncRequest.failure(error)
+        };
+    },
 }
 
 export type InventoryAction =
@@ -202,7 +225,8 @@ export type InventoryAction =
     BoxCreateAction |
     BoxDeleteAction |
     BoxRenameAction |
-    BoxTransferBulkAction
+    BoxTransferBulkAction |
+    BoxTransferSingleAction
 
 export function inventoryReducer(state: InventoryState = inventoryDefaultState, action: InventoryAction): InventoryState {
     switch (action?.value?.status) {
@@ -277,6 +301,24 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                     return { ...state, boxes };
                 }
                 case InventoryActionTypes.BoxTransferBulk: {
+                    const updatedBoxes = action.value.data;
+                    const boxes = state.boxes?.map(b => {
+                        const matchingUpdatedBox = updatedBoxes.find(ub => ub.name === b.name);
+                        if (matchingUpdatedBox) {
+                            return {
+                                ...b,
+                                cards: matchingUpdatedBox.cards,
+                                lastModified: matchingUpdatedBox.lastModified
+                            };
+                        }
+                        else {
+                            return b;
+                        }
+                    }) ?? [];
+
+                    return { ...state, boxes };
+                }
+                case InventoryActionTypes.BoxTransferSingle: {
                     const updatedBoxes = action.value.data;
                     const boxes = state.boxes?.map(b => {
                         const matchingUpdatedBox = updatedBoxes.find(ub => ub.name === b.name);
