@@ -43,6 +43,7 @@ const BinderCard = (props: Props) => {
                         maxHeight: '100%'
                     }}
                 />
+                // TODO: Center spinner
                 : <CircularProgress/> }
         </div>
     )
