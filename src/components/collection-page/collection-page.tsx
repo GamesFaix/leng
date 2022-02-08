@@ -6,6 +6,7 @@ import { icons } from '../../fontawesome';
 import { BoxCard, CardFilter } from '../../logic/model';
 import CardFilterForm from './card-filter-form';
 import { NavigateOptions } from 'react-router-dom';
+import Binder from '../virtual-binder/binder';
 
 type Props = {
     cards: BoxCard[],
@@ -57,11 +58,13 @@ const CollectionPage = (props: Props) => {
                 onChange={props.setFilter}
             />
             <br/>
-            <Card sx={{ width: 900, padding: 1 }}>
+            {/* <Card sx={{ width: 900, padding: 1 }}>
                 <CardsTable
                     cards={props.cards}
                 />
             </Card>
+            <br/> */}
+            <Binder cards={props.cards}/>
         </div>
     );
 }

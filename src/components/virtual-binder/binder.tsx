@@ -12,23 +12,32 @@ type Props = {
 const Binder = (props: Props) => {
     const pages = chunk(props.cards, 9);
 
-    const renderCell = ({ columnIndex }: GridCellProps) => {
+    const renderCell = ({ columnIndex, style }: GridCellProps) => {
         const page = pages[columnIndex];
         return (
-            <BinderPage cards={page}/>
+            <BinderPage
+                style={style}
+                cards={page}
+                key={columnIndex}
+                scale={30}
+            />
         );
     };
 
     return (
-        <Card>
+        <Card
+            style={{
+                padding: '5px'
+            }}
+        >
             <Grid
                 cellRenderer={renderCell}
                 columnCount={pages.length}
-                columnWidth={100}
-                height={300}
+                columnWidth={250}
+                height={370}
                 rowCount={1}
-                rowHeight={100}
-                width={300}
+                rowHeight={360}
+                width={1000}
             />
         </Card>
     )
