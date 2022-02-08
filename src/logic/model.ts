@@ -175,7 +175,7 @@ export const CardModule = {
         const oneCardPerSet = uniqBy(cards, c => c.set);
         const setInfos = oneCardPerSet.map(CardModule.toSetInfo);
         return orderBy(setInfos, s => s.name);
-    }
+    },
 }
 
 export const BoxCardModule = {

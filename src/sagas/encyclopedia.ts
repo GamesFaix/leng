@@ -1,9 +1,10 @@
 import * as fs from 'fs';
-import { call, put, select, takeLeading, } from "redux-saga/effects";
+import { call, put, select, takeEvery, takeLeading, } from "redux-saga/effects";
 import { Card, Set } from 'scryfall-api';
 import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus } from "../logic/model";
-import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";
+import { AppSettings, AsyncRequestStatus, normalizeName } from "../logic/model";
+import { RootState } from '../store';
+import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction, LoadCardImageAction } from "../store/encyclopedia";
 import selectors from '../store/selectors';
 
 export type FrameEffect =
@@ -122,6 +123,10 @@ export function getSetSymbolImagePath(settings: AppSettings, setAbbrev: string) 
     return `${settings.dataPath}/encyclopedia/setSymbols/set-${setAbbrev}.svg`;
 }
 
+export function getCardImagePath(settings: AppSettings, card: Card) : string {
+    return `${settings.dataPath}/encyclopedia/cardImages/set-${card.set}/${normalizeName(card.name)}-${card.collector_number}.jpg`;
+}
+
 async function downloadFile(fromUrl: string, toPath: string) {
     const response = await fetch(fromUrl);
     const buffer = await response.arrayBuffer();
@@ -130,21 +135,23 @@ async function downloadFile(fromUrl: string, toPath: string) {
     await fs.promises.writeFile(toPath, data);
 }
 
-async function downloadSetSymbol(settings: AppSettings, set: Set) : Promise<void> {
-    const path = getSetSymbolImagePath(settings, set.code);
-    await downloadFile(set.icon_svg_uri, path);
+async function downloadFileIfMissing(localPath: string, sourceUrl: string) : Promise<void> {
+    if (!fs.existsSync(localPath)) {
+        // createDirForFileIfMissing(localPath); // TODO: This isn't working, folder must pre-exist!
+        await downloadFile(sourceUrl, localPath);
+    }
 }
 
 async function downloadSetSymbolIfMissing(settings: AppSettings, set: Set) : Promise<void> {
     const path = getSetSymbolImagePath(settings, set.code);
-    const createdDate = await getFileCreatedDate(path);
+    const uri = set.icon_svg_uri;
+    return downloadFileIfMissing(path, uri);
+}
 
-    if (isExpired(createdDate)){
-        await downloadSetSymbol(settings, set);
-    }
-    else {
-        return;
-    }
+async function downloadCardImageIfMissing(settings: AppSettings, card: Card) : Promise<void> {
+    const path = getCardImagePath(settings, card);
+    const uri = card.image_uris?.normal ?? '';
+    return downloadFileIfMissing(path, uri);
 }
 
 function* loadEncyclopedia(action: EncyclopediaLoadAction) {
@@ -166,7 +173,25 @@ function* loadEncyclopedia(action: EncyclopediaLoadAction) {
     }
 }
 
+function* loadCardImage(action: LoadCardImageAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
+
+    try {
+        const scryfallId = action.value.data;
+        const settings : AppSettings = yield select(selectors.settings);
+        const card: Card = yield select((state: RootState) => state.encyclopedia.cardIndex[scryfallId])
+        yield call(() => downloadCardImageIfMissing(settings, card));
+        yield put(encyclopediaActions.loadCardImageSuccess(scryfallId));
+    }
+    catch (error) {
+        yield put(encyclopediaActions.loadCardImageError(`${error}`));
+    }
+}
+
 function* encyclopediaSaga() {
     yield takeLeading(EncyclopediaActionTypes.Load, loadEncyclopedia);
+    yield takeEvery(EncyclopediaActionTypes.LoadCardImage, loadCardImage);
 }
 export default encyclopediaSaga;

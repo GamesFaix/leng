@@ -7,7 +7,8 @@ export type EncyclopediaState = {
     cards: Card[],
     sets: SetInfo[],
     cardNames: string[],
-    cardIndex: CardIndex
+    cardIndex: CardIndex,
+    cachedCardImageIds: string[]
 }
 
 const encyclopediaDefaultState : EncyclopediaState = {
@@ -15,11 +16,13 @@ const encyclopediaDefaultState : EncyclopediaState = {
     cards: [],
     sets: [],
     cardNames: [],
-    cardIndex: {}
+    cardIndex: {},
+    cachedCardImageIds: []
 }
 
 export enum EncyclopediaActionTypes {
-    Load = 'ENCYCLOPEDIA_LOAD'
+    Load = 'ENCYCLOPEDIA_LOAD',
+    LoadCardImage = 'ENCYCLOPEDIA_LOAD_CARD_IMAGE'
 }
 
 export type EncyclopediaLoadAction = {
@@ -27,8 +30,14 @@ export type EncyclopediaLoadAction = {
     value: AsyncRequest<void, Card[]>
 }
 
+export type LoadCardImageAction = {
+    type: EncyclopediaActionTypes.LoadCardImage,
+    value: AsyncRequest<string, string>
+}
+
 export type EncyclopediaAction =
-    EncyclopediaLoadAction;
+    EncyclopediaLoadAction |
+    LoadCardImageAction;
 
 export const encyclopediaActions = {
     loadStart() : EncyclopediaLoadAction {
@@ -46,6 +55,24 @@ export const encyclopediaActions = {
     loadError(error: string) : EncyclopediaLoadAction {
         return {
             type: EncyclopediaActionTypes.Load,
+            value: asyncRequest.failure(error)
+        };
+    },
+    loadCardImageStart(scryfallId: string) : LoadCardImageAction {
+        return {
+            type: EncyclopediaActionTypes.LoadCardImage,
+            value: asyncRequest.started(scryfallId)
+        };
+    },
+    loadCardImageSuccess(scryfallId: string) : LoadCardImageAction {
+        return {
+            type: EncyclopediaActionTypes.LoadCardImage,
+            value: asyncRequest.success(scryfallId)
+        };
+    },
+    loadCardImageError(error: string) : LoadCardImageAction {
+        return {
+            type: EncyclopediaActionTypes.LoadCardImage,
             value: asyncRequest.failure(error)
         };
     }
@@ -90,19 +117,18 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
                     return state;
             }
         }
+        case EncyclopediaActionTypes.LoadCardImage: {
+            switch (action.value.status) {
+                case AsyncRequestStatus.Success: {
+                    return {
+                        ...state,
+                        cachedCardImageIds: [ ...state.cachedCardImageIds, action.value.data ]
+                    }
+                }
+                default: return state;
+            }
+        }
         default:
             return state;
     }
-}
-
-export function getEncyclopediaStatus(state: EncyclopediaState) : AsyncRequestStatus {
-    if (state.isLoading) {
-        return AsyncRequestStatus.Started;
-    }
-
-    if (state.cards.length === 0) {
-        return AsyncRequestStatus.NotStarted;
-    }
-
-    return AsyncRequestStatus.Success;
 }
