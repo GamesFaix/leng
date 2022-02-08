@@ -118,7 +118,8 @@ async function loadSets(settings: AppSettings) : Promise<Set[]> {
 }
 
 export function getSetSymbolImagePath(settings: AppSettings, setAbbrev: string) : string {
-    return `${settings.dataPath}/encyclopedia/setSymbols/${setAbbrev}.svg`;
+    // Need "set-" prefix to avoid naming Conflux icon "con", which is a reserved name in Windows
+    return `${settings.dataPath}/encyclopedia/setSymbols/set-${setAbbrev}.svg`;
 }
 
 async function downloadFile(fromUrl: string, toPath: string) {
