@@ -21,7 +21,8 @@ type Props = {
     cancelEdit: () => void,
     delete: (card: BoxCard) => void,
     save: () => void
-    transfer: (name: string) => void
+    bulkTransfer: (name: string) => void
+    singleTransfer: (count: number, name: string) => void
     select: (keys: string[]) => void
 }
 
@@ -41,7 +42,8 @@ const BoxPage = (props: Props) => {
                 anyUnsavedChanges={props.anyUnsavedChanges}
                 startEdit={props.startEdit}
                 delete={props.delete}
-                transferTo={props.transfer}
+                bulkTransferTo={props.bulkTransfer}
+                singleTransferTo={props.singleTransfer}
             />
             <br/>
             <Card sx={{ width: 700, padding: 1 }}>
