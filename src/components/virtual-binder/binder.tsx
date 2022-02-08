@@ -9,8 +9,32 @@ type Props = {
     cards: BoxCard[]
 }
 
+function compareCards(a: BoxCard, b: BoxCard) {
+    const pattern = /(\d+)(.*)/
+    const matchA = pattern.exec(a.collectorsNumber);
+    const matchB = pattern.exec(b.collectorsNumber);
+    const numA = Number(matchA![1]);
+    const numB = Number(matchB![1]);
+    if (numA < numB) {
+        return -1;
+    } else if (numA > numB) {
+        return 1;
+    }
+
+    const mscA = matchA![2];
+    const mscB = matchB![2];
+    if (mscA < mscB) {
+        return -1;
+    } else if (mscA > mscB) {
+        return 1;
+    }
+
+    return 0;
+}
+
 const Binder = (props: Props) => {
-    const pages = chunk(props.cards, 9);
+    const sorted = props.cards.sort(compareCards);
+    const pages = chunk(sorted, 9);
 
     const renderCell = ({ columnIndex, style }: GridCellProps) => {
         const page = pages[columnIndex];
@@ -23,6 +47,8 @@ const Binder = (props: Props) => {
             />
         );
     };
+
+    // TODO: Add sort controls
 
     return (
         <Card
