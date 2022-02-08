@@ -197,6 +197,10 @@ export const BoxCardModule = {
                     count: cards.map(c => c.count).reduce((a, b) => a+b, 0)
                 };
             });
+    },
+
+    removeZeroes(cards: BoxCard[]) : BoxCard[] {
+        return cards.filter(c => c.count > 0);
     }
 }
 
@@ -230,4 +234,10 @@ export type BoxTransferBulkRequest = {
     fromBoxName: string,
     toBoxName: string,
     cardKeys: string[]
+}
+
+export type BoxTransferSingleRequest = {
+    fromBoxName: string,
+    toBoxName: string,
+    card: BoxCard,
 }
