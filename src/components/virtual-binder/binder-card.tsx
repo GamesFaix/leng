@@ -26,14 +26,11 @@ const BinderCard = (props: Props) => {
         }
     })
 
-
-    // TODO: Use card image
     // TODO: Display count
     return (
         <div
             style={{
                 ...props.style,
-                backgroundColor: 'green',
                 overflow: 'clip'
             }}
             title={`${props.card.name} - ${props.card.setName} (${props.card.collectorsNumber})`}
@@ -46,12 +43,6 @@ const BinderCard = (props: Props) => {
                         maxHeight: '100%'
                     }}
                 />
-                // <div>
-                //     {props.card.name} <br/>
-                //     {props.card.setName} <br/>
-                //     {props.card.versionLabel} <br/>
-                //     {props.card.foil}
-                // </div>
                 : <CircularProgress/> }
         </div>
     )

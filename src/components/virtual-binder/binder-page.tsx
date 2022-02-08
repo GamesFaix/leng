@@ -28,7 +28,7 @@ const BinderPage = (props: Props) => {
                ...props.style,
                 width: `${pageWidth}px`,
                 height: `${pageHeight}px`,
-                backgroundColor: 'blue',
+                backgroundColor: '#333333',
                 display: 'flex',
                 flexDirection: 'column',
                 padding: '3px',
