@@ -55,7 +55,8 @@ const Binder = (props: Props) => {
     return (
         <Card
             style={{
-                padding: '5px'
+                padding: '5px',
+                width: '1000px'
             }}
         >
             <Grid
@@ -64,7 +65,7 @@ const Binder = (props: Props) => {
                 columnWidth={250}
                 height={370}
                 rowCount={1}
-                rowHeight={360}
+                rowHeight={350}
                 width={1000}
             />
         </Card>
