@@ -85,12 +85,23 @@ const BoxPageContainer = () => {
         }
     }
 
-    function transferTo(boxName: string) {
+    function bulkTransferTo(boxName: string) {
         setSelectedKeys([]);
         dispatch(inventoryActions.boxTransferBulkStart({
             fromBoxName: name!,
             toBoxName: boxName,
             cardKeys: selectedKeys
+        }));
+    }
+
+    function singleTransferTo(count: number, boxName: string) {
+        const card = newBox?.cards?.find(c => BoxCardModule.getKey(c) === selectedKeys[0]) as BoxCard;
+
+        setSelectedKeys([]);
+        dispatch(inventoryActions.boxTransferSingleStart({
+            fromBoxName: name!,
+            toBoxName: boxName,
+            card: { ...card, count }
         }));
     }
 
@@ -122,7 +133,8 @@ const BoxPageContainer = () => {
             cancelEdit={cancel}
             delete={deleteCard}
             save={save}
-            transfer={transferTo}
+            bulkTransfer={bulkTransferTo}
+            singleTransfer={singleTransferTo}
             select={setSelectedKeys}
         />
     );
