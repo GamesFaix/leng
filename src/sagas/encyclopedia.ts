@@ -150,7 +150,7 @@ async function downloadSetSymbolIfMissing(settings: AppSettings, set: Set) : Pro
 
 async function downloadCardImageIfMissing(settings: AppSettings, card: Card) : Promise<void> {
     const path = getCardImagePath(settings, card);
-    const uri = card.image_uris?.normal ?? '';
+    const uri = card.image_uris?.small ?? card.image_uris?.normal ?? card.image_uris?.large ?? card.image_uris?.png ?? '';
     return downloadFileIfMissing(path, uri);
 }
 

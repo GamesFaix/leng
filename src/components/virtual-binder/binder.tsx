@@ -33,6 +33,8 @@ function compareCards(a: BoxCard, b: BoxCard) {
 }
 
 const Binder = (props: Props) => {
+    // TODO: Combine foils into same "page pocket"
+
     const sorted = props.cards.sort(compareCards);
     const pages = chunk(sorted, 9);
 
