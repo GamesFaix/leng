@@ -36,17 +36,18 @@ function compareCards(a: BoxCard, b: BoxCard) {
     return 0;
 }
 
-const Binder = (props: Props) => {
+function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][] {
     // TODO: Combine foils into same "page pocket"
 
-    const sets = useSelector(selectors.sets);
-    const groupedBySet = groupBy(props.cards, c => c.setAbbrev);
+    const groupedBySet = groupBy(cards, c => c.setAbbrev);
+
     const setsWithCards = innerJoin(
         sets,
         Object.entries(groupedBySet),
         set => set.code,
         grp => grp[0],
         (set, grp) => [set, grp[1]]);
+
     const setsWithPages = setsWithCards
         .map(tup => {
             const set = tup[0] as Set;
@@ -54,14 +55,23 @@ const Binder = (props: Props) => {
             const sorted = cards.sort(compareCards);
             return [set, chunk(sorted, 9)];
         });
+
     const sortedSets =
         orderBy(setsWithPages, tup => {
             const set = tup[0] as Set;
-            return set.name; // TODO: sort by set release date
+            return set.released_at;
         });
+
     const pages = sortedSets
         .map(tup => tup[1] as BoxCard[][])
         .reduce((a,b) => a.concat(b), []);
+
+    return pages;
+}
+
+const Binder = (props: Props) => {
+    const sets = useSelector(selectors.sets);
+    const pages = organizePages(props.cards, sets);
 
     const renderCell = ({ columnIndex, style }: GridCellProps) => {
         const page = pages[columnIndex];
