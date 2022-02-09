@@ -1,5 +1,5 @@
+import { uniq } from "lodash";
 import { RootState } from ".";
-import { CardModule } from "../logic/model";
 
 const selectors = {
     preload: (state: RootState) => state.preload,
@@ -10,8 +10,8 @@ const selectors = {
     setsOfCard(cardName: string | null) {
         return (state: RootState) => {
             const cards = state.encyclopedia.cards.filter(c => c.name === cardName);
-            const sets = CardModule.toSetInfos(cards);
-            return sets;
+            const sets = state.encyclopedia.setIndex;
+            return uniq(cards.map(c => sets[c.set]));
         }
     },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
@@ -24,6 +24,11 @@ const selectors = {
     box(name: string | null) {
         return (state: RootState) => {
             return state.inventory.boxes?.find(b => b.name === name) ?? null;
+        }
+    },
+    set(abbrev: string) {
+        return (state: RootState) => {
+            return state.encyclopedia.setIndex[abbrev] ?? null;
         }
     }
 }

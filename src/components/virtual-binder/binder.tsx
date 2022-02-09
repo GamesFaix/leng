@@ -3,8 +3,9 @@ import { chunk, groupBy, orderBy } from 'lodash';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { Grid, GridCellProps } from 'react-virtualized';
+import { Set } from 'scryfall-api';
 import { innerJoin } from '../../logic/array-helper';
-import { BoxCard, SetInfo } from '../../logic/model';
+import { BoxCard } from '../../logic/model';
 import selectors from '../../store/selectors';
 import BinderPage from './binder-page';
 
@@ -43,19 +44,19 @@ const Binder = (props: Props) => {
     const setsWithCards = innerJoin(
         sets,
         Object.entries(groupedBySet),
-        set => set.abbrev,
+        set => set.code,
         grp => grp[0],
         (set, grp) => [set, grp[1]]);
     const setsWithPages = setsWithCards
         .map(tup => {
-            const set = tup[0] as SetInfo;
+            const set = tup[0] as Set;
             const cards = tup[1] as BoxCard[];
             const sorted = cards.sort(compareCards);
             return [set, chunk(sorted, 9)];
         });
     const sortedSets =
         orderBy(setsWithPages, tup => {
-            const set = tup[0] as SetInfo;
+            const set = tup[0] as Set;
             return set.name; // TODO: sort by set release date
         });
     const pages = sortedSets

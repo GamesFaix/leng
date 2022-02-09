@@ -1,5 +1,5 @@
-import { Card, Color } from 'scryfall-api';
-import { groupBy, orderBy, uniqBy } from 'lodash';
+import { Card, Color, Set } from 'scryfall-api';
+import { groupBy } from 'lodash';
 import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
 import { ColorFilter } from '../components/collection-page/color-selector';
 
@@ -134,12 +134,6 @@ export type BoxInfo = {
     lastModified: Date
 }
 
-export type SetInfo = {
-    name: string,
-    normalizedName: string,
-    abbrev: string
-}
-
 export function normalizeName(name: string) : string {
     return name
         .toLowerCase()
@@ -160,22 +154,6 @@ export function getVersionLabel(card: Card) : string {
     }
 
     return `${numberStr}${frameEffectsStr}`;
-}
-
-export const CardModule = {
-    toSetInfo(card: Card) : SetInfo {
-        return {
-            name: card.set_name,
-            abbrev: card.set,
-            normalizedName: normalizeName(card.set_name)
-        };
-    },
-
-    toSetInfos(cards: Card[]) : SetInfo[] {
-        const oneCardPerSet = uniqBy(cards, c => c.set);
-        const setInfos = oneCardPerSet.map(CardModule.toSetInfo);
-        return orderBy(setInfos, s => s.name);
-    },
 }
 
 export const BoxCardModule = {
@@ -210,6 +188,10 @@ export type AppSettings = {
 
 export type CardIndex = {
     [id: string]: Card
+}
+
+export type SetIndex = {
+    [abbrev: string]: Set
 }
 
 export type CardFilter = {

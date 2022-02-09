@@ -4,7 +4,7 @@ import { Card, Set } from 'scryfall-api';
 import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, normalizeName } from "../logic/model";
 import { RootState } from '../store';
-import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction, LoadCardImageAction } from "../store/encyclopedia";
+import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadCardImageAction, LoadSetDataAction, LoadSetSymbolAction } from "../store/encyclopedia";
 import selectors from '../store/selectors';
 
 export type FrameEffect =
@@ -154,7 +154,7 @@ async function downloadCardImageIfMissing(settings: AppSettings, card: Card) : P
     return downloadFileIfMissing(path, uri);
 }
 
-function* loadEncyclopedia(action: EncyclopediaLoadAction) {
+function* loadCardData(action: LoadCardDataAction) {
     if (action.value.status !== AsyncRequestStatus.Started) {
         return;
     }
@@ -162,14 +162,42 @@ function* loadEncyclopedia(action: EncyclopediaLoadAction) {
     try {
         const settings : AppSettings = yield select(selectors.settings);
         const cards : Card[] = yield call(() => loadCards(settings));
-        const sets : Set[] = yield call(() => loadSets(settings));
-        for (const s of sets) {
-            yield call(() => downloadSetSymbolIfMissing(settings, s));
-        }
-        yield put(encyclopediaActions.loadSuccess(cards));
+        yield put(encyclopediaActions.loadCardDataSuccess(cards));
     }
     catch (error) {
-        yield put(encyclopediaActions.loadError(`${error}`));
+        yield put(encyclopediaActions.loadCardDataError(`${error}`));
+    }
+}
+
+function* loadSetData(action: LoadSetDataAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
+
+    try {
+        const settings : AppSettings = yield select(selectors.settings);
+        const sets : Set[] = yield call(() => loadSets(settings));
+        yield put(encyclopediaActions.loadSetDataSuccess(sets));
+    }
+    catch (error) {
+        yield put(encyclopediaActions.loadSetDataError(`${error}`));
+    }
+}
+
+function* loadSetSymbol(action: LoadSetSymbolAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
+
+    try {
+        const setAbbrev = action.value.data;
+        const settings : AppSettings = yield select(selectors.settings);
+        const set: Set = yield select(selectors.set(setAbbrev));
+        yield call(() => downloadSetSymbolIfMissing(settings, set));
+        yield put(encyclopediaActions.loadSetSymbolSuccess(setAbbrev));
+    }
+    catch (error) {
+        yield put(encyclopediaActions.loadSetSymbolError(`${error}`));
     }
 }
 
@@ -191,7 +219,9 @@ function* loadCardImage(action: LoadCardImageAction) {
 }
 
 function* encyclopediaSaga() {
-    yield takeLeading(EncyclopediaActionTypes.Load, loadEncyclopedia);
+    yield takeLeading(EncyclopediaActionTypes.LoadCardData, loadCardData);
+    yield takeLeading(EncyclopediaActionTypes.LoadSetData, loadSetData);
+    yield takeEvery(EncyclopediaActionTypes.LoadSetSymbol, loadSetSymbol);
     yield takeEvery(EncyclopediaActionTypes.LoadCardImage, loadCardImage);
 }
 export default encyclopediaSaga;

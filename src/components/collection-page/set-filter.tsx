@@ -23,11 +23,11 @@ const SetFilter = (props: Props) => {
         >
             {sets.map(s =>
                 <MenuItem
-                    key={s.abbrev}
-                    value={s.abbrev}
+                    key={s.code}
+                    value={s.code}
                 >
-                    <SetSymbol setAbbrev={s.abbrev}/>
-                    {`${s.name} (${s.abbrev.toUpperCase()})`}
+                    <SetSymbol setAbbrev={s.code}/>
+                    {`${s.name} (${s.code.toUpperCase()})`}
                 </MenuItem>
             )}
         </Select>

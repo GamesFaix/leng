@@ -26,7 +26,7 @@ const reducer = combineReducers({
 // Large payloads break the devtools
 // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
 const actionSanitizer =  (action: Action) => {
-  if (action.type === EncyclopediaActionTypes.Load
+  if ((action.type === EncyclopediaActionTypes.LoadCardData || action.type === EncyclopediaActionTypes.LoadSetData)
     && action.value.status === AsyncRequestStatus.Success) {
       return {
         ...action,
