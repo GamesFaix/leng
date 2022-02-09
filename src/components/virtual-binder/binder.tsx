@@ -1,8 +1,11 @@
 import { Card } from '@mui/material';
-import { chunk } from 'lodash';
+import { chunk, groupBy, orderBy } from 'lodash';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { Grid, GridCellProps } from 'react-virtualized';
-import { BoxCard } from '../../logic/model';
+import { innerJoin } from '../../logic/array-helper';
+import { BoxCard, SetInfo } from '../../logic/model';
+import selectors from '../../store/selectors';
 import BinderPage from './binder-page';
 
 type Props = {
@@ -35,8 +38,29 @@ function compareCards(a: BoxCard, b: BoxCard) {
 const Binder = (props: Props) => {
     // TODO: Combine foils into same "page pocket"
 
-    const sorted = props.cards.sort(compareCards);
-    const pages = chunk(sorted, 9);
+    const sets = useSelector(selectors.sets);
+    const groupedBySet = groupBy(props.cards, c => c.setAbbrev);
+    const setsWithCards = innerJoin(
+        sets,
+        Object.entries(groupedBySet),
+        set => set.abbrev,
+        grp => grp[0],
+        (set, grp) => [set, grp[1]]);
+    const setsWithPages = setsWithCards
+        .map(tup => {
+            const set = tup[0] as SetInfo;
+            const cards = tup[1] as BoxCard[];
+            const sorted = cards.sort(compareCards);
+            return [set, chunk(sorted, 9)];
+        });
+    const sortedSets =
+        orderBy(setsWithPages, tup => {
+            const set = tup[0] as SetInfo;
+            return set.name; // TODO: sort by set release date
+        });
+    const pages = sortedSets
+        .map(tup => tup[1] as BoxCard[][])
+        .reduce((a,b) => a.concat(b), []);
 
     const renderCell = ({ columnIndex, style }: GridCellProps) => {
         const page = pages[columnIndex];
