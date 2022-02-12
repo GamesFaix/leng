@@ -9,6 +9,8 @@ import { BoxCard } from '../../logic/model';
 import selectors from '../../store/selectors';
 import BinderPage from './binder-page';
 
+const scale = 60;
+
 type Props = {
     cards: BoxCard[]
 }
@@ -80,7 +82,7 @@ const Binder = (props: Props) => {
                 style={style}
                 cards={page}
                 key={columnIndex}
-                scale={30}
+                scale={scale}
             />
         );
     };
@@ -91,17 +93,17 @@ const Binder = (props: Props) => {
         <Card
             style={{
                 padding: '5px',
-                width: '1000px'
+                width: '1800px'
             }}
         >
             <Grid
                 cellRenderer={renderCell}
                 columnCount={pages.length}
-                columnWidth={250}
-                height={370}
+                columnWidth={500}
+                height={740}
                 rowCount={1}
-                rowHeight={350}
-                width={1000}
+                rowHeight={700}
+                width={1800}
             />
         </Card>
     )
