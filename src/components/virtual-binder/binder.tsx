@@ -16,9 +16,13 @@ type Props = {
 }
 
 function compareCards(a: BoxCard, b: BoxCard) {
+    return compareCollectorsNumbers(a.collectorsNumber, b.collectorsNumber);
+}
+
+function compareCollectorsNumbers(a: string, b: string) : number {
     const pattern = /(\d+)(.*)/
-    const matchA = pattern.exec(a.collectorsNumber);
-    const matchB = pattern.exec(b.collectorsNumber);
+    const matchA = pattern.exec(a);
+    const matchB = pattern.exec(b);
     const numA = Number(matchA![1]);
     const numB = Number(matchB![1]);
     if (numA < numB) {
@@ -38,9 +42,7 @@ function compareCards(a: BoxCard, b: BoxCard) {
     return 0;
 }
 
-function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][] {
-    // TODO: Combine foils into same "page pocket"
-
+function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][][] { // An array of pages, which are arrays of card groups, which are arrays of foil/non-foil versions of the same card
     const groupedBySet = groupBy(cards, c => c.setAbbrev);
 
     const setsWithCards = innerJoin(
@@ -54,7 +56,8 @@ function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][] {
         .map(tup => {
             const set = tup[0] as Set;
             const cards = tup[1] as BoxCard[];
-            const sorted = cards.sort(compareCards);
+            const groupById = groupBy(cards, c => c.scryfallId);
+            const sorted = Object.values(groupById).sort((a, b) => compareCollectorsNumbers((a[0].collectorsNumber), (b[0].collectorsNumber)));
             return [set, chunk(sorted, 9)];
         });
 
@@ -65,7 +68,7 @@ function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][] {
         });
 
     const pages = sortedSets
-        .map(tup => tup[1] as BoxCard[][])
+        .map(tup => tup[1] as BoxCard[][][])
         .reduce((a,b) => a.concat(b), []);
 
     return pages;
@@ -80,7 +83,7 @@ const Binder = (props: Props) => {
         return (
             <BinderPage
                 style={style}
-                cards={page}
+                cardGrouops={page}
                 key={columnIndex}
                 scale={scale}
             />

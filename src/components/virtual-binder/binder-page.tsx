@@ -10,7 +10,7 @@ const colsPerPage = 3;
 const cardMargin = 3;
 
 type Props = {
-    cards: BoxCard[],
+    cardGrouops: BoxCard[][],
     style: React.CSSProperties,
     scale: number
 }
@@ -20,7 +20,7 @@ const BinderPage = (props: Props) => {
     const cardWidth = cardAspectRatio[0] * props.scale;
     const pageHeight = (cardHeight * rowsPerPage) + (cardMargin * 2 * rowsPerPage);
     const pageWidth =  (cardWidth * colsPerPage) + (cardMargin * 2 * colsPerPage);
-    const rowsData = chunk(props.cards, colsPerPage);
+    const rowsData = chunk(props.cardGrouops, colsPerPage);
 
     return (
         <div
@@ -44,7 +44,7 @@ const BinderPage = (props: Props) => {
                     {cs.map((c,col) =>
                         <BinderCard
                             key={col}
-                            card={c}
+                            cardGroup={c}
                             style={{
                                 width: `${cardWidth}px`,
                                 height: `${cardHeight}px`,
