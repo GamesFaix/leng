@@ -1,4 +1,4 @@
-import { Badge, CircularProgress, Tooltip, Typography } from '@mui/material';
+import { Badge, CircularProgress, Tooltip } from '@mui/material';
 import { sumBy } from 'lodash';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,31 +7,11 @@ import { getCardImagePath } from '../../sagas/encyclopedia';
 import { RootState } from '../../store';
 import { encyclopediaActions } from '../../store/encyclopedia';
 import selectors from '../../store/selectors';
-import FlagIcon from './flag-icon';
+import CardTooltip from './card-tooltip';
 
 type Props = {
     cardGroup: BoxCard[], // Group of cards with same name/set/collectors number, but different foil or language
     style?: React.CSSProperties
-}
-
-function getCardLabel(card: BoxCard) {
-    const foil = card.foil ? ' Foil' : '';
-    return <React.Fragment key={card.scryfallId}>
-        <br/>
-        <span>
-            {card.count} <FlagIcon lang={card.lang}/> {foil}
-        </span>
-    </React.Fragment>;
-}
-
-function getTooltip(cardGroup: BoxCard[])    {
-    const card = cardGroup[0];
-
-    return (<Typography>
-        {card.name}<br/>
-        {`${card.setName} (#${card.collectorsNumber})`}
-        {cardGroup.map(getCardLabel)}
-    </Typography>);
 }
 
 const BinderCard = (props: Props) => {
@@ -49,19 +29,20 @@ const BinderCard = (props: Props) => {
     })
 
     const count = sumBy(props.cardGroup, c => c.count);
-    const tooltip = getTooltip(props.cardGroup);
+    const multipleVersionSignifier = props.cardGroup.length > 1 ? '*' : '';
+    const badgeContent = `${count}${multipleVersionSignifier}`;
 
     return (
         <Tooltip
             title={
                 <span style={{ whiteSpace: 'pre-line' }}>
-                    {tooltip}
+                    <CardTooltip cardGroup={props.cardGroup}/>
                 </span>
             }
         >
             <Badge
                 color="secondary"
-                badgeContent={count}
+                badgeContent={badgeContent}
                 overlap="circular"
             >
                 <div
