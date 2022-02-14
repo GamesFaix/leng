@@ -4,6 +4,8 @@ import { TableCellProps } from 'react-virtualized';
 import SetSymbol from './set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
+import { BoxCard } from '../../logic/model';
+import { CardImageTooltip } from './card-image-tooltip';
 
 export const CheckboxCell = (props: TableCellProps) => {
     return (
@@ -23,4 +25,15 @@ export const SetCell : React.FC<TableCellProps> = (props: TableCellProps) => {
             {set!.name}
         </div>
     )
+}
+
+export const NameCell : React.FC<TableCellProps> = (props: TableCellProps) => {
+    const card : BoxCard = props.rowData;
+    return (
+        <CardImageTooltip scryfallId={card.scryfallId}>
+            <div>
+                {card.name}
+            </div>
+        </CardImageTooltip>
+    );
 }

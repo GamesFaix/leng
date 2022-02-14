@@ -31,6 +31,16 @@ const selectors = {
         return (state: RootState) => {
             return state.encyclopedia.setIndex[abbrev] ?? null;
         }
+    },
+    card(scryfallId: string) {
+        return (state: RootState) => {
+            return state.encyclopedia.cardIndex[scryfallId] ?? null;
+        }
+    },
+    isCardImageLoaded(scryfallId: string) {
+        return (state: RootState) => {
+            return state.encyclopedia.cachedCardImageIds.includes(scryfallId);
+        }
     }
 }
 export default selectors;
