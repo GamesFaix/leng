@@ -1,6 +1,6 @@
 import { put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { AsyncRequestStatus } from "../logic/model";
-import { encyclopediaActions, EncyclopediaActionTypes, EncyclopediaLoadAction } from "../store/encyclopedia";
+import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadSetDataAction } from "../store/encyclopedia";
 import { BoxInfosLoadAction, BoxLoadAction, BoxState, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import { preloadActions, PreloadActionTypes, PreloadStartAction } from "../store/preload";
 import selectors from "../store/selectors";
@@ -16,19 +16,36 @@ function* onSettingsLoad(action: SettingsLoadAction) {
             yield put(preloadActions.update("Loading settings..."));
             break;
         case AsyncRequestStatus.Success:
-            yield put(encyclopediaActions.loadStart());
+            yield put(encyclopediaActions.loadCardDataStart());
             break;
     }
 }
 
-function* onEncyclopediaLoad(action: EncyclopediaLoadAction) {
+function* onEncyclopediaLoadCardData(action: LoadCardDataAction) {
     switch (action.value.status) {
         case AsyncRequestStatus.Started:
-            yield put(preloadActions.update("Loading Scryfall data..."));
+            yield put(preloadActions.update("Loading Scryfall card data..."));
             break;
         case AsyncRequestStatus.Success:
+            yield put(encyclopediaActions.loadSetDataStart());
+            break;
+    }
+}
+
+function* onEncyclopediaLoadSetData(action: LoadSetDataAction) {
+    switch (action.value.status) {
+        case AsyncRequestStatus.Started:
+            yield put(preloadActions.update("Loading Scryfall set data..."));
+            break;
+        case AsyncRequestStatus.Success: {
+            const sets = action.value.data;
+            for (const s of sets) {
+                yield put(encyclopediaActions.loadSetSymbolStart(s.code));
+            }
+
             yield put(inventoryActions.boxInfosLoadStart());
             break;
+        }
     }
 }
 
@@ -70,7 +87,8 @@ function* onBoxLoad(action: BoxLoadAction) {
 function* preloadSaga() {
     yield takeLeading(PreloadActionTypes.Start, onPreloadStart);
     yield takeEvery(SettingsActionTypes.Load, onSettingsLoad);
-    yield takeEvery(EncyclopediaActionTypes.Load, onEncyclopediaLoad);
+    yield takeLeading(EncyclopediaActionTypes.LoadCardData, onEncyclopediaLoadCardData);
+    yield takeLeading(EncyclopediaActionTypes.LoadSetData, onEncyclopediaLoadSetData);
     yield takeEvery(InventoryActionTypes.BoxInfosLoad, onBoxInfosLoad);
     yield takeEvery(InventoryActionTypes.BoxLoad, onBoxLoad);
 }

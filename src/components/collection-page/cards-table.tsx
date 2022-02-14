@@ -1,9 +1,7 @@
 import { orderBy } from 'lodash';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import { Column, SortDirection, SortDirectionType, Table } from 'react-virtualized';
 import { BoxCard } from '../../logic/model';
-import selectors from '../../store/selectors';
 import { CheckboxCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
@@ -27,7 +25,6 @@ function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCa
 }
 
 const CardsTable = (props: Props) => {
-    const sets = useSelector(selectors.sets);
     const [sortBy, setSortBy] = React.useState('name');
     const [sortDirection, setSortDirection] = React.useState<SortDirectionType>(SortDirection.ASC);
     const [unsortedList, setUnsortedList] = React.useState(props.cards);
@@ -72,7 +69,7 @@ const CardsTable = (props: Props) => {
                 width={200}
                 label='Set'
                 dataKey='setAbbrev'
-                cellRenderer={cellProps => SetCell(cellProps, sets)}
+                cellRenderer={props => <SetCell {...props}/>}
             />
             <Column
                 width={100}
