@@ -46,7 +46,7 @@ const BoxPage = (props: Props) => {
                 singleTransferTo={props.singleTransfer}
             />
             <br/>
-            <Card sx={{ width: 700, padding: 1 }}>
+            <Card sx={{ width: 800, padding: 1 }}>
                 {props.cardToEdit === null
                     ? <AddCardForm
                         onSubmit={props.add}

@@ -9,6 +9,7 @@ import { orderBy } from 'lodash';
 import SetSymbol from '../common/set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
+import FlagIcon from '../common/flag-icon';
 
 type Props = {
     card: BoxCard | null,
@@ -142,6 +143,21 @@ const SetOption = (props: any, set: SetInfo, state: any) => {
             <SetSymbol setAbbrev={set.abbrev}/>
             <div>
                 {`${set.name} (${set.abbrev.toUpperCase()})`}
+            </div>
+        </li>
+    );
+}
+
+const LangOption = (props: any, lang: Language, state: any) => {
+    const classes = state.selected
+        ? [ "autocomplete-option", "selected", "set-container" ]
+        : [ "autocomplete-option", "set-container" ];
+
+    return (
+        <li {...props} key={lang} classes={classes}>
+            <FlagIcon lang={lang}/>
+            <div style={{ paddingLeft: '6px' }}>
+                {lang}
             </div>
         </li>
     );
@@ -326,12 +342,13 @@ const CardForm = (props: Props) => {
             <Autocomplete
                 className="control"
                 options={AllLanguages}
-                sx={{ width: 150 }}
+                sx={{ width: 200 }}
                 renderInput={(params) =>
                     <TextField {...params}
                         label="Language"
                         onFocus={e => e.target.select()}
                     />}
+                renderOption={LangOption}
                 onChange={(e, lang, reason) => setLang(lang)}
                 value={state.lang}
                 autoSelect

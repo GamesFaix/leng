@@ -33,22 +33,11 @@ function getLanguageIcon(lang: string) {
     }
 }
 
-function getLanguageHint(lang: string) {
-    switch (lang) {
-        case Language.ChineseSimplified: return " (Simp.)";
-        case Language.ChineseTraditional: return " (Trad.)";
-        default: return "";
-    }
-}
-
 const FlagIcon = (props: Props) => {
-    return (<span>
-        <img
-            src={getLanguageIcon(props.lang)}
-            alt=""
-            width="20px"
-        />
-        {getLanguageHint(props.lang)}
-    </span>);
+    return (<img
+        src={getLanguageIcon(props.lang)}
+        alt=""
+        width="20px"
+    />);
 }
 export default FlagIcon;
