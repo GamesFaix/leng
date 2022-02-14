@@ -1,13 +1,9 @@
-import { Badge, CircularProgress, Tooltip } from '@mui/material';
+import { Badge, Tooltip } from '@mui/material';
 import { sumBy } from 'lodash';
 import * as React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { BoxCard } from '../../logic/model';
-import { getCardImagePath } from '../../sagas/encyclopedia';
-import { RootState } from '../../store';
-import { encyclopediaActions } from '../../store/encyclopedia';
-import selectors from '../../store/selectors';
 import CardTooltip from './card-tooltip';
+import CardImage from '../common/card-image';
 
 type Props = {
     cardGroup: BoxCard[], // Group of cards with same name/set/collectors number, but different foil or language
@@ -15,19 +11,6 @@ type Props = {
 }
 
 const BinderCard = (props: Props) => {
-    const dispatch = useDispatch();
-    const settings = useSelector(selectors.settings);
-    const card = useSelector(selectors.card(props.cardGroup[0].scryfallId));
-    const imagePath = getCardImagePath(settings, card);
-
-    const isImageLoaded = useSelector((state: RootState) => state.encyclopedia.cachedCardImageIds.includes(card.id));
-
-    React.useEffect(() => {
-        if (!isImageLoaded) {
-            dispatch(encyclopediaActions.loadCardImageStart(card.id));
-        }
-    })
-
     const count = sumBy(props.cardGroup, c => c.count);
     const multipleVersionSignifier = props.cardGroup.length > 1 ? '*' : '';
     const badgeContent = `${count}${multipleVersionSignifier}`;
@@ -51,16 +34,7 @@ const BinderCard = (props: Props) => {
                         overflow: 'clip'
                     }}
                 >
-                    {isImageLoaded
-                        ? <img
-                            src={imagePath}
-                            style={{
-                                maxWidth: '100%',
-                                maxHeight: '100%'
-                            }}
-                        />
-                        // TODO: Center spinner
-                        : <CircularProgress/> }
+                    <CardImage scryfallId={props.cardGroup[0].scryfallId}/>
                 </div>
             </Badge>
         </Tooltip>
