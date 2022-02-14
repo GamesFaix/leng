@@ -1,10 +1,11 @@
 import { Checkbox } from '@mui/material';
 import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
-import { Set } from 'scryfall-api';
 import SetSymbol from './set-symbol';
+import { useSelector } from 'react-redux';
+import selectors from '../../store/selectors';
 
-export function CheckboxCell(props: TableCellProps) {
+export const CheckboxCell = (props: TableCellProps) => {
     return (
         <Checkbox
             checked={props.cellData}
@@ -13,8 +14,9 @@ export function CheckboxCell(props: TableCellProps) {
     );
 }
 
-export function SetCell (props: TableCellProps, sets: Set[]) {
-    const set = sets.find(s => s.code === props.cellData);
+export const SetCell : React.FC<TableCellProps> = (props: TableCellProps) => {
+    const abbrev = props.cellData;
+    const set = useSelector(selectors.set(abbrev));
     return (
         <div className="set-container">
             <SetSymbol setAbbrev={set!.code}/>

@@ -1,4 +1,4 @@
-import { uniq } from "lodash";
+import { orderBy, uniq } from "lodash";
 import { RootState } from ".";
 
 const selectors = {
@@ -10,8 +10,9 @@ const selectors = {
     setsOfCard(cardName: string | null) {
         return (state: RootState) => {
             const cards = state.encyclopedia.cards.filter(c => c.name === cardName);
-            const sets = state.encyclopedia.setIndex;
-            return uniq(cards.map(c => sets[c.set]));
+            let sets = cards.map(c => state.encyclopedia.setIndex[c.set]);
+            sets = uniq(sets);
+            return orderBy(sets, s => s.name);
         }
     },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
