@@ -10,6 +10,7 @@ import SetSymbol from '../common/set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
 import FlagIcon from '../common/flag-icon';
+import { CardImageTooltip } from '../common/card-image-tooltip';
 
 type Props = {
     card: BoxCard | null,
@@ -118,18 +119,20 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
         : [ "autocomplete-option" ];
 
     return (
-        <li {...props} key={card.label} classes={classes}>
-            <div>
-                {card.label}
-            </div>
-            <IconButton
-                onClick={() => shell.openExternal(card.scryfall_uri)}
-                title="View on Scryfall"
-                color="primary"
-            >
-                <FontAwesomeIcon icon={icons.inspect} />
-            </IconButton>
-        </li>
+        <CardImageTooltip scryfallId={card.id}>
+            <li {...props} key={card.label} classes={classes}>
+                <div>
+                    {card.label}
+                </div>
+                <IconButton
+                    onClick={() => shell.openExternal(card.scryfall_uri)}
+                    title="View on Scryfall"
+                    color="primary"
+                >
+                    <FontAwesomeIcon icon={icons.inspect} />
+                </IconButton>
+            </li>
+        </CardImageTooltip>
     );
 }
 
