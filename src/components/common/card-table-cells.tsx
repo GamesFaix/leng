@@ -1,11 +1,11 @@
-import { Checkbox, Tooltip } from '@mui/material';
+import { Checkbox } from '@mui/material';
 import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
 import SetSymbol from './set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
 import { BoxCard } from '../../logic/model';
-import CardImage from './card-image';
+import { CardImageTooltip } from './card-image-tooltip';
 
 export const CheckboxCell = (props: TableCellProps) => {
     return (
@@ -30,16 +30,10 @@ export const SetCell : React.FC<TableCellProps> = (props: TableCellProps) => {
 export const NameCell : React.FC<TableCellProps> = (props: TableCellProps) => {
     const card : BoxCard = props.rowData;
     return (
-        <Tooltip
-            title={
-                <div style={{ width: '125px', height: '175px' }}>
-                    <CardImage scryfallId={card.scryfallId}/>
-                </div>
-            }
-        >
+        <CardImageTooltip scryfallId={card.scryfallId}>
             <div>
                 {card.name}
             </div>
-        </Tooltip>
-    )
+        </CardImageTooltip>
+    );
 }
