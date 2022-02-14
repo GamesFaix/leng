@@ -15,27 +15,19 @@ type Props = {
     cards: BoxCard[]
 }
 
+function normalizeCollectorsNumber(x: string) {
+    const pattern = /([a-zA-Z]*)(\d+)(.*)/
+    const match = pattern.exec(x);
+    const prefix = match![1];
+    const num = match![2];
+    const msc = match![3];
+    return `${prefix.padEnd(1, "_")}|${num.toString().padStart(4, '0')}|${msc}`;
+}
+
 function compareCollectorsNumbers(a: string, b: string) : number {
-    const pattern = /(\d+)(.*)/
-    const matchA = pattern.exec(a);
-    const matchB = pattern.exec(b);
-    const numA = Number(matchA![1]);
-    const numB = Number(matchB![1]);
-    if (numA < numB) {
-        return -1;
-    } else if (numA > numB) {
-        return 1;
-    }
-
-    const mscA = matchA![2];
-    const mscB = matchB![2];
-    if (mscA < mscB) {
-        return -1;
-    } else if (mscA > mscB) {
-        return 1;
-    }
-
-    return 0;
+    const normalizedA = normalizeCollectorsNumber(a);
+    const normalizedB = normalizeCollectorsNumber(b);
+    return normalizedA.localeCompare(normalizedB);
 }
 
 enum SetType {
