@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
-import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName, SetInfo } from '../../logic/model';
+import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName } from '../../logic/model';
 import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
-import { Card } from 'scryfall-api';
+import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
 import { orderBy } from 'lodash';
@@ -43,10 +43,10 @@ const defaultState : State = {
     lang: Language.English
 };
 
-function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
+function stateFromCard (card: BoxCard | null, sets: Set[]) : State {
     if (!card) { return defaultState; }
 
-    const setName = sets.find(s => s.abbrev === card.setAbbrev)?.name ?? '';
+    const setName = sets.find(s => s.code === card.setAbbrev)?.name ?? '';
 
     return {
         cardNameQuery: card.name,
@@ -133,16 +133,16 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
     );
 }
 
-const SetOption = (props: any, set: SetInfo, state: any) => {
+const SetOption = (props: any, set: Set, state: any) => {
     const classes = state.selected
         ? [ "autocomplete-option", "selected", "set-container" ]
         : [ "autocomplete-option", "set-container" ];
 
     return (
-        <li {...props} key={set.abbrev} classes={classes}>
-            <SetSymbol setAbbrev={set.abbrev}/>
+        <li {...props} key={set.code} classes={classes}>
+            <SetSymbol setAbbrev={set.code}/>
             <div>
-                {`${set.name} (${set.abbrev.toUpperCase()})`}
+                {`${set.name} (${set.code.toUpperCase()})`}
             </div>
         </li>
     );
@@ -169,7 +169,7 @@ const CardForm = (props: Props) => {
     const [state, setState] = React.useState(startingState);
     const allCardNames = useSelector(selectors.cardNames);
     const setOptions = useSelector(selectors.setsOfCard(state.cardName))
-        .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
+        .map(s => { return { ...s, label: `${s.name} (${s.code.toUpperCase()})` }});
     const cardVersionOptions = useSelector(selectors.cardsOfNameAndSetName(state.cardName, state.setName))
         .map(c => { return { ...c, label: getVersionLabel(c) }})
         .sort(compareCards);
