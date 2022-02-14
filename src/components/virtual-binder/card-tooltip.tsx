@@ -2,18 +2,28 @@ import { Typography } from '@mui/material';
 import { orderBy } from 'lodash';
 import * as React from 'react';
 import { BoxCard, Language } from '../../logic/model';
-import FlagIcon from './flag-icon';
+import FlagIcon from '../common/flag-icon';
 
 type Props = {
     cardGroup: BoxCard[]
 }
 
+function getLanguageHint(lang: Language) {
+    switch (lang) {
+        case Language.ChineseSimplified: return "(Simp.)";
+        case Language.ChineseTraditional: return "(Trad.)";
+        default: return "";
+    }
+}
+
 function getCardLabel(card: BoxCard) {
     const foil = card.foil ? ' Foil' : '';
+    const langHint = getLanguageHint(card.lang);
+
     return <React.Fragment key={card.scryfallId}>
         <br/>
         <span>
-            {card.count} <FlagIcon lang={card.lang}/> {foil}
+            {card.count} <FlagIcon lang={card.lang}/> {langHint} {foil}
         </span>
     </React.Fragment>;
 }
