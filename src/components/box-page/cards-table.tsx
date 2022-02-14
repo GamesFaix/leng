@@ -1,10 +1,8 @@
 import { Card, Checkbox, FormControlLabel } from '@mui/material';
 import { orderBy } from 'lodash';
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
 import { BoxCard, BoxCardModule } from '../../logic/model';
-import selectors from '../../store/selectors';
 import { CheckboxCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
