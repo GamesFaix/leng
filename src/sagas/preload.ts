@@ -1,4 +1,4 @@
-import { fork, put, select, takeEvery, takeLeading } from "redux-saga/effects";
+import { put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { AsyncRequestStatus } from "../logic/model";
 import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadSetDataAction } from "../store/encyclopedia";
 import { BoxInfosLoadAction, BoxLoadAction, BoxState, inventoryActions, InventoryActionTypes } from "../store/inventory";
