@@ -130,7 +130,7 @@ const Binder = (props: Props) => {
         return (
             <BinderPage
                 style={style}
-                cardGrouops={page}
+                cardGroups={page}
                 key={columnIndex}
                 scale={scale}
             />

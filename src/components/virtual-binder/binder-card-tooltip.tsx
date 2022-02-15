@@ -38,7 +38,7 @@ function sortCardGroup(cardGroup: BoxCard[]) : BoxCard[] {
     return sortedEnglish.concat(sortedNonEnglish);
 }
 
-const CardTooltip = (props: Props) => {
+const BinderCardTooltip = (props: Props) => {
     const aCard = props.cardGroup[0];
     const sortedCards = sortCardGroup(props.cardGroup);
 
@@ -48,4 +48,4 @@ const CardTooltip = (props: Props) => {
         {sortedCards.map(getCardLabel)}
     </Typography>);
 }
-export default CardTooltip;
+export default BinderCardTooltip;
