@@ -15,13 +15,19 @@ const SplashScreen = (props: Props) => {
             alignItems: 'center',
             padding: '50px'
         }}>
-            <img
-                src={lengArt}
-                style={{
-                    width: '300px'
-                }}
-            />
+            <Typography variant="h4">
+                Leng
+            </Typography>
             <br/>
+            <figure>
+                <img
+                    src={lengArt}
+                    style={{
+                        width: '300px'
+                    }}
+                />
+                <figcaption>Illus. Daniel Gelon</figcaption>
+            </figure>
             <br/>
             <CircularProgress/>
             <br/>
