@@ -28,27 +28,12 @@ const CollectionPage = (props: Props) => {
                 }}
             >
                 <div>
-                    <Typography variant="h3">
+                    <Typography variant="h4">
                         Your collection
                     </Typography>
                     <Typography sx={{ fontStyle: "italic" }}>
                         {props.cardCount} cards
                     </Typography>
-                </div>
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'end',
-                        flexDirection: 'column',
-                    }}
-                >
-                    <IconButton
-                        title="Home"
-                        onClick={() => props.navigate('/', { replace: true })}
-                        color='primary'
-                    >
-                        <FontAwesomeIcon icon={icons.home}/>
-                    </IconButton>
                 </div>
             </Card>
             <br/>

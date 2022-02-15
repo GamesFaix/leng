@@ -49,7 +49,7 @@ type ReadModeProps = {
 
 function ReadMode(props: ReadModeProps) {
     return (<div style={{ display: 'flex' }}>
-        <Typography variant="h3">
+        <Typography variant="h4">
             {props.name}
         </Typography>
         <IconButton
