@@ -17,43 +17,18 @@ type Props = {
 const BoxesPage = (props: Props) => {
     return (
         <div>
-            <Typography variant="h3">
-                Your boxes
-            </Typography>
-            <br/>
-            <IconButton
-                title="Add box"
-                onClick={() => props.setIsNewBoxFormVisible(true)}
-                color='primary'
-            >
-                <FontAwesomeIcon icon={icons.add}/>
-            </IconButton>
-            <Link to="/collection">
+            <div style={{display: 'flex'}}>
+                <Typography variant="h4">
+                    Your boxes
+                </Typography>
                 <IconButton
-                    title="Collection"
+                    title="Add box"
+                    onClick={() => props.setIsNewBoxFormVisible(true)}
                     color='primary'
                 >
-                    <FontAwesomeIcon icon={icons.collection}/>
+                    <FontAwesomeIcon icon={icons.add}/>
                 </IconButton>
-            </Link>
-            <Link to="/reports">
-                <IconButton
-                    title="Reports"
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.report}/>
-                </IconButton>
-            </Link>
-            <Link to="/settings">
-                <IconButton
-                    title="Settings"
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.settings}/>
-                </IconButton>
-            </Link>
-
-            <br/>
+            </div>
             <br/>
             {props.isNewBoxFormVisible
                 ? (<>
