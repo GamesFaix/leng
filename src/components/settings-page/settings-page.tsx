@@ -1,8 +1,5 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton } from '@mui/material';
+import { Typography } from '@mui/material';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
-import { icons } from '../../fontawesome';
 
 type Props = {
     dataPath: string,
@@ -14,7 +11,10 @@ type Props = {
 const SettingsPage = (props: Props) => {
     return (
         <div>
-            <h2>Settings</h2>
+            <Typography variant="h4">
+                Settings
+            </Typography>
+            <br/>
             <form>
                 <label className="form-label">
                     Data path
@@ -24,6 +24,7 @@ const SettingsPage = (props: Props) => {
                     value={props.dataPath}
                     onChange={e => props.setDataPath(e.target.value)}
                 />
+                <br/>
                 <br/>
                 <div>
                     <button
@@ -41,15 +42,6 @@ const SettingsPage = (props: Props) => {
                     </button>
                 </div>
             </form>
-            <br/>
-            <Link to ="/">
-                <IconButton
-                    title="Home"
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.home}/>
-                </IconButton>
-            </Link>
         </div>
     )
 }

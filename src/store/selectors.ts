@@ -41,6 +41,11 @@ const selectors = {
         return (state: RootState) => {
             return state.encyclopedia.cachedCardImageIds.includes(scryfallId);
         }
+    },
+    unsavedChanges() {
+        return (state: RootState) => {
+            return state.editing.unsavedChanges;
+        };
     }
 }
 export default selectors;
