@@ -11,7 +11,9 @@ type Props = {
 const SettingsPage = (props: Props) => {
     return (
         <div>
-            <Typography variant="h4">Settings</Typography>
+            <Typography variant="h4">
+                Settings
+            </Typography>
             <br/>
             <form>
                 <label className="form-label">

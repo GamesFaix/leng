@@ -1,8 +1,8 @@
 
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import {
-    faBoxOpen,
     faBox,
+    faBoxOpen,
     faCheck,
     faCog,
     faFile,

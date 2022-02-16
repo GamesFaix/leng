@@ -8,7 +8,6 @@ const defaultEditingState : EditingState = {
 
 export enum EditingActionTypes {
     Edit = 'EDITING_EDIT',
-    Save = 'EDITING_SAVE',
     Reset = 'EDITING_RESET'
 }
 
@@ -20,11 +19,6 @@ export const editingActions = {
     edit(): EditingAction {
         return {
             type: EditingActionTypes.Edit
-        };
-    },
-    save(): EditingAction {
-        return {
-            type: EditingActionTypes.Save
         };
     },
     reset(): EditingAction {
@@ -40,11 +34,6 @@ export function editingReducer(state: EditingState = defaultEditingState, action
             return {
                 ...state,
                 unsavedChanges: true
-            };
-        case EditingActionTypes.Save:
-            return {
-                ...state,
-                unsavedChanges: false
             };
         case EditingActionTypes.Reset:
             return {

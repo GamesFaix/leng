@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { BoxState } from '../../store/inventory';
 import BoxesTable from './boxes-table';
@@ -17,9 +16,9 @@ type Props = {
 const BoxesPage = (props: Props) => {
     return (
         <div>
-            <div style={{display: 'flex'}}>
+            <div style={{ display: 'flex' }}>
                 <Typography variant="h4">
-                    Your boxes
+                    Boxes
                 </Typography>
                 <IconButton
                     title="Add box"
