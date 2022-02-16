@@ -119,8 +119,8 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
         : [ "autocomplete-option" ];
 
     return (
-        <CardImageTooltip scryfallId={card.id}>
-            <li {...props} key={card.label} classes={classes}>
+        <CardImageTooltip scryfallId={card.id} key={card.label}>
+            <li {...props} classes={classes}>
                 <div>
                     {card.label}
                 </div>

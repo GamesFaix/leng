@@ -1,6 +1,7 @@
 
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import {
+    faBox,
     faBoxOpen,
     faCheck,
     faCog,
@@ -17,6 +18,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
+    faBox,
     faBoxOpen,
     faCheck,
     faCog,
@@ -45,5 +47,6 @@ export const icons = {
     inspect: <IconProp>'search-plus',
     badge: <IconProp>'id-badge',
     art: <IconProp>'palette',
-    collection: <IconProp>'layer-group'
+    collection: <IconProp>'layer-group',
+    box: <IconProp>'box'
 };
