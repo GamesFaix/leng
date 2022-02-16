@@ -9,6 +9,7 @@ import BoxesPageContainer from './boxes-page/boxes-page-container';
 import SplashScreen from './splash-screen';
 import { preloadActions } from '../store/preload';
 import selectors from '../store/selectors';
+import ReportsPage from './reports-page/reports-page';
 import NavBar from './navbar';
 
 const App = () => {
@@ -31,9 +32,10 @@ const App = () => {
                         <Route path="/boxes/:name" element={<BoxPageContainer/>}/>
                         <Route path="/settings" element={<SettingsPageContainer/>}/>
                         <Route path="/collection" element={<CollectionPageContainer/>}/>
+                        <Route path="/reports" element={<ReportsPage/>}/>
                     </Routes>
-                : <SplashScreen message={message} />
-            }
+                    : <SplashScreen message={message} />
+                }
             </Container>
         </HashRouter>
     );

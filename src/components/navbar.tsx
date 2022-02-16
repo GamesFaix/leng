@@ -41,6 +41,13 @@ const NavBar = () => {
                     <FontAwesomeIcon icon={icons.box}/>
                 </IconButton>
                 <IconButton
+                    title="Reports"
+                    color='primary'
+                    onClick={() => confirmIfUnsavedChangesThenNavigateTo("/reports")}
+                >
+                    <FontAwesomeIcon icon={icons.report}/>
+                </IconButton>
+                <IconButton
                     title="Settings"
                     color='primary'
                     onClick={() => confirmIfUnsavedChangesThenNavigateTo("/settings")}
