@@ -1,51 +1,130 @@
 import { uniq } from 'lodash';
-import { Card } from 'scryfall-api';
-import { asyncRequest, AsyncRequest, AsyncRequestStatus, CardIndex, CardModule, SetInfo } from '../logic/model';
+import { Card, Set } from 'scryfall-api';
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, CardIndex, SetIndex } from '../logic/model';
 
 export type EncyclopediaState = {
-    isLoading: boolean,
     cards: Card[],
-    sets: SetInfo[],
+    sets: Set[],
     cardNames: string[],
-    cardIndex: CardIndex
+    cardIndex: CardIndex,
+    setIndex: SetIndex,
+    cachedSetSymbolAbbrevs: string[],
+    cachedCardImageIds: string[]
 }
 
 const encyclopediaDefaultState : EncyclopediaState = {
-    isLoading: false,
     cards: [],
     sets: [],
     cardNames: [],
-    cardIndex: {}
+    cardIndex: {},
+    setIndex: {},
+    cachedSetSymbolAbbrevs: [],
+    cachedCardImageIds: []
 }
 
 export enum EncyclopediaActionTypes {
-    Load = 'ENCYCLOPEDIA_LOAD'
+    LoadCardData = 'ENCYCLOPEDIA_LOAD_CARD_DATA',
+    LoadSetData = 'ENCYCLOPEDIA_LOAD_SET_DATA',
+    LoadSetSymbol = 'ENCYCLOPEDIA_LOAD_SET_ICON',
+    LoadCardImage = 'ENCYCLOPEDIA_LOAD_CARD_IMAGE'
 }
 
-export type EncyclopediaLoadAction = {
-    type: EncyclopediaActionTypes.Load,
+export type LoadCardDataAction = {
+    type: EncyclopediaActionTypes.LoadCardData,
     value: AsyncRequest<void, Card[]>
 }
 
+export type LoadSetDataAction = {
+    type: EncyclopediaActionTypes.LoadSetData,
+    value: AsyncRequest<void, Set[]>
+}
+
+export type LoadSetSymbolAction = {
+    type: EncyclopediaActionTypes.LoadSetSymbol,
+    value: AsyncRequest<string, string>
+}
+
+export type LoadCardImageAction = {
+    type: EncyclopediaActionTypes.LoadCardImage,
+    value: AsyncRequest<string, string>
+}
+
 export type EncyclopediaAction =
-    EncyclopediaLoadAction;
+    LoadCardDataAction |
+    LoadSetDataAction |
+    LoadSetSymbolAction |
+    LoadCardImageAction;
 
 export const encyclopediaActions = {
-    loadStart() : EncyclopediaLoadAction {
+    loadCardDataStart() : LoadCardDataAction {
         return {
-            type: EncyclopediaActionTypes.Load,
+            type: EncyclopediaActionTypes.LoadCardData,
             value: asyncRequest.started(undefined)
         };
     },
-    loadSuccess(cards: Card[]) : EncyclopediaLoadAction {
+    loadCardDataSuccess(cards: Card[]) : LoadCardDataAction {
         return {
-            type: EncyclopediaActionTypes.Load,
+            type: EncyclopediaActionTypes.LoadCardData,
             value: asyncRequest.success(cards)
         };
     },
-    loadError(error: string) : EncyclopediaLoadAction {
+    loadCardDataError(error: string) : LoadCardDataAction {
         return {
-            type: EncyclopediaActionTypes.Load,
+            type: EncyclopediaActionTypes.LoadCardData,
+            value: asyncRequest.failure(error)
+        };
+    },
+    loadSetDataStart() : LoadSetDataAction {
+        return {
+            type: EncyclopediaActionTypes.LoadSetData,
+            value: asyncRequest.started(undefined)
+        };
+    },
+    loadSetDataSuccess(sets: Set[]) : LoadSetDataAction {
+        return {
+            type: EncyclopediaActionTypes.LoadSetData,
+            value: asyncRequest.success(sets)
+        };
+    },
+    loadSetDataError(error: string) : LoadSetDataAction {
+        return {
+            type: EncyclopediaActionTypes.LoadSetData,
+            value: asyncRequest.failure(error)
+        };
+    },
+    loadSetSymbolStart(setAbbrev: string) : LoadSetSymbolAction {
+        return {
+            type: EncyclopediaActionTypes.LoadSetSymbol,
+            value: asyncRequest.started(setAbbrev)
+        };
+    },
+    loadSetSymbolSuccess(setAbbrev: string) : LoadSetSymbolAction {
+        return {
+            type: EncyclopediaActionTypes.LoadSetSymbol,
+            value: asyncRequest.success(setAbbrev)
+        };
+    },
+    loadSetSymbolError(error: string) : LoadSetSymbolAction {
+        return {
+            type: EncyclopediaActionTypes.LoadSetSymbol,
+            value: asyncRequest.failure(error)
+        };
+    },
+    loadCardImageStart(scryfallId: string) : LoadCardImageAction {
+        return {
+            type: EncyclopediaActionTypes.LoadCardImage,
+            value: asyncRequest.started(scryfallId)
+        };
+    },
+    loadCardImageSuccess(scryfallId: string) : LoadCardImageAction {
+        return {
+            type: EncyclopediaActionTypes.LoadCardImage,
+            value: asyncRequest.success(scryfallId)
+        };
+    },
+    loadCardImageError(error: string) : LoadCardImageAction {
+        return {
+            type: EncyclopediaActionTypes.LoadCardImage,
             value: asyncRequest.failure(error)
         };
     }
@@ -55,16 +134,10 @@ const sortAndDeduplicate = (xs: string[])  => uniq(xs).sort();
 
 export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefaultState, action: EncyclopediaAction) : EncyclopediaState {
     switch (action.type) {
-        case EncyclopediaActionTypes.Load: {
+        case EncyclopediaActionTypes.LoadCardData: {
             switch (action.value.status) {
-                case AsyncRequestStatus.Started:
-                    return {
-                        ...state,
-                        isLoading: true
-                    };
                 case AsyncRequestStatus.Success: {
                     const cards = action.value.data;
-                    const sets = CardModule.toSetInfos(cards);
                     const cardNames = sortAndDeduplicate(cards.map(c => c.name));
 
                     const cardIndex : CardIndex = {};
@@ -74,35 +147,52 @@ export function encyclopediaReducer(state: EncyclopediaState = encyclopediaDefau
 
                     return {
                         ...state,
-                        isLoading: false,
                         cards,
-                        sets,
                         cardNames,
                         cardIndex
                     };
                 }
-                case AsyncRequestStatus.Failure:
-                    return {
-                        ...state,
-                        isLoading: false
-                    };
                 default:
                     return state;
+            }
+        }
+        case EncyclopediaActionTypes.LoadSetData: {
+            switch (action.value.status) {
+                case AsyncRequestStatus.Success: {
+                    const sets = action.value.data;
+
+                    const setIndex : SetIndex = {};
+                    sets.forEach(s => {
+                        setIndex[s.code] = s;
+                    });
+
+                    return {
+                        ...state,
+                        sets,
+                        setIndex
+                    };
+                }
+                default:
+                    return state;
+            }
+        }
+        case EncyclopediaActionTypes.LoadSetSymbol: {
+            switch (action.value.status) {
+                default: return state;
+            }
+        }
+        case EncyclopediaActionTypes.LoadCardImage: {
+            switch (action.value.status) {
+                case AsyncRequestStatus.Success: {
+                    return {
+                        ...state,
+                        cachedCardImageIds: [ ...state.cachedCardImageIds, action.value.data ]
+                    }
+                }
+                default: return state;
             }
         }
         default:
             return state;
     }
-}
-
-export function getEncyclopediaStatus(state: EncyclopediaState) : AsyncRequestStatus {
-    if (state.isLoading) {
-        return AsyncRequestStatus.Started;
-    }
-
-    if (state.cards.length === 0) {
-        return AsyncRequestStatus.NotStarted;
-    }
-
-    return AsyncRequestStatus.Success;
 }

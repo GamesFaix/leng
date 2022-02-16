@@ -52,11 +52,11 @@ module.exports = [
               ]
             },
             {
-              test: /\.(png|jpg|jpeg|gif)$/i,
+              test: /\.(png|jpg|jpeg|gif|svg)$/i,
               use: [
                 'url-loader'
               ]
-            }
+            },
           ]
         },
         output: {

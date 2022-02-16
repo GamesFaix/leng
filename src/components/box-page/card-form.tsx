@@ -1,14 +1,16 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
-import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName, SetInfo } from '../../logic/model';
+import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName } from '../../logic/model';
 import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
-import { Card } from 'scryfall-api';
+import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
 import { orderBy } from 'lodash';
 import SetSymbol from '../common/set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
+import FlagIcon from '../common/flag-icon';
+import { CardImageTooltip } from '../common/card-image-tooltip';
 
 type Props = {
     card: BoxCard | null,
@@ -42,10 +44,10 @@ const defaultState : State = {
     lang: Language.English
 };
 
-function stateFromCard (card: BoxCard | null, sets: SetInfo[]) : State {
+function stateFromCard (card: BoxCard | null, sets: Set[]) : State {
     if (!card) { return defaultState; }
 
-    const setName = sets.find(s => s.abbrev === card.setAbbrev)?.name ?? '';
+    const setName = sets.find(s => s.code === card.setAbbrev)?.name ?? '';
 
     return {
         cardNameQuery: card.name,
@@ -117,31 +119,48 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
         : [ "autocomplete-option" ];
 
     return (
-        <li {...props} key={card.label} classes={classes}>
-            <div>
-                {card.label}
-            </div>
-            <IconButton
-                onClick={() => shell.openExternal(card.scryfall_uri)}
-                title="View on Scryfall"
-                color="primary"
-            >
-                <FontAwesomeIcon icon={icons.inspect} />
-            </IconButton>
-        </li>
+        <CardImageTooltip scryfallId={card.id} key={card.label}>
+            <li {...props} classes={classes}>
+                <div>
+                    {card.label}
+                </div>
+                <IconButton
+                    onClick={() => shell.openExternal(card.scryfall_uri)}
+                    title="View on Scryfall"
+                    color="primary"
+                >
+                    <FontAwesomeIcon icon={icons.inspect} />
+                </IconButton>
+            </li>
+        </CardImageTooltip>
     );
 }
 
-const SetOption = (props: any, set: SetInfo, state: any) => {
+const SetOption = (props: any, set: Set, state: any) => {
     const classes = state.selected
         ? [ "autocomplete-option", "selected", "set-container" ]
         : [ "autocomplete-option", "set-container" ];
 
     return (
-        <li {...props} key={set.abbrev} classes={classes}>
-            <SetSymbol setAbbrev={set.abbrev}/>
+        <li {...props} key={set.code} classes={classes}>
+            <SetSymbol setAbbrev={set.code}/>
             <div>
-                {`${set.name} (${set.abbrev.toUpperCase()})`}
+                {`${set.name} (${set.code.toUpperCase()})`}
+            </div>
+        </li>
+    );
+}
+
+const LangOption = (props: any, lang: Language, state: any) => {
+    const classes = state.selected
+        ? [ "autocomplete-option", "selected", "set-container" ]
+        : [ "autocomplete-option", "set-container" ];
+
+    return (
+        <li {...props} key={lang} classes={classes}>
+            <FlagIcon lang={lang}/>
+            <div style={{ paddingLeft: '6px' }}>
+                {lang}
             </div>
         </li>
     );
@@ -153,7 +172,7 @@ const CardForm = (props: Props) => {
     const [state, setState] = React.useState(startingState);
     const allCardNames = useSelector(selectors.cardNames);
     const setOptions = useSelector(selectors.setsOfCard(state.cardName))
-        .map(s => { return { ...s, label: `${s.name} (${s.abbrev.toUpperCase()})` }});
+        .map(s => { return { ...s, label: `${s.name} (${s.code.toUpperCase()})` }});
     const cardVersionOptions = useSelector(selectors.cardsOfNameAndSetName(state.cardName, state.setName))
         .map(c => { return { ...c, label: getVersionLabel(c) }})
         .sort(compareCards);
@@ -326,12 +345,13 @@ const CardForm = (props: Props) => {
             <Autocomplete
                 className="control"
                 options={AllLanguages}
-                sx={{ width: 150 }}
+                sx={{ width: 200 }}
                 renderInput={(params) =>
                     <TextField {...params}
                         label="Language"
                         onFocus={e => e.target.select()}
                     />}
+                renderOption={LangOption}
                 onChange={(e, lang, reason) => setLang(lang)}
                 value={state.lang}
                 autoSelect

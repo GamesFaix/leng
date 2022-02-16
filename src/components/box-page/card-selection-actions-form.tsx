@@ -1,14 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
 import { BoxCard, BoxCardModule } from '../../logic/model';
+import selectors from '../../store/selectors';
 import CardTransferForm from './card-transfer-form';
 
 type Props = {
     selectedKeys: string[],
     cards: BoxCard[],
-    anyUnsavedChanges: boolean,
     startEdit: (card: BoxCard) => void,
     delete: (card: BoxCard) => void,
     bulkTransferTo: (boxName: string) => void
@@ -16,6 +17,7 @@ type Props = {
 }
 
 const CardSelectionActionsForm = (props: Props) => {
+    const unsavedChanges = useSelector(selectors.unsavedChanges);
 
     function startEdit() {
         const key = props.selectedKeys[0];
@@ -32,7 +34,7 @@ const CardSelectionActionsForm = (props: Props) => {
     const canEdit = props.selectedKeys.length === 1;
     const canDelete = props.selectedKeys.length > 0;
     const canTransfer = props.selectedKeys.length > 0
-        && !props.anyUnsavedChanges;
+        && !unsavedChanges;
 
     return (
         <Card

@@ -1,19 +1,19 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
+import selectors from '../../store/selectors';
 import BoxTitle from './box-title';
 
 type Props = {
     name: string,
     cardCount: number,
-    unsavedChanges: boolean,
     save: () => void
 }
 
 const BoxHeaderCard = (props: Props) => {
-    const navigate = useNavigate();
+    const unsavedChanges = useSelector(selectors.unsavedChanges);
 
     return (
         <Card
@@ -38,21 +38,9 @@ const BoxHeaderCard = (props: Props) => {
                 }}
             >
                 <IconButton
-                    title="Home"
-                    onClick={() => {
-                        if (props.unsavedChanges && !confirm("There are unsaved changes. Are you sure you want to go back?")) {
-                            return;
-                        }
-                        navigate('/', { replace: true });
-                    }}
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.home}/>
-                </IconButton>
-                <IconButton
                     title="Save"
                     onClick={() => props.save()}
-                    disabled={!props.unsavedChanges}
+                    disabled={!unsavedChanges}
                     color='primary'
                 >
                     <FontAwesomeIcon icon={icons.save}/>

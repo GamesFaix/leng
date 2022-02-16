@@ -1,5 +1,5 @@
+import { orderBy, uniq } from "lodash";
 import { RootState } from ".";
-import { CardModule } from "../logic/model";
 
 const selectors = {
     preload: (state: RootState) => state.preload,
@@ -10,8 +10,9 @@ const selectors = {
     setsOfCard(cardName: string | null) {
         return (state: RootState) => {
             const cards = state.encyclopedia.cards.filter(c => c.name === cardName);
-            const sets = CardModule.toSetInfos(cards);
-            return sets;
+            let sets = cards.map(c => state.encyclopedia.setIndex[c.set]);
+            sets = uniq(sets);
+            return orderBy(sets, s => s.name);
         }
     },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
@@ -25,6 +26,22 @@ const selectors = {
         return (state: RootState) => {
             return state.inventory.boxes?.find(b => b.name === name) ?? null;
         }
-    }
+    },
+    set(abbrev: string) {
+        return (state: RootState) => {
+            return state.encyclopedia.setIndex[abbrev] ?? null;
+        }
+    },
+    card(scryfallId: string) {
+        return (state: RootState) => {
+            return state.encyclopedia.cardIndex[scryfallId] ?? null;
+        }
+    },
+    isCardImageLoaded(scryfallId: string) {
+        return (state: RootState) => {
+            return state.encyclopedia.cachedCardImageIds.includes(scryfallId);
+        }
+    },
+    unsavedChanges: (state: RootState) => state.editing.unsavedChanges
 }
 export default selectors;

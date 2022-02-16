@@ -96,7 +96,7 @@ function combineBoxes(boxes: BoxState[], filter: CardFilter) : BoxCard[] {
     return includeCards.filter(c => !exceptKeys.includes(BoxCardModule.getKey(c)));
 }
 
-function getCardsFromBoxes(boxes: BoxState[]) : BoxCard[] {
+export function getCardsFromBoxes(boxes: BoxState[]) : BoxCard[] {
     return boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
 }
 

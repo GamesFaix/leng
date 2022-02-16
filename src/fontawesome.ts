@@ -1,10 +1,11 @@
 
 import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import {
+    faBox,
     faBoxOpen,
     faCheck,
     faCog,
-    faFileAlt,
+    faFile,
     faHome,
     faIdBadge,
     faLayerGroup,
@@ -18,10 +19,11 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
+    faBox,
     faBoxOpen,
     faCheck,
     faCog,
-    faFileAlt,
+    faFile,
     faHome,
     faIdBadge,
     faLayerGroup,
@@ -48,5 +50,6 @@ export const icons = {
     badge: <IconProp>'id-badge',
     art: <IconProp>'palette',
     collection: <IconProp>'layer-group',
-    report: <IconProp>'file-alt'
+    report: <IconProp>'file',
+    box: <IconProp>'box'
 };

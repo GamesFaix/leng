@@ -1,10 +1,13 @@
 import { Checkbox } from '@mui/material';
 import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
-import { SetInfo } from '../../logic/model';
 import SetSymbol from './set-symbol';
+import { useSelector } from 'react-redux';
+import selectors from '../../store/selectors';
+import { BoxCard } from '../../logic/model';
+import { CardImageTooltip } from './card-image-tooltip';
 
-export function CheckboxCell(props: TableCellProps) {
+export const CheckboxCell = (props: TableCellProps) => {
     return (
         <Checkbox
             checked={props.cellData}
@@ -13,12 +16,24 @@ export function CheckboxCell(props: TableCellProps) {
     );
 }
 
-export function SetCell (props: TableCellProps, sets: SetInfo[]) {
-    const set = sets.find(s => s.abbrev === props.cellData);
+export const SetCell : React.FC<TableCellProps> = (props: TableCellProps) => {
+    const abbrev = props.cellData;
+    const set = useSelector(selectors.set(abbrev));
     return (
         <div className="set-container">
-            <SetSymbol setAbbrev={set!.abbrev}/>
+            <SetSymbol setAbbrev={set!.code}/>
             {set!.name}
         </div>
     )
+}
+
+export const NameCell : React.FC<TableCellProps> = (props: TableCellProps) => {
+    const card : BoxCard = props.rowData;
+    return (
+        <CardImageTooltip scryfallId={card.scryfallId}>
+            <div>
+                {card.name}
+            </div>
+        </CardImageTooltip>
+    );
 }

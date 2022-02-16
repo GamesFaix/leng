@@ -9,7 +9,6 @@ import CardSelectionActionsForm from './card-selection-actions-form';
 
 type Props = {
     name: string,
-    anyUnsavedChanges: boolean,
     cards: BoxCard[],
     selectedKeys: string[],
     cardCount: number,
@@ -32,21 +31,19 @@ const BoxPage = (props: Props) => {
             <BoxHeaderCard
                 name={props.name}
                 cardCount={props.cardCount}
-                unsavedChanges={props.anyUnsavedChanges}
                 save={props.save}
             />
             <br/>
             <CardSelectionActionsForm
                 cards={props.cards}
                 selectedKeys={props.selectedKeys}
-                anyUnsavedChanges={props.anyUnsavedChanges}
                 startEdit={props.startEdit}
                 delete={props.delete}
                 bulkTransferTo={props.bulkTransfer}
                 singleTransferTo={props.singleTransfer}
             />
             <br/>
-            <Card sx={{ width: 700, padding: 1 }}>
+            <Card sx={{ width: 800, padding: 1 }}>
                 {props.cardToEdit === null
                     ? <AddCardForm
                         onSubmit={props.add}

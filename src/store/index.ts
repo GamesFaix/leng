@@ -9,24 +9,27 @@ import encyclopediaSaga from '../sagas/encyclopedia';
 import inventorySaga from '../sagas/inventory';
 import { PreloadAction, preloadReducer } from './preload';
 import preloadSaga from '../sagas/preload';
+import { EditingAction, editingReducer } from './editing';
 
 type Action =
   EncyclopediaAction |
   InventoryAction |
   SettingsAction |
-  PreloadAction
+  PreloadAction |
+  EditingAction
 
 const reducer = combineReducers({
     encyclopedia: encyclopediaReducer,
     inventory: inventoryReducer,
     settings: settingsReducer,
-    preload: preloadReducer
+    preload: preloadReducer,
+    editing: editingReducer
 });
 
 // Large payloads break the devtools
 // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
 const actionSanitizer =  (action: Action) => {
-  if (action.type === EncyclopediaActionTypes.Load
+  if ((action.type === EncyclopediaActionTypes.LoadCardData || action.type === EncyclopediaActionTypes.LoadSetData)
     && action.value.status === AsyncRequestStatus.Success) {
       return {
         ...action,
