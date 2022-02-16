@@ -9,18 +9,21 @@ import encyclopediaSaga from '../sagas/encyclopedia';
 import inventorySaga from '../sagas/inventory';
 import { PreloadAction, preloadReducer } from './preload';
 import preloadSaga from '../sagas/preload';
+import { EditingAction, editingReducer } from './editing';
 
 type Action =
   EncyclopediaAction |
   InventoryAction |
   SettingsAction |
-  PreloadAction
+  PreloadAction |
+  EditingAction
 
 const reducer = combineReducers({
     encyclopedia: encyclopediaReducer,
     inventory: inventoryReducer,
     settings: settingsReducer,
-    preload: preloadReducer
+    preload: preloadReducer,
+    editing: editingReducer
 });
 
 // Large payloads break the devtools

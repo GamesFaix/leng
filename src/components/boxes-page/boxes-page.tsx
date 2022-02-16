@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { icons } from '../../fontawesome';
 import { BoxState } from '../../store/inventory';
 import BoxesTable from './boxes-table';
@@ -17,35 +16,18 @@ type Props = {
 const BoxesPage = (props: Props) => {
     return (
         <div>
-            <Typography variant="h3">
-                Your boxes
-            </Typography>
-            <br/>
-            <IconButton
-                title="Add box"
-                onClick={() => props.setIsNewBoxFormVisible(true)}
-                color='primary'
-            >
-                <FontAwesomeIcon icon={icons.add}/>
-            </IconButton>
-            <Link to="/collection">
+            <div style={{ display: 'flex' }}>
+                <Typography variant="h4">
+                    Boxes
+                </Typography>
                 <IconButton
-                    title="Collection"
+                    title="Add box"
+                    onClick={() => props.setIsNewBoxFormVisible(true)}
                     color='primary'
                 >
-                    <FontAwesomeIcon icon={icons.collection}/>
+                    <FontAwesomeIcon icon={icons.add}/>
                 </IconButton>
-            </Link>
-            <Link to="/settings">
-                <IconButton
-                    title="Settings"
-                    color='primary'
-                >
-                    <FontAwesomeIcon icon={icons.settings}/>
-                </IconButton>
-            </Link>
-
-            <br/>
+            </div>
             <br/>
             {props.isNewBoxFormVisible
                 ? (<>

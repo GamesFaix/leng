@@ -6,6 +6,7 @@ import 'react-virtualized/styles.css';
 import { inventoryActions } from '../../store/inventory';
 import BoxPage from './box-page';
 import selectors from '../../store/selectors';
+import { editingActions } from '../../store/editing';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -30,7 +31,6 @@ const BoxPageContainer = () => {
 
     const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
-    const [anyUnsavedChanges, setAnyUnsavedChanges] = React.useState(false);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
     const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
 
@@ -70,7 +70,7 @@ const BoxPageContainer = () => {
         if (!newBox?.cards) { return; }
         const cards = addOrIncrememnt(newBox.cards, card);
         setNewBox({...newBox, cards });
-        setAnyUnsavedChanges(true);
+        dispatch(editingActions.edit());
         setCardToEdit(null);
     }
 
@@ -78,7 +78,7 @@ const BoxPageContainer = () => {
         if (!newBox?.cards) { return; }
         const cards = newBox.cards.filter(c => !BoxCardModule.areSame(c, card));
         setNewBox({...newBox, cards });
-        setAnyUnsavedChanges(true);
+        dispatch(editingActions.edit());
         const key = BoxCardModule.getKey(card);
         if (selectedKeys.includes(key)){
             setSelectedKeys(selectedKeys.filter(k => k !== key));
@@ -114,14 +114,13 @@ const BoxPageContainer = () => {
                 lastModified: newBox.lastModified
             };
             dispatch(inventoryActions.boxSaveStart(box));
-            setAnyUnsavedChanges(false);
+            dispatch(editingActions.reset());
         }
     }
 
     return (
         <BoxPage
             name={name!}
-            anyUnsavedChanges={anyUnsavedChanges}
             cards={newBox?.cards ?? []}
             cardCount={cardCount}
             cardToEdit={cardToEdit}
