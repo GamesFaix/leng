@@ -3,7 +3,6 @@ import * as React from 'react';
 import CardsTable from './cards-table';
 import { BoxCard, CardFilter } from '../../logic/model';
 import CardFilterForm from './card-filter-form';
-import Binder from '../virtual-binder/binder';
 
 type Props = {
     cards: BoxCard[],
