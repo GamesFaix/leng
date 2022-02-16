@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { BoxState } from '../../store/inventory';
 
 type Props = {
-
+    boxes: BoxState[]
 }
 
 const BinderBySetReport = (props: Props) => {
