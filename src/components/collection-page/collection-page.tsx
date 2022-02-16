@@ -29,13 +29,11 @@ const CollectionPage = (props: Props) => {
                 onChange={props.setFilter}
             />
             <br/>
-            {/* <Card sx={{ width: 900, padding: 1 }}>
+            <Card sx={{ width: 900, padding: 1 }}>
                 <CardsTable
                     cards={props.cards}
                 />
             </Card>
-            <br/> */}
-            <Binder cards={props.cards}/>
         </div>
     );
 }
