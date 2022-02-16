@@ -13,7 +13,7 @@ type Props = {
 }
 
 const BoxHeaderCard = (props: Props) => {
-    const unsavedChanges = useSelector(selectors.unsavedChanges());
+    const unsavedChanges = useSelector(selectors.unsavedChanges);
 
     return (
         <Card

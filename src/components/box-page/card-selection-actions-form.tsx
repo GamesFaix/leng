@@ -17,7 +17,7 @@ type Props = {
 }
 
 const CardSelectionActionsForm = (props: Props) => {
-    const unsavedChanges = useSelector(selectors.unsavedChanges());
+    const unsavedChanges = useSelector(selectors.unsavedChanges);
 
     function startEdit() {
         const key = props.selectedKeys[0];

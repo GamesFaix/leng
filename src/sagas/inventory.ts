@@ -59,7 +59,7 @@ function fromFileBox(fileBox: FileBox, cardIndex: CardIndex) : Box {
                 scryfallId: c.scryfallId,
                 lang: c.lang ?? Language.English,
                 foil: c.foil,
-                collectorsNumber: c.collectorsNumber,
+                collectorsNumber: c.collectorsNumber ?? match.collector_number,
                 count: c.count,
                 color: match?.colors ?? [],
                 colorIdentity: match?.color_identity ?? [],

@@ -11,7 +11,7 @@ import { editingActions } from '../store/editing';
 const NavBar = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const unsavedChanges = useSelector(selectors.unsavedChanges());
+    const unsavedChanges = useSelector(selectors.unsavedChanges);
 
     function confirmIfUnsavedChangesThenNavigateTo(route: string) : void {
         const canNavigate = !unsavedChanges
