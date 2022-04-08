@@ -4,7 +4,7 @@ import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { createDirIfMissing } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
-import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, CsvExportAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import selectors from '../store/selectors';
 
 function getInventoryDir(settings: AppSettings) : string {
@@ -326,6 +326,23 @@ function* transferSingle(action: BoxTransferSingleAction) {
     }
 }
 
+function* csvExport(action: CsvExportAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
+
+    try {
+        // load inventory
+        // merge cards to match tappedOut schema
+        // create csv file
+
+        yield put(inventoryActions.csvExportSuccess());
+    }
+    catch (error) {
+        yield put(inventoryActions.csvExportFailure(`${error}`));
+    }
+}
+
 function* inventorySaga() {
     yield takeLeading(InventoryActionTypes.BoxInfosLoad, loadBoxInfos);
     yield takeEvery(InventoryActionTypes.BoxLoad, loadBox);
@@ -335,5 +352,6 @@ function* inventorySaga() {
     yield takeEvery(InventoryActionTypes.BoxDelete, deleteBox);
     yield takeEvery(InventoryActionTypes.BoxTransferBulk, transferBulk);
     yield takeEvery(InventoryActionTypes.BoxTransferSingle, transferSingle);
+    yield takeEvery(InventoryActionTypes.CsvExport, csvExport);
 }
 export default inventorySaga;
