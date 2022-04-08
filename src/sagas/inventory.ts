@@ -8,6 +8,8 @@ import { createDirIfMissing } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, Box, BoxCard, BoxCardModule, BoxInfo, CardIndex, defaultCardFilter, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, CsvExportAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import selectors from '../store/selectors';
+import { createObjectCsvWriter } from 'csv-writer';
+import * as moment from 'moment';
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
@@ -334,11 +336,24 @@ function* csvExport(action: CsvExportAction) {
     }
 
     try {
+        const settings : AppSettings = yield select(selectors.settings);
         const boxes : Box[] = yield select(selectors.boxes);
         const cards = getCards(boxes, defaultCardFilter);
         const csvCards = toCsvCards(cards);
-        // create csv file
-
+        const timestamp = moment.utc().format('YYYY-MM-DD-HH-mm-ss');
+        const writer = createObjectCsvWriter({
+            path: `${settings.dataPath}/collection-${timestamp}.csv`,
+            header: [
+                {id: 'count', title: 'Qty'},
+                {id: 'name', title: 'Card'},
+                {id: 'setAbbrev', title: 'Set'},
+                {id: 'language', title: 'Language'},
+                {id: 'condition', title: 'Condition'},
+                {id: 'foilCount', title: 'Foil'},
+                {id: 'multiverseId', title: 'MultiverseId'}
+            ]
+        });
+        yield call(() => writer.writeRecords(csvCards));
         yield put(inventoryActions.csvExportSuccess());
     }
     catch (error) {
