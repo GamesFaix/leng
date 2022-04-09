@@ -5,7 +5,7 @@ import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { getCards } from '../logic/card-filters';
 import { toCsvCards } from '../logic/csv-model';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxCard, BoxCardModule, BoxInfo, CardIndex, defaultCardFilter, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, defaultCardFilter, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, CsvExportAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import selectors from '../store/selectors';
 import { createObjectCsvWriter } from 'csv-writer';

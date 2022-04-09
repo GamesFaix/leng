@@ -2,8 +2,9 @@ import * as React from 'react';
 import { BoxCard, defaultCardFilter } from '../../logic/model';
 import { getCards } from '../../logic/card-filters';
 import CollectionPage from './collection-page';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
+import { inventoryActions } from '../../store/inventory';
 
 function getCount(cards: BoxCard[]) : number {
     return cards.map(c => c.count).reduce((a,b) => a+b, 0);
@@ -11,6 +12,7 @@ function getCount(cards: BoxCard[]) : number {
 
 const CollectionPageContainer = () => {
     const [filter, setFilter] = React.useState(defaultCardFilter);
+    const dispatch = useDispatch();
     const boxes = useSelector(selectors.boxes);
     const cards = getCards(boxes, filter);
     const cardCount = getCount(cards);
@@ -21,6 +23,7 @@ const CollectionPageContainer = () => {
             cardCount={cardCount}
             filter={filter}
             setFilter={setFilter}
+            exportCsv={() => dispatch(inventoryActions.csvExportStart())}
         />
     );
 }

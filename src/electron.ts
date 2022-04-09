@@ -1,8 +1,7 @@
 import * as Electron from 'electron';
-import CrossProcessExports = require('electron');
 import installExtension, { REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } from 'electron-devtools-installer';
 
-let mainWindow : CrossProcessExports.BrowserWindow | null;
+let mainWindow : Electron.BrowserWindow | null;
 
 const installExtensions = async () => {
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
