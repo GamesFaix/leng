@@ -17,17 +17,17 @@ function normalizeSetAbbrev(setAbbrev: string) : string {
 
 function normalizeLang(lang: Language) : string {
     switch (lang) {
-        case Language.ChineseSimplified: return 'CS';
-        case Language.ChineseTraditional: return 'CT';
+        case Language.ChineseSimplified: return 'CN';
+        case Language.ChineseTraditional: return 'CN';
         case Language.English: return 'EN';
         case Language.French: return 'FR';
-        case Language.German: return 'DE';
+        case Language.German: return 'GE';
         case Language.Italian: return 'IT';
         case Language.Japanese: return 'JP';
-        case Language.Korean: return 'KR';
-        case Language.Portuguese: return 'PT';
-        case Language.Russian: return 'RU';
-        case Language.Spanish: return 'ES';
+        case Language.Korean: return 'KO';
+        case Language.Portuguese: return 'PR';
+        case Language.Russian: return 'RS';
+        case Language.Spanish: return 'SP';
         default: return '';
     }
 }
@@ -48,6 +48,9 @@ function toCsvCard(group: BoxCard[]) : CsvCard {
 }
 
 export function toCsvCards(cards: BoxCard[]) : CsvCard[] {
-    return Object.values(groupBy(cards, c => `${c.name}|${normalizeSetAbbrev(c.setAbbrev)}|${c.lang}`))
+    const isToken = (c: BoxCard) => c.setAbbrev.length === 4 && c.setAbbrev.startsWith('t');
+    const isArt = (c: BoxCard) => c.setAbbrev.length === 4 && c.setAbbrev.startsWith('a');
+    const filteredCards = cards.filter(c => !isArt(c) && !isToken(c));
+    return Object.values(groupBy(filteredCards, c => `${c.name}|${normalizeSetAbbrev(c.setAbbrev)}|${c.lang}`))
         .map(toCsvCard);
 }

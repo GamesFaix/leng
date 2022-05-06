@@ -344,13 +344,13 @@ function* csvExport(action: CsvExportAction) {
         const writer = createObjectCsvWriter({
             path: `${settings.dataPath}/collection-${timestamp}.csv`,
             header: [
-                {id: 'count', title: 'Qty'},
-                {id: 'name', title: 'Card'},
-                {id: 'setAbbrev', title: 'Set'},
-                {id: 'language', title: 'Language'},
-                {id: 'condition', title: 'Condition'},
-                {id: 'foilCount', title: 'Foil'},
-                {id: 'multiverseId', title: 'MultiverseId'}
+                'count',
+                'name',
+                'setAbbrev',
+                'language',
+                'condition',
+                'foilCount',
+                'multiverseId',
             ]
         });
         yield call(() => writer.writeRecords(csvCards));
