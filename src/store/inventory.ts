@@ -28,7 +28,8 @@ export enum InventoryActionTypes {
     BoxDelete = 'INVENTORY_BOX_DELETE',
     BoxRename = 'INVENTORY_BOX_RENAME',
     BoxTransferBulk = 'INVENTORY_BOX_TRANSFER_BULK',
-    BoxTransferSingle = 'INVENTORY_BOX_TRANSFER_SINGLE'
+    BoxTransferSingle = 'INVENTORY_BOX_TRANSFER_SINGLE',
+    CsvExport = 'INVENTORY_CSV_EXPORT'
 }
 
 export type BoxInfosLoadAction = {
@@ -69,6 +70,11 @@ export type BoxTransferBulkAction = {
 export type BoxTransferSingleAction = {
     type: InventoryActionTypes.BoxTransferSingle,
     value: AsyncRequest<BoxTransferSingleRequest, Box[]>
+}
+
+export type CsvExportAction = {
+    type: InventoryActionTypes.CsvExport,
+    value: AsyncRequest<void, void>
 }
 
 export const inventoryActions = {
@@ -216,6 +222,24 @@ export const inventoryActions = {
             value: asyncRequest.failure(error)
         };
     },
+    csvExportStart() : CsvExportAction {
+        return {
+            type: InventoryActionTypes.CsvExport,
+            value: asyncRequest.started(undefined)
+        };
+    },
+    csvExportSuccess() : CsvExportAction {
+        return {
+            type: InventoryActionTypes.CsvExport,
+            value: asyncRequest.success(undefined)
+        };
+    },
+    csvExportFailure(error: string) : CsvExportAction {
+        return {
+            type: InventoryActionTypes.CsvExport,
+            value: asyncRequest.failure(error)
+        };
+    },
 }
 
 export type InventoryAction =
@@ -226,7 +250,8 @@ export type InventoryAction =
     BoxDeleteAction |
     BoxRenameAction |
     BoxTransferBulkAction |
-    BoxTransferSingleAction
+    BoxTransferSingleAction |
+    CsvExportAction
 
 export function inventoryReducer(state: InventoryState = inventoryDefaultState, action: InventoryAction): InventoryState {
     switch (action?.value?.status) {
@@ -335,6 +360,9 @@ export function inventoryReducer(state: InventoryState = inventoryDefaultState, 
                     }) ?? [];
 
                     return { ...state, boxes };
+                }
+                case InventoryActionTypes.CsvExport: {
+                    return state;
                 }
                 default:
                     return state;

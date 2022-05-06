@@ -56,6 +56,7 @@
     "@types/react-virtualized": "^9.21.16",
     "@types/redux-logger": "^3.0.9",
     "@types/redux-saga": "^0.10.5",
+    "csv-writer": "^1.6.0",
     "electron-devtools-installer": "git+https://github.com/MarshallOfSound/electron-devtools-installer.git",
     "fs": "0.0.1-security",
     "lodash": "^4.17.21",

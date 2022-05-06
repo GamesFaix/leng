@@ -2,10 +2,14 @@ import * as fs from 'fs';
 import { orderBy } from 'lodash';
 import { parse } from 'path';
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
+import { getCards } from '../logic/card-filters';
+import { toCsvCards } from '../logic/csv-model';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
-import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, defaultCardFilter, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
+import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, CsvExportAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import selectors from '../store/selectors';
+import { createObjectCsvWriter } from 'csv-writer';
+import * as moment from 'moment';
 
 function getInventoryDir(settings: AppSettings) : string {
     return `${settings.dataPath}/inventory`;
@@ -326,6 +330,37 @@ function* transferSingle(action: BoxTransferSingleAction) {
     }
 }
 
+function* csvExport(action: CsvExportAction) {
+    if (action.value.status !== AsyncRequestStatus.Started) {
+        return;
+    }
+
+    try {
+        const settings : AppSettings = yield select(selectors.settings);
+        const boxes : Box[] = yield select(selectors.boxes);
+        const cards = getCards(boxes, defaultCardFilter);
+        const csvCards = toCsvCards(cards);
+        const timestamp = moment.utc().format('YYYY-MM-DD-HH-mm-ss');
+        const writer = createObjectCsvWriter({
+            path: `${settings.dataPath}/collection-${timestamp}.csv`,
+            header: [
+                'count',
+                'name',
+                'setAbbrev',
+                'language',
+                'condition',
+                'foilCount',
+                'multiverseId',
+            ]
+        });
+        yield call(() => writer.writeRecords(csvCards));
+        yield put(inventoryActions.csvExportSuccess());
+    }
+    catch (error) {
+        yield put(inventoryActions.csvExportFailure(`${error}`));
+    }
+}
+
 function* inventorySaga() {
     yield takeLeading(InventoryActionTypes.BoxInfosLoad, loadBoxInfos);
     yield takeEvery(InventoryActionTypes.BoxLoad, loadBox);
@@ -335,5 +370,6 @@ function* inventorySaga() {
     yield takeEvery(InventoryActionTypes.BoxDelete, deleteBox);
     yield takeEvery(InventoryActionTypes.BoxTransferBulk, transferBulk);
     yield takeEvery(InventoryActionTypes.BoxTransferSingle, transferSingle);
+    yield takeEvery(InventoryActionTypes.CsvExport, csvExport);
 }
 export default inventorySaga;
