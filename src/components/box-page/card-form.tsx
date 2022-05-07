@@ -271,7 +271,8 @@ const CardForm = (props: Props) => {
             color: selectedCard.colors ?? [],
             colorIdentity: selectedCard.color_identity,
             versionLabel: getVersionLabel(selectedCard),
-            normalizedName: normalizeName(state.cardName)
+            normalizedName: normalizeName(state.cardName),
+            legalities: selectedCard.legalities
         };
 
         props.onSubmit(card);

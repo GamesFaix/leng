@@ -4,6 +4,7 @@ import { CardFilter } from '../../logic/model';
 import BoxSelector from './box-selector';
 import ColorRuleSelector, { ColorFilterRule } from './color-rule-selector';
 import ColorsSelector, { ColorFilter } from './color-selector';
+import FormatFilter from './format-filter';
 import SetFilter from './set-filter';
 
 type Props = {
@@ -31,14 +32,19 @@ const CardFilterForm = (props: Props) => {
     function updateFromBoxes(fromBoxes: string[]) {
         props.onChange({ ...props.filter, fromBoxes })
     }
+
     function updateExceptBoxes(exceptBoxes: string[]) {
         props.onChange({ ...props.filter, exceptBoxes })
+    }
+
+    function updateFormat(format: string | null) {
+        props.onChange({ ...props.filter, format })
     }
 
     return (
         <Card
             sx={{
-                width: 700,
+                width: 900,
                 padding: 1
             }}
         >
@@ -60,6 +66,16 @@ const CardFilterForm = (props: Props) => {
                     <SetFilter
                         value={props.filter.setAbbrevs}
                         onChange={updateSetAbbrevs}
+                    />
+                }
+            />
+            <FormControlLabel
+                label="Format"
+                labelPlacement='top'
+                control={
+                    <FormatFilter
+                        value={props.filter.format}
+                        onChange={updateFormat}
                     />
                 }
             />
