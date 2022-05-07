@@ -33,7 +33,8 @@ const MissingFromBinderReport = () => {
         colorRule: ColorFilterRule.IdentityContainsOnly,
         setAbbrevs,
         fromBoxes,
-        exceptBoxes
+        exceptBoxes,
+        format: null
     }
 
     const cards = getCards(boxes, filter);

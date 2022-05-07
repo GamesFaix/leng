@@ -1,4 +1,4 @@
-import { Card, Color, Set } from 'scryfall-api';
+import { Card, Color, Legalities, Set } from 'scryfall-api';
 import { groupBy } from 'lodash';
 import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
 import { ColorFilter } from '../components/collection-page/color-selector';
@@ -117,7 +117,8 @@ export type BoxCard = {
     color: Color[],
     colorIdentity: Color[],
     versionLabel: string,
-    normalizedName: string
+    normalizedName: string,
+    legalities: Legalities
 }
 
 /* A group of cards in a collection, saved in a single box file. (It could represent a binder, bulk box, deck, etc.) */
@@ -200,7 +201,8 @@ export type CardFilter = {
     colors: ColorFilter[],
     colorRule: ColorFilterRule,
     fromBoxes: string[],
-    exceptBoxes: string[]
+    exceptBoxes: string[],
+    format: string | null
 }
 
 export const defaultCardFilter : CardFilter = {
@@ -209,7 +211,8 @@ export const defaultCardFilter : CardFilter = {
     colors: [],
     colorRule: ColorFilterRule.IdentityContainsOnly,
     fromBoxes: [],
-    exceptBoxes: []
+    exceptBoxes: [],
+    format: null
 }
 
 export type BoxTransferBulkRequest = {

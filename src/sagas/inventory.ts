@@ -68,7 +68,8 @@ function fromFileBox(fileBox: FileBox, cardIndex: CardIndex) : Box {
                 color: match?.colors ?? [],
                 colorIdentity: match?.color_identity ?? [],
                 normalizedName: normalizeName(c.name),
-                versionLabel: match ? getVersionLabel(match) : ''
+                versionLabel: match ? getVersionLabel(match) : '',
+                legalities: match.legalities
             };
         })
     };

@@ -78,6 +78,14 @@ function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
         cards = filterCardsByColor(cards, filter.colors, filter.colorRule);
     }
 
+    if (filter.format !== null) {
+        const key = filter.format as any;
+        cards = cards.filter(c => {
+            const legality = c.legalities[key];
+            return legality === 'legal' || legality === 'restricted';
+        });
+    }
+
     return cards;
 }
 
