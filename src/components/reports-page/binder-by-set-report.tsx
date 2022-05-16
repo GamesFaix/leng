@@ -10,7 +10,8 @@ import Binder from '../virtual-binder/binder';
 import { getCardsFromBoxes } from '../../logic/card-filters';
 
 type Props = {
-    boxes: BoxState[]
+    boxes: BoxState[],
+    filter?: (card:BoxCard) => boolean
 }
 
 type SetWithCards = {
@@ -121,7 +122,8 @@ function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][][] { // An ar
 
 const BinderBySetReport = (props: Props) => {
     const sets = useSelector(selectors.sets);
-    const cards = getCardsFromBoxes(props.boxes);
+    let cards = getCardsFromBoxes(props.boxes);
+    if (props.filter) { cards = cards.filter(props.filter); }
     const pages = organizePages(cards, sets);
     return <Binder pages={pages}/>;
 }
