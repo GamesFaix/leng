@@ -6,7 +6,9 @@ import selectors from '../../store/selectors';
 import TabPanel from '../common/tab-panel';
 import BinderBySetReport from './binder-by-set-report';
 import MissingFromBinderReport from './missing-from-binders-report';
-import { Set } from 'scryfall-api';
+import { Set, SetType } from 'scryfall-api';
+
+type SetTypeKey = keyof typeof SetType
 
 const ReportsPage = () => {
     const [tabId, setTabId] = React.useState(0);
@@ -25,6 +27,10 @@ const ReportsPage = () => {
 
     function isMajorSet(s: Set) : boolean {
         return s.set_type === "core" || s.set_type === "expansion" || s.set_type === "masters";
+    }
+
+    function isOfTypes(s: Set, types: SetTypeKey[]) : boolean {
+        return types.includes(s.set_type);
     }
 
     function isBetween(s:Set, start:string, end:string) : boolean {
@@ -51,7 +57,8 @@ const ReportsPage = () => {
             <Tab label="Alpha - 5ED"/>
             <Tab label="Weatherlight - Prophecy"/>
             <Tab label="Invasion - Scourge"/>
-            <Tab label="8ED - Rise...Eldrazi"/>
+            <Tab label="8ED - New Phyrexia"/>
+            <Tab label="M12 - Journey Into Nyx"/>
             <Tab label="Dominaria - ..."/>
             <Tab label="Misc"/>
             {/* <Tab label="Missing from Binders"/> */}
@@ -60,21 +67,35 @@ const ReportsPage = () => {
             {binderReport()}
         </TabPanel>
         <TabPanel hidden={tabId !== 1}>
-            {binderOfSetsReport(s => isMajorSet(s) && isBetween(s, '1993-01-01', '1997-04-01'))}
+            {binderOfSetsReport(s =>
+                isOfTypes(s, [ 'core', 'expansion', 'masters' ]) && // Masters for Chronicles
+                isBetween(s, '1993-01-01', '1997-04-01'))}
         </TabPanel>
         <TabPanel hidden={tabId !== 2}>
-            {binderOfSetsReport(s => isMajorSet(s) && isBetween(s, '1997-04-01', '2000-07-01'))}
+            {binderOfSetsReport(s =>
+                isOfTypes(s, [ 'core', 'expansion' ]) &&
+                isBetween(s, '1997-04-01', '2000-07-01'))}
         </TabPanel>
         <TabPanel hidden={tabId !== 3}>
-            {binderOfSetsReport(s => isMajorSet(s) && isBetween(s, '2000-07-01', '2003-06-01'))}
+            {binderOfSetsReport(s =>
+                isOfTypes(s, [ 'core', 'expansion' ]) &&
+                isBetween(s, '2000-07-01', '2003-06-01'))}
         </TabPanel>
         <TabPanel hidden={tabId !== 4}>
-            {binderOfSetsReport(s => isMajorSet(s) && isBetween(s, '2003-06-01', '2010-05-01'))}
+            {binderOfSetsReport(s =>
+                isOfTypes(s, [ 'core', 'expansion' ]) &&
+                isBetween(s, '2003-06-01', '2011-06-01'))}
         </TabPanel>
         <TabPanel hidden={tabId !== 5}>
-            {binderOfSetsReport(s => anyOf(s, ['dom', 'mh1', 'm19', 'm20', 'm21', 'tsr', 'cmr', 'eld', 'afr']))}
+            {binderOfSetsReport(s =>
+                isOfTypes(s, [ 'core', 'expansion' ]) &&
+                isBetween(s, '2011-06-01', '2014-09-01'))}
         </TabPanel>
         <TabPanel hidden={tabId !== 6}>
+            {binderOfSetsReport(s =>
+                anyOf(s, ['dom', 'mh1', 'm19', 'm20', 'm21', 'tsr', 'cmr', 'eld', 'afr']))}
+        </TabPanel>
+        <TabPanel hidden={tabId !== 7}>
             {binderOfSetsReport(s =>
                 (s.set_type === 'starter' && isBetween(s, '1993-01-01', '2001-01-01'))
                 || (s.set_type === 'funny' && isBetween(s, '1993-01-01', '2005-01-01'))
