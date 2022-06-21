@@ -87,6 +87,13 @@ export const AllLanguages = [
     Language.Spanish
 ];
 
+export enum CardFinish {
+    Normal = 'nonfoil',
+    Foil = "foil",
+    Etched = "etched",
+    Glossy = "glossy"
+}
+
 export type FileBoxCard = {
     scryfallId: string,
     name: string,
@@ -94,6 +101,7 @@ export type FileBoxCard = {
     collectorsNumber: string,
     lang: Language | null,
     foil: boolean,
+    finish: CardFinish,
     count: number,
 }
 
@@ -111,7 +119,7 @@ export type BoxCard = {
     setAbbrev: string,
     collectorsNumber: string,
     lang: Language,
-    foil: boolean,
+    finish: CardFinish,
     count: number,
     setName: string,
     color: Color[],
@@ -159,7 +167,7 @@ export function getVersionLabel(card: Card) : string {
 
 export const BoxCardModule = {
     getKey(card: BoxCard) : string {
-        return `${card.scryfallId}|${card.foil}|${card.lang}`;
+        return `${card.scryfallId}|${card.finish}|${card.lang}`;
     },
 
     areSame(a: BoxCard, b: BoxCard) : boolean {

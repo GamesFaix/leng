@@ -5,7 +5,7 @@ import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { getCards } from '../logic/card-filters';
 import { toCsvCards } from '../logic/csv-model';
 import { createDirIfMissing } from '../logic/file-helpers';
-import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardIndex, defaultCardFilter, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
+import { AppSettings, AsyncRequestStatus, Box, BoxCardModule, BoxInfo, CardFinish, CardIndex, defaultCardFilter, FileBox, getVersionLabel, Language, normalizeName } from "../logic/model";
 import { BoxCreateAction, BoxDeleteAction, BoxInfosLoadAction, BoxLoadAction, BoxRenameAction, BoxSaveAction, BoxState, BoxTransferBulkAction, BoxTransferSingleAction, CsvExportAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import selectors from '../store/selectors';
 import { createObjectCsvWriter } from 'csv-writer';
@@ -49,6 +49,11 @@ function* loadBoxInfos(action: BoxInfosLoadAction) {
     }
 }
 
+function getFinish(finish: CardFinish, foil: boolean) : CardFinish {
+    if (finish) return finish;
+    return foil ? CardFinish.Foil : CardFinish.Normal;
+}
+
 function fromFileBox(fileBox: FileBox, cardIndex: CardIndex) : Box {
     return {
         name: fileBox.name,
@@ -62,7 +67,7 @@ function fromFileBox(fileBox: FileBox, cardIndex: CardIndex) : Box {
                 setName: match?.set_name ?? '',
                 scryfallId: c.scryfallId,
                 lang: c.lang ?? Language.English,
-                foil: c.foil,
+                finish: getFinish(c.finish, c.foil),
                 collectorsNumber: c.collectorsNumber ?? match.collector_number,
                 count: c.count,
                 color: match?.colors ?? [],
@@ -117,7 +122,8 @@ function toFileBox(box: Box) : FileBox {
                 setAbbrev: c.setAbbrev,
                 scryfallId: c.scryfallId,
                 lang: c.lang,
-                foil: c.foil,
+                finish: c.finish,
+                foil: c.finish !== CardFinish.Normal,
                 collectorsNumber: c.collectorsNumber,
                 count: c.count
             };

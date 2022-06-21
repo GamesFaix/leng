@@ -1,5 +1,5 @@
 import { groupBy } from "lodash";
-import { BoxCard, Language } from "./model";
+import { BoxCard, CardFinish, Language } from "./model";
 
 export type CsvCard = {
     count: number;
@@ -34,8 +34,8 @@ function normalizeLang(lang: Language) : string {
 
 function toCsvCard(group: BoxCard[]) : CsvCard {
     const { name, setAbbrev, lang } = group[0];
-    const count = group.filter(c => !c.foil).map(c => c.count).reduce((a,b) => a+b, 0);
-    const foilCount = group.filter(c => c.foil).map(c => c.count).reduce((a,b) => a+b, 0);
+    const count = group.filter(c => c.finish === CardFinish.Normal).map(c => c.count).reduce((a,b) => a+b, 0);
+    const foilCount = group.filter(c => c.finish !== CardFinish.Normal).map(c => c.count).reduce((a,b) => a+b, 0);
     return {
         count,
         name,
