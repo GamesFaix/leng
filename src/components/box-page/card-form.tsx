@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
-import { AllLanguages, BoxCard, getVersionLabel, Language, normalizeName } from '../../logic/model';
+import { AllLanguages, BoxCard, CardFinish, getVersionLabel, Language, normalizeName } from '../../logic/model';
 import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
 import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,7 +23,7 @@ type State = {
     cardName: string | null,
     setName: string | null,
     scryfallId: string | null,
-    foil: boolean | null,
+    finish: CardFinish | null,
     count: number,
     lang: Language
 }
@@ -39,7 +39,7 @@ const defaultState : State = {
     cardName: null,
     setName: null,
     scryfallId: null,
-    foil: null,
+    finish: null,
     count: 1,
     lang: Language.English
 };
@@ -54,7 +54,7 @@ function stateFromCard (card: BoxCard | null, sets: Set[]) : State {
         cardName: card.name,
         setName: setName,
         scryfallId: card.scryfallId,
-        foil: card.foil,
+        finish: card.finish,
         count: card.count,
         lang: card.lang ?? Language.English
     };
@@ -99,8 +99,8 @@ function filterCardNames (options: string[], state: FilterOptionsState<string>) 
 
     let results = options;
 
-    if (query.endsWith('\"')) {
-        const normalizedQuery = query.toLowerCase().replace('\"', '');
+    if (query.endsWith("\"")) {
+        const normalizedQuery = query.toLowerCase().replace("\"", '');
         results = results.filter(c => normalizeName(c) === normalizedQuery);
     }
     else {
@@ -166,6 +166,20 @@ const LangOption = (props: any, lang: Language, state: any) => {
     );
 }
 
+const FinishOption = (props: any, value: CardFinish, state: any) => {
+    const classes = state.selected
+        ? [ "autocomplete-option", "selected", "set-container" ]
+        : [ "autocomplete-option", "set-container" ];
+
+    return (
+        <li {...props} key={value} classes={classes}>
+            <div style={{ paddingLeft: '6px' }}>
+                {value}
+            </div>
+        </li>
+    );
+}
+
 const CardForm = (props: Props) => {
     const sets = useSelector(selectors.sets);
     const startingState = stateFromCard(props.card, sets);
@@ -178,7 +192,7 @@ const CardForm = (props: Props) => {
         .sort(compareCards);
     const selectedSet = setOptions.find(s => s.name === state.setName) ?? null;
     const selectedCard = cardVersionOptions.find(c => c.id === state.scryfallId) ?? null;
-    const foilOptions = getFoilOptions(selectedCard);
+    const finishOptions = (selectedCard as any)?.finishes ?? [];
 
     React.useEffect(() => {
         if (setOptions.length === 1 && !state.setName) {
@@ -187,15 +201,15 @@ const CardForm = (props: Props) => {
         else if (cardVersionOptions.length === 1 && !state.scryfallId) {
             setScryfallId(cardVersionOptions[0].id);
         }
-        else if (foilOptions.length >= 1 && state.foil === null) {
-            setFoil(foilOptions[0]);
+        else if (finishOptions.length >= 1 && state.finish === null) {
+            setFinish(finishOptions[0]);
         }
     });
 
     const formStartRef = React.useRef<HTMLInputElement>(null);
 
-    const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.foil === null;
-    const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.foil === null;
+    const isSubmitButtonDisabled = state.cardName === null || state.setName === null || state.scryfallId === null || state.finish === null;
+    const isCancelButtonDisabled = state.cardName === null && state.setName === null && state.scryfallId === null && state.finish === null;
 
     const setCount = (e: React.ChangeEvent<HTMLInputElement>) => {
         setState({
@@ -217,7 +231,7 @@ const CardForm = (props: Props) => {
             cardName: name,
             setName: null,
             scryfallId: null,
-            foil: null,
+            finish: null
         });
     };
 
@@ -226,7 +240,7 @@ const CardForm = (props: Props) => {
             ...state,
             setName: name,
             scryfallId: null,
-            foil: null,
+            finish: null,
         });
     };
 
@@ -234,14 +248,14 @@ const CardForm = (props: Props) => {
         setState({
             ...state,
             scryfallId: id,
-            foil: null,
+            finish: null,
         });
     };
 
-    const setFoil = (value: boolean) => {
+    const setFinish = (value: CardFinish | null) => {
         setState({
             ...state,
-            foil: value
+            finish: value
         });
     };
 
@@ -253,7 +267,7 @@ const CardForm = (props: Props) => {
     }
 
     const submit = (mode: SubmitMode) => {
-        if (!state.cardName || !selectedCard || state.foil === null || !state.scryfallId) {
+        if (!state.cardName || !selectedCard || state.finish === null || !state.scryfallId) {
             console.log(state);
             console.log(selectedCard);
             throw "Card data missing"
@@ -263,7 +277,7 @@ const CardForm = (props: Props) => {
             name: state.cardName,
             setAbbrev: selectedCard.set,
             setName: selectedCard.set_name,
-            foil: state.foil,
+            finish: state.finish,
             count: state.count,
             scryfallId: state.scryfallId,
             lang: state.lang,
@@ -380,18 +394,23 @@ const CardForm = (props: Props) => {
                 openOnFocus
                 renderOption={CardOption}
             />
-            <FormControlLabel
-                label="Foil"
-                labelPlacement='top'
-                control={
-                    <Checkbox
-                        className="control"
-                        title="Foil"
-                        checked={state.foil ?? false}
-                        onChange={e => setFoil(e.target.checked)}
-                        disabled={foilOptions.length < 2}
-                    />
-                }
+            <Autocomplete
+                className='control'
+                options={finishOptions}
+                sx={{ width: 250 }}
+                renderInput={(params) =>
+                    <TextField {...params}
+                        label="Finish"
+                        onFocus={e => e.target.select()}
+                    />}
+                onChange={(e, value, reason) => setFinish(value)}
+                disabled={finishOptions.length < 2}
+                value={state.finish}
+                autoSelect
+                autoHighlight
+                selectOnFocus
+                openOnFocus
+                renderOption={FinishOption}
             />
             <TextField
                 className="control"

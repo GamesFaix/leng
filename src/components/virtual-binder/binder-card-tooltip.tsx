@@ -1,7 +1,7 @@
 import { Typography } from '@mui/material';
 import { orderBy } from 'lodash';
 import * as React from 'react';
-import { BoxCard, Language } from '../../logic/model';
+import { BoxCard, CardFinish, Language } from '../../logic/model';
 import FlagIcon from '../common/flag-icon';
 
 type Props = {
@@ -17,13 +17,13 @@ function getLanguageHint(lang: Language) {
 }
 
 function getCardLabel(card: BoxCard) {
-    const foil = card.foil ? ' Foil' : '';
+    const finish = card.finish === CardFinish.Normal ? '' : card.finish; // TODO: Capitalize
     const langHint = getLanguageHint(card.lang);
 
     return <React.Fragment key={card.scryfallId}>
         <br/>
         <span>
-            {card.count} <FlagIcon lang={card.lang}/> {langHint} {foil}
+            {card.count} <FlagIcon lang={card.lang}/> {langHint} {finish}
         </span>
     </React.Fragment>;
 }
@@ -33,8 +33,8 @@ function sortCardGroup(cardGroup: BoxCard[]) : BoxCard[] {
     const englishCards = cardGroup.filter(c => c.lang === Language.English);
     const nonEnglishCards = cardGroup.filter(c => c.lang !== Language.English);
 
-    const sortedEnglish = orderBy(englishCards, c => c.foil);
-    const sortedNonEnglish = orderBy(nonEnglishCards, [c => c.lang, c => c.foil]);
+    const sortedEnglish = orderBy(englishCards, c => c.finish); // TODO: Sort so normal is first, not alphabetically
+    const sortedNonEnglish = orderBy(nonEnglishCards, [c => c.lang, c => c.finish]);
     return sortedEnglish.concat(sortedNonEnglish);
 }
 

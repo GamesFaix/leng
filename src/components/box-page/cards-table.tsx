@@ -3,7 +3,7 @@ import { orderBy } from 'lodash';
 import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
 import { BoxCard, BoxCardModule } from '../../logic/model';
-import { CheckboxCell, NameCell, SetCell } from '../common/card-table-cells';
+import { FinishCell, NameCell, SetCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
@@ -145,9 +145,9 @@ const CardsTable = (props: Props) => {
                 />
                 <Column
                     width={50}
-                    label='Foil'
-                    dataKey='foil'
-                    cellRenderer={CheckboxCell}
+                    label='Finish'
+                    dataKey='finish'
+                    cellRenderer={FinishCell}
                 />
                 <Column
                     width={100}

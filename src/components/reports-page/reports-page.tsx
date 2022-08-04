@@ -93,7 +93,7 @@ const ReportsPage = () => {
         </TabPanel>
         <TabPanel hidden={tabId !== 6}>
             {binderOfSetsReport(s =>
-                anyOf(s, ['dom', 'mh1', 'm19', 'm20', 'm21', 'tsr', 'cmr', 'eld', 'afr']))}
+                anyOf(s, ['dom', 'mh1', 'm19', 'm20', 'm21', 'tsr', 'cmr', 'eld', 'afr', 'clb']))}
         </TabPanel>
         <TabPanel hidden={tabId !== 7}>
             {binderOfSetsReport(s =>

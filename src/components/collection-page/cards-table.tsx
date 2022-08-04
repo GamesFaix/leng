@@ -2,7 +2,7 @@ import { orderBy } from 'lodash';
 import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table } from 'react-virtualized';
 import { BoxCard } from '../../logic/model';
-import { CheckboxCell, SetCell, NameCell } from '../common/card-table-cells';
+import { SetCell, NameCell, FinishCell } from '../common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
@@ -79,9 +79,9 @@ const CardsTable = (props: Props) => {
             />
             <Column
                 width={50}
-                label='Foil'
-                dataKey='foil'
-                cellRenderer={CheckboxCell}
+                label='Finish'
+                dataKey='finish'
+                cellRenderer={FinishCell}
             />
             <Column
                 width={100}
