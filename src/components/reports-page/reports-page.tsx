@@ -65,18 +65,27 @@ const ReportsPage = () => {
 
             case "6": return binderOfSetsReport(s =>
                 isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2011-06-01', '2014-09-01'));
+                isBetween(s, '2011-06-01', '2014-06-01'));
 
             case "7": return binderOfSetsReport(s =>
-                anyOf(s, ['dom', 'mh1', 'm19', 'm20', 'm21', 'tsr', 'cmr', 'eld', 'afr', 'clb']));
+                isOfTypes(s, [ 'core', 'expansion' ]) &&
+                isBetween(s, '2014-06-01', '2017-08-01'));
 
             case "8": return binderOfSetsReport(s =>
+                (isOfTypes(s, [ 'core', 'expansion' ]) &&
+                    isBetween(s, '2017-08-01', '2019-08-02'))
+                || anyOf(s, ['mh1', 'm20']));
+
+            case "9": return binderOfSetsReport(s =>
+                anyOf(s, ['m21', 'tsr', 'cmr', 'eld', 'afr', 'clb', 'bbd']));
+
+            case "10": return binderOfSetsReport(s =>
                 (s.set_type === 'starter' && isBetween(s, '1993-01-01', '2001-01-01'))
                 || (s.set_type === 'funny' && isBetween(s, '1993-01-01', '2005-01-01'))
                 || (s.set_type === 'box' && isBetween(s, '1993-01-01', '2002-01-01'))
                 || s.code === 'cst' /* coldsnap decks */);
 
-            case "9": return <SetCompletionReport />;
+            case "11": return <SetCompletionReport />;
 
             default: return <></>;
         }
@@ -94,11 +103,13 @@ const ReportsPage = () => {
             <MenuItem value="4">Apocalypses (Invasion - Scourge)</MenuItem>
             <MenuItem value="5">Early Modern (8ED - New Phyrexia)</MenuItem>
             <MenuItem value="6">Modern 2 (M12 - Journey Into Nyx)</MenuItem>
-            <MenuItem value="7">Pioneer (Dominaria, misc.)</MenuItem>
-            <MenuItem value="8">Silver, Starter, and Boxed Sets</MenuItem>
+            <MenuItem value="7">Pioneer 1 (M15 - Hour of Devastation)</MenuItem>
+            <MenuItem value="8">Pioneer 2 (Ixalan - M19, MH1, M20)</MenuItem>
+            <MenuItem value="9">Pioneer 3 (ELD, M21, TSR, AFR, CLB)</MenuItem>
+            <MenuItem value="10">Silver, Starter, and Boxed Sets</MenuItem>
             <Divider/>
             <MenuItem disabled>Info</MenuItem>
-            <MenuItem value="9">Set completion</MenuItem>
+            <MenuItem value="11">Set completion</MenuItem>
         </Select>
         {getReport(selectedReport)}
     </div>);
