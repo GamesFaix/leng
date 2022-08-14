@@ -14,14 +14,14 @@ const ReportsPage = () => {
     const sets = useSelector(selectors.sets);
     const [selectedReport, setSelectedReport] = React.useState("9");
 
-    function binderReport(filter ?: (c:BoxCard) => boolean) {
-        return <BinderBySetReport boxes={boxes} filter={filter}/>;
+    function binderReport(cardFilter ?: (c:BoxCard) => boolean, sortSets ?: (a:Set,b:Set) => number) {
+        return <BinderBySetReport boxes={boxes} cardFilter={cardFilter} sortSets={sortSets}/>;
     }
 
-    function binderOfSetsReport(filter: (s:Set) => boolean) {
-        const filteredSetAbbrevs = sets.filter(filter).map(s => s.code);
+    function binderOfSetsReport(setFilter: (s:Set) => boolean, sortSets ?: (a:Set,b:Set) => number) {
+        const filteredSetAbbrevs = sets.filter(setFilter).map(s => s.code);
         const cardFilter = (c:BoxCard) => filteredSetAbbrevs.includes(c.setAbbrev);
-        return binderReport(cardFilter);
+        return binderReport(cardFilter, sortSets);
     }
 
     function isOfTypes(s: Set, types: SetTypeKey[]) : boolean {
@@ -43,49 +43,87 @@ const ReportsPage = () => {
         return abbrevs.find(a => isOrHasParent(s, a)) !== undefined;
     }
 
+    function customOrder(abbrevs: string[]) : (a:Set,b:Set) => number {
+        return (a,b) => {
+            const aValue = abbrevs.indexOf(a.code);
+            const bValue = abbrevs.indexOf(b.code);
+            if (aValue < bValue) return -1;
+            if (aValue > bValue) return 1;
+            return 0;
+        };
+    }
+
+    function setsInOrderReport(abbrevs: string[]) {
+        return binderOfSetsReport(set => abbrevs.includes(set.code), customOrder(abbrevs));
+    }
+
     function getReport(selectedId: string) {
         switch (selectedId) {
             case "1": return binderReport();
 
-            case "2": return binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion', 'masters' ]) && // Masters for Chronicles
-                isBetween(s, '1993-01-01', '1997-04-01'));
+            case "2": return setsInOrderReport([
+                'atq', 'leg', 'drk', 'fem', // pre-block
+                'ice', 'hml', 'all', 'csp', 'cst', // ice age block
+                'mir', 'vis', 'wth', // mirage block
+                'tmp', 'sth', 'exo', // tempest block
+                'usg', 'ulg', 'uds', // urza block
+                'mmq'
+            ]);
 
-            case "3": return binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '1997-04-01', '2000-07-01'));
+            case "3": return setsInOrderReport([
+                'nem', 'pcy',
+                'inv', 'pls', 'apc', // invasion block
+                'ody', 'tor', 'jud', // odyssey block
+                'ons', 'lgn', 'scg' // onslaught block
+            ]);
 
-            case "4": return binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2000-07-01', '2003-06-01'));
+            case "4": return setsInOrderReport([
+                'mrd', 'dst', '5dn', // mirrodin block
+                'bhk', 'bok', 'sok', // kamigawa block
+                'rav', 'gpt', 'dis', // ravnica block
+                'tsp', 'plc', 'fut', 'tsr', // time spiral block
+                'lrw', 'mor', 'shm', 'eve', // lorwyn/shadowmoor
+                'ala', 'con', 'arb', // alara block
+                'zen', 'wwk', 'roe', // zendikar block
+                'som', 'mbs', 'nph', // scars of mirrodin block
+                'isd', 'dka', 'avr' // innistrad block
+            ]);
 
-            case "5": return binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2003-06-01', '2011-06-01'));
+            case "5": return setsInOrderReport([
+                'rtr', 'gtc', 'dgm', // return to ravnica block
+                'ths', 'bng', 'jou', // theros block
+                'ktk', 'frf', 'dtk', // tarkir block
+                'bfz', 'ogw' // battle for zenikar block
+            ]);
 
-            case "6": return binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2011-06-01', '2014-06-01'));
+            case "6": return setsInOrderReport([
+                'soi', 'emn', // shadows over innistrad block
+                'kld', 'aer', // kaladesh block
+                'akh', 'hou', // amonkhet block
+                'xln', 'rix', // ixalan block
+                'dom', 'grn', 'rna', 'war', // war of the spark
+                'eld'
+            ]);
 
-            case "7": return binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2014-06-01', '2017-08-01'));
+            case "7": return setsInOrderReport([
+                '2ed', '3ed', '4ed', 'chr',
+                '5ed', '6ed', '7ed',
+                'por', 'p02', 'ptk', 's99', 's00', // portal/starter
+                'ath', 'brb', 'btd', 'dkm' // late 90's box sets
+            ]);
 
-            case "8": return binderOfSetsReport(s =>
-                (isOfTypes(s, [ 'core', 'expansion' ]) &&
-                    isBetween(s, '2017-08-01', '2019-08-02'))
-                || anyOf(s, ['mh1', 'm20']));
+            case "8": return setsInOrderReport([
+                '8ed', '9ed', '10e',
+                'm10', 'm11', 'm12', 'm13', 'm14', 'm15',
+                'ori', 'm19', 'm20', 'm21'
+            ]);
 
-            case "9": return binderOfSetsReport(s =>
-                anyOf(s, ['m21', 'tsr', 'cmr', 'eld', 'afr', 'clb', 'bbd']));
+            case "9": return setsInOrderReport([
+                'ugl', 'unh', 'ust',
+                'bbd', 'mh1', 'cmr', 'afr', 'clb'
+            ]);
 
-            case "10": return binderOfSetsReport(s =>
-                (s.set_type === 'starter' && isBetween(s, '1993-01-01', '2001-01-01'))
-                || (s.set_type === 'funny' && isBetween(s, '1993-01-01', '2005-01-01'))
-                || (s.set_type === 'box' && isBetween(s, '1993-01-01', '2002-01-01'))
-                || s.code === 'cst' /* coldsnap decks */);
-
-            case "11": return <SetCompletionReport />;
+            case "10": return <SetCompletionReport />;
 
             default: return <></>;
         }
@@ -98,18 +136,18 @@ const ReportsPage = () => {
         >
             <MenuItem disabled>Binders</MenuItem>
             <MenuItem value="1">All cards, by set</MenuItem>
-            <MenuItem value="2">Old School (Alpha - 5ED)</MenuItem>
-            <MenuItem value="3">Weatherlight Saga (Weatherlight - Prophecy)</MenuItem>
-            <MenuItem value="4">Apocalypses (Invasion - Scourge)</MenuItem>
-            <MenuItem value="5">Early Modern (8ED - New Phyrexia)</MenuItem>
-            <MenuItem value="6">Modern 2 (M12 - Journey Into Nyx)</MenuItem>
-            <MenuItem value="7">Pioneer 1 (M15 - Hour of Devastation)</MenuItem>
-            <MenuItem value="8">Pioneer 2 (Ixalan - M19, MH1, M20)</MenuItem>
-            <MenuItem value="9">Pioneer 3 (ELD, M21, TSR, AFR, CLB)</MenuItem>
-            <MenuItem value="10">Silver, Starter, and Boxed Sets</MenuItem>
+            <MenuItem value="2">Expansions 1 (Antiquities - Masques)</MenuItem>
+            <MenuItem value="3">Expansions 2 (Nemesis - Scourge)</MenuItem>
+            <MenuItem value="4">Expansions 3 (Mirrodin - Avacyn Restored)</MenuItem>
+            <MenuItem value="5">Expansions 4 (Return to Ravnica - Oath of Gatewatch)</MenuItem>
+            <MenuItem value="6">Expansions 5 (Shadows over Innistrad - Eldraine)</MenuItem>
+            <MenuItem value="7">Core 1 (Unlimied - 7E, Starter, Box Sets)</MenuItem>
+            <MenuItem value="8">Core 2 (8ED - M21)</MenuItem>
+            <MenuItem value="9">Casual (Silver, Commander, etc.)</MenuItem>
+            {/* <MenuItem value="10"></MenuItem> */}
             <Divider/>
             <MenuItem disabled>Info</MenuItem>
-            <MenuItem value="11">Set completion</MenuItem>
+            <MenuItem value="10">Set completion</MenuItem>
         </Select>
         {getReport(selectedReport)}
     </div>);
