@@ -4,10 +4,8 @@ import { useSelector } from 'react-redux';
 import { BoxCard } from '../../logic/model';
 import selectors from '../../store/selectors';
 import BinderBySetReport from './binder-by-set-report';
-import { Set, SetType } from 'scryfall-api';
+import { Set } from 'scryfall-api';
 import SetCompletionReport from './set-completion-report';
-
-type SetTypeKey = keyof typeof SetType
 
 const ReportsPage = () => {
     const boxes = useSelector(selectors.boxes);
@@ -24,23 +22,9 @@ const ReportsPage = () => {
         return binderReport(cardFilter, sortSets);
     }
 
-    function isOfTypes(s: Set, types: SetTypeKey[]) : boolean {
-        return types.includes(s.set_type);
-    }
-
-    function isBetween(s:Set, start:string, end:string) : boolean {
-        return s.released_at !== undefined
-            && s.released_at >= start
-            && s.released_at <= end;
-    }
-
     function isOrHasParent(s:Set, parentAbbrev:string) {
         return s.code === parentAbbrev
             || s.parent_set_code === parentAbbrev;
-    }
-
-    function anyOf(s: Set, abbrevs:string[]) : boolean {
-        return abbrevs.find(a => isOrHasParent(s, a)) !== undefined;
     }
 
     function customOrder(abbrevs: string[]) : (a:Set,b:Set) => number {
