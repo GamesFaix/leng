@@ -110,16 +110,17 @@ const ReportsPage = () => {
                 'xln', 'rix', // ixalan block
             ]) },
         {
-            name: 'Pioneer 2 (Dominaria - Crimson Vow)',
+            name: 'Pioneer 2 (Dominaria - Ikoria)',
             render: () => setsInOrderReport([
                 'dom', 'grn', 'rna', 'war', // war of the spark
-                'eld', 'thb', 'iko', 'znr', // 2020
-                'kld', 'stx', 'afr', 'mid', 'vow', // 2021
+                'eld', 'thb', 'iko', // 2020
             ]) },
         {
-            name: 'Pioneer 3 (Neon Dynasty - ?)',
+            name: 'Pioneer 3 (Zendikar Rising - Dominaria United)',
             render: () => setsInOrderReport([
-                'neo', 'snc', 'dmu', 'bro' // 2022
+                'znr', // 2020
+                'khm', 'stx', 'afr', 'mid', 'vow', // 2021
+                'neo', 'snc', 'dmu' // 2022
             ]) },
         {
             name: 'Casual (Silver, Commander, etc.)',
