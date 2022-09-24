@@ -1,42 +1,30 @@
-import { Tab, Tabs } from '@mui/material';
+import { Divider, MenuItem, Select } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { BoxCard } from '../../logic/model';
 import selectors from '../../store/selectors';
-import TabPanel from '../common/tab-panel';
 import BinderBySetReport from './binder-by-set-report';
-import MissingFromBinderReport from './missing-from-binders-report';
-import { Set, SetType } from 'scryfall-api';
+import { Set } from 'scryfall-api';
+import SetCompletionReport from './set-completion-report';
 
-type SetTypeKey = keyof typeof SetType
+type Report = {
+    name: string,
+    render: () => JSX.Element
+};
 
 const ReportsPage = () => {
-    const [tabId, setTabId] = React.useState(0);
     const boxes = useSelector(selectors.boxes);
     const sets = useSelector(selectors.sets);
+    const [selectedReport, setSelectedReport] = React.useState("2");
 
-    function binderReport(filter ?: (c:BoxCard) => boolean) {
-        return <BinderBySetReport boxes={boxes} filter={filter}/>;
+    function binderReport(cardFilter ?: (c:BoxCard) => boolean, sortSets ?: (a:Set,b:Set) => number) {
+        return <BinderBySetReport boxes={boxes} cardFilter={cardFilter} sortSets={sortSets}/>;
     }
 
-    function binderOfSetsReport(filter: (s:Set) => boolean) {
-        const filteredSetAbbrevs = sets.filter(filter).map(s => s.code);
+    function binderOfSetsReport(setFilter: (s:Set) => boolean, sortSets ?: (a:Set,b:Set) => number) {
+        const filteredSetAbbrevs = sets.filter(setFilter).map(s => s.code);
         const cardFilter = (c:BoxCard) => filteredSetAbbrevs.includes(c.setAbbrev);
-        return binderReport(cardFilter);
-    }
-
-    function isMajorSet(s: Set) : boolean {
-        return s.set_type === "core" || s.set_type === "expansion" || s.set_type === "masters";
-    }
-
-    function isOfTypes(s: Set, types: SetTypeKey[]) : boolean {
-        return types.includes(s.set_type);
-    }
-
-    function isBetween(s:Set, start:string, end:string) : boolean {
-        return s.released_at !== undefined
-            && s.released_at >= start
-            && s.released_at <= end;
+        return binderReport(cardFilter, sortSets);
     }
 
     function isOrHasParent(s:Set, parentAbbrev:string) {
@@ -44,71 +32,131 @@ const ReportsPage = () => {
             || s.parent_set_code === parentAbbrev;
     }
 
-    function anyOf(s: Set, abbrevs:string[]) : boolean {
-        return abbrevs.find(a => isOrHasParent(s, a)) !== undefined;
+    function customOrder(abbrevs: string[]) : (a:Set,b:Set) => number {
+        return (a,b) => {
+            const aValue = abbrevs.indexOf(a.code);
+            const bValue = abbrevs.indexOf(b.code);
+            if (aValue < bValue) return -1;
+            if (aValue > bValue) return 1;
+            return 0;
+        };
     }
 
-    return (<div>
-        <Tabs
-            value={tabId}
-            onChange={(e, tabId) => setTabId(tabId)}
-        >
-            <Tab label="All cards, by set"/>
-            <Tab label="Alpha - 5ED"/>
-            <Tab label="Weatherlight - Prophecy"/>
-            <Tab label="Invasion - Scourge"/>
-            <Tab label="8ED - New Phyrexia"/>
-            <Tab label="M12 - Journey Into Nyx"/>
-            <Tab label="Dominaria - ..."/>
-            <Tab label="Misc"/>
-            {/* <Tab label="Missing from Binders"/> */}
-        </Tabs>
-        <TabPanel hidden={tabId !== 0}>
-            {binderReport()}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 1}>
-            {binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion', 'masters' ]) && // Masters for Chronicles
-                isBetween(s, '1993-01-01', '1997-04-01'))}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 2}>
-            {binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '1997-04-01', '2000-07-01'))}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 3}>
-            {binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2000-07-01', '2003-06-01'))}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 4}>
-            {binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2003-06-01', '2011-06-01'))}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 5}>
-            {binderOfSetsReport(s =>
-                isOfTypes(s, [ 'core', 'expansion' ]) &&
-                isBetween(s, '2011-06-01', '2014-09-01'))}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 6}>
-            {binderOfSetsReport(s =>
-                anyOf(s, ['dom', 'mh1', 'm19', 'm20', 'm21', 'tsr', 'cmr', 'eld', 'afr', 'clb']))}
-        </TabPanel>
-        <TabPanel hidden={tabId !== 7}>
-            {binderOfSetsReport(s =>
-                (s.set_type === 'starter' && isBetween(s, '1993-01-01', '2001-01-01'))
-                || (s.set_type === 'funny' && isBetween(s, '1993-01-01', '2005-01-01'))
-                || (s.set_type === 'box' && isBetween(s, '1993-01-01', '2002-01-01'))
-                || s.code === 'cst' /* coldsnap decks */
-            )}
-        </TabPanel>
+    function setsInOrderReport(abbrevs: string[]) {
+        return binderOfSetsReport(set => abbrevs.includes(set.code), customOrder(abbrevs));
+    }
 
-        {/*
-         <TabPanel hidden={tabId !== 1}>
-             <MissingFromBinderReport />
-         </TabPanel>
-        */}
+    const reports : Report[] = [
+        {
+            name: 'All cards, by set',
+            render: () => binderReport() },
+        {
+            name: 'Core 1 (Alpha - 10th Edition)',
+            render: () => setsInOrderReport([
+                'lea', 'leb', '2ed', '3ed', '4ed', 'chr',
+                '5ed', '6ed', '7ed', '8ed', '9ed', '10e',
+            ]) },
+        {
+            name: 'Core 2 (Magic 2010 - Core 2021)',
+            render: () => setsInOrderReport([
+                'm10', 'm11', 'm12', 'm13', 'm14', 'm15',
+                'ori', 'm19', 'm20', 'm21'
+            ]) },
+        {
+            name: 'Classical 1 (Pre-Block - Tempest Block)',
+            render: () => setsInOrderReport([
+                'arn', 'atq', 'leg', 'drk', 'fem', // pre-block
+                'ice', 'hml', 'all', 'csp', 'cst', // ice age block
+                'mir', 'vis', 'wth', // mirage block
+                'tmp', 'sth', 'exo', // tempest block
+            ]) },
+        {
+            name: 'Classical 2 (Urza Block - Odyssey)',
+            render: () => setsInOrderReport([
+                'usg', 'ulg', 'uds', // urza block
+                'mmq', 'nem', 'pcy', // masques block
+                'inv', 'pls', 'apc', // invasion block
+                'ody',
+            ]) },
+        {
+            name: 'Modern 1 (Torment - Alara Block)',
+            render: () => setsInOrderReport([
+                'tor', 'jud', // odyssey block
+                'ons', 'lgn', 'scg', // onslaught block
+                'mrd', 'dst', '5dn', // mirrodin block
+                'bhk', 'bok', 'sok', // kamigawa block
+                'rav', 'gpt', 'dis', // ravnica block
+                'tsp', 'plc', 'fut', 'tsr', // time spiral block
+                'lrw', 'mor', 'shm', 'eve', // lorwyn/shadowmoor
+                'ala', 'con', 'arb', // alara block
+            ]) },
+        {
+            name: 'Modern 2 (Zendikar Block - Theros Block)',
+            render: () => setsInOrderReport([
+                'zen', 'wwk', 'roe', // zendikar block
+                'som', 'mbs', 'nph', // scars of mirrodin block
+                'isd', 'dka', 'avr', // innistrad block
+                'rtr', 'gtc', 'dgm', // return to ravnica block
+                'ths', 'bng', 'jou', // theros block
+            ]) },
+        {
+            name: 'Pioneer 1 (Tarkir Block - Ixalan Block)',
+            render: () => setsInOrderReport([
+                'ktk', 'frf', 'dtk', // tarkir block
+                'bfz', 'ogw', // battle for zenikar block
+                'soi', 'emn', // shadows over innistrad block
+                'kld', 'aer', // kaladesh block
+                'akh', 'hou', // amonkhet block
+                'xln', 'rix', // ixalan block
+            ]) },
+        {
+            name: 'Pioneer 2 (Dominaria - Ikoria)',
+            render: () => setsInOrderReport([
+                'dom', 'grn', 'rna', 'war', // war of the spark
+                'eld', 'thb', 'iko', // 2020
+            ]) },
+        {
+            name: 'Pioneer 3 (Zendikar Rising - Dominaria United)',
+            render: () => setsInOrderReport([
+                'znr', // 2020
+                'khm', 'stx', 'afr', 'mid', 'vow', // 2021
+                'neo', 'snc', 'dmu' // 2022
+            ]) },
+        {
+            name: 'Casual (Silver, Commander, etc.)',
+            render: () => setsInOrderReport([
+                'ugl', 'unh', 'ust',
+                'bbd', 'mh1', 'mh2', 'cmr', 'clb'
+            ]) },
+        {
+            name: 'Starter',
+            render: () => setsInOrderReport([
+                'por', 'p02', 'ptk', 's99', 's00', // portal/starter
+                'ath', 'brb', 'btd', 'dkm' // late 90's box sets
+            ]) },
+        {
+            name: 'Set completion',
+            render: () => <SetCompletionReport /> },
+    ];
+
+    const getReport = (selectedId: string) => reports[Number(selectedId) - 1].render();
+
+    return (<div>
+        <Select
+            value={selectedReport}
+            onChange={e => setSelectedReport(e.target.value)}
+        >
+            <MenuItem disabled>Binders</MenuItem>
+            {reports.slice(0, 11)
+                .map((r,i) => <MenuItem key={r.name} value={(i+1).toString()}>{r.name}</MenuItem>)
+            }
+            <Divider/>
+            <MenuItem disabled>Info</MenuItem>
+            {reports.slice(11, 13)
+                .map((r,i) => <MenuItem key={r.name} value={(i+13).toString()}>{r.name}</MenuItem>)
+            }
+        </Select>
+        {getReport(selectedReport)}
     </div>);
 }
 export default ReportsPage;

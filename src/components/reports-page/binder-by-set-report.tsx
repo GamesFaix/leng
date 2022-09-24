@@ -11,7 +11,8 @@ import { getCardsFromBoxes } from '../../logic/card-filters';
 
 type Props = {
     boxes: BoxState[],
-    filter?: (card:BoxCard) => boolean
+    cardFilter?: (card:BoxCard) => boolean,
+    sortSets?: (set1: Set, set2: Set) => number
 }
 
 type SetWithCards = {
@@ -65,7 +66,7 @@ function compareCollectorsNumbers(a: string, b: string) : number {
     return normalizedA.localeCompare(normalizedB);
 }
 
-function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][][] { // An array of pages, which are arrays of card groups, which are arrays of foil/non-foil versions of the same card
+function organizePages(cards: BoxCard[], sets: Set[], sortSets?: (a:Set,b:Set) => number) : BoxCard[][][] { // An array of pages, which are arrays of card groups, which are arrays of foil/non-foil versions of the same card
     const groupedBySet : Dictionary<BoxCard[]> = groupBy(cards, c => c.setAbbrev);
 
     const setsWithCards : SetWithCards[] = innerJoin(
@@ -111,7 +112,9 @@ function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][][] { // An ar
             .map(x => { return { set: x.set, pages: chunk(x.cardGroups, 9)}; });
 
     const sortedSets =
-        orderBy(setsWithPages, x => x.set.released_at);
+        sortSets
+            ? setsWithPages.sort((a,b) => sortSets(a.set, b.set))
+            : orderBy(setsWithPages, x => x.set.released_at);
 
     const pages = sortedSets
         .map(x => x.pages)
@@ -123,8 +126,8 @@ function organizePages(cards: BoxCard[], sets: Set[]) : BoxCard[][][] { // An ar
 const BinderBySetReport = (props: Props) => {
     const sets = useSelector(selectors.sets);
     let cards = getCardsFromBoxes(props.boxes);
-    if (props.filter) { cards = cards.filter(props.filter); }
-    const pages = organizePages(cards, sets);
+    if (props.cardFilter) { cards = cards.filter(props.cardFilter); }
+    const pages = organizePages(cards, sets, props.sortSets);
     return <Binder pages={pages}/>;
 }
 export default BinderBySetReport;
