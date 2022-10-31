@@ -84,7 +84,7 @@ const ReportsPage = () => {
                 'tor', 'jud', // odyssey block
                 'ons', 'lgn', 'scg', // onslaught block
                 'mrd', 'dst', '5dn', // mirrodin block
-                'bhk', 'bok', 'sok', // kamigawa block
+                'chk', 'bok', 'sok', // kamigawa block
                 'rav', 'gpt', 'dis', // ravnica block
                 'tsp', 'plc', 'fut', 'tsr', // time spiral block
                 'lrw', 'mor', 'shm', 'eve', // lorwyn/shadowmoor
