@@ -1,4 +1,4 @@
-import { orderBy, uniq } from "lodash";
+import { groupBy, orderBy, uniq } from "lodash";
 import { RootState } from ".";
 
 const selectors = {
@@ -14,6 +14,11 @@ const selectors = {
             sets = uniq(sets);
             return orderBy(sets, s => s.name);
         }
+    },
+    setsWithCards: (state: RootState) => {
+        const allCards = state.encyclopedia.cards;
+        const bySet = groupBy(allCards, c => c.set);
+        return bySet;
     },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
     cardsOfNameAndSetName(cardName: string | null, setName: string | null) {
