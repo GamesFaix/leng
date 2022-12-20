@@ -20,6 +20,12 @@ const selectors = {
         const bySet = groupBy(allCards, c => c.set);
         return bySet;
     },
+    setsGroupedByParent: (state: RootState) => {
+        const { sets } = state.encyclopedia;
+        const groupedByParent = groupBy(sets, s => s.parent_set_code);
+        const parentSets = sets.filter(s => !s.parent_set_code);
+        return parentSets.map(s => ({ parent: s, children: groupedByParent[s.code]}));
+    },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
     cardsOfNameAndSetName(cardName: string | null, setName: string | null) {
         return (state: RootState) => {
