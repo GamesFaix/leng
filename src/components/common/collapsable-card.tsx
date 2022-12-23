@@ -13,7 +13,7 @@ const CollapsableCard = ({ title, sx, children }: Props) => {
     const [expanded, setExpanded] = React.useState(false);
 
     return (
-        <Card sx={sx}>
+        <Card sx={{ padding: 1, ...sx }}>
             <div style={{ display: 'flex' }}>
                 <Typography variant="h5">{title}</Typography>
                 <ExpandCollapseButton isExpanded={expanded} onClick={() => setExpanded(!expanded)}/>

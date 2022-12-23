@@ -38,13 +38,7 @@ const CardSelectionActionsForm = (props: Props) => {
         && !unsavedChanges;
 
     return (
-        <CollapsableCard
-            title="Selection actions"
-            sx={{
-                width: 700,
-                padding: 1
-            }}
-        >
+        <CollapsableCard title="Selection actions">
             <Typography>
                 {`${props.selectedKeys.length} rows selected`}
             </Typography>

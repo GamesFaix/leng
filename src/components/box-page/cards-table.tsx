@@ -88,7 +88,7 @@ const CardsTable = (props: Props) => {
     }
 
     return (
-        <Card sx={{ width: 900, padding: 1 }}>
+        <Card sx={{ padding: 1 }}>
             <FormControlLabel
                 label='Select all'
                 labelPlacement='end'

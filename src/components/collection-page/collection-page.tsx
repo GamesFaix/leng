@@ -42,7 +42,7 @@ const CollectionPage = (props: Props) => {
                 onChange={props.setFilter}
             />
             <br/>
-            <Card sx={{ width: 900, padding: 1 }}>
+            <Card sx={{ padding: 1 }}>
                 <CardsTable
                     cards={props.cards}
                 />

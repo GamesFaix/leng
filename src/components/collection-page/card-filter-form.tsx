@@ -43,13 +43,7 @@ const CardFilterForm = (props: Props) => {
     }
 
     return (
-        <CollapsableCard
-            title="Card filters"
-            sx={{
-                width: 900,
-                padding: 1
-            }}
-        >
+        <CollapsableCard title="Card filters">
             <FormControlLabel
                 label="Name includes"
                 labelPlacement='top'

@@ -19,7 +19,6 @@ const BoxHeaderCard = (props: Props) => {
         <Card
             sx={{
                 padding: "6px",
-                width: 700,
                 display: 'flex',
                 justifyContent: 'space-between'
             }}

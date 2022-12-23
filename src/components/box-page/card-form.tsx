@@ -321,13 +321,7 @@ const CardForm = (props: Props) => {
     };
 
     return (
-        <CollapsableCard
-            title={props.title}
-            sx={{
-                width: 800,
-                padding: 1
-            }}
-        >
+        <CollapsableCard title={props.title}>
             <form>
                 <div className="form-row">
                     <Autocomplete
