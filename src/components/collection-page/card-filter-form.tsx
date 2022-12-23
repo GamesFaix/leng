@@ -1,6 +1,7 @@
-import { Card, FormControlLabel, TextField } from '@mui/material';
+import { FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
 import { CardFilter } from '../../logic/model';
+import CollapsableCard from '../common/collapsable-card';
 import BoxSelector from './box-selector';
 import ColorRuleSelector, { ColorFilterRule } from './color-rule-selector';
 import ColorsSelector, { ColorFilter } from './color-selector';
@@ -42,7 +43,8 @@ const CardFilterForm = (props: Props) => {
     }
 
     return (
-        <Card
+        <CollapsableCard
+            title="Card filters"
             sx={{
                 width: 900,
                 padding: 1
@@ -80,6 +82,7 @@ const CardFilterForm = (props: Props) => {
                 }
             />
             <br/>
+            <br/>
             <FormControlLabel
                 sx={{
                     border: "1px solid gainsboro",
@@ -98,6 +101,7 @@ const CardFilterForm = (props: Props) => {
                     />
                 </div>}
             />
+            <br/>
             <br/>
             <FormControlLabel
                 sx={{
@@ -127,7 +131,7 @@ const CardFilterForm = (props: Props) => {
                     />
                 </div>}
             />
-        </Card>
+        </CollapsableCard>
     )
 }
 export default CardFilterForm;

@@ -1,11 +1,12 @@
 import { Card } from '@mui/material';
 import * as React from 'react';
-import { BoxCard } from '../../logic/model';
+import { BoxCard, CardFilter } from '../../logic/model';
 import CardsTable from './cards-table';
 import 'react-virtualized/styles.css';
 import { AddCardForm, EditCardForm } from './card-form';
 import BoxHeaderCard from './box-header-card';
 import CardSelectionActionsForm from './card-selection-actions-form';
+import CardFilterForm from '../collection-page/card-filter-form';
 
 type Props = {
     name: string,
@@ -13,6 +14,8 @@ type Props = {
     selectedKeys: string[],
     cardCount: number,
     cardToEdit: BoxCard | null,
+    filter: CardFilter,
+    setFilter: (filter: CardFilter) => void,
     add: (card: BoxCard) => void,
     cancelAdd: () => void,
     startEdit: (card: BoxCard) => void,
@@ -34,6 +37,11 @@ const BoxPage = (props: Props) => {
                 save={props.save}
             />
             <br/>
+            <CardFilterForm
+                filter={props.filter}
+                onChange={props.setFilter}
+            />
+            <br/>
             <CardSelectionActionsForm
                 cards={props.cards}
                 selectedKeys={props.selectedKeys}
@@ -43,19 +51,17 @@ const BoxPage = (props: Props) => {
                 singleTransferTo={props.singleTransfer}
             />
             <br/>
-            <Card sx={{ width: 800, padding: 1 }}>
-                {props.cardToEdit === null
-                    ? <AddCardForm
-                        onSubmit={props.add}
-                        onCancel={props.cancelAdd}
-                    />
-                    : <EditCardForm
-                        card={props.cardToEdit}
-                        onSubmit={props.finishEdit}
-                        onCancel={props.cancelEdit}
-                    />
-                }
-            </Card>
+            {props.cardToEdit === null
+                ? <AddCardForm
+                    onSubmit={props.add}
+                    onCancel={props.cancelAdd}
+                />
+                : <EditCardForm
+                    card={props.cardToEdit}
+                    onSubmit={props.finishEdit}
+                    onCancel={props.cancelEdit}
+                />
+            }
             <br/>
             <CardsTable
                 cards={props.cards}

@@ -3,6 +3,8 @@ import { IconProp, library } from "@fortawesome/fontawesome-svg-core";
 import {
     faBox,
     faBoxOpen,
+    faCaretDown,
+    faCaretUp,
     faCheck,
     faCog,
     faFile,
@@ -16,12 +18,14 @@ import {
     faSave,
     faSearchPlus,
     faTrash,
-    faWindowClose
+    faWindowClose,
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
     faBox,
     faBoxOpen,
+    faCaretDown,
+    faCaretUp,
     faCheck,
     faCog,
     faFile,
@@ -35,7 +39,7 @@ library.add(
     faSave,
     faSearchPlus,
     faTrash,
-    faWindowClose
+    faWindowClose,
 );
 
 export const icons = {
@@ -54,5 +58,7 @@ export const icons = {
     collection: <IconProp>'layer-group',
     report: <IconProp>'file',
     box: <IconProp>'box',
-    export: <IconProp>'file-export'
+    export: <IconProp>'file-export',
+    collapseArea: <IconProp>'caret-up',
+    expandArea: <IconProp>'caret-down'
 };

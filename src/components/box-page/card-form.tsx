@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { AllLanguages, BoxCard, CardFinish, getVersionLabel, Language, normalizeName } from '../../logic/model';
-import { Autocomplete, Checkbox, FilterOptionsState, FormControlLabel, IconButton, TextField } from '@mui/material';
+import { Autocomplete, FilterOptionsState, IconButton, TextField } from '@mui/material';
 import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
@@ -11,8 +11,10 @@ import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
 import FlagIcon from '../common/flag-icon';
 import { CardImageTooltip } from '../common/card-image-tooltip';
+import CollapsableCard from '../common/collapsable-card';
 
 type Props = {
+    title: string
     card: BoxCard | null,
     onSubmit: (card: BoxCard) => void,
     onCancel: () => void
@@ -318,165 +320,175 @@ const CardForm = (props: Props) => {
         formStartRef.current?.focus();
     };
 
-    return (<form>
-        <div className="form-row">
-            <Autocomplete
-                className="control"
-                options={allCardNames}
-                sx={{ width: 300 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        inputRef={formStartRef}
-                        label="Card"
+    return (
+        <CollapsableCard
+            title={props.title}
+            sx={{
+                width: 800,
+                padding: 1
+            }}
+        >
+            <form>
+                <div className="form-row">
+                    <Autocomplete
+                        className="control"
+                        options={allCardNames}
+                        sx={{ width: 300 }}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                inputRef={formStartRef}
+                                label="Card"
+                                onFocus={e => e.target.select()}
+                            />}
+                        onChange={(e, value, reason) => setCardName(value)}
+                        value={state.cardName}
+                        autoSelect
+                        autoHighlight
+                        inputValue={state.cardNameQuery}
+                        onInputChange={(e, value, reason) => updateCardNameQuery(value)}
+                        noOptionsText="Type at least 3 characters to search cards..."
+                        filterOptions={filterCardNames}
+                    />
+                    <Autocomplete
+                        className="control"
+                        options={setOptions}
+                        sx={{ width: 300 }}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Set"
+                                onFocus={e => e.target.select()}
+                            />}
+                        onChange={(e, value, reason) => setSetName(value?.name ?? null)}
+                        disabled={setOptions.length < 2}
+                        value={selectedSet}
+                        autoSelect
+                        autoHighlight
+                        selectOnFocus
+                        openOnFocus
+                        renderOption={SetOption}
+                    />
+                    <Autocomplete
+                        className="control"
+                        options={AllLanguages}
+                        sx={{ width: 200 }}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Language"
+                                onFocus={e => e.target.select()}
+                            />}
+                        renderOption={LangOption}
+                        onChange={(e, lang, reason) => setLang(lang)}
+                        value={state.lang}
+                        autoSelect
+                        autoHighlight
+                        selectOnFocus
+                        openOnFocus
+                    />
+                </div>
+                <div className="form-row">
+                    <Autocomplete
+                        className="control"
+                        options={cardVersionOptions}
+                        sx={{ width: 250 }}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Version"
+                                onFocus={e => e.target.select()}
+                            />}
+                        onChange={(e, card, reason) => setScryfallId(card?.id ?? null)}
+                        disabled={cardVersionOptions.length < 2}
+                        value={selectedCard}
+                        autoSelect
+                        autoHighlight
+                        selectOnFocus
+                        openOnFocus
+                        renderOption={CardOption}
+                    />
+                    <Autocomplete
+                        className='control'
+                        options={finishOptions}
+                        sx={{ width: 250 }}
+                        renderInput={(params) =>
+                            <TextField {...params}
+                                label="Finish"
+                                onFocus={e => e.target.select()}
+                            />}
+                        onChange={(e, value, reason) => setFinish(value)}
+                        disabled={finishOptions.length < 2}
+                        value={state.finish}
+                        autoSelect
+                        autoHighlight
+                        selectOnFocus
+                        openOnFocus
+                        renderOption={FinishOption}
+                    />
+                    <TextField
+                        className="control"
+                        type="number"
+                        title="Count"
+                        inputProps={{
+                            min: 1,
+                            max: 1000,
+                        }}
+                        sx={{ width: 75 }}
+                        value={state.count}
+                        onChange={setCount}
                         onFocus={e => e.target.select()}
-                    />}
-                onChange={(e, value, reason) => setCardName(value)}
-                value={state.cardName}
-                autoSelect
-                autoHighlight
-                inputValue={state.cardNameQuery}
-                onInputChange={(e, value, reason) => updateCardNameQuery(value)}
-                noOptionsText="Type at least 3 characters to search cards..."
-                filterOptions={filterCardNames}
-            />
-            <Autocomplete
-                className="control"
-                options={setOptions}
-                sx={{ width: 300 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        label="Set"
-                        onFocus={e => e.target.select()}
-                    />}
-                onChange={(e, value, reason) => setSetName(value?.name ?? null)}
-                disabled={setOptions.length < 2}
-                value={selectedSet}
-                autoSelect
-                autoHighlight
-                selectOnFocus
-                openOnFocus
-                renderOption={SetOption}
-            />
-            <Autocomplete
-                className="control"
-                options={AllLanguages}
-                sx={{ width: 200 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        label="Language"
-                        onFocus={e => e.target.select()}
-                    />}
-                renderOption={LangOption}
-                onChange={(e, lang, reason) => setLang(lang)}
-                value={state.lang}
-                autoSelect
-                autoHighlight
-                selectOnFocus
-                openOnFocus
-            />
-        </div>
-        <div className="form-row">
-            <Autocomplete
-                className="control"
-                options={cardVersionOptions}
-                sx={{ width: 250 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        label="Version"
-                        onFocus={e => e.target.select()}
-                    />}
-                onChange={(e, card, reason) => setScryfallId(card?.id ?? null)}
-                disabled={cardVersionOptions.length < 2}
-                value={selectedCard}
-                autoSelect
-                autoHighlight
-                selectOnFocus
-                openOnFocus
-                renderOption={CardOption}
-            />
-            <Autocomplete
-                className='control'
-                options={finishOptions}
-                sx={{ width: 250 }}
-                renderInput={(params) =>
-                    <TextField {...params}
-                        label="Finish"
-                        onFocus={e => e.target.select()}
-                    />}
-                onChange={(e, value, reason) => setFinish(value)}
-                disabled={finishOptions.length < 2}
-                value={state.finish}
-                autoSelect
-                autoHighlight
-                selectOnFocus
-                openOnFocus
-                renderOption={FinishOption}
-            />
-            <TextField
-                className="control"
-                type="number"
-                title="Count"
-                inputProps={{
-                    min: 1,
-                    max: 1000,
-                }}
-                sx={{ width: 75 }}
-                value={state.count}
-                onChange={setCount}
-                onFocus={e => e.target.select()}
-            />
-            {props.card === null ? <>
-                <IconButton
-                    className="control"
-                    onClick={() => submit(SubmitMode.ClearAll)}
-                    title="Add"
-                    disabled={isSubmitButtonDisabled}
-                    color="success"
-                >
-                    <FontAwesomeIcon icon={icons.add}/>
-                </IconButton>
-                <IconButton
-                    className="control"
-                    onClick={() => submit(SubmitMode.ClearAllButName)}
-                    title="Add, then add another card with the same name"
-                    disabled={isSubmitButtonDisabled}
-                    color="secondary"
-                >
-                    <FontAwesomeIcon icon={icons.add}/>
-                    <FontAwesomeIcon icon={icons.badge}/>
-                </IconButton>
-                <IconButton
-                    className="control"
-                    onClick={() => submit(SubmitMode.ClearAllButNameAndSet)}
-                    title="Add, then add another card with the same name and set"
-                    disabled={isSubmitButtonDisabled}
-                    color="secondary"
-                >
-                    <FontAwesomeIcon icon={icons.add}/>
-                    <FontAwesomeIcon icon={icons.art}/>
-                </IconButton>
-            </> : <>
-                <IconButton
-                    className="control"
-                    onClick={() => submit(SubmitMode.ClearAll)}
-                    title="Done editing"
-                    disabled={isSubmitButtonDisabled}
-                    color="success"
-                >
-                    <FontAwesomeIcon icon={icons.ok}/>
-                </IconButton>
-            </>}
-            <IconButton
-                className="control"
-                onClick={cancel}
-                title="Cancel"
-                disabled={isCancelButtonDisabled}
-                color="error"
-            >
-                <FontAwesomeIcon icon={icons.cancel}/>
-            </IconButton>
-        </div>
-    </form>);
+                    />
+                    {props.card === null ? <>
+                        <IconButton
+                            className="control"
+                            onClick={() => submit(SubmitMode.ClearAll)}
+                            title="Add"
+                            disabled={isSubmitButtonDisabled}
+                            color="success"
+                        >
+                            <FontAwesomeIcon icon={icons.add}/>
+                        </IconButton>
+                        <IconButton
+                            className="control"
+                            onClick={() => submit(SubmitMode.ClearAllButName)}
+                            title="Add, then add another card with the same name"
+                            disabled={isSubmitButtonDisabled}
+                            color="secondary"
+                        >
+                            <FontAwesomeIcon icon={icons.add}/>
+                            <FontAwesomeIcon icon={icons.badge}/>
+                        </IconButton>
+                        <IconButton
+                            className="control"
+                            onClick={() => submit(SubmitMode.ClearAllButNameAndSet)}
+                            title="Add, then add another card with the same name and set"
+                            disabled={isSubmitButtonDisabled}
+                            color="secondary"
+                        >
+                            <FontAwesomeIcon icon={icons.add}/>
+                            <FontAwesomeIcon icon={icons.art}/>
+                        </IconButton>
+                    </> : <>
+                        <IconButton
+                            className="control"
+                            onClick={() => submit(SubmitMode.ClearAll)}
+                            title="Done editing"
+                            disabled={isSubmitButtonDisabled}
+                            color="success"
+                        >
+                            <FontAwesomeIcon icon={icons.ok}/>
+                        </IconButton>
+                    </>}
+                    <IconButton
+                        className="control"
+                        onClick={cancel}
+                        title="Cancel"
+                        disabled={isCancelButtonDisabled}
+                        color="error"
+                    >
+                        <FontAwesomeIcon icon={icons.cancel}/>
+                    </IconButton>
+                </div>
+            </form>
+        </CollapsableCard>
+    );
 }
 
 type AddFormProps = {
@@ -484,5 +496,11 @@ type AddFormProps = {
     onCancel: () => void
 }
 
-export const AddCardForm = (props: AddFormProps) => CardForm({ ...props, card: null });
-export const EditCardForm = (props: Props) => CardForm(props);
+type EditFormProps = {
+    card: BoxCard | null,
+    onSubmit: (card: BoxCard) => void,
+    onCancel: () => void
+}
+
+export const AddCardForm = (props: AddFormProps) => CardForm({ ...props, card: null, title: "Add card" });
+export const EditCardForm = (props: EditFormProps) => CardForm({ ...props, title: "Edit card" });

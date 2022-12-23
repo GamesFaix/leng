@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { Box, BoxCard, BoxCardModule } from '../../logic/model';
+import { Box, BoxCard, BoxCardModule, defaultCardFilter } from '../../logic/model';
 import 'react-virtualized/styles.css';
 import { inventoryActions } from '../../store/inventory';
 import BoxPage from './box-page';
 import selectors from '../../store/selectors';
 import { editingActions } from '../../store/editing';
+import { getCards } from '../../logic/card-filters';
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard) : BoxCard[] {
     const match = cards.find(c => BoxCardModule.areSame(c, card));
@@ -33,6 +34,7 @@ const BoxPageContainer = () => {
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
     const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
     const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
+    const [filter, setFilter] = React.useState(defaultCardFilter);
 
     const cardCount = (newBox?.cards ?? []).map(c => c.count).reduce((a, b) => a + b, 0);
 
@@ -118,13 +120,17 @@ const BoxPageContainer = () => {
         }
     }
 
+    const cards = getCards(newBox ? [newBox] : [], filter);
+
     return (
         <BoxPage
             name={name!}
-            cards={newBox?.cards ?? []}
+            cards={cards}
             cardCount={cardCount}
             cardToEdit={cardToEdit}
             selectedKeys={selectedKeys}
+            filter={filter}
+            setFilter={setFilter}
             add={submit}
             cancelAdd={cancel}
             startEdit={checkout}

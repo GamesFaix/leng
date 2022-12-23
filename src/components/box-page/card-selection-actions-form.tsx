@@ -1,10 +1,11 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Card, IconButton, Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
 import { BoxCard, BoxCardModule } from '../../logic/model';
 import selectors from '../../store/selectors';
+import CollapsableCard from '../common/collapsable-card';
 import CardTransferForm from './card-transfer-form';
 
 type Props = {
@@ -37,7 +38,8 @@ const CardSelectionActionsForm = (props: Props) => {
         && !unsavedChanges;
 
     return (
-        <Card
+        <CollapsableCard
+            title="Selection actions"
             sx={{
                 width: 700,
                 padding: 1
@@ -70,7 +72,7 @@ const CardSelectionActionsForm = (props: Props) => {
                     disabled={!canTransfer}
                 />
             </div>
-        </Card>
+        </CollapsableCard>
     );
 }
 export default CardSelectionActionsForm;
