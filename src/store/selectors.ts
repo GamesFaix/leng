@@ -1,5 +1,7 @@
 import { groupBy, orderBy, uniq } from "lodash";
 import { RootState } from ".";
+import { getCardsFromBoxes } from "../logic/card-filters";
+import { SetGroup } from "../logic/model";
 
 const selectors = {
     preload: (state: RootState) => state.preload,
@@ -20,11 +22,14 @@ const selectors = {
         const bySet = groupBy(allCards, c => c.set);
         return bySet;
     },
-    setsGroupedByParent: (state: RootState) => {
+    setsGroupedByParent: (state: RootState) : SetGroup[] => {
         const { sets } = state.encyclopedia;
         const groupedByParent = groupBy(sets, s => s.parent_set_code);
         const parentSets = sets.filter(s => !s.parent_set_code);
-        return parentSets.map(s => ({ parent: s, children: groupedByParent[s.code]}));
+        return parentSets.map(s => ({
+            parent: s,
+            children: groupedByParent[s.code] ?? []
+        }));
     },
     cardNames: (state: RootState) => state.encyclopedia.cardNames,
     cardsOfNameAndSetName(cardName: string | null, setName: string | null) {
@@ -57,6 +62,34 @@ const selectors = {
     formats(state: RootState) {
         const anyCard = state.encyclopedia.cards[0];
         return Object.keys(anyCard.legalities);
+    },
+    boxCardsOfParentSet(code: string | null) {
+        return (state: RootState) => {
+            if (!code) return [];
+
+            const codes = [code, ...state.encyclopedia.sets.filter(s => s.parent_set_code === code).map(s => s.code)];
+            return getCardsFromBoxes(state.inventory.boxes ?? [])
+                .filter(c => codes.includes(c.setAbbrev));
+        };
+    },
+    setGroupsInBoxes(state: RootState) {
+        const { sets } = state.encyclopedia;
+        const groupedByParent = groupBy(sets, s => s.parent_set_code);
+        const parentSets = sets.filter(s => !s.parent_set_code);
+        const setGroups = parentSets.map(s => ({
+            parent: s,
+            children: groupedByParent[s.code] ?? []
+        }));
+
+        const boxes = state.inventory.boxes ?? [];
+        const setCodesInBoxes = uniq(boxes
+            .map(b => b.cards?.map(c => c.setAbbrev)?? [])
+            .reduce((a,b) => a.concat(b), []));
+        return setGroups
+            .filter(sg => [ sg.parent, ...sg.children ]
+                .some(s => setCodesInBoxes.includes(s.code))
+            );
     }
+
 }
 export default selectors;
