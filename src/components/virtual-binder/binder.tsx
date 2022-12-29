@@ -36,9 +36,9 @@ const Binder = (props: Props) => {
                 cellRenderer={renderCell}
                 columnCount={props.pages.length}
                 columnWidth={500}
-                height={740}
+                height={680}
                 rowCount={1}
-                rowHeight={700}
+                rowHeight={680}
                 width={1480}
             />
         </Card>
