@@ -31,7 +31,7 @@ const CardImage = (props: Props) => {
         if (!isImageLoaded) {
             dispatch(encyclopediaActions.loadCardImageStart(props.scryfallId));
         }
-    });
+    }, [isImageLoaded, props.scryfallId, dispatch]);
 
     return (isImageLoaded
         ? <LoadedImage {...props}/>

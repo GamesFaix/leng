@@ -3,95 +3,99 @@ import {
   TextField,
 } from "@mui/material";
 import * as React from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import selectors from "../../store/selectors";
 import { Set } from "scryfall-api";
-import { uniq } from "lodash";
 import SetSymbol from "../common/set-symbol";
-import { getCardsFromBoxes } from "../../logic/card-filters";
-import { organizePages } from "./binder-page-generator";
 import Binder from "../virtual-binder/binder";
-import { RootState } from "../../store";
+import { organizePages } from "./binder-page-generator";
+import { getCardsFromBoxes } from "../../logic/card-filters";
 
-const SetSelectorOption = (props: any, set: Set, state: any) => {
+type SetSelectorOption = {
+    label: string,
+    parent: Set
+}
+
+const SetSelectorOption = (props: any, option: SetSelectorOption, state: any) => {
   const classes = state.selected
     ? ["autocomplete-option", "selected", "set-container"]
     : ["autocomplete-option", "set-container"];
 
   return (
-    <li {...props} key={set.code} classes={classes}>
-      <SetSymbol setAbbrev={set.code} />
-      <div>{`${set.name} (${set.code.toUpperCase()})`}</div>
+    <li {...props} key={option.parent.code} classes={classes}>
+      <SetSymbol setAbbrev={option.parent.code} />
+      <div>{`${option.parent.name} (${option.parent.code.toUpperCase()})`}</div>
     </li>
   );
 };
 
 const SetSelector = (props: {
-  options: Set[];
-  selectedSet: Set | null;
-  setSelectedSet: (s: Set | null) => void;
-}) => (
-  <Autocomplete
-    className="control"
-    options={props.options.map((s) => ({ ...s, label: s.name }))}
-    sx={{ width: 300 }}
-    renderInput={(params) => (
-      <TextField {...params} label="Set" onFocus={(e) => e.target.select()} />
-    )}
-    onChange={(e, value) => {
-      console.log('set selector on change ' + value?.code);
-      if (props.selectedSet?.code !== value?.code) {
-        props.setSelectedSet(value);
-      }
-    }}
-    value={props.selectedSet}
-    autoSelect
-    autoHighlight
-    selectOnFocus
-    openOnFocus
-    renderOption={SetSelectorOption}
-    isOptionEqualToValue={(x, y) => x.code === y.code}
-  />
-);
+  selectedSetCode: string | null;
+  setSelectedSetCode: (code: string | null) => void;
+}) => {
+    const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
+    const options = React.useMemo<SetSelectorOption[]>(
+        () => setGroupsInBoxes.map((s) => ({ label: s.parent.name, parent: s.parent })),
+        [setGroupsInBoxes]);
+    const selectedOption = options.find(o => o.parent.code === props.selectedSetCode) ?? null;
 
-const getSetGroupsInBoxes = (rootState: RootState) => {
-  console.log('get set groups in boxes')
-  const boxes = selectors.boxes(rootState);
-  const setGroups = selectors.setsGroupedByParent(rootState);
+    const onSelection = React.useCallback((e, value) => props.setSelectedSetCode(value?.parent.code ?? null), [props.setSelectedSetCode]);
 
-  const setCodesInBoxes = uniq(boxes
-    .map(b => b.cards?.map(c => c.setAbbrev)?? [])
-    .reduce((a,b) => a.concat(b), []));
-
-  // Don't show sets with 0 cards
-  return setGroups
-    .filter(sg => [ sg.parent, ...sg.children ]
-      .some(s => setCodesInBoxes.includes(s.code))
-    );
+    return (
+        <Autocomplete
+            className="control"
+            options={options}
+            sx={{ width: 300 }}
+            renderInput={(params) => (
+                <TextField {...params} label="Set" onFocus={(e) => e.target.select()} />
+            )}
+            onChange={onSelection}
+            value={selectedOption}
+            autoSelect
+            autoHighlight
+            selectOnFocus
+            openOnFocus
+            renderOption={SetSelectorOption}
+        />);
 };
 
-const ReportsPage = () => {
+type BinderProps = {
+  parentSetCode: string | null
+}
+
+const BinderOfSet = (props: BinderProps) => {
+  const boxes = useSelector(selectors.boxes);
+  const sets = useSelector(selectors.sets);
   const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
-  const [selectedParentSet, setSelectedParentSet] = React.useState<Set | null>(null);
-  const selectedCards = useSelector(selectors.boxCardsOfParentSet(selectedParentSet?.code ?? null))
 
-  const selectedSetGroup = setGroupsInBoxes.find(sg => selectedParentSet?.code === sg.parent.code);
-  const selectedSets = selectedSetGroup ? [ selectedSetGroup.parent, ...selectedSetGroup.children ] : [];
-  const pages = organizePages(selectedCards, selectedSets);
+  const pages = React.useMemo(() => {
+    if (!props.parentSetCode) { return []; }
+    const codes = [props.parentSetCode, ...sets.filter(s => s.parent_set_code === props.parentSetCode).map(s => s.code)];
+    const selectedCards = getCardsFromBoxes(boxes).filter(c => codes.includes(c.setAbbrev));
+    const selectedSetGroup = setGroupsInBoxes.find(sg => props.parentSetCode === sg.parent.code);
+    const selectedSets = selectedSetGroup ? [ selectedSetGroup.parent, ...selectedSetGroup.children ] : [];
+    const pages = organizePages(selectedCards, selectedSets);
+    return pages;
+  }, [props.parentSetCode]);
 
-  const onSetSelected = React.useCallback((s) => {
-    console.log('on set selected ' + s.code);
-    setSelectedParentSet(s);
-  }, []);
+  return <Binder pages={pages}/>;
+}
+
+const ReportsPage = () => {
+  const [selectedParentSetCode, setSelectedParentSetCode] = React.useState<string | null>(null);
+
+  const onSetSelected = React.useCallback((code) => {
+    if (code === selectedParentSetCode) return;
+    setSelectedParentSetCode(code);
+  }, [setSelectedParentSetCode]);
 
   return (
     <div>
       <SetSelector
-        options={setGroupsInBoxes.map((s) => s.parent)}
-        selectedSet={selectedParentSet}
-        setSelectedSet={onSetSelected}
+        selectedSetCode={selectedParentSetCode}
+        setSelectedSetCode={onSetSelected}
       />
-      <Binder pages={pages}/>
+      <BinderOfSet parentSetCode={selectedParentSetCode}/>
     </div>
   );
 };

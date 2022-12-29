@@ -1,5 +1,6 @@
 import { groupBy, orderBy, uniq } from "lodash";
 import { RootState } from ".";
+import { organizePages } from "../components/reports-page/binder-page-generator";
 import { getCardsFromBoxes } from "../logic/card-filters";
 import { SetGroup } from "../logic/model";
 
@@ -89,7 +90,15 @@ const selectors = {
             .filter(sg => [ sg.parent, ...sg.children ]
                 .some(s => setCodesInBoxes.includes(s.code))
             );
+    },
+    binderPagesOfParentSet(parentSetCode: string | null) {
+        return (state: RootState) => {
+            const selectedCards = selectors.boxCardsOfParentSet(parentSetCode)(state);
+            const setGroupsInBoxes = selectors.setGroupsInBoxes(state);
+            const selectedSetGroup = setGroupsInBoxes.find(sg => parentSetCode === sg.parent.code);
+            const selectedSets = selectedSetGroup ? [ selectedSetGroup.parent, ...selectedSetGroup.children ] : [];
+            return organizePages(selectedCards, selectedSets);
+        }
     }
-
 }
 export default selectors;

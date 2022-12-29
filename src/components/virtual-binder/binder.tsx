@@ -11,6 +11,7 @@ type Props = {
 }
 
 const Binder = (props: Props) => {
+    console.log('Rendering Binder');
     const renderCell = ({ columnIndex, style }: GridCellProps) => {
         const page = props.pages[columnIndex];
         return (
