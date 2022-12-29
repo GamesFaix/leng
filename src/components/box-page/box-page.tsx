@@ -1,4 +1,4 @@
-import { Card } from '@mui/material';
+import { Card, Container } from '@mui/material';
 import * as React from 'react';
 import { BoxCard } from '../../logic/model';
 import CardsTable from './cards-table';
@@ -27,7 +27,7 @@ type Props = {
 
 const BoxPage = (props: Props) => {
     return (
-        <div>
+        <Container style={{ paddingTop: '12px' }}>
             <BoxHeaderCard
                 name={props.name}
                 cardCount={props.cardCount}
@@ -62,7 +62,7 @@ const BoxPage = (props: Props) => {
                 selectedKeys={props.selectedKeys}
                 onSelectionChanged={props.select}
             />
-        </div>
+        </Container>
     );
 };
 export default BoxPage;

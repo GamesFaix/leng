@@ -30,7 +30,6 @@ const Binder = (props: Props) => {
         <Card
             style={{
                 padding: '5px',
-                width: '1800px'
             }}
         >
             <Grid
@@ -40,7 +39,7 @@ const Binder = (props: Props) => {
                 height={740}
                 rowCount={1}
                 rowHeight={700}
-                width={1800}
+                width={1480}
             />
         </Card>
     )

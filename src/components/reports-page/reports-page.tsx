@@ -1,5 +1,6 @@
 import {
   Autocomplete,
+  Container,
   TextField,
 } from "@mui/material";
 import * as React from "react";
@@ -82,7 +83,7 @@ const BinderOfSet = (props: BinderProps) => {
 }
 
 const ReportsPage = () => {
-  const [selectedParentSetCode, setSelectedParentSetCode] = React.useState<string | null>(null);
+  const [selectedParentSetCode, setSelectedParentSetCode] = React.useState<string | null>('6ed');
 
   const onSetSelected = React.useCallback((code) => {
     if (code === selectedParentSetCode) return;
@@ -90,13 +91,13 @@ const ReportsPage = () => {
   }, [setSelectedParentSetCode]);
 
   return (
-    <div>
+    <Container style={{ paddingTop: '12px' }} maxWidth="xl">
       <SetSelector
         selectedSetCode={selectedParentSetCode}
         setSelectedSetCode={onSetSelected}
       />
       <BinderOfSet parentSetCode={selectedParentSetCode}/>
-    </div>
+    </Container>
   );
 };
 export default ReportsPage;

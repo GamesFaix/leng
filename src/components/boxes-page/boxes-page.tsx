@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IconButton, Typography } from '@mui/material';
+import { Container, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
 import { BoxState } from '../../store/inventory';
@@ -15,7 +15,7 @@ type Props = {
 
 const BoxesPage = (props: Props) => {
     return (
-        <div>
+        <Container style={{ paddingTop: '12px' }}>
             <div style={{ display: 'flex' }}>
                 <Typography variant="h4">
                     Boxes
@@ -42,7 +42,7 @@ const BoxesPage = (props: Props) => {
                     deleteBox={props.delete}
                 />
             </div>
-        </div>
+        </Container>
     );
 };
 export default BoxesPage;

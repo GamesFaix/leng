@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, HashRouter, Routes } from 'react-router-dom';
-import { Container } from '@mui/material';
 import BoxPageContainer from './box-page/box-page-container';
 import CollectionPageContainer from './collection-page/collection-page-container';
 import SettingsPageContainer from './settings-page/settings-page-container';
@@ -25,7 +24,6 @@ const App = () => {
     return (
         <HashRouter>
             <NavBar/>
-            <Container style={{ paddingTop: '12px' }}>
                 {ready
                     ? <Routes>
                         <Route path="/" element={<BoxesPageContainer/>} />
@@ -36,7 +34,6 @@ const App = () => {
                     </Routes>
                     : <SplashScreen message={message} />
                 }
-            </Container>
         </HashRouter>
     );
 }
