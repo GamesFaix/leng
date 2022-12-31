@@ -98,6 +98,11 @@ type SetCompletionModel = {
   ownedCards: BoxCard[]
 }
 
+const ofRarity = (rarity: Rarity, model: SetCompletionModel) : SetCompletionModel => ({
+  ...model,
+  allCards: model.allCards.filter(c => getRarity(c) === rarity)
+})
+
 type ParentSetCompletionModel = {
   parentSet: SetCompletionModel,
   tokenSet: SetCompletionModel | null,
@@ -110,6 +115,22 @@ type ParentSetCompletionModel = {
 type CheckListItem = {
   card: ScryfallCard,
   has: boolean
+}
+
+type Rarity = "mythic" | "rare" | "uncommon" | "common" | "basicland"
+
+const basicLandNames = [ "Forest", "Island", "Mountain", "Plains", "Swamp", "Snow-Covered Forest", "Snow-Covered Island", "Snow-Covered Mountain", "Snow-Covered Plains", "Snow-Covered Swamp"];
+
+const getRarity = (card: ScryfallCard) : Rarity => {
+  switch (card.rarity) {
+    case "mythic": return "mythic";
+    case "rare": return "rare";
+    case "uncommon": return "uncommon";
+    case "common":
+      return basicLandNames.includes(card.name) ? "basicland" : "common";
+    default:
+      throw Error("Invalid rarity " + card.rarity);
+  }
 }
 
 const createModel = (
@@ -150,21 +171,31 @@ const createChecklist = (model: SetCompletionModel) : CheckListItem[] =>
       has: model.ownedCards.some(bc => bc.collectorsNumber === c.collector_number)
   }));
 
+const StatsRow = (props: { label: string, model: SetCompletionModel | null }) => {
+  if (!props.model || props.model.allCards.length === 0) { return <></>; }
+
+  return (
+    <TableRow>
+      <TableCell>{props.label}</TableCell>
+      <CompletionCell checkList={createChecklist(props.model)}/>
+    </TableRow>
+  )
+}
+
 const CompletionCell = (props: { checkList: CheckListItem[] }) => {
   if (props.checkList.length === 0) {
       return <TableCell/>
   }
 
-  const completion =
-      props.checkList.filter(x => x.has).length
-      / props.checkList.length
-      * 100;
+  const numerator =  props.checkList.filter(x => x.has).length;
+  const denominator =props.checkList.length;
+  const completion = numerator / denominator * 100;
 
   return (
       <TableCell>
           <LinearProgress variant='determinate' value={completion}/>
           <Typography style={{ fontSize: ".75em" }}>
-              {completion.toFixed(0)}%
+              {`${completion.toFixed(0)}% (${numerator} of ${denominator})`}
           </Typography>
       </TableCell>
   );
@@ -193,30 +224,17 @@ const SetStats = (props: BinderProps) => {
     <TableContainer>
       <Table>
         <TableBody>
-          <TableRow>
-            <TableCell>Main set</TableCell>
-            <CompletionCell checkList={createChecklist(model.parentSet)}/>
-          </TableRow>
-          {model.tokenSet ? <TableRow>
-            <TableCell>Tokens</TableCell>
-            <CompletionCell checkList={createChecklist(model.tokenSet)}/>
-          </TableRow> : null}
-          {model.promoSet ? <TableRow>
-            <TableCell>Promos</TableCell>
-            <CompletionCell checkList={createChecklist(model.promoSet)}/>
-          </TableRow> : null}
-          {model.commanderSet ? <TableRow>
-            <TableCell>Commander cards</TableCell>
-            <CompletionCell checkList={createChecklist(model.commanderSet)}/>
-          </TableRow> : null }
-          {model.masterpieceSet ? <TableRow>
-            <TableCell>Masterpiece cards</TableCell>
-            <CompletionCell checkList={createChecklist(model.masterpieceSet)}/>
-          </TableRow> : null }
-          {model.artSet ? <TableRow>
-            <TableCell>Art cards</TableCell>
-            <CompletionCell checkList={createChecklist(model.artSet)}/>
-          </TableRow> : null }
+          <StatsRow label="Main Set" model={model.parentSet}/>
+          <StatsRow label="Mythics" model={ofRarity("mythic", model.parentSet)}/>
+          <StatsRow label="Rares" model={ofRarity("rare", model.parentSet)}/>
+          <StatsRow label="Uncommons" model={ofRarity("uncommon", model.parentSet)}/>
+          <StatsRow label="Commons" model={ofRarity("common", model.parentSet)}/>
+          <StatsRow label="Basic Lands" model={ofRarity("basicland", model.parentSet)}/>
+          <StatsRow label="Tokens" model={model.tokenSet}/>
+          <StatsRow label="Promo Cards" model={model.promoSet}/>
+          <StatsRow label="Commander Cards" model={model.commanderSet}/>
+          <StatsRow label="Masterpiece Cards" model={model.masterpieceSet}/>
+          <StatsRow label="Art Cards" model={model.artSet}/>
         </TableBody>
       </Table>
     </TableContainer>
