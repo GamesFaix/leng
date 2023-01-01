@@ -39,7 +39,7 @@ function getSetBase(setName: string) : string {
     return setName;
 }
 
-function normalizeCollectorsNumber(x: string) {
+export function normalizeCollectorsNumber(x: string) {
     const pattern = /([a-zA-Z]*)(\d+)(.*)/
     const match = pattern.exec(x);
     const prefix = match![1];
