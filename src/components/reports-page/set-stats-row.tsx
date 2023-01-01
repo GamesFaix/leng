@@ -34,21 +34,24 @@ const CompletionCell = (props: { checkList: CheckListItem[] }) => {
   );
 };
 
-const ChecklistCell = (props: { checklist: CheckListItem[] }) => {
+const ChecklistCell = (props: { checklist: CheckListItem[], visibility: CheckListVisibility }) => {
   return (
     <TableCell>
       <ChecklistView
         checklist={props.checklist}
-        visibility={CheckListVisibility.all}
+        visibility={props.visibility}
       />
     </TableCell>
   );
 };
 
-const SetStatsRow = (props: {
-  label: string;
-  model: SetCompletionModel | null;
-}) => {
+type Props = {
+    label: string;
+    model: SetCompletionModel | null;
+    visibility: CheckListVisibility;
+};
+
+const SetStatsRow = (props: Props) => {
   if (!props.model || props.model.allCards.length === 0) {
     return <></>;
   }
@@ -63,7 +66,7 @@ const SetStatsRow = (props: {
         {props.label}
       </TableCell>
       {expanded ? (
-        <ChecklistCell checklist={checklist} />
+        <ChecklistCell checklist={checklist} visibility={props.visibility}/>
       ) : (
         <CompletionCell checkList={checklist} />
       )}

@@ -1,4 +1,7 @@
 import {
+  MenuItem,
+  Select,
+  SelectChangeEvent,
   Table,
   TableBody,
   TableContainer,
@@ -9,7 +12,13 @@ import selectors from "../../store/selectors";
 import { Set, Card as ScryfallCard } from "scryfall-api";
 import { getCardsFromBoxes } from "../../logic/card-filters";
 import { BoxCard } from "../../logic/model";
-import { getRarity, ParentSetCompletionModel, Rarity, SetCompletionModel } from "./model";
+import {
+  CheckListVisibility,
+  getRarity,
+  ParentSetCompletionModel,
+  Rarity,
+  SetCompletionModel,
+} from "./model";
 import SetStatsRow from "./set-stats-row";
 
 const ofRarity = (
@@ -43,7 +52,11 @@ const createModel = (
     set
       ? {
           set,
-          allCards: encyclopediaCardsBySet[set.code],
+          allCards: encyclopediaCardsBySet[set.code]
+            .filter(c =>
+                // These are usually alternate Chinese arts
+                !c.collector_number.endsWith('s') &&
+                !c.collector_number.endsWith('†')),
           ownedCards: ownedCards.filter((c) => c.setAbbrev === set.code),
         }
       : null;
@@ -92,36 +105,85 @@ const SetStatsPanel = (props: Props) => {
     [selectedSets, selectedCards, cardsBySet]
   );
 
+  const [visibility, setVisibility] = React.useState(CheckListVisibility.all);
+
+  const onVisibilityChanged = React.useCallback(
+    (e: SelectChangeEvent<string>) => {
+      const value = e.target.value as CheckListVisibility;
+      setVisibility(value);
+    },
+    [setVisibility]
+  );
+
   return (
-    <TableContainer>
-      <Table width="sm">
-        <TableBody>
-          <SetStatsRow label="Main Set" model={model.parentSet} />
-          <SetStatsRow
-            label="Mythics"
-            model={ofRarity("mythic", model.parentSet)}
-          />
-          <SetStatsRow label="Rares" model={ofRarity("rare", model.parentSet)} />
-          <SetStatsRow
-            label="Uncommons"
-            model={ofRarity("uncommon", model.parentSet)}
-          />
-          <SetStatsRow
-            label="Commons"
-            model={ofRarity("common", model.parentSet)}
-          />
-          <SetStatsRow
-            label="Basic Lands"
-            model={ofRarity("basicland", model.parentSet)}
-          />
-          <SetStatsRow label="Tokens" model={model.tokenSet} />
-          <SetStatsRow label="Promo Cards" model={model.promoSet} />
-          <SetStatsRow label="Commander Cards" model={model.commanderSet} />
-          <SetStatsRow label="Masterpiece Cards" model={model.masterpieceSet} />
-          <SetStatsRow label="Art Cards" model={model.artSet} />
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <div>
+      <Select value={visibility} onChange={onVisibilityChanged}>
+        <MenuItem value={CheckListVisibility.all}>All</MenuItem>
+        <MenuItem value={CheckListVisibility.owned}>Owned</MenuItem>
+        <MenuItem value={CheckListVisibility.missing}>Missing</MenuItem>
+      </Select>
+      <TableContainer>
+        <Table width="sm">
+          <TableBody>
+            <SetStatsRow
+              label="Main Set"
+              model={model.parentSet}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Mythics"
+              model={ofRarity("mythic", model.parentSet)}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Rares"
+              model={ofRarity("rare", model.parentSet)}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Uncommons"
+              model={ofRarity("uncommon", model.parentSet)}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Commons"
+              model={ofRarity("common", model.parentSet)}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Basic Lands"
+              model={ofRarity("basicland", model.parentSet)}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Tokens"
+              model={model.tokenSet}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Promo Cards"
+              model={model.promoSet}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Commander Cards"
+              model={model.commanderSet}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Masterpiece Cards"
+              model={model.masterpieceSet}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Art Cards"
+              model={model.artSet}
+              visibility={visibility}
+            />
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
   );
 };
 export default SetStatsPanel;
