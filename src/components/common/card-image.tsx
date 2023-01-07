@@ -12,7 +12,7 @@ type Props = {
 const LoadedImage = (props: Props) => {
     const card = useSelector(selectors.card(props.scryfallId));
     const settings = useSelector(selectors.settings);
-    const imagePath = getCardImagePath(settings, card);
+    const imagePath = React.useMemo(() => getCardImagePath(settings, card), [card, settings]);
 
     return (<img
         src={imagePath}

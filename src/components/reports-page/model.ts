@@ -12,7 +12,7 @@ export enum CheckListVisibility {
   all = "all",
 }
 
-export type Rarity = "mythic" | "rare" | "uncommon" | "common" | "basicland";
+export type Rarity = "special" | "mythic" | "rare" | "uncommon" | "common" | "basicland";
 
 export const basicLandNames = [
   "Forest",
@@ -29,6 +29,8 @@ export const basicLandNames = [
 
 export const getRarity = (card: Card): Rarity => {
   switch (card.rarity) {
+    case "special" as any as string:
+      return "special";
     case "mythic":
       return "mythic";
     case "rare":

@@ -11,8 +11,7 @@ type Props = {
 }
 
 const Binder = (props: Props) => {
-    console.log('Rendering Binder');
-    const renderCell = ({ columnIndex, style }: GridCellProps) => {
+    const renderCell = React.useCallback(({ columnIndex, style }: GridCellProps) => {
         const page = props.pages[columnIndex];
         return (
             <BinderPage
@@ -22,7 +21,7 @@ const Binder = (props: Props) => {
                 scale={scale}
             />
         );
-    };
+    }, [props.pages]);
 
     // TODO: Add sort controls
 

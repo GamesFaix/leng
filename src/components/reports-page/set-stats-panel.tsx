@@ -81,28 +81,26 @@ const SetStatsPanel = (props: Props) => {
   const cardsBySet = useSelector(selectors.setsWithCards);
   const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
 
-  const selectedCards = React.useMemo(() => {
-    const codes = [
-      props.parentSetCode,
-      ...sets
-        .filter((s) => s.parent_set_code === props.parentSetCode)
-        .map((s) => s.code),
-    ];
-    return getCardsFromBoxes(boxes).filter((c) => codes.includes(c.setAbbrev));
-  }, [props.parentSetCode, boxes, sets]);
-
-  const selectedSets = React.useMemo(() => {
-    const selectedSetGroup = setGroupsInBoxes.find(
-      (sg) => props.parentSetCode === sg.parent.code
-    );
-    return selectedSetGroup
-      ? [selectedSetGroup.parent, ...selectedSetGroup.children]
-      : [];
-  }, [props.parentSetCode, setGroupsInBoxes]);
-
   const model = React.useMemo(
-    () => createModel(selectedSets, selectedCards, cardsBySet),
-    [selectedSets, selectedCards, cardsBySet]
+    () => {
+      const codes = [
+        props.parentSetCode,
+        ...sets
+          .filter((s) => s.parent_set_code === props.parentSetCode)
+          .map((s) => s.code),
+      ];
+      const selectedCards = getCardsFromBoxes(boxes).filter((c) => codes.includes(c.setAbbrev));
+
+      const selectedSetGroup = setGroupsInBoxes.find(
+        (sg) => props.parentSetCode === sg.parent.code
+      );
+      const selectedSets = selectedSetGroup
+        ? [selectedSetGroup.parent, ...selectedSetGroup.children]
+        : [];
+
+      return createModel(selectedSets, selectedCards, cardsBySet);
+    },
+    [props.parentSetCode, setGroupsInBoxes, boxes, sets, cardsBySet]
   );
 
   const [visibility, setVisibility] = React.useState(CheckListVisibility.all);
@@ -128,6 +126,11 @@ const SetStatsPanel = (props: Props) => {
             <SetStatsRow
               label="Main Set"
               model={model.parentSet}
+              visibility={visibility}
+            />
+            <SetStatsRow
+              label="Special"
+              model={ofRarity("special", model.parentSet)}
               visibility={visibility}
             />
             <SetStatsRow
