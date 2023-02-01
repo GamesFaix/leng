@@ -11,7 +11,7 @@ type Props = {
 }
 
 const Binder = (props: Props) => {
-    const renderCell = ({ columnIndex, style }: GridCellProps) => {
+    const renderCell = React.useCallback(({ columnIndex, style }: GridCellProps) => {
         const page = props.pages[columnIndex];
         return (
             <BinderPage
@@ -21,7 +21,7 @@ const Binder = (props: Props) => {
                 scale={scale}
             />
         );
-    };
+    }, [props.pages]);
 
     // TODO: Add sort controls
 
@@ -29,17 +29,16 @@ const Binder = (props: Props) => {
         <Card
             style={{
                 padding: '5px',
-                width: '1800px'
             }}
         >
             <Grid
                 cellRenderer={renderCell}
                 columnCount={props.pages.length}
                 columnWidth={500}
-                height={740}
+                height={680}
                 rowCount={1}
-                rowHeight={700}
-                width={1800}
+                rowHeight={680}
+                width={1480}
             />
         </Card>
     )

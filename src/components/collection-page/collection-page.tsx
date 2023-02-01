@@ -1,4 +1,4 @@
-import { Card, IconButton, Typography } from '@mui/material';
+import { Card, Container, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import CardsTable from './cards-table';
 import { BoxCard, CardFilter } from '../../logic/model';
@@ -16,7 +16,7 @@ type Props = {
 
 const CollectionPage = (props: Props) => {
     return (
-        <div>
+        <Container style={{ paddingTop: '12px' }}>
             <div style={{ display: "flex" }}>
                 <div>
                     <Typography variant="h4">
@@ -47,7 +47,7 @@ const CollectionPage = (props: Props) => {
                     cards={props.cards}
                 />
             </Card>
-        </div>
+        </Container>
     );
 }
 export default CollectionPage;

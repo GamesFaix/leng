@@ -234,3 +234,8 @@ export type BoxTransferSingleRequest = {
     toBoxName: string,
     card: BoxCard,
 }
+
+export type SetGroup = {
+    parent: Set,
+    children: Set[]
+}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Typography } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 
 type Props = {
     dataPath: string,
@@ -10,7 +10,7 @@ type Props = {
 
 const SettingsPage = (props: Props) => {
     return (
-        <div>
+        <Container style={{ paddingTop: '12px' }}>
             <Typography variant="h4">
                 Settings
             </Typography>
@@ -42,7 +42,7 @@ const SettingsPage = (props: Props) => {
                     </button>
                 </div>
             </form>
-        </div>
+        </Container>
     )
 }
 export default SettingsPage;

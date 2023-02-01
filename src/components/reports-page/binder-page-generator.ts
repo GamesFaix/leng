@@ -1,19 +1,7 @@
-import * as React from 'react';
-import { BoxState } from '../../store/inventory';
-import { chunk, Dictionary, groupBy, orderBy } from 'lodash';
-import { useSelector } from 'react-redux';
-import { Set } from 'scryfall-api';
-import { innerJoin } from '../../logic/array-helper';
-import { BoxCard } from '../../logic/model';
-import selectors from '../../store/selectors';
-import Binder from '../virtual-binder/binder';
-import { getCardsFromBoxes } from '../../logic/card-filters';
-
-type Props = {
-    boxes: BoxState[],
-    cardFilter?: (card:BoxCard) => boolean,
-    sortSets?: (set1: Set, set2: Set) => number
-}
+import { Dictionary, groupBy, chunk, orderBy } from "lodash";
+import { Set } from "scryfall-api";
+import { innerJoin } from "../../logic/array-helper";
+import { BoxCard } from "../../logic/model";
 
 type SetWithCards = {
     set: Set,
@@ -51,7 +39,7 @@ function getSetBase(setName: string) : string {
     return setName;
 }
 
-function normalizeCollectorsNumber(x: string) {
+export function normalizeCollectorsNumber(x: string) {
     const pattern = /([a-zA-Z]*)(\d+)(.*)/
     const match = pattern.exec(x);
     const prefix = match![1];
@@ -66,7 +54,7 @@ function compareCollectorsNumbers(a: string, b: string) : number {
     return normalizedA.localeCompare(normalizedB);
 }
 
-function organizePages(cards: BoxCard[], sets: Set[], sortSets?: (a:Set,b:Set) => number) : BoxCard[][][] { // An array of pages, which are arrays of card groups, which are arrays of foil/non-foil versions of the same card
+export function organizePages(cards: BoxCard[], sets: Set[], sortSets?: (a:Set,b:Set) => number) : BoxCard[][][] { // An array of pages, which are arrays of card groups, which are arrays of foil/non-foil versions of the same card
     const groupedBySet : Dictionary<BoxCard[]> = groupBy(cards, c => c.setAbbrev);
 
     const setsWithCards : SetWithCards[] = innerJoin(
@@ -122,12 +110,3 @@ function organizePages(cards: BoxCard[], sets: Set[], sortSets?: (a:Set,b:Set) =
 
     return pages;
 }
-
-const BinderBySetReport = (props: Props) => {
-    const sets = useSelector(selectors.sets);
-    let cards = getCardsFromBoxes(props.boxes);
-    if (props.cardFilter) { cards = cards.filter(props.cardFilter); }
-    const pages = organizePages(cards, sets, props.sortSets);
-    return <Binder pages={pages}/>;
-}
-export default BinderBySetReport;
