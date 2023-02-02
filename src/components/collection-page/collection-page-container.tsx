@@ -14,7 +14,8 @@ const CollectionPageContainer = () => {
     const [filter, setFilter] = React.useState(defaultCardFilter);
     const dispatch = useDispatch();
     const boxes = useSelector(selectors.boxes);
-    const cards = getCards(boxes, filter);
+    const setsWithCards = useSelector(selectors.setsWithCards);
+    const cards = getCards(boxes, filter, setsWithCards);
     const cardCount = getCount(cards);
 
     return (

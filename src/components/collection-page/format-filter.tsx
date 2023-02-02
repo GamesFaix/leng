@@ -1,11 +1,12 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
+import { customFormats, emptyFormat, Format, FormatType } from '../../logic/formats';
 import selectors from '../../store/selectors';
 
 type Props = {
-    value: string | null,
-    onChange: (value: string | null) => void
+    value: Format | null,
+    onChange: (value: Format | null) => void
 }
 
 function capitalize(str: string) : string {
@@ -17,18 +18,18 @@ function capitalize(str: string) : string {
     }
 }
 
-function toDisplayName(format: string) : string {
-    switch (format) {
+function toDisplayName(format: Format) : string {
+    switch (format.name) {
         case "": return "(Casual)";
         case "historicbrawl": return "Historic Brawl";
         case "paupercommander": return "Pauper Commander";
         case "oldschool": return "Old School";
         case "premodern": return "Pre-modern";
-        default: return capitalize(format);
+        default: return capitalize(format.name);
     }
 }
 
-const prioritizedFormats : string[] = [
+const prioritizedFormatNames : string[] = [
     "",
     "commander",
     "standard",
@@ -41,12 +42,12 @@ const prioritizedFormats : string[] = [
     "pauper"
 ];
 
-function getSortRank(format: string) : number {
-    const priorityIndex = prioritizedFormats.indexOf(format);
+function getSortRank(format: Format) : number {
+    const priorityIndex = prioritizedFormatNames.indexOf(format.name);
     return priorityIndex >= 0 ? priorityIndex : 100;
 }
 
-function sortFormats(formats: string[]) : string[] {
+function sortFormats(formats: Format[]) : Format[] {
     const withRanks = formats.map(f => { return { format: f, rank: getSortRank(f) }});
 
     const sorted = withRanks
@@ -62,27 +63,31 @@ function sortFormats(formats: string[]) : string[] {
 }
 
 const FormatFilter = (props: Props) => {
-    let formats = [ "" ];
-    formats = formats.concat(useSelector(selectors.formats));
-    formats = sortFormats(formats);
+    const standardFormats : Format[] =  useSelector(selectors.formats)
+        .map(name => ({ type: FormatType.Standard, name }));
 
-    function onSelect(e: SelectChangeEvent<string>) {
-        const value = e.target.value === "" ? null : e.target.value;
-        props.onChange(value);
-    }
+    const sortedFormats = React.useMemo(() =>
+        sortFormats([emptyFormat].concat(standardFormats).concat(customFormats)),
+    [standardFormats]);
+
+    const onSelect = React.useCallback((e: SelectChangeEvent<string>) => {
+        const name = e.target.value === "" ? null : e.target.value;
+        const format = sortedFormats.find(f => f.name === name) ?? null;
+        props.onChange(format);
+    }, [standardFormats, sortedFormats, props.onChange]);
 
     return (
         <Select
             sx={{
                 width: 200
             }}
-            value={props.value ?? ""}
+            value={props.value?.name ?? ""}
             onChange={onSelect}
         >
-            {formats.map(f =>
+            {sortedFormats.map(f =>
                 <MenuItem
-                    key={f}
-                    value={f}
+                    key={f.name}
+                    value={f.name}
                 >
                     {toDisplayName(f)}
                 </MenuItem>

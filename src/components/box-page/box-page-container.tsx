@@ -29,6 +29,7 @@ const BoxPageContainer = () => {
 
     const dispatch = useDispatch();
     const lastSavedBoxState = useSelector(selectors.box(name!));
+    const allCardsBySet = useSelector(selectors.setsWithCards);
 
     const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
     const [newBox, setNewBox] = React.useState(lastSavedBoxState);
@@ -120,7 +121,7 @@ const BoxPageContainer = () => {
         }
     }
 
-    const cards = getCards(newBox ? [newBox] : [], filter);
+    const cards = getCards(newBox ? [newBox] : [], filter, allCardsBySet);
 
     return (
         <BoxPage
