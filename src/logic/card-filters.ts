@@ -1,8 +1,10 @@
 import { difference, intersection, uniq } from "lodash";
-import { Color } from "scryfall-api";
+import { Card, Color } from "scryfall-api";
 import { ColorFilterRule } from "../components/collection-page/color-rule-selector";
 import { ColorFilter } from "../components/collection-page/color-selector";
+import { basicLandNames } from "../components/reports-page/model";
 import { BoxState } from "../store/inventory";
+import { FormatType } from "./formats";
 import { BoxCard, BoxCardModule, CardFilter, normalizeName } from "./model";
 
 function containsAny(cardColors: Color[], filterColors: ColorFilter[]) {
@@ -64,7 +66,7 @@ function filterCardsByColor(cards: BoxCard[], colors: ColorFilter[], rule: Color
     }
 }
 
-function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
+function filterCards(cards: BoxCard[], filter: CardFilter, allCardsBySet: Record<string, Card[]>) : BoxCard[] {
     if (filter.nameQuery.length > 0) {
         const normalizedQuery = normalizeName(filter.nameQuery);
         cards = cards.filter(c => c.normalizedName.includes(normalizedQuery));
@@ -79,11 +81,24 @@ function filterCards(cards: BoxCard[], filter: CardFilter) : BoxCard[] {
     }
 
     if (filter.format !== null) {
-        const key = filter.format as any;
-        cards = cards.filter(c => {
-            const legality = c.legalities[key];
-            return legality === 'legal' || legality === 'restricted';
-        });
+        if (filter.format.type === FormatType.Standard) {
+            const key = filter.format.name as any;
+            cards = cards.filter(c => {
+                const legality = c.legalities[key];
+                return legality === 'legal' || legality === 'restricted';
+            });
+        }
+        if (filter.format.type === FormatType.Custom) {
+            const legalCardNames = uniq(
+                filter.format.setCodes
+                    .map(set => allCardsBySet[set].map(c => c.name))
+                    .reduce((a, b) => a.concat(b))
+            );
+            cards = cards.filter(c => legalCardNames.includes(c.name));
+        }
+
+        // Don't return basic lands, it's overwhelming noise in formats with small card pools
+        cards = cards.filter(x => !basicLandNames.includes(x.name));
     }
 
     return cards;
@@ -108,9 +123,9 @@ export function getCardsFromBoxes(boxes: BoxState[]) : BoxCard[] {
     return boxes.map(b => b.cards ?? []).reduce((a, b) => a.concat(b), []);
 }
 
-export function getCards(inventory: BoxState[], filter: CardFilter) : BoxCard[] {
+export function getCards(inventory: BoxState[], filter: CardFilter, allCardsBySet: Record<string, Card[]>) : BoxCard[] {
     let cards = combineBoxes(inventory, filter);
     cards = BoxCardModule.combineDuplicates(cards);
-    cards = filterCards(cards, filter);
+    cards = filterCards(cards, filter, allCardsBySet);
     return cards;
 }

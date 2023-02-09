@@ -345,7 +345,7 @@ function* csvExport(action: CsvExportAction) {
     try {
         const settings : AppSettings = yield select(selectors.settings);
         const boxes : Box[] = yield select(selectors.boxes);
-        const cards = getCards(boxes, defaultCardFilter);
+        const cards = getCards(boxes, defaultCardFilter, {});
         const csvCards = toCsvCards(cards);
         const timestamp = moment.utc().format('YYYY-MM-DD-HH-mm-ss');
         const writer = createObjectCsvWriter({

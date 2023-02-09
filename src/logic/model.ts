@@ -2,6 +2,7 @@ import { Card, Color, Legalities, Set } from 'scryfall-api';
 import { groupBy } from 'lodash';
 import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
 import { ColorFilter } from '../components/collection-page/color-selector';
+import { Format } from './formats';
 
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
@@ -210,7 +211,7 @@ export type CardFilter = {
     colorRule: ColorFilterRule,
     fromBoxes: string[],
     exceptBoxes: string[],
-    format: string | null
+    format: Format | null
 }
 
 export const defaultCardFilter : CardFilter = {

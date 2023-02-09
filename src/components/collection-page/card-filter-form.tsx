@@ -1,5 +1,6 @@
 import { FormControlLabel, TextField } from '@mui/material';
 import * as React from 'react';
+import { Format } from '../../logic/formats';
 import { CardFilter } from '../../logic/model';
 import CollapsableCard from '../common/collapsable-card';
 import BoxSelector from './box-selector';
@@ -38,7 +39,7 @@ const CardFilterForm = (props: Props) => {
         props.onChange({ ...props.filter, exceptBoxes })
     }
 
-    function updateFormat(format: string | null) {
+    function updateFormat(format: Format | null) {
         props.onChange({ ...props.filter, format })
     }
 
