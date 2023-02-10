@@ -1,4 +1,4 @@
-import { FormControlLabel, TextField } from "@mui/material";
+import { Button, FormControlLabel, TextField } from "@mui/material";
 import * as React from "react";
 import { Format } from "../../logic/formats";
 import { CardFilter } from "../../logic/model";
@@ -88,12 +88,15 @@ const CardFilterForm = (props: Props) => {
               value={props.filter.scryfallQuery}
               onChange={updateScryfallQuery}
               style={{ width: "300px" }}
+              onKeyDown={(e) => {
+                if (e.key.toLowerCase() === "enter") {
+                  props.submitScryfallSearch();
+                }
+              }}
             />
           }
         />
-        <button type="button" onClick={() => props.submitScryfallSearch()}>
-          Search
-        </button>
+        <Button onClick={() => props.submitScryfallSearch()}>Search</Button>
       </div>
       <br />
       <br />
