@@ -13,6 +13,8 @@ import BoxPage from "./box-page";
 import selectors from "../../store/selectors";
 import { editingActions } from "../../store/editing";
 import { getCards } from "../../logic/card-filters";
+import { useCallback } from "react";
+import { searchActions } from "../../store/search";
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard): BoxCard[] {
   const match = cards.find((c) => BoxCardModule.areSame(c, card));
@@ -139,6 +141,11 @@ const BoxPageContainer = () => {
 
   const cards = getCards(newBox ? [newBox] : [], filter, allCardsBySet, []);
 
+  const search = useCallback(
+    () => dispatch(searchActions.searchStart(filter.scryfallQuery)),
+    [filter.scryfallQuery, dispatch]
+  );
+
   return (
     <BoxPage
       name={name!}
@@ -148,6 +155,7 @@ const BoxPageContainer = () => {
       selectedKeys={selectedKeys}
       filter={filter}
       setFilter={setFilter}
+      submitScryfallSearch={search}
       add={submit}
       cancelAdd={cancel}
       startEdit={checkout}

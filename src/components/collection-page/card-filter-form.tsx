@@ -12,6 +12,7 @@ import SetFilter from "./set-filter";
 type Props = {
   filter: CardFilter;
   onChange: (filter: CardFilter) => void;
+  submitScryfallSearch: () => void;
 };
 
 const CardFilterForm = (props: Props) => {
@@ -77,18 +78,23 @@ const CardFilterForm = (props: Props) => {
           <FormatFilter value={props.filter.format} onChange={updateFormat} />
         }
       />
-      <FormControlLabel
-        label="Scryfall query"
-        labelPlacement="top"
-        control={
-          <TextField
-            title="Scryfall query"
-            value={props.filter.scryfallQuery}
-            onChange={updateScryfallQuery}
-            style={{ width: "300px" }}
-          />
-        }
-      />
+      <div style={{ display: "flex" }}>
+        <FormControlLabel
+          label="Scryfall query"
+          labelPlacement="top"
+          control={
+            <TextField
+              title="Scryfall query"
+              value={props.filter.scryfallQuery}
+              onChange={updateScryfallQuery}
+              style={{ width: "300px" }}
+            />
+          }
+        />
+        <button type="button" onClick={() => props.submitScryfallSearch()}>
+          Search
+        </button>
+      </div>
       <br />
       <br />
       <FormControlLabel
