@@ -211,7 +211,8 @@ export type CardFilter = {
     colorRule: ColorFilterRule,
     fromBoxes: string[],
     exceptBoxes: string[],
-    format: Format | null
+    format: Format | null,
+    scryfallQuery: string
 }
 
 export const defaultCardFilter : CardFilter = {
@@ -221,7 +222,8 @@ export const defaultCardFilter : CardFilter = {
     colorRule: ColorFilterRule.IdentityContainsOnly,
     fromBoxes: [],
     exceptBoxes: [],
-    format: null
+    format: null,
+    scryfallQuery: ''
 }
 
 export type BoxTransferBulkRequest = {
