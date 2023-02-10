@@ -7,8 +7,5 @@ const options: SearchOptions = {
 };
 
 export async function searchScryfall(query: string): Promise<Card[]> {
-  console.log(`Searching scryfall for '${query}'...`);
-  const results = await scryfall.Cards.search(query, options).all();
-  console.log(`Found ${results.length} results, including ${results[0]?.name}`);
-  return results;
+  return await scryfall.Cards.search(query, options).all();
 }
