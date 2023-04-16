@@ -385,7 +385,8 @@ function* csvExport(action: CsvExportAction) {
     const settings: AppSettings = yield select(selectors.settings);
     const boxes: Box[] = yield select(selectors.boxes);
     const cards = getCards(boxes, defaultCardFilter, {}, []);
-    const csvCards = toCsvCards(cards);
+    const cardIndex: CardIndex = yield select(selectors.cardIndex);
+    const csvCards = toCsvCards(cards, cardIndex);
     const timestamp = moment.utc().format("YYYY-MM-DD-HH-mm-ss");
     const writer = createObjectCsvWriter({
       path: `${settings.dataPath}/collection-${timestamp}.csv`,
