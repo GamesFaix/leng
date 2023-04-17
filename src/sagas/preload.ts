@@ -56,8 +56,12 @@ function* onBoxInfosLoad(action: BoxInfosLoadAction) {
             break;
         case AsyncRequestStatus.Success: {
             const boxInfos = action.value.data ?? [];
-            for (const b of boxInfos) {
-                yield put(inventoryActions.boxLoadStart(b.name));
+            if (boxInfos.length === 0) {
+                yield put(preloadActions.finish());
+            } else {
+                for (const b of boxInfos) {
+                    yield put(inventoryActions.boxLoadStart(b.name));
+                }
             }
             break;
         }
