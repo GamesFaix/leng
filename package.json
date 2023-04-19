@@ -57,7 +57,7 @@
     "@types/redux-logger": "^3.0.9",
     "@types/redux-saga": "^0.10.5",
     "csv-writer": "^1.6.0",
-    "electron-devtools-installer": "git+https://github.com/MarshallOfSound/electron-devtools-installer.git",
+    "electron-devtools-installer": "^3.2.0",
     "fs": "0.0.1-security",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -69,8 +69,8 @@
     "redux-saga": "^1.1.3",
     "scryfall-api": "^2.2.2"
   },
-  "engines" : { 
-    "npm" : "6.14.17",
-    "node" : "14.20.0"
+  "engines": {
+    "npm": "6.14.17",
+    "node": "14.20.0"
   }
 }
