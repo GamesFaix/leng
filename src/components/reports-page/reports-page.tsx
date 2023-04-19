@@ -4,12 +4,22 @@ import SetStatsPanel from "./set-stats-panel";
 import SetBinderPanel from "./set-binder-panel";
 import SetSelector from "./set-selector";
 
-const defaultSet = "6ed";
+const someSetView = (selectedParentSetCode: string | null) => (<>
+  <Card style={{ padding: "6px" }}>
+    <Typography variant="h5">Binder</Typography>
+    <SetBinderPanel parentSetCode={selectedParentSetCode} />
+  </Card>
+  <br />
+  <Card style={{ padding: "6px" }}>
+    <Typography variant="h5">Stats</Typography>
+    <SetStatsPanel parentSetCode={selectedParentSetCode} />
+  </Card>
+</>);
 
 const ReportsPage = () => {
   const [selectedParentSetCode, setSelectedParentSetCode] = React.useState<
     string | null
-  >(defaultSet);
+  >(null);
 
   const onSetSelected = React.useCallback(
     (code) => {
@@ -26,15 +36,7 @@ const ReportsPage = () => {
         setSelectedSetCode={onSetSelected}
       />
       <br />
-      <Card style={{ padding: "6px" }}>
-        <Typography variant="h5">Binder</Typography>
-        <SetBinderPanel parentSetCode={selectedParentSetCode} />
-      </Card>
-      <br />
-      <Card style={{ padding: "6px" }}>
-        <Typography variant="h5">Stats</Typography>
-        <SetStatsPanel parentSetCode={selectedParentSetCode} />
-      </Card>
+      {selectedParentSetCode ? someSetView(selectedParentSetCode) : null}
     </Container>
   );
 };
