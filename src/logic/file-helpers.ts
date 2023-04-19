@@ -3,7 +3,7 @@ import { dirname } from 'path';
 
 export function createDirIfMissing(dir: string) {
     if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+        fs.mkdirSync(dir, { recursive: true });
     }
 }
 
