@@ -17,6 +17,8 @@ function loadSettingsOrDefaults() {
         return JSON.parse(json);
     }
     catch {
+        const json = JSON.stringify(defaultSettings);
+        createFileAndDirectoryIfRequired(settingsPath, json);
         return defaultSettings;
     }
 }
