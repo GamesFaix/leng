@@ -59,6 +59,7 @@ const actionSanitizer = (action: Action) => {
   }
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const stateSanitizer = (state: any /* RootState is defined below */) => {
   return {
     ...state,
@@ -67,7 +68,9 @@ const stateSanitizer = (state: any /* RootState is defined below */) => {
 };
 
 const devToolsEnhancer =
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (window as any).__REDUX_DEVTOOLS_EXTENSION__({
     actionSanitizer,
     stateSanitizer,

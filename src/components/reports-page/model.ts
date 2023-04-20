@@ -29,7 +29,7 @@ export const basicLandNames = [
 
 export const getRarity = (card: Card): Rarity => {
   switch (card.rarity) {
-    case "special" as any as string:
+    case "special" as unknown as string:
       return "special";
     case "mythic":
       return "mythic";

@@ -6,6 +6,7 @@ import { preloadActions, PreloadActionTypes, PreloadStartAction } from "../store
 import selectors from "../store/selectors";
 import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "../store/settings";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function* onPreloadStart(_: PreloadStartAction) {
     yield put(settingsActions.loadStart());
 }

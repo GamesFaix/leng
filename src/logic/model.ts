@@ -179,6 +179,7 @@ export const BoxCardModule = {
         const groups = groupBy(cards, BoxCardModule.getKey);
         return Object.entries(groups)
             .map(grp => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const [_, cards] = grp;
                 return {
                     ...cards[0],

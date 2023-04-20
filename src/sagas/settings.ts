@@ -4,6 +4,7 @@ import { createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AsyncRequestStatus } from '../logic/model';
 import { settingsActions, SettingsActionTypes, SettingsLoadAction, SettingsSaveAction } from '../store/settings';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dir = `${(process.env as any).USERPROFILE.replace('\\', '/')}/leng`;
 const settingsPath = `${dir}/settings.json`;
 
