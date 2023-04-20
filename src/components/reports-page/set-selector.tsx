@@ -41,7 +41,7 @@ const SetSelector = (props: {
     options.find((o) => o.parent.code === props.selectedSetCode) ?? null;
 
   const onSelection = React.useCallback(
-    (e, value) => props.setSelectedSetCode(value?.parent.code ?? null),
+    (e: React.SyntheticEvent<Element, Event>, value: SetSelectorOption | null) => props.setSelectedSetCode(value?.parent.code ?? null),
     [props.setSelectedSetCode]
   );
 

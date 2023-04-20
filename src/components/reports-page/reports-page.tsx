@@ -22,7 +22,7 @@ const ReportsPage = () => {
   >(null);
 
   const onSetSelected = React.useCallback(
-    (code) => {
+    (code: string | null) => {
       if (code === selectedParentSetCode) return;
       setSelectedParentSetCode(code);
     },

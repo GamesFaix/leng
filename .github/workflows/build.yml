@@ -27,6 +27,7 @@ jobs:
       - name: Install packages
         run: |
           npm install
+          npm run postinstall
 
       - name: Lint
         run: |
