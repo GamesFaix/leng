@@ -52,7 +52,7 @@ function normalizeName(card: BoxCard, match: Card): string {
     match.layout === "transform" ||
     //    match.layout === "double_sided" ||
     match.layout === "meld" ||
-    (match.layout as any) === "modal_dfc" ||
+    (match.layout as unknown) === "modal_dfc" ||
     match.layout === "adventure"
   ) {
     const slashIndex = name.indexOf("//");

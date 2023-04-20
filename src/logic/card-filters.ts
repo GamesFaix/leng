@@ -45,6 +45,7 @@ function isColorExactly(cardColors: Color[], filterColors: ColorFilter[]) {
   }
 
   for (const fc of filterColors) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     if (!cardColors.includes(fc as any)) {
       return false;
     }
@@ -101,9 +102,10 @@ function filterCards(
 
   if (filter.format !== null) {
     if (filter.format.type === FormatType.Standard) {
-      const key = filter.format.name as any;
+      const key = filter.format.name;
       cards = cards.filter((c) => {
-        const legality = c.legalities[key];
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const legality = c.legalities[key as any];
         return legality === "legal" || legality === "restricted";
       });
     }
