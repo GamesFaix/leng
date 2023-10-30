@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { IconButton } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHome } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faHome, faSearch } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { routes } from "../../routes";
 
@@ -35,7 +35,12 @@ const Header: FC = () => {
         <IconButton title="Home" onClick={() => navigate(routes.home)}>
           <FontAwesomeIcon icon={faHome} />
         </IconButton>
-        
+        <IconButton title="Search" onClick={() => navigate(routes.search)}>
+          <FontAwesomeIcon icon={faSearch} />
+        </IconButton>
+        <IconButton title="Report" onClick={() => navigate(routes.report)}>
+          <FontAwesomeIcon icon={faBook} />
+        </IconButton>
       </div>
       <div style={{ float: "right", width: "33.33%" }}></div>
     </div>

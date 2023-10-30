@@ -19,6 +19,8 @@ export const MainPage: FC = () => {
       <div id="app-body" className="row">
         <Routes>
           <Route path={routes.home} element={<span>Home page</span>} />
+          <Route path={routes.search} element={<span>Search page</span>} />
+          <Route path={routes.report} element={<span>Report page</span>} />
         </Routes>
       </div>
       <footer className="row">Footer</footer>
