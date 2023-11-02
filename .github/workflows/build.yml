@@ -1,4 +1,4 @@
-name: Build
+name: Build Desktop
 
 on:
   push:
@@ -26,12 +26,15 @@ jobs:
 
       - name: Install packages
         run: |
+          cd desktop
           npm install
 
       - name: Lint
         run: |
+          cd desktop
           npm run lint
 
       - name: Build
         run: |
+          cd desktop
           npm run build
