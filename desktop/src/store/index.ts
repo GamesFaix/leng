@@ -16,7 +16,7 @@ import settingsSaga from "../sagas/settings";
 import { AsyncRequestStatus } from "leng-core/src/logic/model";
 import encyclopediaSaga from "../sagas/encyclopedia";
 import inventorySaga from "../sagas/inventory";
-import { PreloadAction, preloadReducer } from "./preload";
+import { PreloadAction, preloadReducer } from "leng-core/src/store/preload";
 import preloadSaga from "../sagas/preload";
 import { EditingAction, editingReducer } from "./editing";
 import { SearchAction, searchReducer } from "./search";
