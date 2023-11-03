@@ -1,14 +1,5 @@
 import { orderBy } from "lodash";
-import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo, BoxTransferBulkRequest, BoxTransferSingleRequest } from "leng-core/src/logic/model";
-
-export type BoxState = {
-    name: string,
-    lastModified: Date,
-
-    // Deferred loading because file must be opened and deserialized
-    description: string | null,
-    cards: BoxCard[] | null
-}
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo, BoxState, BoxTransferBulkRequest, BoxTransferSingleRequest } from "leng-core/src/logic/model";
 
 export type InventoryState = {
     loading: boolean,

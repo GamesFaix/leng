@@ -5,8 +5,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Column, Table, TableCellProps } from 'react-virtualized';
 import { icons } from '../../fontawesome';
-import { BoxCard } from "leng-core/src/logic/model";
-import { BoxState } from '../../store/inventory';
+import { BoxCard, BoxState } from "leng-core/src/logic/model";
 
 type Props = {
     boxes: BoxState[],

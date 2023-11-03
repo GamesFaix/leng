@@ -1,7 +1,7 @@
 import { groupBy, orderBy, uniq } from "lodash";
 import { RootState } from ".";
 import { organizePages } from "../components/reports-page/binder-page-generator";
-import { getCardsFromBoxes } from "../logic/card-filters";
+import { getCardsFromBoxes } from "leng-core/src/logic/card-filters";
 import { SetGroup } from "leng-core/src/logic/model";
 
 const selectors = {

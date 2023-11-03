@@ -267,3 +267,25 @@ export type SetGroup = {
     parent: Set,
     children: Set[]
 }
+
+export const basicLandNames = [
+    "Forest",
+    "Island",
+    "Mountain",
+    "Plains",
+    "Swamp",
+    "Snow-Covered Forest",
+    "Snow-Covered Island",
+    "Snow-Covered Mountain",
+    "Snow-Covered Plains",
+    "Snow-Covered Swamp",
+  ];
+  
+export type BoxState = {
+    name: string,
+    lastModified: Date,
+
+    // Deferred loading because file must be opened and deserialized
+    description: string | null,
+    cards: BoxCard[] | null
+}

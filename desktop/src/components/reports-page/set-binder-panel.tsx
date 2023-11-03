@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import selectors from "../../store/selectors";
 import Binder from "../virtual-binder/binder";
 import { organizePages } from "./binder-page-generator";
-import { getCardsFromBoxes } from "../../logic/card-filters";
+import { getCardsFromBoxes } from "leng-core/src/logic/card-filters";
 
 type Props = {
   parentSetCode: string | null;

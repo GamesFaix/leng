@@ -12,7 +12,7 @@ import { inventoryActions } from "../../store/inventory";
 import BoxPage from "./box-page";
 import selectors from "../../store/selectors";
 import { editingActions } from "../../store/editing";
-import { getCards } from "../../logic/card-filters";
+import { getCards } from "leng-core/src/logic/card-filters";
 import { useCallback } from "react";
 import { searchActions } from "../../store/search";
 

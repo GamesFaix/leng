@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo, useCallback } from "react";
 import { BoxCard, defaultCardFilter } from "leng-core/src/logic/model";
-import { getCards } from "../../logic/card-filters";
+import { getCards } from "leng-core/src/logic/card-filters";
 import CollectionPage from "./collection-page";
 import { useDispatch, useSelector } from "react-redux";
 import selectors from "../../store/selectors";

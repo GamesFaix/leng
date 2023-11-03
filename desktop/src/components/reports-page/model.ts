@@ -1,5 +1,5 @@
 import { Card, Set } from "scryfall-api";
-import { BoxCard } from "leng-core/src/logic/model";
+import { BoxCard, basicLandNames } from "leng-core/src/logic/model";
 
 export type CheckListItem = {
   card: Card;
@@ -13,19 +13,6 @@ export enum CheckListVisibility {
 }
 
 export type Rarity = "special" | "mythic" | "rare" | "uncommon" | "common" | "basicland";
-
-export const basicLandNames = [
-  "Forest",
-  "Island",
-  "Mountain",
-  "Plains",
-  "Swamp",
-  "Snow-Covered Forest",
-  "Snow-Covered Island",
-  "Snow-Covered Mountain",
-  "Snow-Covered Plains",
-  "Snow-Covered Swamp",
-];
 
 export const getRarity = (card: Card): Rarity => {
   switch (card.rarity) {

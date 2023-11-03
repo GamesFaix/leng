@@ -2,7 +2,7 @@ import * as fs from "fs";
 import { orderBy } from "lodash";
 import { parse } from "path";
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
-import { getCards } from "../logic/card-filters";
+import { getCards } from "leng-core/src/logic/card-filters";
 import { toCsvCards } from "../logic/csv-model";
 import { createDirIfMissing } from "../logic/file-helpers";
 import {
@@ -18,6 +18,7 @@ import {
   getVersionLabel,
   Language,
   normalizeName,
+  BoxState
 } from "leng-core/src/logic/model";
 import {
   BoxCreateAction,
@@ -26,7 +27,6 @@ import {
   BoxLoadAction,
   BoxRenameAction,
   BoxSaveAction,
-  BoxState,
   BoxTransferBulkAction,
   BoxTransferSingleAction,
   CsvExportAction,
