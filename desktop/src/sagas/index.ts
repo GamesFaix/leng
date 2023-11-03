@@ -2,7 +2,7 @@ import settingsSaga from "./settings";
 import encyclopediaSaga from "./encyclopedia";
 import inventorySaga from "./inventory";
 import preloadSaga from "./preload";
-import searchSaga from "./search";
+import searchSaga from "leng-core/src/sagas/search";
 import { sagaMiddleware } from "leng-core/src/store";
 
 export const runSagas = () => {

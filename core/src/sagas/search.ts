@@ -1,12 +1,12 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Card } from "scryfall-api";
-import { AsyncRequestStatus } from "leng-core/src/logic/model";
-import { searchScryfall } from "leng-core/src/logic/search";
+import { AsyncRequestStatus } from "../logic/model";
+import { searchScryfall } from "../logic/search";
 import {
   SearchAction,
   searchActions,
   SearchActionTypes,
-} from "leng-core/src/store/search";
+} from "../store/search";
 
 function* search(action: SearchAction) {
   if (action.value.status !== AsyncRequestStatus.Started) {
