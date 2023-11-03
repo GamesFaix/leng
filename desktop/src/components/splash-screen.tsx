@@ -1,6 +1,6 @@
 import { Card, CircularProgress, Typography } from '@mui/material';
 import * as React from 'react';
-import lengArt from '../images/leng.jpg';
+import lengArt from 'leng-core/src/images/leng.jpg';
 
 type Props = {
     message: string

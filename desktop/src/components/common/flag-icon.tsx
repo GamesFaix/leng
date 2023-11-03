@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { Language } from "leng-core/src/logic/model";
 
-import britishFlag from '../../images/flags/gb.svg';
-import chineseFlag from '../../images/flags/cn.svg';
-import frenchFlag from '../../images/flags/fr.svg';
-import germanFlag from '../../images/flags/de.svg';
-import spanishFlag from '../../images/flags/es.svg';
-import italianFlag from '../../images/flags/it.svg';
-import russianFlag from '../../images/flags/ru.svg';
-import portugueseFlag from '../../images/flags/pt.svg';
-import japaneseFlag from '../../images/flags/jp.svg';
-import southKoreanFlag from '../../images/flags/kr.svg';
+import britishFlag from 'leng-core/src/images/flags/gb.svg';
+import chineseFlag from 'leng-core/src/images/flags/cn.svg';
+import frenchFlag from 'leng-core/src/images/flags/fr.svg';
+import germanFlag from 'leng-core/src/images/flags/de.svg';
+import spanishFlag from 'leng-core/src/images/flags/es.svg';
+import italianFlag from 'leng-core/src/images/flags/it.svg';
+import russianFlag from 'leng-core/src/images/flags/ru.svg';
+import portugueseFlag from 'leng-core/src/images/flags/pt.svg';
+import japaneseFlag from 'leng-core/src/images/flags/jp.svg';
+import southKoreanFlag from 'leng-core/src/images/flags/kr.svg';
 
 type Props = {
     lang: Language
