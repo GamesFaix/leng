@@ -3,6 +3,9 @@
         "jsx": "react",
         "strict": true,
         "target": "ES6",
-        "moduleResolution": "Node"
+        "moduleResolution": "Node",
+        "paths": {
+            "react": [ "./node_modules/@types/react" ]
+          }
     }
 }
