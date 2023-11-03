@@ -8,7 +8,7 @@ import {
   EncyclopediaAction,
   EncyclopediaActionTypes,
   encyclopediaReducer,
-} from "./encyclopedia";
+} from "leng-core/src/store/encyclopedia";
 import { InventoryAction, inventoryReducer } from "./inventory";
 import { SettingsAction, settingsReducer } from "./settings";
 import createSagaMiddleware from "redux-saga";

@@ -4,7 +4,7 @@ import { Card, Set } from 'scryfall-api';
 import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, normalizeName } from "leng-core/src/logic/model";
 import { RootState } from '../store';
-import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadCardImageAction, LoadSetDataAction, LoadSetSymbolAction } from "../store/encyclopedia";
+import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadCardImageAction, LoadSetDataAction, LoadSetSymbolAction } from "leng-core/src/store/encyclopedia";
 import selectors from '../store/selectors';
 
 export type FrameEffect =
