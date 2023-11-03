@@ -14,7 +14,7 @@ import selectors from "../../store/selectors";
 import { editingActions } from "../../store/editing";
 import { getCards } from "leng-core/src/logic/card-filters";
 import { useCallback } from "react";
-import { searchActions } from "../../store/search";
+import { searchActions } from "leng-core/src/store/search";
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard): BoxCard[] {
   const match = cards.find((c) => BoxCardModule.areSame(c, card));

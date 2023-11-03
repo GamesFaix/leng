@@ -6,7 +6,7 @@ import {
   SearchAction,
   searchActions,
   SearchActionTypes,
-} from "../store/search";
+} from "leng-core/src/store/search";
 
 function* search(action: SearchAction) {
   if (action.value.status !== AsyncRequestStatus.Started) {

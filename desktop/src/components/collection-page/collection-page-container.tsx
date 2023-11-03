@@ -6,7 +6,7 @@ import CollectionPage from "./collection-page";
 import { useDispatch, useSelector } from "react-redux";
 import selectors from "../../store/selectors";
 import { inventoryActions } from "../../store/inventory";
-import { searchActions } from "../../store/search";
+import { searchActions } from "leng-core/src/store/search";
 
 function getCount(cards: BoxCard[]): number {
   return cards.map((c) => c.count).reduce((a, b) => a + b, 0);

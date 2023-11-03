@@ -19,7 +19,7 @@ import inventorySaga from "../sagas/inventory";
 import { PreloadAction, preloadReducer } from "leng-core/src/store/preload";
 import preloadSaga from "../sagas/preload";
 import { EditingAction, editingReducer } from "./editing";
-import { SearchAction, searchReducer } from "./search";
+import { SearchAction, searchReducer } from "leng-core/src/store/search";
 import searchSaga from "../sagas/search";
 
 type Action =
