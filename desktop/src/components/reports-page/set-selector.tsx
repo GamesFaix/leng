@@ -1,7 +1,7 @@
 import { Autocomplete, TextField } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
-import selectors from "../../store/selectors";
+import selectors from "leng-core/src/store/selectors";
 import { Set } from "scryfall-api";
 import SetSymbol from "../common/set-symbol";
 

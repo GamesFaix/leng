@@ -2,7 +2,7 @@ import { Icon } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { getSetSymbolImagePath } from '../../sagas/encyclopedia';
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 
 type Props = {
     setAbbrev: string

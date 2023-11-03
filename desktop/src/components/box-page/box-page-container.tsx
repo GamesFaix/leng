@@ -8,10 +8,10 @@ import {
   defaultCardFilter,
 } from "leng-core/src/logic/model";
 import "react-virtualized/styles.css";
-import { inventoryActions } from "../../store/inventory";
+import { inventoryActions } from "leng-core/src/store/inventory";
 import BoxPage from "./box-page";
-import selectors from "../../store/selectors";
-import { editingActions } from "../../store/editing";
+import selectors from "leng-core/src/store/selectors";
+import { editingActions } from "leng-core/src/store/editing";
 import { getCards } from "leng-core/src/logic/card-filters";
 import { useCallback } from "react";
 import { searchActions } from "leng-core/src/store/search";

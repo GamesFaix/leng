@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import selectors from '../../store/selectors';
-import { settingsActions } from '../../store/settings';
+import selectors from 'leng-core/src/store/selectors';
+import { settingsActions } from 'leng-core/src/store/settings';
 import SettingsPage from './settings-page';
 
 const SettingsPageContainer = () => {

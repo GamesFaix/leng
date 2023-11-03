@@ -2,7 +2,7 @@ import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { customFormats, emptyFormat, Format, FormatType } from 'leng-core/src/logic/formats';
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 
 type Props = {
     value: Format | null,

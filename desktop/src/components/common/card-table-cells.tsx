@@ -3,7 +3,7 @@ import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
 import SetSymbol from './set-symbol';
 import { useSelector } from 'react-redux';
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 import { BoxCard, CardFinish } from "leng-core/src/logic/model";
 import { CardImageTooltip } from './card-image-tooltip';
 

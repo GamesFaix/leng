@@ -32,8 +32,8 @@ import {
   CsvExportAction,
   inventoryActions,
   InventoryActionTypes,
-} from "../store/inventory";
-import selectors from "../store/selectors";
+} from "leng-core/src/store/inventory";
+import selectors from "leng-core/src/store/selectors";
 import { createObjectCsvWriter } from "csv-writer";
 import * as moment from "moment";
 

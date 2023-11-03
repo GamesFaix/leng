@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCardImagePath } from '../../sagas/encyclopedia';
 import { encyclopediaActions } from 'leng-core/src/store/encyclopedia';
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 
 type Props = {
     scryfallId: string

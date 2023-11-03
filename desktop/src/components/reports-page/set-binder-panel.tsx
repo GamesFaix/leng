@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useSelector } from "react-redux";
-import selectors from "../../store/selectors";
+import selectors from "leng-core/src/store/selectors";
 import Binder from "../virtual-binder/binder";
-import { organizePages } from "./binder-page-generator";
+import { organizePages } from "leng-core/src/logic/binder-page-generator";
 import { getCardsFromBoxes } from "leng-core/src/logic/card-filters";
 
 type Props = {

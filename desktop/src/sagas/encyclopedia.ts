@@ -3,9 +3,9 @@ import { call, put, select, takeEvery, takeLeading, } from "redux-saga/effects";
 import { Card, Set } from 'scryfall-api';
 import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AppSettings, AsyncRequestStatus, normalizeName } from "leng-core/src/logic/model";
-import { RootState } from '../store';
+import { RootState } from 'leng-core/src/store';
 import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadCardImageAction, LoadSetDataAction, LoadSetSymbolAction } from "leng-core/src/store/encyclopedia";
-import selectors from '../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 
 export type FrameEffect =
     | 'legendary'

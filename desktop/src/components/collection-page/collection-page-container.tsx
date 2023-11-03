@@ -4,8 +4,8 @@ import { BoxCard, defaultCardFilter } from "leng-core/src/logic/model";
 import { getCards } from "leng-core/src/logic/card-filters";
 import CollectionPage from "./collection-page";
 import { useDispatch, useSelector } from "react-redux";
-import selectors from "../../store/selectors";
-import { inventoryActions } from "../../store/inventory";
+import selectors from "leng-core/src/store/selectors";
+import { inventoryActions } from "leng-core/src/store/inventory";
 import { searchActions } from "leng-core/src/store/search";
 
 function getCount(cards: BoxCard[]): number {

@@ -5,8 +5,8 @@ import { Box } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { icons } from '../fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
-import selectors from '../store/selectors';
-import { editingActions } from '../store/editing';
+import selectors from 'leng-core/src/store/selectors';
+import { editingActions } from 'leng-core/src/store/editing';
 
 const NavBar = () => {
     const navigate = useNavigate();

@@ -3,7 +3,7 @@ import { IconButton, TextField } from '@mui/material';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { icons } from '../../fontawesome';
-import { inventoryActions } from '../../store/inventory';
+import { inventoryActions } from 'leng-core/src/store/inventory';
 
 type Props = {
     close: () => void

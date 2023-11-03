@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import { put, takeEvery, takeLeading } from 'redux-saga/effects';
 import { createFileAndDirectoryIfRequired } from '../logic/file-helpers';
 import { AsyncRequestStatus } from "leng-core/src/logic/model";
-import { settingsActions, SettingsActionTypes, SettingsLoadAction, SettingsSaveAction } from '../store/settings';
+import { settingsActions, SettingsActionTypes, SettingsLoadAction, SettingsSaveAction } from 'leng-core/src/store/settings';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dir = `${(process.env as any).USERPROFILE.replace('\\', '/')}/leng`;

@@ -7,7 +7,7 @@ import SettingsPageContainer from './settings-page/settings-page-container';
 import BoxesPageContainer from './boxes-page/boxes-page-container';
 import SplashScreen from './splash-screen';
 import { preloadActions } from 'leng-core/src/store/preload';
-import selectors from '../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 import ReportsPage from './reports-page/reports-page';
 import NavBar from './navbar';
 

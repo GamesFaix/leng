@@ -3,10 +3,13 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './components/app';
-import { store } from './store';
+import { store } from 'leng-core/src/store';
 import "./styles.scss";
 import { darkTheme } from './theme';
+import { runSagas } from './sagas';
 
+runSagas();
+  
 ReactDOM.render(
     <Provider store={store}>
         <ThemeProvider theme={darkTheme}>

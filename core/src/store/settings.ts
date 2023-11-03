@@ -1,4 +1,4 @@
-import { AppSettings, asyncRequest, AsyncRequest, AsyncRequestStatus } from "leng-core/src/logic/model"
+import { AppSettings, asyncRequest, AsyncRequest, AsyncRequestStatus } from "../logic/model"
 
 export type SettingsState = {
     settings: AppSettings | null

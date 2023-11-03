@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
 import { BoxCard, BoxCardModule } from "leng-core/src/logic/model";
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 import CollapsableCard from '../common/collapsable-card';
 import CardTransferForm from './card-transfer-form';
 

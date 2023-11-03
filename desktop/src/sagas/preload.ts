@@ -1,10 +1,10 @@
 import { put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { AsyncRequestStatus, BoxState } from "leng-core/src/logic/model";
 import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadSetDataAction } from "leng-core/src/store/encyclopedia";
-import { BoxInfosLoadAction, BoxLoadAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import { BoxInfosLoadAction, BoxLoadAction, inventoryActions, InventoryActionTypes } from "leng-core/src/store/inventory";
 import { preloadActions, PreloadActionTypes, PreloadStartAction } from "leng-core/src/store/preload";
-import selectors from "../store/selectors";
-import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "../store/settings";
+import selectors from "leng-core/src/store/selectors";
+import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "leng-core/src/store/settings";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function* onPreloadStart(_: PreloadStartAction) {

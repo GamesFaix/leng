@@ -3,7 +3,7 @@ import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 import BoxTitle from './box-title';
 
 type Props = {

@@ -20,7 +20,9 @@
   },
   "homepage": "https://github.com/GamesFaix/leng#readme",
   "dependencies": {
+    "@reduxjs/toolkit": "^1.9.7",
     "lodash": "^4.17.21",
+    "redux-saga": "^1.2.3",
     "scryfall-api": "^3.2.5"
   },
   "devDependencies": {

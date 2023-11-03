@@ -8,7 +8,7 @@ import { shell } from 'electron';
 import { orderBy } from 'lodash';
 import SetSymbol from '../common/set-symbol';
 import { useSelector } from 'react-redux';
-import selectors from '../../store/selectors';
+import selectors from 'leng-core/src/store/selectors';
 import FlagIcon from '../common/flag-icon';
 import { CardImageTooltip } from '../common/card-image-tooltip';
 import CollapsableCard from '../common/collapsable-card';

@@ -8,19 +8,14 @@ import {
   EncyclopediaAction,
   EncyclopediaActionTypes,
   encyclopediaReducer,
-} from "leng-core/src/store/encyclopedia";
+} from "./encyclopedia";
 import { InventoryAction, inventoryReducer } from "./inventory";
 import { SettingsAction, settingsReducer } from "./settings";
-import createSagaMiddleware from "redux-saga";
-import settingsSaga from "../sagas/settings";
-import { AsyncRequestStatus } from "leng-core/src/logic/model";
-import encyclopediaSaga from "../sagas/encyclopedia";
-import inventorySaga from "../sagas/inventory";
-import { PreloadAction, preloadReducer } from "leng-core/src/store/preload";
-import preloadSaga from "../sagas/preload";
+import { AsyncRequestStatus } from "../logic/model";
+import { PreloadAction, preloadReducer } from "./preload";
 import { EditingAction, editingReducer } from "./editing";
-import { SearchAction, searchReducer } from "leng-core/src/store/search";
-import searchSaga from "../sagas/search";
+import { SearchAction, searchReducer } from "./search";
+import createSagaMiddleware from "redux-saga";
 
 type Action =
   | EncyclopediaAction
@@ -76,22 +71,13 @@ const devToolsEnhancer =
     stateSanitizer,
   });
 
-const sagaMiddleware = createSagaMiddleware();
+export const sagaMiddleware = createSagaMiddleware();
 
 const middlewareEnhancer = applyMiddleware(sagaMiddleware);
 
 const enhancers = compose(middlewareEnhancer, devToolsEnhancer);
 
 export const store = createStore(reducer, enhancers);
-
-const sagas = [
-  settingsSaga,
-  encyclopediaSaga,
-  inventorySaga,
-  preloadSaga,
-  searchSaga,
-];
-sagas.forEach(sagaMiddleware.run);
 
 export type RootState = ReturnType<typeof store.getState>;
 

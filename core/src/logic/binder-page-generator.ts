@@ -1,7 +1,7 @@
 import { Dictionary, groupBy, chunk, orderBy } from "lodash";
 import { Set } from "scryfall-api";
-import { innerJoin } from "leng-core/src/logic/array-helper";
-import { BoxCard } from "leng-core/src/logic/model";
+import { innerJoin } from "./array-helper";
+import { BoxCard } from "./model";
 
 type SetWithCards = {
   set: Set;

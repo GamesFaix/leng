@@ -3,8 +3,8 @@ import { IconButton, TextField, Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../fontawesome';
-import { inventoryActions } from '../../store/inventory';
-import selectors from '../../store/selectors';
+import { inventoryActions } from 'leng-core/src/store/inventory';
+import selectors from 'leng-core/src/store/selectors';
 
 type Props = {
     name: string
