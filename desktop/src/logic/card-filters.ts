@@ -4,7 +4,7 @@ import { ColorFilterRule } from "../components/collection-page/color-rule-select
 import { ColorFilter } from "../components/collection-page/color-selector";
 import { basicLandNames } from "../components/reports-page/model";
 import { BoxState } from "../store/inventory";
-import { FormatType } from "./formats";
+import { FormatType } from "leng-core/src/logic/formats";
 import { BoxCard, BoxCardModule, CardFilter, normalizeName } from "./model";
 
 function containsAny(cardColors: Color[], filterColors: ColorFilter[]) {

@@ -1,6 +1,6 @@
 import { Button, FormControlLabel, TextField } from "@mui/material";
 import * as React from "react";
-import { Format } from "../../logic/formats";
+import { Format } from "leng-core/src/logic/formats";
 import { CardFilter } from "../../logic/model";
 import CollapsableCard from "../common/collapsable-card";
 import BoxSelector from "./box-selector";

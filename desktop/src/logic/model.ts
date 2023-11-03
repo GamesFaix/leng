@@ -2,7 +2,7 @@ import { Card, Color, Legalities, Set } from 'scryfall-api';
 import { groupBy } from 'lodash';
 import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
 import { ColorFilter } from '../components/collection-page/color-selector';
-import { Format } from './formats';
+import { Format } from 'leng-core/src/logic/formats';
 
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
