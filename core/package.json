@@ -1,14 +1,11 @@
 {
-  "name": "leng-desktop",
+  "name": "leng-core",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/leng-core.js",
   "scripts": {
-    "postinstall": "node ./scripts/postinstall.js",
     "build": "webpack --config ./webpack.config.js",
     "watch": "webpack --config ./webpack.config.js --watch",
-    "serve": "electron ./dist/electron.js",
-    "start": "npm run build && npm run serve",
     "lint": "eslint . --ext .ts"
   },
   "repository": {
@@ -32,9 +29,6 @@
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.5",
     "csv-writer": "^1.6.0",
-    "electron": "^24.1.2",
-    "electron-devtools-installer": "^3.2.0",
-    "fs": "0.0.1-security",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "path": "^0.12.7",
