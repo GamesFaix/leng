@@ -44,7 +44,7 @@ jobs:
         working-directory: ./desktop
         run: npm install
 
-      - name: Link- Desktop
+      - name: Link - Desktop
         working-directory: ./desktop
         run: npm link leng-core
 
