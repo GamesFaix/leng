@@ -1,4 +1,4 @@
-name: Build
+name: Build Desktop
 
 on:
   push:
@@ -24,14 +24,34 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install packages
-        run: |
-          npm install
+      - name: Install packages - Desktop
+        working-directory: ./core
+        run: npm install
 
-      - name: Lint
-        run: |
-          npm run lint
+      - name: Lint - Core
+        working-directory: ./core
+        run: npm run lint
 
-      - name: Build
-        run: |
-          npm run build
+      - name: Build - Core
+        working-directory: ./core
+        run: npm run build
+
+      - name: Link - Core
+        working-directory: ./core
+        run: npm link
+
+      - name: Install packages - Desktop
+        working-directory: ./desktop
+        run: npm install
+
+      - name: Link - Desktop
+        working-directory: ./desktop
+        run: npm link leng-core
+
+      - name: Lint - Desktop
+        working-directory: ./desktop
+        run: npm run lint
+
+      - name: Build - Desktop
+        working-directory: ./desktop
+        run: npm run build
