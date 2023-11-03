@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import { Card } from "scryfall-api";
-import { AsyncRequestStatus } from "../logic/model";
+import { AsyncRequestStatus } from "leng-core/src/logic/model";
 import { searchScryfall } from "../logic/search";
 import {
   SearchAction,

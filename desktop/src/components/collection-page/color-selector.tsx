@@ -1,9 +1,6 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { ColorFilter, allColors } from 'leng-core/src/logic/model';
 import * as React from 'react';
-
-export type ColorFilter = 'W' | 'U' | 'B' | 'R' | 'G' | 'C'
-
-export const allColors : ColorFilter[] = ['W', 'U', 'B', 'R', 'G', 'C'];
 
 function getOptionLabel(color: ColorFilter) : string {
     switch (color) {

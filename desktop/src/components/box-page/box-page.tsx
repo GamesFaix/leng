@@ -1,6 +1,6 @@
 import { Card, Container } from "@mui/material";
 import * as React from "react";
-import { BoxCard, CardFilter } from "../../logic/model";
+import { BoxCard, CardFilter } from "leng-core/src/logic/model";
 import CardsTable from "./cards-table";
 import "react-virtualized/styles.css";
 import { AddCardForm, EditCardForm } from "./card-form";

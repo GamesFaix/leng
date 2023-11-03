@@ -1,6 +1,6 @@
 import { groupBy } from "lodash";
 import { Card } from "scryfall-api";
-import { BoxCard, CardFinish, CardIndex, Language } from "./model";
+import { BoxCard, CardFinish, CardIndex, Language } from "leng-core/src/logic/model";
 
 export type CsvCard = {
   count: number;

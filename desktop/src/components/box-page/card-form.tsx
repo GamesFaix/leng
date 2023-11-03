@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { icons } from '../../fontawesome';
-import { AllLanguages, BoxCard, CardFinish, getVersionLabel, Language, normalizeName } from '../../logic/model';
+import { AllLanguages, BoxCard, CardFinish, getVersionLabel, Language, normalizeName } from "leng-core/src/logic/model";
 import { Autocomplete, FilterOptionsState, IconButton, TextField } from '@mui/material';
 import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';

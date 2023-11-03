@@ -1,8 +1,6 @@
 import { Card, Color, Legalities, Set } from 'scryfall-api';
 import { groupBy } from 'lodash';
-import { ColorFilterRule } from '../components/collection-page/color-rule-selector';
-import { ColorFilter } from '../components/collection-page/color-selector';
-import { Format } from 'leng-core/src/logic/formats';
+import { Format } from './formats';
 
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
@@ -204,6 +202,32 @@ export type CardIndex = {
 export type SetIndex = {
     [abbrev: string]: Set
 }
+
+export type ColorFilter = 'W' | 'U' | 'B' | 'R' | 'G' | 'C'
+
+export const allColors : ColorFilter[] = ['W', 'U', 'B', 'R', 'G', 'C'];
+
+export enum ColorFilterRule {
+    ContainsAny = 'CONTAINS_ANY',
+    ContainsAll = 'CONTAINS_ALL',
+    ContainsOnly = 'CONTAINS_ONLY',
+    IsExactly = 'IS_EXACTLY',
+    IdentityContainsAny = 'IDENTITY_CONTAINS_ANY',
+    IdentityContainsAll = 'IDENTITY_CONTAINS_ALL',
+    IdentityContainsOnly = 'IDENTITY_CONTAINS_ONLY',
+    IdentityIsExactly = 'IDENTITY_IS_EXACTLY'
+}
+
+export const allColorFilterRules = [
+    ColorFilterRule.ContainsAny,
+    ColorFilterRule.ContainsAll,
+    ColorFilterRule.ContainsOnly,
+    ColorFilterRule.IsExactly,
+    ColorFilterRule.IdentityContainsAny,
+    ColorFilterRule.IdentityContainsAll,
+    ColorFilterRule.IdentityContainsOnly,
+    ColorFilterRule.IdentityIsExactly
+];
 
 export type CardFilter = {
     nameQuery: string,

@@ -1,6 +1,6 @@
 import { uniq } from 'lodash';
 import { Card, Set } from 'scryfall-api';
-import { asyncRequest, AsyncRequest, AsyncRequestStatus, CardIndex, SetIndex } from '../logic/model';
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, CardIndex, SetIndex } from "leng-core/src/logic/model";
 
 export type EncyclopediaState = {
     cards: Card[],

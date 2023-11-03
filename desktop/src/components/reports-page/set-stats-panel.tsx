@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 import selectors from "../../store/selectors";
 import { Set, Card as ScryfallCard } from "scryfall-api";
 import { getCardsFromBoxes } from "../../logic/card-filters";
-import { BoxCard } from "../../logic/model";
+import { BoxCard } from "leng-core/src/logic/model";
 import {
   CheckListVisibility,
   getRarity,

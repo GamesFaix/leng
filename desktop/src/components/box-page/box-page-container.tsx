@@ -6,7 +6,7 @@ import {
   BoxCard,
   BoxCardModule,
   defaultCardFilter,
-} from "../../logic/model";
+} from "leng-core/src/logic/model";
 import "react-virtualized/styles.css";
 import { inventoryActions } from "../../store/inventory";
 import BoxPage from "./box-page";

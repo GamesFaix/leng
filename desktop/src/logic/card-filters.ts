@@ -1,11 +1,9 @@
 import { difference, intersection, uniq } from "lodash";
 import { Card, Color } from "scryfall-api";
-import { ColorFilterRule } from "../components/collection-page/color-rule-selector";
-import { ColorFilter } from "../components/collection-page/color-selector";
 import { basicLandNames } from "../components/reports-page/model";
 import { BoxState } from "../store/inventory";
 import { FormatType } from "leng-core/src/logic/formats";
-import { BoxCard, BoxCardModule, CardFilter, normalizeName } from "./model";
+import { BoxCard, BoxCardModule, CardFilter, ColorFilter, ColorFilterRule, normalizeName } from "leng-core/src/logic/model";
 
 function containsAny(cardColors: Color[], filterColors: ColorFilter[]) {
   if (cardColors.length === 0 && filterColors.includes("C")) {

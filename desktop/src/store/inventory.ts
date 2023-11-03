@@ -1,5 +1,5 @@
 import { orderBy } from "lodash";
-import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo, BoxTransferBulkRequest, BoxTransferSingleRequest } from "../logic/model";
+import { asyncRequest, AsyncRequest, AsyncRequestStatus, Box, BoxCard, BoxInfo, BoxTransferBulkRequest, BoxTransferSingleRequest } from "leng-core/src/logic/model";
 
 export type BoxState = {
     name: string,

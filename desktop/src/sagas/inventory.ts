@@ -18,7 +18,7 @@ import {
   getVersionLabel,
   Language,
   normalizeName,
-} from "../logic/model";
+} from "leng-core/src/logic/model";
 import {
   BoxCreateAction,
   BoxDeleteAction,

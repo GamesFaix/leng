@@ -1,5 +1,5 @@
 import { put, select, takeEvery, takeLeading } from "redux-saga/effects";
-import { AsyncRequestStatus } from "../logic/model";
+import { AsyncRequestStatus } from "leng-core/src/logic/model";
 import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadSetDataAction } from "../store/encyclopedia";
 import { BoxInfosLoadAction, BoxLoadAction, BoxState, inventoryActions, InventoryActionTypes } from "../store/inventory";
 import { preloadActions, PreloadActionTypes, PreloadStartAction } from "../store/preload";

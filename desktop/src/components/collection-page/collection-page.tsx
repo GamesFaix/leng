@@ -1,7 +1,7 @@
 import { Card, Container, IconButton, Typography } from "@mui/material";
 import * as React from "react";
 import CardsTable from "./cards-table";
-import { BoxCard, CardFilter } from "../../logic/model";
+import { BoxCard, CardFilter } from "leng-core/src/logic/model";
 import CardFilterForm from "./card-filter-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../fontawesome";

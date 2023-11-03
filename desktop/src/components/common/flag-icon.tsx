@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Language } from '../../logic/model';
+import { Language } from "leng-core/src/logic/model";
 
 import britishFlag from '../../images/flags/gb.svg';
 import chineseFlag from '../../images/flags/cn.svg';

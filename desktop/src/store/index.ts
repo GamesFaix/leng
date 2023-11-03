@@ -13,7 +13,7 @@ import { InventoryAction, inventoryReducer } from "./inventory";
 import { SettingsAction, settingsReducer } from "./settings";
 import createSagaMiddleware from "redux-saga";
 import settingsSaga from "../sagas/settings";
-import { AsyncRequestStatus } from "../logic/model";
+import { AsyncRequestStatus } from "leng-core/src/logic/model";
 import encyclopediaSaga from "../sagas/encyclopedia";
 import inventorySaga from "../sagas/inventory";
 import { PreloadAction, preloadReducer } from "./preload";

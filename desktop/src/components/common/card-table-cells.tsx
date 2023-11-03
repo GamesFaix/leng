@@ -4,7 +4,7 @@ import { TableCellProps } from 'react-virtualized';
 import SetSymbol from './set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from '../../store/selectors';
-import { BoxCard, CardFinish } from '../../logic/model';
+import { BoxCard, CardFinish } from "leng-core/src/logic/model";
 import { CardImageTooltip } from './card-image-tooltip';
 
 export const CheckboxCell = (props: TableCellProps) => {

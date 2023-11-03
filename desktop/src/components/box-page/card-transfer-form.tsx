@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../fontawesome';
-import { BoxCard, BoxCardModule } from '../../logic/model';
+import { BoxCard, BoxCardModule } from "leng-core/src/logic/model";
 import TransferFormBoxSelector from './transfer-form-box-selector';
 
 type Props = {

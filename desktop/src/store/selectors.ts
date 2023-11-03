@@ -2,7 +2,7 @@ import { groupBy, orderBy, uniq } from "lodash";
 import { RootState } from ".";
 import { organizePages } from "../components/reports-page/binder-page-generator";
 import { getCardsFromBoxes } from "../logic/card-filters";
-import { SetGroup } from "../logic/model";
+import { SetGroup } from "leng-core/src/logic/model";
 
 const selectors = {
   preload: (state: RootState) => state.preload,
