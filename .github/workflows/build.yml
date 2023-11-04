@@ -1,9 +1,6 @@
 name: Build Desktop
 
 on:
-  push:
-    branches:
-      - "*"
   pull_request:
     branches:
       - "*"
@@ -24,7 +21,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install packages - Desktop
+      - name: Install packages - Core
         working-directory: ./core
         run: npm install
 
@@ -36,17 +33,13 @@ jobs:
         working-directory: ./core
         run: npm run build
 
-      - name: Link - Core
-        working-directory: ./core
-        run: npm link
-
       - name: Install packages - Desktop
         working-directory: ./desktop
         run: npm install
 
-      - name: Link - Desktop
+      - name: Re-link Core lib - Desktop
         working-directory: ./desktop
-        run: npm link leng-core
+        run: npm run relink
 
       - name: Lint - Desktop
         working-directory: ./desktop
@@ -54,4 +47,20 @@ jobs:
 
       - name: Build - Desktop
         working-directory: ./desktop
+        run: npm run build
+
+      - name: Install packages - Web
+        working-directory: ./web
+        run: npm install
+
+      - name: Re-link Core lib - Web
+        working-directory: ./web
+        run: npm run relink
+
+      - name: Lint - Web
+        working-directory: ./web
+        run: npm run lint
+
+      - name: Build - Web
+        working-directory: ./web
         run: npm run build
