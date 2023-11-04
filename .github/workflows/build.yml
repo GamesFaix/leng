@@ -7,6 +7,7 @@ on:
 
 jobs:
   # JOB to run change detection
+  # https://github.com/dorny/paths-filter#examples
   changes:
     runs-on: ubuntu-latest
     # Required permissions
@@ -58,7 +59,7 @@ jobs:
         run: npm run build
 
   build-desktop:    
-    needs: changes
+    needs: [changes, build-core-library]
     if: ${{ needs.changes.outputs.desktop == 'true' }}
     runs-on: ubuntu-latest
 
@@ -91,7 +92,7 @@ jobs:
         run: npm run build
 
   build-web:    
-    needs: changes
+    needs: [changes, build-core-library]
     if: ${{ needs.changes.outputs.web == 'true' }}
     runs-on: ubuntu-latest
 
