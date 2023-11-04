@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
 
 module.exports = [
     // Electron main process
@@ -69,7 +70,11 @@ module.exports = [
           })
         ],
         resolve: {
-          extensions: ['.ts', '.tsx', '.js']
+          extensions: ['.ts', '.tsx', '.js'],
+          alias: {
+            react: path.resolve('./node_modules/react'),
+            '@mui/material': path.resolve('./node_modules/@mui/material'),
+          }
         },
     }
 ];

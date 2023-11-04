@@ -9,7 +9,7 @@ import { orderBy } from 'lodash';
 import SetSymbol from '../common/set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from 'leng-core/src/store/selectors';
-import FlagIcon from '../common/flag-icon';
+import FlagIcon from 'leng-core/src/components/common/flag-icon';
 import { CardImageTooltip } from '../common/card-image-tooltip';
 import CollapsableCard from '../common/collapsable-card';
 
