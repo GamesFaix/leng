@@ -5,11 +5,11 @@ import BoxPageContainer from './box-page/box-page-container';
 import CollectionPageContainer from './collection-page/collection-page-container';
 import SettingsPageContainer from './settings-page/settings-page-container';
 import BoxesPageContainer from './boxes-page/boxes-page-container';
-import SplashScreen from './splash-screen';
+import SplashScreen from 'leng-core/src/components/splash-screen';
 import { preloadActions } from 'leng-core/src/store/preload';
 import selectors from 'leng-core/src/store/selectors';
 import ReportsPage from './reports-page/reports-page';
-import NavBar from './navbar';
+import NavBar from 'leng-core/src/components/navbar';
 
 const App = () => {
     const dispatch = useDispatch();

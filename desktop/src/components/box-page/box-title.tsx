@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField, Typography } from '@mui/material';
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { icons } from '../../fontawesome';
+import { icons } from 'leng-core/src/ui/fontawesome';
 import { inventoryActions } from 'leng-core/src/store/inventory';
 import selectors from 'leng-core/src/store/selectors';
 

@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
-import { icons } from '../../fontawesome';
+import { icons } from 'leng-core/src/ui/fontawesome';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
 import { BoxState } from 'leng-core/src/logic/model';

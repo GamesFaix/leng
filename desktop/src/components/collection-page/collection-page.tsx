@@ -4,7 +4,7 @@ import CardsTable from "./cards-table";
 import { BoxCard, CardFilter } from "leng-core/src/logic/model";
 import CardFilterForm from "./card-filter-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icons } from "../../fontawesome";
+import { icons } from "leng-core/src/ui/fontawesome";
 
 type Props = {
   cards: BoxCard[];

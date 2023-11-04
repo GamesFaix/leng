@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { AppBar, IconButton } from '@mui/material';
 import { Box } from '@mui/system';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { icons } from '../fontawesome';
+import { icons } from '../ui/fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
-import selectors from 'leng-core/src/store/selectors';
-import { editingActions } from 'leng-core/src/store/editing';
+import selectors from '../store/selectors';
+import { editingActions } from '../store/editing';
 
 const NavBar = () => {
     const navigate = useNavigate();
