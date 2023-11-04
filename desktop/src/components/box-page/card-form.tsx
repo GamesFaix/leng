@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { icons } from '../../fontawesome';
+import { icons } from 'leng-core/src/ui/fontawesome';
 import { AllLanguages, BoxCard, CardFinish, getVersionLabel, Language, normalizeName } from "leng-core/src/logic/model";
 import { Autocomplete, FilterOptionsState, IconButton, TextField } from '@mui/material';
 import { Card, Set } from 'scryfall-api';

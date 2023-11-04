@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { icons } from '../../fontawesome';
+import { icons } from 'leng-core/src/ui/fontawesome';
 import { BoxCard, BoxCardModule } from "leng-core/src/logic/model";
 import selectors from 'leng-core/src/store/selectors';
 import CollapsableCard from '../common/collapsable-card';
