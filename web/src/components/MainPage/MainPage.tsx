@@ -7,8 +7,7 @@ import { routes } from "../../routes";
 export const MainPage: FC = () => {
 
   useEffect(() => {
-    // TODO: Initialize data
-// eslint-disable-next-line react-hooks/exhaustive-deps      
+    // TODO: Initialize data    
   },[]); // Don't re-run
 
   return (
