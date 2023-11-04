@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import App from './components/app';
 import { store } from 'leng-core/src/store';
 import "./styles.scss";
-import { darkTheme } from './theme';
+import { darkTheme } from 'leng-core/src/ui/theme';
 import { runSagas } from './sagas';
 
 runSagas();
