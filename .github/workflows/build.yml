@@ -1,4 +1,4 @@
-name: Build Core library
+name: Build
 
 on:
   pull_request:
@@ -57,7 +57,7 @@ jobs:
       - name: Build
         run: npm run build
 
- build-desktop:    
+  build-desktop:    
     needs: changes
     if: ${{ needs.changes.outputs.desktop == 'true' }}
     runs-on: ubuntu-latest
@@ -90,7 +90,7 @@ jobs:
       - name: Build
         run: npm run build
 
- build-web:    
+  build-web:    
     needs: changes
     if: ${{ needs.changes.outputs.web == 'true' }}
     runs-on: ubuntu-latest
