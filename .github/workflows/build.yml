@@ -6,120 +6,81 @@ on:
       - "*"
 
 jobs:
-  # JOB to run change detection
-  # https://github.com/dorny/paths-filter#examples
-  changes:
+  build:    
     runs-on: ubuntu-latest
-    # Required permissions
-    permissions:
-      pull-requests: read
-    # Set job outputs to values from filter step
-    outputs:
-      desktop: ${{ steps.filter.outputs.desktop }}
-      web: ${{ steps.filter.outputs.web }}
+
+    strategy:
+      matrix:
+        node-version: [18.11.0]
+
     steps:
-    # For pull requests it's not necessary to checkout the code
-    - uses: dorny/paths-filter@v2
-      id: filter
-      with:
-        filters: |
-          desktop:
-            - 'core/**'
-            - 'desktop/**'
-          web:
-            - 'core/**'
-            - 'web/**'
+      - uses: actions/checkout@v3
 
-  build-core-library:    
-    runs-on: ubuntu-latest
+      - uses: dorny/paths-filter@v2
+        # https://github.com/dorny/paths-filter#examples
+        id: filter
+        with:
+          filters: |
+            desktop:
+              - 'core/**'
+              - 'desktop/**'
+            web:
+              - 'core/**'
+              - 'web/**'
 
-    defaults:
-      run:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install packages - Core
         working-directory: './core'
-
-    strategy:
-      matrix:
-        node-version: [18.11.0]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install packages
         run: npm install
 
-      - name: Lint
+      - name: Lint - Core
+        working-directory: './core'
         run: npm run lint
 
-      - name: Build
+      - name: Build - Core
+        working-directory: './core'
         run: npm run build
 
-  build-desktop:    
-    needs: [changes, build-core-library]
-    if: ${{ needs.changes.outputs.desktop == 'true' }}
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
+      - name: Install packages - Desktop
+        if: steps.filter.outputs.desktop == 'true'
         working-directory: './desktop'
-
-    strategy:
-      matrix:
-        node-version: [18.11.0]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install packages
         run: npm install
 
-      - name: Re-link core library
+      - name: Re-link core library - Desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
         run: npm run relink
 
-      - name: Lint
+      - name: Lint - Desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
         run: npm run lint
 
-      - name: Build
+      - name: Build - Desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
         run: npm run build
 
-  build-web:    
-    needs: [changes, build-core-library]
-    if: ${{ needs.changes.outputs.web == 'true' }}
-    runs-on: ubuntu-latest
-
-    defaults:
-      run:
+      - name: Install packages - Web
+        if: steps.filter.outputs.web == 'true'
         working-directory: './web'
-
-    strategy:
-      matrix:
-        node-version: [18.11.0]
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Install packages
         run: npm install
 
-      - name: Re-link core library
+      - name: Re-link core library - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
         run: npm run relink
 
-      - name: Lint
+      - name: Lint - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
         run: npm run lint
 
-      - name: Build
+      - name: Build - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
         run: npm run build
