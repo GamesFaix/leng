@@ -11,7 +11,7 @@ import { useSelector } from 'react-redux';
 import selectors from 'leng-core/src/store/selectors';
 import FlagIcon from 'leng-core/src/components/common/flag-icon';
 import { CardImageTooltip } from '../common/card-image-tooltip';
-import CollapsableCard from '../common/collapsable-card';
+import CollapsableCard from 'leng-core/src/components/common/collapsable-card';
 
 type Props = {
     title: string

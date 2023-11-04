@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { icons } from 'leng-core/src/ui/fontawesome';
 import { BoxCard, BoxCardModule } from "leng-core/src/logic/model";
 import selectors from 'leng-core/src/store/selectors';
-import CollapsableCard from '../common/collapsable-card';
+import CollapsableCard from 'leng-core/src/components/common/collapsable-card';
 import CardTransferForm from './card-transfer-form';
 
 type Props = {

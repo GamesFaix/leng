@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconButton } from "@mui/material";
 import * as React from "react";
-import { icons } from "leng-core/src/ui/fontawesome";
+import { icons } from "../../ui/fontawesome";
 
 type Props = {
     isExpanded: boolean,
