@@ -9,7 +9,7 @@ import SplashScreen from 'leng-core/src/components/splash-screen';
 import { preloadActions } from 'leng-core/src/store/preload';
 import selectors from 'leng-core/src/store/selectors';
 import ReportsPage from './reports-page/reports-page';
-import NavBar from './navbar';
+import NavBar from 'leng-core/src/components/navbar';
 
 const App = () => {
     const dispatch = useDispatch();
