@@ -6,7 +6,7 @@ import { Card, Set } from 'scryfall-api';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { shell } from 'electron';
 import { orderBy } from 'lodash';
-import SetSymbol from '../common/set-symbol';
+import SetSymbol from 'leng-core/src/components/common/set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from 'leng-core/src/store/selectors';
 import FlagIcon from 'leng-core/src/components/common/flag-icon';

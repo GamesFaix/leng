@@ -1,6 +1,6 @@
 import { Tooltip } from '@mui/material';
 import * as React from 'react';
-import CardImage from './card-image';
+import CardImage from 'leng-core/src/components/common/card-image';
 
 type Props = {
     scryfallId: string,

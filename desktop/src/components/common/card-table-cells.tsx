@@ -1,7 +1,7 @@
 import { Checkbox } from '@mui/material';
 import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
-import SetSymbol from './set-symbol';
+import SetSymbol from 'leng-core/src/components/common/set-symbol';
 import { useSelector } from 'react-redux';
 import selectors from 'leng-core/src/store/selectors';
 import { BoxCard, CardFinish } from "leng-core/src/logic/model";

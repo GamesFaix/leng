@@ -3,7 +3,7 @@ import { sumBy } from 'lodash';
 import * as React from 'react';
 import { BoxCard } from "leng-core/src/logic/model";
 import BinderCardTooltip from './binder-card-tooltip';
-import CardImage from '../common/card-image';
+import CardImage from 'leng-core/src/components/common/card-image';
 
 type Props = {
     cardGroup: BoxCard[], // Group of cards with same name/set/collectors number, but different foil or language
