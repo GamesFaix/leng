@@ -1,28 +1,39 @@
-import { ThemeProvider } from '@mui/material';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import App from './components/app';
-import { store } from 'leng-core/src/store';
+import { ThemeProvider } from "@mui/material";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import App from "./components/app";
+import { store } from "leng-core/src/store";
 import "./styles.scss";
-import { darkTheme } from 'leng-core/src/ui/theme';
-import { runSagas } from 'leng-core/src/sagas';
-import { cardDataProvider, imageDownloader, inventoryReadProvider, inventoryWriteProvider, settingsProvider, tappedOutCsvExportProvider } from './file-system';
+import { darkTheme } from "leng-core/src/ui/theme";
+import { runSagas } from "leng-core/src/sagas";
+import {
+  cardDataProvider,
+  imageDownloader,
+  imagePathProvider,
+  inventoryReadProvider,
+  inventoryWriteProvider,
+  settingsProvider,
+  tappedOutCsvExportProvider,
+} from "./file-system";
+import { ImagePathContext } from 'leng-core/src/ui/image-path-context';
 
 runSagas({
-    images: imageDownloader,
-    settings: settingsProvider,
-    cardData: cardDataProvider,
-    inventoryRead: inventoryReadProvider,
-    inventoryWrite: inventoryWriteProvider,
-    tappedOut: tappedOutCsvExportProvider
+  images: imageDownloader,
+  settings: settingsProvider,
+  cardData: cardDataProvider,
+  inventoryRead: inventoryReadProvider,
+  inventoryWrite: inventoryWriteProvider,
+  tappedOut: tappedOutCsvExportProvider,
 });
-  
+
 ReactDOM.render(
-    <Provider store={store}>
-        <ThemeProvider theme={darkTheme}>
-            <App />
-        </ThemeProvider>
-    </Provider>,
-    document.getElementById('app')
+  <Provider store={store}>
+    <ThemeProvider theme={darkTheme}>
+      <ImagePathContext.Provider value={imagePathProvider}>
+        <App />
+      </ImagePathContext.Provider>
+    </ThemeProvider>
+  </Provider>,
+  document.getElementById("app")
 );
