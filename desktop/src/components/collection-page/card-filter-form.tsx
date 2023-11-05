@@ -2,12 +2,12 @@ import { Button, FormControlLabel, TextField } from "@mui/material";
 import * as React from "react";
 import { Format } from "leng-core/src/logic/formats";
 import { CardFilter, ColorFilter, ColorFilterRule } from "leng-core/src/logic/model";
-import CollapsableCard from "leng-core/src/components/common/collapsable-card";
 import BoxSelector from "./box-selector";
 import ColorRuleSelector from "./color-rule-selector";
 import ColorsSelector from "./color-selector";
 import FormatFilter from "./format-filter";
 import SetFilter from "./set-filter";
+import { CollapsableCard } from "leng-core/src/components/common";
 
 type Props = {
   filter: CardFilter;

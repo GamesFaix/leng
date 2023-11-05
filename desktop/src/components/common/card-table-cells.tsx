@@ -1,11 +1,11 @@
 import { Checkbox } from '@mui/material';
 import * as React from 'react';
 import { TableCellProps } from 'react-virtualized';
-import SetSymbol from 'leng-core/src/components/common/set-symbol';
+import { SetSymbol } from 'leng-core/src/components/common';
 import { useSelector } from 'react-redux';
 import selectors from 'leng-core/src/store/selectors';
 import { BoxCard, CardFinish } from "leng-core/src/logic/model";
-import { CardImageTooltip } from './card-image-tooltip';
+import { CardImageTooltip } from 'leng-core/src/components/common/card-image-tooltip';
 
 export const CheckboxCell = (props: TableCellProps) => {
     return (

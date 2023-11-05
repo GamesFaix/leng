@@ -29,7 +29,7 @@ const LoadedImage = (props: Props) => {
   );
 };
 
-const CardImage = (props: Props) => {
+export const CardImage = (props: Props) => {
   const dispatch = useDispatch();
   const isImageLoaded = useSelector(
     selectors.isCardImageLoaded(props.scryfallId)
@@ -43,4 +43,3 @@ const CardImage = (props: Props) => {
 
   return isImageLoaded ? <LoadedImage {...props} /> : <CircularProgress />;
 };
-export default CardImage;

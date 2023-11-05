@@ -8,7 +8,7 @@ type Props = {
   setAbbrev: string;
 };
 
-const SetSymbol = (props: Props) => {
+export const SetSymbol = (props: Props) => {
   const settings = useSelector(selectors.settings);
   const imagePathProvider = React.useContext(ImagePathContext);
   const url = React.useMemo(
@@ -27,4 +27,3 @@ const SetSymbol = (props: Props) => {
     </Icon>
   );
 };
-export default SetSymbol;
