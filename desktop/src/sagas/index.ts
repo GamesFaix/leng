@@ -1,17 +1,24 @@
 import settingsSaga from "./settings";
 import encyclopediaSaga from "./encyclopedia";
-import inventorySaga from "./inventory";
 import preloadSaga from "./preload";
 import searchSaga from "leng-core/src/sagas/search";
 import { sagaMiddleware } from "leng-core/src/store";
+import { tappedOutCsvExportProvider } from "./tapped-out-csv-export-provider";
+import { inventoryWriteProvider } from "./inventory-write-provider";
+import { inventoryReadProvider } from "./inventory-read-provider";
+import { getInventoryReadSaga } from "leng-core/src/sagas/inventory-read";
+import { getInventoryWriteSaga } from "leng-core/src/sagas/inventory-write";
+import { getTappedOutCsvExportSaga } from "leng-core/src/sagas/tapped-out-csv-export";
 
 export const runSagas = () => {
-    const sagas = [
+  const sagas = [
     settingsSaga,
     encyclopediaSaga,
-    inventorySaga,
+    getInventoryReadSaga(inventoryReadProvider),
+    getInventoryWriteSaga(inventoryWriteProvider),
+    getTappedOutCsvExportSaga(tappedOutCsvExportProvider),
     preloadSaga,
     searchSaga,
-    ];
-    sagas.forEach(sagaMiddleware.run);
-}
+  ];
+  sagas.forEach(sagaMiddleware.run);
+};
