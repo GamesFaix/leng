@@ -1,7 +1,7 @@
 import { Icon } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { getSetSymbolImagePath } from '../../sagas/encyclopedia';
+import { getSetSymbolImagePath } from '../../sagas/images';
 import selectors from 'leng-core/src/store/selectors';
 
 type Props = {
