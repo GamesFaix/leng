@@ -3,7 +3,7 @@ import { orderBy } from "lodash";
 import { parse } from "path";
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import { getCards } from "leng-core/src/logic/card-filters";
-import { toCsvCards } from "../logic/csv-model";
+import { toTappedOutCsvExportCards } from "leng-core/src/logic/tappedout-csv-export";
 import { createDirIfMissing } from "../logic/file-helpers";
 import {
   AppSettings,
@@ -29,7 +29,7 @@ import {
   BoxSaveAction,
   BoxTransferBulkAction,
   BoxTransferSingleAction,
-  CsvExportAction,
+  TappedOutCsvExportAction,
   inventoryActions,
   InventoryActionTypes,
 } from "leng-core/src/store/inventory";
@@ -376,7 +376,7 @@ function* transferSingle(action: BoxTransferSingleAction) {
   }
 }
 
-function* csvExport(action: CsvExportAction) {
+function* tappedOutCsvExport(action: TappedOutCsvExportAction) {
   if (action.value.status !== AsyncRequestStatus.Started) {
     return;
   }
@@ -386,7 +386,7 @@ function* csvExport(action: CsvExportAction) {
     const boxes: Box[] = yield select(selectors.boxes);
     const cards = getCards(boxes, defaultCardFilter, {}, []);
     const cardIndex: CardIndex = yield select(selectors.cardIndex);
-    const csvCards = toCsvCards(cards, cardIndex);
+    const csvCards = toTappedOutCsvExportCards(cards, cardIndex);
     const timestamp = moment.utc().format("YYYY-MM-DD-HH-mm-ss");
     const writer = createObjectCsvWriter({
       path: `${settings.dataPath}/collection-${timestamp}.csv`,
@@ -416,6 +416,6 @@ function* inventorySaga() {
   yield takeEvery(InventoryActionTypes.BoxDelete, deleteBox);
   yield takeEvery(InventoryActionTypes.BoxTransferBulk, transferBulk);
   yield takeEvery(InventoryActionTypes.BoxTransferSingle, transferSingle);
-  yield takeEvery(InventoryActionTypes.CsvExport, csvExport);
+  yield takeEvery(InventoryActionTypes.TappedOutCsvExport, tappedOutCsvExport);
 }
 export default inventorySaga;

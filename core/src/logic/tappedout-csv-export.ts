@@ -1,8 +1,8 @@
 import { groupBy } from "lodash";
 import { Card } from "scryfall-api";
-import { BoxCard, CardFinish, CardIndex, Language } from "leng-core/src/logic/model";
+import { BoxCard, CardFinish, CardIndex, Language } from "./model";
 
-export type CsvCard = {
+export type TappedOutCsvExportCard = {
   count: number;
   name: string;
   setAbbrev: string;
@@ -64,7 +64,7 @@ function normalizeName(card: BoxCard, match: Card): string {
   return name;
 }
 
-function toCsvCard(group: BoxCard[], cardIndex: CardIndex): CsvCard {
+function toCsvCard(group: BoxCard[], cardIndex: CardIndex): TappedOutCsvExportCard {
   const card = group[0];
   const { setAbbrev, lang, scryfallId } = card;
   const match = cardIndex[scryfallId];
@@ -90,7 +90,7 @@ function toCsvCard(group: BoxCard[], cardIndex: CardIndex): CsvCard {
   };
 }
 
-export function toCsvCards(cards: BoxCard[], cardIndex: CardIndex): CsvCard[] {
+export function toTappedOutCsvExportCards(cards: BoxCard[], cardIndex: CardIndex): TappedOutCsvExportCard[] {
   const isToken = (c: BoxCard) =>
     c.setAbbrev.length === 4 && c.setAbbrev.startsWith("t");
   const isArt = (c: BoxCard) =>
