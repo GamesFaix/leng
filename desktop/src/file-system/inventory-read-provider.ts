@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { orderBy } from "lodash";
 import { parse } from "path";
-import { createDirIfMissing } from "../logic/file-helpers";
+import { createDirIfMissing } from "./file-helpers";
 import {
   AppSettings,
   Box,

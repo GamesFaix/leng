@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import { call, put, select, takeEvery, takeLeading, } from "redux-saga/effects";
 import { Card, Set } from 'scryfall-api';
-import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../logic/file-helpers';
+import { createDirForFileIfMissing, createFileAndDirectoryIfRequired } from '../file-system/file-helpers';
 import { AppSettings, AsyncRequestStatus, normalizeName } from "leng-core/src/logic/model";
 import { RootState } from 'leng-core/src/store';
 import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadCardImageAction, LoadSetDataAction, LoadSetSymbolAction } from "leng-core/src/store/encyclopedia";

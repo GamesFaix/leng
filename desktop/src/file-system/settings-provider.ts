@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { createFileAndDirectoryIfRequired } from "../logic/file-helpers";
+import { createFileAndDirectoryIfRequired } from "./file-helpers";
 import { AppSettings } from "leng-core/src/logic/model";
 import { SettingsProvider } from "leng-core/src/logic/interfaces";
 
