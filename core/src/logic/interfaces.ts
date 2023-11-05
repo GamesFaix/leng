@@ -15,3 +15,8 @@ export interface InventoryWriteProvider {
 export interface TappedOutCsvExportProvider {
     exportCards: (settings: AppSettings, cards: TappedOutCsvExportCard[]) => Promise<void>
 }
+
+export interface SettingsProvider {
+    load: () => AppSettings,
+    save: (settings: AppSettings) => void
+}
