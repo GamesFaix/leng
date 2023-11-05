@@ -1,8 +1,8 @@
 import { Icon } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { getSetSymbolImagePath } from '../../sagas/images';
 import selectors from 'leng-core/src/store/selectors';
+import { imagePathProvider } from '../../file-system';
 
 type Props = {
     setAbbrev: string
@@ -10,7 +10,7 @@ type Props = {
 
 const SetSymbol = (props: Props) => {
     const settings = useSelector(selectors.settings);
-    const url = getSetSymbolImagePath(settings, props.setAbbrev);
+    const url = imagePathProvider.getSetSymbolPath(settings, props.setAbbrev);
 
     return (
         <Icon

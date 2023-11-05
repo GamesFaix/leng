@@ -43,7 +43,7 @@ export interface CardDataProvider {
   getAllSets: (settings: AppSettings) => Promise<Set[]>;
 }
 
-export interface CardImageProvider {
-    getSetSymbol: (settings: AppSettings, set: Set) => Promise<any>; // TODO: Fix this
-    getCardImage: (settings: AppSettings, card: Card) => Promise<any>; // TODO: Fix this  
+export interface ImagePathProvider {
+  getSetSymbolPath: (settings: AppSettings, setCode: string) => string;
+  getCardImagePath: (settings: AppSettings, card: Card) => string;
 }
