@@ -47,3 +47,8 @@ export interface ImagePathProvider {
   getSetSymbolPath: (settings: AppSettings, setCode: string) => string;
   getCardImagePath: (settings: AppSettings, card: Card) => string;
 }
+
+export interface ImageDownloader {
+  downloadCardImage: (settings: AppSettings, card: Card) => Promise<void>;
+  downloadSetSymbol: (settings: AppSettings, set: Set) => Promise<void>;
+}

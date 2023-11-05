@@ -1,4 +1,4 @@
-import imagesSaga from "./images";
+import { getImagesSaga } from "./images";
 import { sagaMiddleware } from "leng-core/src/store";
 import {
   getCardDataSaga,
@@ -11,6 +11,7 @@ import {
 } from "leng-core/src/sagas";
 import {
   cardDataProvider,
+  imageDownloader,
   inventoryReadProvider,
   inventoryWriteProvider,
   settingsProvider,
@@ -20,7 +21,7 @@ import {
 export const runSagas = () => {
   const sagas = [
     getSettingsSaga(settingsProvider),
-    imagesSaga,
+    getImagesSaga(imageDownloader),
     getCardDataSaga(cardDataProvider),
     getInventoryReadSaga(inventoryReadProvider),
     getInventoryWriteSaga(inventoryWriteProvider),
