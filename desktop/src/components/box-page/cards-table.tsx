@@ -3,7 +3,7 @@ import { orderBy } from 'lodash';
 import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
 import { BoxCard, BoxCardModule } from 'leng-core/src/logic/model';
-import { FinishCell, NameCell, SetCell } from '../common/card-table-cells';
+import { FinishCell, NameCell, SetCell } from 'leng-core/src/components/common/card-table-cells';
 
 type Props = {
     cards: BoxCard[],
