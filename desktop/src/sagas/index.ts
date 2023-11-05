@@ -1,8 +1,14 @@
 import imagesSaga from "./images";
-import preloadSaga from "./preload";
-import searchSaga from "leng-core/src/sagas/search";
 import { sagaMiddleware } from "leng-core/src/store";
-import { getCardDataSaga, getSettingsSaga, getInventoryReadSaga, getInventoryWriteSaga, getTappedOutCsvExportSaga } from "leng-core/src/sagas";
+import {
+  getCardDataSaga,
+  getSettingsSaga,
+  getInventoryReadSaga,
+  getInventoryWriteSaga,
+  getTappedOutCsvExportSaga,
+  preloadSaga,
+  searchSaga
+} from "leng-core/src/sagas";
 import {
   cardDataProvider,
   inventoryReadProvider,

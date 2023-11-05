@@ -1,10 +1,10 @@
 import { put, select, takeEvery, takeLeading } from "redux-saga/effects";
-import { AsyncRequestStatus, BoxState } from "leng-core/src/logic/model";
-import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadSetDataAction } from "leng-core/src/store/encyclopedia";
-import { BoxInfosLoadAction, BoxLoadAction, inventoryActions, InventoryActionTypes } from "leng-core/src/store/inventory";
-import { preloadActions, PreloadActionTypes, PreloadStartAction } from "leng-core/src/store/preload";
-import selectors from "leng-core/src/store/selectors";
-import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "leng-core/src/store/settings";
+import { AsyncRequestStatus, BoxState } from "../logic/model";
+import { encyclopediaActions, EncyclopediaActionTypes, LoadCardDataAction, LoadSetDataAction } from "../store/encyclopedia";
+import { BoxInfosLoadAction, BoxLoadAction, inventoryActions, InventoryActionTypes } from "../store/inventory";
+import { preloadActions, PreloadActionTypes, PreloadStartAction } from "../store/preload";
+import selectors from "../store/selectors";
+import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "../store/settings";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function* onPreloadStart(_: PreloadStartAction) {
@@ -89,7 +89,7 @@ function* onBoxLoad(action: BoxLoadAction) {
     }
 }
 
-function* preloadSaga() {
+export const preloadSaga = function* () {
     yield takeLeading(PreloadActionTypes.Start, onPreloadStart);
     yield takeEvery(SettingsActionTypes.Load, onSettingsLoad);
     yield takeLeading(EncyclopediaActionTypes.LoadCardData, onEncyclopediaLoadCardData);
@@ -97,4 +97,3 @@ function* preloadSaga() {
     yield takeEvery(InventoryActionTypes.BoxInfosLoad, onBoxInfosLoad);
     yield takeEvery(InventoryActionTypes.BoxLoad, onBoxLoad);
 }
-export default preloadSaga;

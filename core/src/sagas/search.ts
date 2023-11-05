@@ -22,7 +22,6 @@ function* search(action: SearchAction) {
   }
 }
 
-function* searchSaga() {
+export const searchSaga = function* () {
   yield takeEvery(SearchActionTypes.Search, search);
 }
-export default searchSaga;
