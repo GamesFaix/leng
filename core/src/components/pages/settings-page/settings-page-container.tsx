@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectors } from "leng-core/src/store";
-import { settingsActions } from 'leng-core/src/store/settings';
+import { selectors } from "../../../store";
+import { settingsActions } from '../../../store/settings';
 import SettingsPage from './settings-page';
 
-const SettingsPageContainer = () => {
+export const SettingsPageContainer = () => {
     const oldSettings = useSelector(selectors.settings);
     const [newSettings, setNewSettings] = React.useState(oldSettings);
 
@@ -32,4 +32,3 @@ const SettingsPageContainer = () => {
         />
     );
 }
-export default SettingsPageContainer;
