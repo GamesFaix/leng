@@ -2,7 +2,7 @@
 
 Leng is a desktop app for keeping track of your *Magic: the Gathering* collection.
 
-<img src="src/images/leng.jpg" style="max-width: 400px" />
+<img src="core/src/images/leng.jpg" style="max-width: 400px" />
 
 *Illus. Daniel Gelon*
 
