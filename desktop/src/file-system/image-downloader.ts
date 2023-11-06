@@ -27,7 +27,7 @@ const downloadSetSymbol = async (
   settings: AppSettings,
   set: Set
 ): Promise<void> => {
-  const path = imagePathProvider.getSetSymbolPath(settings, set.code);
+  const path = imagePathProvider.getSetSymbolPath(settings, set);
   const uri = set.icon_svg_uri;
   return downloadFileIfMissing(path, uri);
 };

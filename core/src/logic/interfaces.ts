@@ -44,7 +44,7 @@ export interface CardDataProvider {
 }
 
 export interface ImagePathProvider {
-  getSetSymbolPath: (settings: AppSettings, setCode: string) => string;
+  getSetSymbolPath: (settings: AppSettings, set: Set) => string;
   getCardImagePath: (settings: AppSettings, card: Card) => string;
 }
 

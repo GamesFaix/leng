@@ -11,9 +11,10 @@ type Props = {
 export const SetSymbol = (props: Props) => {
   const settings = useSelector(selectors.settings);
   const imagePathProvider = React.useContext(ImagePathContext);
+  const set = useSelector(selectors.set(props.setAbbrev));
   const url = React.useMemo(
-    () => imagePathProvider.getSetSymbolPath(settings, props.setAbbrev),
-    [settings, imagePathProvider]
+    () => imagePathProvider.getSetSymbolPath(settings, set),
+    [settings, imagePathProvider, set]
   );
 
   return (
