@@ -10,7 +10,7 @@ import {
 import "react-virtualized/styles.css";
 import { inventoryActions } from "leng-core/src/store/inventory";
 import BoxPage from "./box-page";
-import selectors from "leng-core/src/store/selectors";
+import { selectors } from "leng-core/src/store";
 import { editingActions } from "leng-core/src/store/editing";
 import { getCards } from "leng-core/src/logic/card-filters";
 import { useCallback } from "react";

@@ -1,7 +1,7 @@
 import { Card } from '@mui/material';
 import * as React from 'react';
 import { Grid, GridCellProps } from 'react-virtualized';
-import { BoxCard } from "leng-core/src/logic/model";
+import { BoxCard } from "../../logic/model";
 import BinderPage from './binder-page';
 
 const scale = 60;
@@ -10,7 +10,7 @@ type Props = {
     pages: BoxCard[][][]
 }
 
-const Binder = (props: Props) => {
+export const Binder = (props: Props) => {
     const renderCell = React.useCallback(({ columnIndex, style }: GridCellProps) => {
         const page = props.pages[columnIndex];
         return (
@@ -43,4 +43,3 @@ const Binder = (props: Props) => {
         </Card>
     )
 };
-export default Binder;

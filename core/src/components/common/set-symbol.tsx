@@ -1,7 +1,7 @@
 import { Icon } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
-import selectors from "../../store/selectors";
+import { selectors } from "../../store";
 import { ImagePathContext } from "../../ui/image-path-context";
 
 type Props = {

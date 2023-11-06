@@ -4,7 +4,7 @@ import { BoxCard, defaultCardFilter } from "../../../logic/model";
 import { getCards } from "../../../logic/card-filters";
 import CollectionPage from "./collection-page";
 import { useDispatch, useSelector } from "react-redux";
-import selectors from "../../../store/selectors";
+import { selectors } from "../../../store";
 import { inventoryActions } from "../../../store/inventory";
 import { searchActions } from "../../../store/search";
 

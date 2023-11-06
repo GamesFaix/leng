@@ -4,7 +4,7 @@ import { organizePages } from "../logic/binder-page-generator";
 import { getCardsFromBoxes } from "../logic/card-filters";
 import { SetGroup } from "../logic/model";
 
-const selectors = {
+export const selectors = {
   preload: (state: RootState) => state.preload,
   boxes: (state: RootState) => state.inventory.boxes ?? [],
   settings: (state: RootState) => state.settings.settings ?? { dataPath: "" },
@@ -117,4 +117,3 @@ const selectors = {
     return state.search.results;
   },
 };
-export default selectors;

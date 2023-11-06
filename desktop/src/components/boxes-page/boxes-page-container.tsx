@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryActions } from 'leng-core/src/store/inventory';
-import selectors from 'leng-core/src/store/selectors';
+import { selectors } from "leng-core/src/store";
 import BoxesPage from './boxes-page';
 
 const BoxesPageContainer = () => {

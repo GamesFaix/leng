@@ -2,7 +2,7 @@ import { CircularProgress } from "@mui/material";
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { encyclopediaActions } from "../../store/encyclopedia";
-import selectors from "../../store/selectors";
+import { selectors } from "../../store";
 import { ImagePathContext } from "../../ui/image-path-context";
 
 type Props = {

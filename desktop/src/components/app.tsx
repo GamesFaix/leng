@@ -2,13 +2,12 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Route, HashRouter, Routes } from 'react-router-dom';
 import BoxPageContainer from './box-page/box-page-container';
-import { CollectionPage } from 'leng-core/src/components/pages';
+import { CollectionPage, ReportsPage } from 'leng-core/src/components/pages';
 import SettingsPageContainer from './settings-page/settings-page-container';
 import BoxesPageContainer from './boxes-page/boxes-page-container';
 import SplashScreen from 'leng-core/src/components/splash-screen';
 import { preloadActions } from 'leng-core/src/store/preload';
-import selectors from 'leng-core/src/store/selectors';
-import ReportsPage from './reports-page/reports-page';
+import { selectors } from 'leng-core/src/store';
 import NavBar from 'leng-core/src/components/navbar';
 
 const App = () => {

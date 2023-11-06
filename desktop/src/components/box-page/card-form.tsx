@@ -18,7 +18,7 @@ import { Card, Set } from "scryfall-api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { orderBy } from "lodash";
 import { useSelector } from "react-redux";
-import selectors from "leng-core/src/store/selectors";
+import { selectors } from "leng-core/src/store";
 import {
   CardImageTooltip,
   CollapsableCard,

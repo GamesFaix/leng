@@ -8,7 +8,7 @@ import {
   LoadCardDataAction,
   LoadSetDataAction,
 } from "../store/encyclopedia";
-import selectors from "../store/selectors";
+import { selectors } from "../store";
 
 export const getCardDataSaga = (provider: CardDataProvider) => {
   function* loadCardData(action: LoadCardDataAction) {

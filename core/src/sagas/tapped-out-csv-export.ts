@@ -13,7 +13,7 @@ import {
   inventoryActions,
   InventoryActionTypes,
 } from "../store/inventory";
-import selectors from "../store/selectors";
+import { selectors } from "../store";
 import { TappedOutCsvExportProvider } from "../logic/interfaces";
 
 export const getTappedOutCsvExportSaga = (

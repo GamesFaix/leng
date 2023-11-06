@@ -1,5 +1,5 @@
 import { Card, Set } from "scryfall-api";
-import { BoxCard, basicLandNames } from "leng-core/src/logic/model";
+import { BoxCard, basicLandNames } from "../../../logic/model";
 
 export type CheckListItem = {
   card: Card;

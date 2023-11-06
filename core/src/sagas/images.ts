@@ -8,7 +8,7 @@ import {
   LoadCardImageAction,
   LoadSetSymbolAction,
 } from "../store/encyclopedia";
-import selectors from "../store/selectors";
+import { selectors } from "../store";
 import { ImageDownloader } from "../logic/interfaces";
 
 export const getImagesSaga = (imageDownloader: ImageDownloader) => {

@@ -1,7 +1,7 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import selectors from 'leng-core/src/store/selectors';
+import { selectors } from "leng-core/src/store";
 
 type Props = {
     value: string | null,

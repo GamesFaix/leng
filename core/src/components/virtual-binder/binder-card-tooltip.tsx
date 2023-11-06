@@ -1,8 +1,8 @@
 import { Typography } from "@mui/material";
 import { orderBy } from "lodash";
 import * as React from "react";
-import { BoxCard, CardFinish, Language } from "leng-core/src/logic/model";
-import { FlagIcon } from "leng-core/src/components/common";
+import { BoxCard, CardFinish, Language } from "../../logic/model";
+import { FlagIcon } from "../common";
 
 type Props = {
   cardGroup: BoxCard[];

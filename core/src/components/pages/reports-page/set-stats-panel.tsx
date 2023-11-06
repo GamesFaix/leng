@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
-import selectors from "leng-core/src/store/selectors";
+import { selectors } from "../../../store";
 import { Set, Card as ScryfallCard } from "scryfall-api";
-import { getCardsFromBoxes } from "leng-core/src/logic/card-filters";
-import { BoxCard } from "leng-core/src/logic/model";
+import { getCardsFromBoxes } from "../../../logic/card-filters";
+import { BoxCard } from "../../../logic/model";
 import {
   CheckListVisibility,
   getRarity,

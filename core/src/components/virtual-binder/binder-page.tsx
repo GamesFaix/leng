@@ -1,6 +1,6 @@
 import { chunk } from 'lodash';
 import * as React from 'react';
-import { BoxCard } from "leng-core/src/logic/model";
+import { BoxCard } from "../../logic/model";
 import BinderCard from './binder-card';
 
 const cardAspectRatio = [2.5, 3.5];

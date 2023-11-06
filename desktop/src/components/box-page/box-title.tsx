@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from 'leng-core/src/ui/fontawesome';
 import { inventoryActions } from 'leng-core/src/store/inventory';
-import selectors from 'leng-core/src/store/selectors';
+import { selectors } from "leng-core/src/store";
 
 type Props = {
     name: string

@@ -1,9 +1,9 @@
 import { Badge, Tooltip } from "@mui/material";
 import { sumBy } from "lodash";
 import * as React from "react";
-import { BoxCard } from "leng-core/src/logic/model";
+import { BoxCard } from "../../logic/model";
 import BinderCardTooltip from "./binder-card-tooltip";
-import { CardImage } from "leng-core/src/components/common";
+import { CardImage } from "../common";
 
 type Props = {
   cardGroup: BoxCard[]; // Group of cards with same name/set/collectors number, but different foil or language

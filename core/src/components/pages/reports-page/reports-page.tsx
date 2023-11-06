@@ -16,7 +16,7 @@ const someSetView = (selectedParentSetCode: string | null) => (<>
   </Card>
 </>);
 
-const ReportsPage = () => {
+export const ReportsPage = () => {
   const [selectedParentSetCode, setSelectedParentSetCode] = React.useState<
     string | null
   >(null);
@@ -40,4 +40,3 @@ const ReportsPage = () => {
     </Container>
   );
 };
-export default ReportsPage;
