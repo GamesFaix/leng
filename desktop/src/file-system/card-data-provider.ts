@@ -4,6 +4,8 @@ import { Card, Set } from "scryfall-api";
 import * as fs from "fs";
 import { createFileAndDirectoryIfRequired } from "../file-system/file-helpers";
 
+// TODO: Refactor this as caching decorator of web card-data-provider
+
 type BulkData = {
   object: string;
   id: string;

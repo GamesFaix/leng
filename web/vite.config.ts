@@ -22,6 +22,7 @@ export default defineConfig({
         NodeModulesPolyfillPlugin(),
       ],
     },
+    exclude: ['leng-core']
   },
   build: {
     rollupOptions: {
