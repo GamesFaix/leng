@@ -16,7 +16,6 @@ import {
 } from "@mui/material";
 import { Card, Set } from "scryfall-api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { shell } from "electron";
 import { orderBy } from "lodash";
 import { useSelector } from "react-redux";
 import selectors from "leng-core/src/store/selectors";
@@ -26,6 +25,7 @@ import {
   FlagIcon,
   SetSymbol,
 } from "leng-core/src/components/common";
+import { ExternalLinkContext } from "leng-core/src/ui/external-link-context";
 
 type Props = {
   title: string;
@@ -135,6 +135,8 @@ function filterCardNames(options: string[], state: FilterOptionsState<string>) {
 }
 
 const CardOption = (props: any, card: Card & { label: string }, state: any) => {
+  const provider = React.useContext(ExternalLinkContext);
+
   const classes = state.selected
     ? ["autocomplete-option", "selected"]
     : ["autocomplete-option"];
@@ -144,7 +146,7 @@ const CardOption = (props: any, card: Card & { label: string }, state: any) => {
       <li {...props} classes={classes}>
         <div>{card.label}</div>
         <IconButton
-          onClick={() => shell.openExternal(card.scryfall_uri)}
+          onClick={() => provider.openLink(card.scryfall_uri)}
           title="View on Scryfall"
           color="primary"
         >

@@ -5,7 +5,6 @@ import { Provider } from "react-redux";
 import App from "./components/app";
 import { store } from "leng-core/src/store";
 import "./styles.scss";
-import { darkTheme } from "leng-core/src/ui/theme";
 import { runSagas } from "leng-core/src/sagas";
 import {
   cardDataProvider,
@@ -16,7 +15,12 @@ import {
   settingsProvider,
   tappedOutCsvExportProvider,
 } from "./file-system";
-import { ImagePathContext } from 'leng-core/src/ui/image-path-context';
+import {
+  ExternalLinkContext,
+  ImagePathContext,
+  darkTheme,
+} from "leng-core/src/ui";
+import { externalLinkProvider } from "./external-link-provider";
 
 runSagas({
   images: imageDownloader,
@@ -31,7 +35,9 @@ ReactDOM.render(
   <Provider store={store}>
     <ThemeProvider theme={darkTheme}>
       <ImagePathContext.Provider value={imagePathProvider}>
-        <App />
+        <ExternalLinkContext.Provider value={externalLinkProvider}>
+          <App />
+        </ExternalLinkContext.Provider>
       </ImagePathContext.Provider>
     </ThemeProvider>
   </Provider>,

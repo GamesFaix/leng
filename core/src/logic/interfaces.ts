@@ -52,3 +52,7 @@ export interface ImageDownloader {
   downloadCardImage: (settings: AppSettings, card: Card) => Promise<void>;
   downloadSetSymbol: (settings: AppSettings, set: Set) => Promise<void>;
 }
+
+export interface ExternalLinkProvider {
+  openLink: (url: string) => void
+}
