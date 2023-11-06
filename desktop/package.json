@@ -9,7 +9,8 @@
     "watch": "webpack --config ./webpack.config.js --watch",
     "serve": "electron ./dist/electron.js",
     "start": "npm run build && npm run serve",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "relink": "cd ../core && npm link && cd ../desktop && npm link leng-core"
   },
   "repository": {
     "type": "git",

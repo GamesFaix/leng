@@ -1,0 +1,43 @@
+$header-height: 48px;
+$footer-height: 0px;
+
+@font-face {
+  font-family: Beleren;
+  src: url("/fonts/beleren-bold_P1.01.ttf");
+}
+
+@font-face {
+  font-family: BelerenSmallCaps;
+  src: url("/fonts/belerensmallcaps-bold.ttf");
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.row {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+header {
+  top: 0;
+  height: $header-height;
+  overflow: hidden;
+  background-color: #111111;
+}
+
+footer {
+  bottom: 0;
+  height: $footer-height;
+  overflow: hidden;
+  background-color: #111111;
+}
+
+#app-body {
+  top: $header-height;
+  bottom: $footer-height;
+  overflow: auto;
+}

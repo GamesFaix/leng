@@ -29,7 +29,7 @@ export enum InventoryActionTypes {
   BoxRename = "INVENTORY_BOX_RENAME",
   BoxTransferBulk = "INVENTORY_BOX_TRANSFER_BULK",
   BoxTransferSingle = "INVENTORY_BOX_TRANSFER_SINGLE",
-  CsvExport = "INVENTORY_CSV_EXPORT",
+  TappedOutCsvExport = "INVENTORY_TAPPED_OUT_CSV_EXPORT",
 }
 
 export type BoxInfosLoadAction = {
@@ -72,8 +72,8 @@ export type BoxTransferSingleAction = {
   value: AsyncRequest<BoxTransferSingleRequest, Box[]>;
 };
 
-export type CsvExportAction = {
-  type: InventoryActionTypes.CsvExport;
+export type TappedOutCsvExportAction = {
+  type: InventoryActionTypes.TappedOutCsvExport;
   value: AsyncRequest<void, void>;
 };
 
@@ -224,21 +224,21 @@ export const inventoryActions = {
       value: asyncRequest.failure(error),
     };
   },
-  csvExportStart(): CsvExportAction {
+  csvExportStart(): TappedOutCsvExportAction {
     return {
-      type: InventoryActionTypes.CsvExport,
+      type: InventoryActionTypes.TappedOutCsvExport,
       value: asyncRequest.started(undefined),
     };
   },
-  csvExportSuccess(): CsvExportAction {
+  csvExportSuccess(): TappedOutCsvExportAction {
     return {
-      type: InventoryActionTypes.CsvExport,
+      type: InventoryActionTypes.TappedOutCsvExport,
       value: asyncRequest.success(undefined),
     };
   },
-  csvExportFailure(error: string): CsvExportAction {
+  csvExportFailure(error: string): TappedOutCsvExportAction {
     return {
-      type: InventoryActionTypes.CsvExport,
+      type: InventoryActionTypes.TappedOutCsvExport,
       value: asyncRequest.failure(error),
     };
   },
@@ -253,7 +253,7 @@ export type InventoryAction =
   | BoxRenameAction
   | BoxTransferBulkAction
   | BoxTransferSingleAction
-  | CsvExportAction;
+  | TappedOutCsvExportAction;
 
 export function inventoryReducer(
   state: InventoryState = inventoryDefaultState,
@@ -374,7 +374,7 @@ export function inventoryReducer(
 
           return { ...state, boxes };
         }
-        case InventoryActionTypes.CsvExport: {
+        case InventoryActionTypes.TappedOutCsvExport: {
           return state;
         }
         default:

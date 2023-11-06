@@ -1,15 +1,12 @@
-name: Build Desktop
+name: Build
 
 on:
-  push:
-    branches:
-      - "*"
   pull_request:
     branches:
       - "*"
 
 jobs:
-  build:
+  build:    
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,39 +16,71 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - uses: dorny/paths-filter@v2
+        # https://github.com/dorny/paths-filter#examples
+        id: filter
+        with:
+          filters: |
+            desktop:
+              - 'core/**'
+              - 'desktop/**'
+            web:
+              - 'core/**'
+              - 'web/**'
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Install packages - Desktop
-        working-directory: ./core
+      - name: Install packages - Core
+        working-directory: './core'
         run: npm install
 
       - name: Lint - Core
-        working-directory: ./core
+        working-directory: './core'
         run: npm run lint
 
       - name: Build - Core
-        working-directory: ./core
+        working-directory: './core'
         run: npm run build
 
-      - name: Link - Core
-        working-directory: ./core
-        run: npm link
-
       - name: Install packages - Desktop
-        working-directory: ./desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
         run: npm install
 
-      - name: Link - Desktop
-        working-directory: ./desktop
-        run: npm link leng-core
+      - name: Re-link core library - Desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
+        run: npm run relink
 
       - name: Lint - Desktop
-        working-directory: ./desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
         run: npm run lint
 
       - name: Build - Desktop
-        working-directory: ./desktop
+        if: steps.filter.outputs.desktop == 'true'
+        working-directory: './desktop'
+        run: npm run build
+
+      - name: Install packages - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
+        run: npm install
+
+      - name: Re-link core library - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
+        run: npm run relink
+
+      - name: Lint - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
+        run: npm run lint
+
+      - name: Build - Web
+        if: steps.filter.outputs.web == 'true'
+        working-directory: './web'
         run: npm run build

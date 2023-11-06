@@ -82,3 +82,5 @@ export const store = createStore(reducer, enhancers);
 export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
+
+export { selectors } from './selectors';
