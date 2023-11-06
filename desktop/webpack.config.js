@@ -22,7 +22,7 @@ module.exports = [
     // React renderer process
     {
         mode: 'development',
-        entry: './src/react.tsx',
+        entry: './src/main.tsx',
         target: 'electron-renderer',
         devtool: 'source-map',
         module: {
