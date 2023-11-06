@@ -1,13 +1,13 @@
 import { Button, FormControlLabel, TextField } from "@mui/material";
 import * as React from "react";
-import { Format } from "leng-core/src/logic/formats";
-import { CardFilter, ColorFilter, ColorFilterRule } from "leng-core/src/logic/model";
+import { Format } from "../../../logic/formats";
+import { CardFilter, ColorFilter, ColorFilterRule } from "../../../logic/model";
 import BoxSelector from "./box-selector";
 import ColorRuleSelector from "./color-rule-selector";
 import ColorsSelector from "./color-selector";
 import FormatFilter from "./format-filter";
 import SetFilter from "./set-filter";
-import { CollapsableCard } from "leng-core/src/components/common";
+import { CollapsableCard } from "../collapsable-card";
 
 type Props = {
   filter: CardFilter;
@@ -15,7 +15,7 @@ type Props = {
   submitScryfallSearch: () => void;
 };
 
-const CardFilterForm = (props: Props) => {
+export const CardFilterForm = (props: Props) => {
   function updateNameQuery(e: React.ChangeEvent<HTMLInputElement>) {
     props.onChange({ ...props.filter, nameQuery: e.target.value });
   }
@@ -155,4 +155,3 @@ const CardFilterForm = (props: Props) => {
     </CollapsableCard>
   );
 };
-export default CardFilterForm;

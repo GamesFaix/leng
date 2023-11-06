@@ -1,5 +1,5 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { ColorFilterRule, allColorFilterRules } from 'leng-core/src/logic/model';
+import { ColorFilterRule, allColorFilterRules } from '../../../logic/model';
 import * as React from 'react';
 
 type Props = {

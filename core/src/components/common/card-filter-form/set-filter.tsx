@@ -1,8 +1,8 @@
 import { MenuItem, Select } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import selectors from 'leng-core/src/store/selectors';
-import { SetSymbol } from 'leng-core/src/components/common';
+import selectors from '../../../store/selectors';
+import { SetSymbol } from '../../common';
 
 type Props = {
     value: string[],

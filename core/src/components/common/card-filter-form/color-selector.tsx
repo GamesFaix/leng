@@ -1,5 +1,5 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { ColorFilter, allColors } from 'leng-core/src/logic/model';
+import { ColorFilter, allColors } from '../../../logic/model';
 import * as React from 'react';
 
 function getOptionLabel(color: ColorFilter) : string {
