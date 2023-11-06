@@ -4,8 +4,8 @@ import * as moment from 'moment';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Column, Table, TableCellProps } from 'react-virtualized';
-import { icons } from 'leng-core/src/ui/fontawesome';
-import { BoxCard, BoxState } from "leng-core/src/logic/model";
+import { icons } from '../../../ui/fontawesome';
+import { BoxCard, BoxState } from "../../../logic/model";
 
 type Props = {
     boxes: BoxState[],

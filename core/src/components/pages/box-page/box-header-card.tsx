@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
-import { icons } from 'leng-core/src/ui/fontawesome';
-import { selectors } from "leng-core/src/store";
+import { icons } from '../../../ui/fontawesome';
+import { selectors } from "../../../store";
 import BoxTitle from './box-title';
 
 type Props = {

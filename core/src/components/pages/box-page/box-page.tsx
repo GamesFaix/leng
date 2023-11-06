@@ -1,12 +1,12 @@
 import { Container } from "@mui/material";
 import * as React from "react";
-import { BoxCard, CardFilter } from "leng-core/src/logic/model";
+import { BoxCard, CardFilter } from "../../../logic/model";
 import CardsTable from "./cards-table";
 import "react-virtualized/styles.css";
 import { AddCardForm, EditCardForm } from "./card-form";
 import BoxHeaderCard from "./box-header-card";
 import CardSelectionActionsForm from "./card-selection-actions-form";
-import { CardFilterForm } from "leng-core/src/components/common";
+import { CardFilterForm } from "../../common";
 
 type Props = {
   name: string;

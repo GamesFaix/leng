@@ -2,8 +2,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField } from '@mui/material';
 import * as React from 'react';
 import { useDispatch } from 'react-redux';
-import { icons } from 'leng-core/src/ui/fontawesome';
-import { inventoryActions } from 'leng-core/src/store/inventory';
+import { icons } from '../../../ui/fontawesome';
+import { inventoryActions } from '../../../store/inventory';
 
 type Props = {
     close: () => void

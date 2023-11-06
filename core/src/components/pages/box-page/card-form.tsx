@@ -1,5 +1,5 @@
 import * as React from "react";
-import { icons } from "leng-core/src/ui/fontawesome";
+import { icons } from "../../../ui/fontawesome";
 import {
   AllLanguages,
   BoxCard,
@@ -7,7 +7,7 @@ import {
   getVersionLabel,
   Language,
   normalizeName,
-} from "leng-core/src/logic/model";
+} from "../../../logic/model";
 import {
   Autocomplete,
   FilterOptionsState,
@@ -18,14 +18,14 @@ import { Card, Set } from "scryfall-api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { orderBy } from "lodash";
 import { useSelector } from "react-redux";
-import { selectors } from "leng-core/src/store";
+import { selectors } from "../../../store";
 import {
   CardImageTooltip,
   CollapsableCard,
   FlagIcon,
   SetSymbol,
-} from "leng-core/src/components/common";
-import { ExternalLinkContext } from "leng-core/src/ui/external-link-context";
+} from "../../common";
+import { ExternalLinkContext } from "../../../ui/external-link-context";
 
 type Props = {
   title: string;

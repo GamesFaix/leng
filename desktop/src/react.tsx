@@ -2,7 +2,7 @@ import { ThemeProvider } from "@mui/material";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
-import App from "./components/app";
+import { App } from 'leng-core/src/components/app';
 import { store } from "leng-core/src/store";
 import "./styles.scss";
 import { runSagas } from "leng-core/src/sagas";

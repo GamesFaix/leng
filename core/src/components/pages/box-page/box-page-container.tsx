@@ -6,15 +6,15 @@ import {
   BoxCard,
   BoxCardModule,
   defaultCardFilter,
-} from "leng-core/src/logic/model";
+} from "../../../logic/model";
 import "react-virtualized/styles.css";
-import { inventoryActions } from "leng-core/src/store/inventory";
+import { inventoryActions } from "../../../store/inventory";
 import BoxPage from "./box-page";
-import { selectors } from "leng-core/src/store";
-import { editingActions } from "leng-core/src/store/editing";
-import { getCards } from "leng-core/src/logic/card-filters";
+import { selectors } from "../../../store";
+import { editingActions } from "../../../store/editing";
+import { getCards } from "../../../logic/card-filters";
 import { useCallback } from "react";
-import { searchActions } from "leng-core/src/store/search";
+import { searchActions } from "../../../store/search";
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard): BoxCard[] {
   const match = cards.find((c) => BoxCardModule.areSame(c, card));
@@ -30,7 +30,7 @@ function addOrIncrememnt(cards: BoxCard[], card: BoxCard): BoxCard[] {
   }
 }
 
-const BoxPageContainer = () => {
+export const BoxPageContainer = () => {
   const { name } = useParams();
 
   const dispatch = useDispatch();
@@ -169,4 +169,3 @@ const BoxPageContainer = () => {
     />
   );
 };
-export default BoxPageContainer;

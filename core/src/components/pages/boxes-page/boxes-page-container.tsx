@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { inventoryActions } from 'leng-core/src/store/inventory';
-import { selectors } from "leng-core/src/store";
+import { inventoryActions } from '../../../store/inventory';
+import { selectors } from "../../../store";
 import BoxesPage from './boxes-page';
 
-const BoxesPageContainer = () => {
+export const BoxesPageContainer = () => {
     const boxes = useSelector(selectors.boxes);
     const dispatch = useDispatch();
     const [isNewBoxFormVisible, setIsNewBoxFormVisible] = React.useState(false);
@@ -22,4 +22,3 @@ const BoxesPageContainer = () => {
         />
     );
 };
-export default BoxesPageContainer;

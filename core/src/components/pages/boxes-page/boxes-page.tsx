@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, IconButton, Typography } from '@mui/material';
 import * as React from 'react';
-import { icons } from 'leng-core/src/ui/fontawesome';
+import { icons } from '../../../ui/fontawesome';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
-import { BoxState } from 'leng-core/src/logic/model';
+import { BoxState } from '../../../logic/model';
 
 type Props = {
     boxes: BoxState[],
