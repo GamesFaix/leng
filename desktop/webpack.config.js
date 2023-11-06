@@ -72,6 +72,7 @@ module.exports = [
         resolve: {
           extensions: ['.ts', '.tsx', '.js'],
           alias: {
+            '@emotion/react': path.resolve('./node_modules/@emotion/react'),
             '@mui/material': path.resolve('./node_modules/@mui/material'),
             react: path.resolve('./node_modules/react'),
             'react-dom': path.resolve('./node_modules/react-dom'),

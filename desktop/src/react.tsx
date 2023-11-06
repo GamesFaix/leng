@@ -1,6 +1,6 @@
 import { ThemeProvider } from "@mui/material";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import * as ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from 'leng-core/src/components/app';
 import { store } from "leng-core/src/store";
@@ -31,7 +31,9 @@ runSagas({
   tappedOut: tappedOutCsvExportProvider,
 });
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+
+root.render(
   <Provider store={store}>
     <ThemeProvider theme={darkTheme}>
       <ImagePathContext.Provider value={imagePathProvider}>
@@ -40,6 +42,5 @@ ReactDOM.render(
         </ExternalLinkContext.Provider>
       </ImagePathContext.Provider>
     </ThemeProvider>
-  </Provider>,
-  document.getElementById("app")
+  </Provider>
 );
