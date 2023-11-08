@@ -19,6 +19,7 @@ export const getCardDataSaga = (provider: CardDataProvider) => {
     try {
       const settings: AppSettings = yield select(selectors.settings);
       const cards: Card[] = yield call(() => provider.getAllCards(settings));
+      console.log(`saga/cardData.getCardDataSaga - received ${cards.length} cards`)
       yield put(encyclopediaActions.loadCardDataSuccess(cards));
     } catch (error) {
       yield put(encyclopediaActions.loadCardDataError(`${error}`));

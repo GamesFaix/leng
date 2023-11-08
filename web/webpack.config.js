@@ -61,7 +61,6 @@ module.exports = {
       react: path.resolve("./node_modules/react"),
       "react-dom": path.resolve("./node_modules/react-dom"),
       "react-redux": path.resolve("./node_modules/react-redux"),
-      "react-router-dom": path.resolve("./node_modules/react-router-dom"),
     },
   },
 };

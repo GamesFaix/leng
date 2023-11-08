@@ -18,27 +18,55 @@ import {
   cardDataProvider,
   inventoryReadProvider,
 } from "./logic";
+import * as Uuid from "uuid";
 
-console.log("main.tsx");
+const isSingletonRegistered = () => !!(window as any).lengId;
+const registerSingleton = (id: string) => {
+  (window as any).lengId = id;
+};
 
-runSagas({
-  settings: settingsProvider,
-  cardData: cardDataProvider,
-  inventoryRead: inventoryReadProvider,
-});
+const initReduxSaga = () => {
+  console.log("initReduxSaga");
+  runSagas({
+    settings: settingsProvider,
+    cardData: cardDataProvider,
+    inventoryRead: inventoryReadProvider,
+  });
+};
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const initReact = () => {
+  console.log("initReact");
 
-root.render(
-  <Provider store={store}>
-    <ThemeProvider theme={darkTheme}>
-      <ImagePathContext.Provider value={imagePathProvider}>
-        <ExternalLinkContext.Provider value={externalLinkProvider}>
-          <App />
-        </ExternalLinkContext.Provider>
-      </ImagePathContext.Provider>
-    </ThemeProvider>
-  </Provider>
-);
+  const root = ReactDOM.createRoot(
+    document.getElementById("root") as HTMLElement
+  );
+
+  root.render(
+    <Provider store={store}>
+      <ThemeProvider theme={darkTheme}>
+        <ImagePathContext.Provider value={imagePathProvider}>
+          <ExternalLinkContext.Provider value={externalLinkProvider}>
+            <App />
+          </ExternalLinkContext.Provider>
+        </ImagePathContext.Provider>
+      </ThemeProvider>
+    </Provider>
+  );
+};
+
+const init = () => {
+  const id = Uuid.v4();
+  console.log(`initializing leng instance ${id}`);
+
+  if (isSingletonRegistered()) {
+    console.log(`already running, instance ${id} aborting`);
+    return;
+  }
+
+  console.log(`no other instances. instance ${id} continuing`);
+  registerSingleton(id);
+  initReduxSaga();
+  initReact();
+};
+
+init();

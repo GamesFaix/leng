@@ -41,10 +41,12 @@ function* onEncyclopediaLoadCardData(action: LoadCardDataAction) {
 function* onEncyclopediaLoadSetData(action: LoadSetDataAction) {
     switch (action.value.status) {
         case AsyncRequestStatus.Started:
+            console.log('onEncyclopediaLoadSetData Started')
             yield put(preloadActions.update("Loading Scryfall set data..."));
             break;
         case AsyncRequestStatus.Success: {
             const sets = action.value.data;
+            console.log('onEncyclopediaLoadSetData Success')
             for (const s of sets) {
                 yield put(encyclopediaActions.loadSetSymbolStart(s.code));
             }
