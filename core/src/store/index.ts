@@ -37,19 +37,27 @@ const reducer = combineReducers({
 // Large payloads break the devtools
 // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
 const actionSanitizer = (action: Action) => {
-  if (
-    (action.type === EncyclopediaActionTypes.LoadCardData ||
-      action.type === EncyclopediaActionTypes.LoadSetData) &&
+  if (action.type === EncyclopediaActionTypes.LoadCardData &&
     action.value.status === AsyncRequestStatus.Success
   ) {
     return {
       ...action,
       value: {
         ...action.value,
-        data: "<<LARGE BLOB>>",
+        data: `<<Omitting large blob. ${action.value.data.length} cards loaded.>>`,
       },
     };
-  } else {
+  } else if (action.type === EncyclopediaActionTypes.LoadSetData &&
+    action.value.status === AsyncRequestStatus.Success
+  ) {
+    return {
+      ...action,
+      value: {
+        ...action.value,
+        data: `<<Omitting large blob. ${action.value.data.length} sets loaded.>>`,
+      },
+    };
+  } else  {
     return action;
   }
 };
@@ -58,7 +66,7 @@ const actionSanitizer = (action: Action) => {
 const stateSanitizer = (state: any /* RootState is defined below */) => {
   return {
     ...state,
-    encyclopedia: "<<LARGE BLOB>>",
+    encyclopedia: `<<Omitting large blob. Encyclopedia contains ${state.encyclopedia.cards.length} cards and ${state.encyclopedia.sets.length} sets.>>`,
   };
 };
 
