@@ -48,13 +48,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    new webpack.DefinePlugin({
-      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
-    }),
+    new webpack.DefinePlugin({}),
     new CopyWebpackPlugin({
-      patterns: [
-        { from: "data", to: "data" },
-      ],
+      patterns: [{ from: "data", to: "data" }],
     }),
   ],
   resolve: {
