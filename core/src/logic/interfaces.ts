@@ -1,6 +1,7 @@
 import { Card, Set } from "scryfall-api";
 import { AppSettings, Box, BoxInfo, CardIndex } from "./model";
 import { TappedOutCsvExportCard } from "./tappedout-csv-export";
+import { Inventory } from "./inventory";
 
 export interface InventoryReadProvider {
   loadBoxInfos: (settings: AppSettings) => Promise<BoxInfo[]>;
@@ -54,5 +55,9 @@ export interface ImageDownloader {
 }
 
 export interface ExternalLinkProvider {
-  openLink: (url: string) => void
+  openLink: (url: string) => void;
+}
+
+export interface InventoryWebExportProvider {
+  exportCards: (settings: AppSettings, inventory: Inventory) => Promise<void>;
 }

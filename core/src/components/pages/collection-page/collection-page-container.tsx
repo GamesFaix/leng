@@ -36,7 +36,8 @@ export const CollectionPageContainer = () => {
       filter={filter}
       setFilter={setFilter}
       submitScryfallSearch={search}
-      exportCsv={() => dispatch(inventoryActions.csvExportStart())}
+      exportTappedOutCsv={() => dispatch(inventoryActions.csvExportStart())}
+      exportWebJson={() => dispatch(inventoryActions.webExportStart())}
     />
   );
 };

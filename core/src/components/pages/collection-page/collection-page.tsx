@@ -1,17 +1,18 @@
 import { Card, Container, IconButton, Typography } from "@mui/material";
-import * as React from "react";
 import CardsTable from "./cards-table";
 import { BoxCard, CardFilter } from "../../../logic/model";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../../ui/fontawesome";
 import { CardFilterForm } from "../../common";
+import * as React from 'react'
 
 type Props = {
   cards: BoxCard[];
   cardCount: number;
   filter: CardFilter;
   setFilter: (filter: CardFilter) => void;
-  exportCsv: () => void;
+  exportTappedOutCsv: () => void;
+  exportWebJson: () => void;
   submitScryfallSearch: () => void;
 };
 
@@ -27,9 +28,16 @@ const CollectionPage = (props: Props) => {
         </div>
         <div>
           <IconButton
-            title="Export CSV"
+            title="Export TappedOut CSV"
             color="primary"
-            onClick={() => props.exportCsv()}
+            onClick={() => props.exportTappedOutCsv()}
+          >
+            <FontAwesomeIcon icon={icons.export} />
+          </IconButton>
+          <IconButton
+            title="Export Leng-Web JSON"
+            color="primary"
+            onClick={() => props.exportWebJson()}
           >
             <FontAwesomeIcon icon={icons.export} />
           </IconButton>

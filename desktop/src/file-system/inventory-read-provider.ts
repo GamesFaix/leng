@@ -6,15 +6,12 @@ import {
   AppSettings,
   Box,
   BoxInfo,
-  CardFinish,
   CardIndex,
   FileBox,
-  getVersionLabel,
-  Language,
-  normalizeName,
 } from "leng-core/src/logic/model";
 import { InventoryReadProvider } from "leng-core/src/logic/interfaces";
 import { getBoxPath, getInventoryDir } from "./inventory-common";
+import { fromFileBox } from "leng-core/src/logic/inventory";
 
 const loadBoxInfos = async (settings: AppSettings): Promise<BoxInfo[]> => {
   const dir = getInventoryDir(settings);
@@ -32,35 +29,6 @@ const loadBoxInfos = async (settings: AppSettings): Promise<BoxInfo[]> => {
 
   return Promise.all(promises);
 };
-
-const getFinish = (finish: CardFinish, foil: boolean): CardFinish => {
-  if (finish) return finish;
-  return foil ? CardFinish.Foil : CardFinish.Normal;
-};
-
-const fromFileBox = (fileBox: FileBox, cardIndex: CardIndex): Box => ({
-  name: fileBox.name,
-  lastModified: fileBox.lastModified,
-  description: fileBox.description,
-  cards: fileBox.cards.map((c) => {
-    const match = cardIndex[c.scryfallId];
-    return {
-      name: c.name,
-      setAbbrev: c.setAbbrev,
-      setName: match?.set_name ?? "",
-      scryfallId: c.scryfallId,
-      lang: c.lang ?? Language.English,
-      finish: getFinish(c.finish, c.foil),
-      collectorsNumber: c.collectorsNumber ?? match.collector_number,
-      count: c.count,
-      color: match?.colors ?? [],
-      colorIdentity: match?.color_identity ?? [],
-      normalizedName: normalizeName(c.name),
-      versionLabel: match ? getVersionLabel(match) : "",
-      legalities: match.legalities,
-    };
-  }),
-});
 
 const loadBox = async (
   settings: AppSettings,

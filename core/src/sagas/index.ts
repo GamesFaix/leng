@@ -11,10 +11,12 @@ import {
   CardDataProvider,
   ImageDownloader,
   InventoryReadProvider,
+  InventoryWebExportProvider,
   InventoryWriteProvider,
   SettingsProvider,
   TappedOutCsvExportProvider,
 } from "../logic/interfaces";
+import { getInventoryWebExportSaga } from "./inventory-web-export";
 
 type SagaProviders = {
   settings: SettingsProvider;
@@ -23,10 +25,11 @@ type SagaProviders = {
   inventoryRead: InventoryReadProvider;
   inventoryWrite: InventoryWriteProvider;
   tappedOut: TappedOutCsvExportProvider;
+  webExport: InventoryWebExportProvider;
 };
 
 export const runSagas = (providers: Partial<SagaProviders>) => {
-  console.log('runSagas')
+  console.log("runSagas");
   const sagas = [preloadSaga, searchSaga];
 
   if (providers.settings) {
@@ -46,6 +49,9 @@ export const runSagas = (providers: Partial<SagaProviders>) => {
   }
   if (providers.tappedOut) {
     sagas.push(getTappedOutCsvExportSaga(providers.tappedOut));
+  }
+  if (providers.webExport) {
+    sagas.push(getInventoryWebExportSaga(providers.webExport));
   }
 
   sagas.forEach(sagaMiddleware.run);

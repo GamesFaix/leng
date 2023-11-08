@@ -14,6 +14,7 @@ import {
   inventoryWriteProvider,
   settingsProvider,
   tappedOutCsvExportProvider,
+  inventoryWebExportProvider
 } from "./file-system";
 import {
   ExternalLinkContext,
@@ -29,6 +30,7 @@ runSagas({
   inventoryRead: inventoryReadProvider,
   inventoryWrite: inventoryWriteProvider,
   tappedOut: tappedOutCsvExportProvider,
+  webExport: inventoryWebExportProvider
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
