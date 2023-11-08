@@ -26,6 +26,7 @@ type SagaProviders = {
 };
 
 export const runSagas = (providers: Partial<SagaProviders>) => {
+  console.log('runSagas')
   const sagas = [preloadSaga, searchSaga];
 
   if (providers.settings) {

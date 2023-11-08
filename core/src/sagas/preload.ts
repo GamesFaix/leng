@@ -8,15 +8,18 @@ import { settingsActions, SettingsActionTypes, SettingsLoadAction } from "../sto
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function* onPreloadStart(_: PreloadStartAction) {
+    console.log('onPreloadStart')
     yield put(settingsActions.loadStart());
 }
 
 function* onSettingsLoad(action: SettingsLoadAction) {
     switch (action.value.status) {
         case AsyncRequestStatus.Started:
+            console.log('onSettingsLoad Started')
             yield put(preloadActions.update("Loading settings..."));
             break;
         case AsyncRequestStatus.Success:
+            console.log('onSettingsLoad Success')
             yield put(encyclopediaActions.loadCardDataStart());
             break;
     }
@@ -25,9 +28,11 @@ function* onSettingsLoad(action: SettingsLoadAction) {
 function* onEncyclopediaLoadCardData(action: LoadCardDataAction) {
     switch (action.value.status) {
         case AsyncRequestStatus.Started:
+            console.log('onEncyclopediaLoadCardData Started')
             yield put(preloadActions.update("Loading Scryfall card data..."));
             break;
         case AsyncRequestStatus.Success:
+            console.log('onEncyclopediaLoadCardData Success')
             yield put(encyclopediaActions.loadSetDataStart());
             break;
     }

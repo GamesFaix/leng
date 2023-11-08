@@ -16,8 +16,10 @@ import {
   externalLinkProvider,
   settingsProvider,
   cardDataProvider,
-  inventoryReadProvider
+  inventoryReadProvider,
 } from "./logic";
+
+console.log("main.tsx");
 
 runSagas({
   settings: settingsProvider,
