@@ -19,6 +19,7 @@ import {
   inventoryReadProvider,
 } from "./logic";
 import * as Uuid from "uuid";
+import { imageDownloader } from "./logic/image-downloader";
 
 const isSingletonRegistered = () => !!(window as any).lengId;
 const registerSingleton = (id: string) => {
@@ -31,6 +32,7 @@ const initReduxSaga = () => {
     settings: settingsProvider,
     cardData: cardDataProvider,
     inventoryRead: inventoryReadProvider,
+    images: imageDownloader
   });
 };
 
