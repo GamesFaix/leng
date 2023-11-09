@@ -1,5 +1,5 @@
-import { AppSettings } from "leng-core/src/logic/model";
-import { SettingsProvider } from "leng-core/src/logic/interfaces";
+import { AppSettings } from "leng-core/src/domain/config";
+import { SettingsProvider } from "leng-core/src/domain/interfaces";
 
 const defaultSettings = {
   dataPath: "",

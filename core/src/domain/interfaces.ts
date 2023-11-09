@@ -1,7 +1,8 @@
-import { Card, Set } from "scryfall-api";
-import { AppSettings, Box, BoxInfo, CardIndex } from "./model";
-import { TappedOutCsvExportCard } from "./tappedout-csv-export";
-import { Inventory } from "./inventory";
+import { TappedOutCsvExportCard } from "./export/tappedout-csv-export";
+import { Inventory } from "./inventory-files";
+import { AppSettings } from "./config";
+import { Box, BoxInfo } from "./inventory";
+import { CardIndex, Card, Set } from "./encyclopedia";
 
 export interface InventoryReadProvider {
   loadBoxInfos: (settings: AppSettings) => Promise<BoxInfo[]>;

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ClientCapabilities } from "../logic/model";
+import { ClientCapabilities } from "../domain/config";
 
 const defaultValue : Partial<ClientCapabilities> = {
 }

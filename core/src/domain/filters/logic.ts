@@ -1,16 +1,9 @@
 import { difference, intersection, uniq } from "lodash";
-import { Card, Color } from "scryfall-api";
-import { FormatType } from "./formats";
-import {
-  BoxCard,
-  BoxCardModule,
-  CardFilter,
-  ColorFilter,
-  ColorFilterRule,
-  normalizeName,
-  basicLandNames,
-  BoxState,
-} from "./model";
+import { CardFilter, ColorFilter, ColorFilterRule } from "./types";
+import { BoxCard, BoxState, combineDuplicates, getKey } from "../inventory";
+import { normalizeName } from "../names";
+import { FormatType } from "../formats";
+import { Card, Color, basicLandNames } from "../encyclopedia";
 
 function containsAny(cardColors: Color[], filterColors: ColorFilter[]) {
   if (cardColors.length === 0 && filterColors.includes("C")) {
@@ -147,15 +140,15 @@ function combineBoxes(boxes: BoxState[], filter: CardFilter): BoxCard[] {
       ? boxes.filter((b) => filter.exceptBoxes.includes(b.name))
       : [];
 
-  const includeCards = BoxCardModule.combineDuplicates(
+  const includeCards = combineDuplicates(
     getCardsFromBoxes(includeBoxes)
   );
   const exceptKeys = uniq(
-    getCardsFromBoxes(exceptBoxes).map(BoxCardModule.getKey)
+    getCardsFromBoxes(exceptBoxes).map(getKey)
   );
 
   return includeCards.filter(
-    (c) => !exceptKeys.includes(BoxCardModule.getKey(c))
+    (c) => !exceptKeys.includes(getKey(c))
   );
 }
 
@@ -170,7 +163,7 @@ export function getCards(
   searchResults: Card[]
 ): BoxCard[] {
   let cards = combineBoxes(inventory, filter);
-  cards = BoxCardModule.combineDuplicates(cards);
+  cards = combineDuplicates(cards);
   cards = filterCards(cards, filter, allCardsBySet, searchResults);
   return cards;
 }

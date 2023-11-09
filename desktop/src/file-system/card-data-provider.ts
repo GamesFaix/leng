@@ -1,8 +1,8 @@
-import { CardDataProvider } from "leng-core/src/logic/interfaces";
-import { AppSettings } from "leng-core/src/logic/model";
-import { Card, Set } from "scryfall-api";
+import { Card, Set } from "leng-core/src/domain/encyclopedia";
 import * as fs from "fs";
 import { createFileAndDirectoryIfRequired } from "../file-system/file-helpers";
+import { AppSettings } from "leng-core/src/domain/config";
+import { CardDataProvider } from "leng-core/src/domain/interfaces";
 
 // TODO: Refactor this as caching decorator of web card-data-provider
 

@@ -11,11 +11,11 @@ import {
 } from "./encyclopedia";
 import { InventoryAction, inventoryReducer } from "./inventory";
 import { SettingsAction, settingsReducer } from "./settings";
-import { AsyncRequestStatus } from "../logic/model";
 import { PreloadAction, preloadReducer } from "./preload";
 import { EditingAction, editingReducer } from "./editing";
 import { SearchAction, searchReducer } from "./search";
 import createSagaMiddleware from "redux-saga";
+import { AsyncRequestStatus } from "../domain/async-request";
 
 type Action =
   | EncyclopediaAction

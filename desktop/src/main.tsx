@@ -23,7 +23,7 @@ import {
   ImagePathContext,
 } from "leng-core/src/contexts";
 import { externalLinkProvider } from "./external-link-provider";
-import { ClientCapabilities } from "leng-core/src/logic/model";
+import { ClientCapabilities } from "leng-core/src/domain/config";
 
 const capabilities: ClientCapabilities = {
   view: {

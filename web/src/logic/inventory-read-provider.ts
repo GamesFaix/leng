@@ -1,16 +1,8 @@
-import {
-  AppSettings,
-  Box,
-  BoxInfo,
-  CardIndex,
-} from "leng-core/src/logic/model";
-import { InventoryReadProvider } from "leng-core/src/logic/interfaces";
-import {
-  Inventory,
-  defaultInventory,
-  fromFileBox,
-  toBoxInfo,
-} from "leng-core/src/logic/inventory";
+import { AppSettings } from "leng-core/src/domain/config";
+import { CardIndex } from "leng-core/src/domain/encyclopedia";
+import { InventoryReadProvider } from "leng-core/src/domain/interfaces";
+import { Box, BoxInfo } from "leng-core/src/domain/inventory";
+import { defaultInventory, Inventory, toBoxInfo, fromFileBox } from "leng-core/src/domain/inventory-files";
 
 let cachedPath = "";
 let cache = defaultInventory;

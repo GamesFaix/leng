@@ -1,7 +1,7 @@
 import { Badge, Tooltip } from "@mui/material";
 import { sumBy } from "lodash";
 import * as React from "react";
-import { BoxCard } from "../../logic/model";
+import { BoxCard } from "../../domain/inventory";
 import BinderCardTooltip from "./binder-card-tooltip";
 import { CardImage } from "../common";
 

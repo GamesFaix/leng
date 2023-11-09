@@ -4,7 +4,7 @@ import * as React from 'react';
 import { icons } from '../../../ui/fontawesome';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';
-import { BoxState } from '../../../logic/model';
+import { BoxState } from '../../../domain/inventory';
 
 type Props = {
     boxes: BoxState[],

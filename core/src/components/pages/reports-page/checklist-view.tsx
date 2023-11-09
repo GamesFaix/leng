@@ -1,6 +1,6 @@
 import { Checkbox, Typography } from "@mui/material";
 import * as React from "react";
-import { normalizeCollectorsNumber } from "../../../logic/binder-page-generator";
+import { normalizeCollectorsNumber } from "../../../domain/binder-report";
 import { orderBy } from "lodash";
 import { CheckListItem, CheckListVisibility } from "./model";
 

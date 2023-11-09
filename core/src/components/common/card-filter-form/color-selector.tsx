@@ -1,6 +1,6 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { ColorFilter, allColors } from '../../../logic/model';
 import * as React from 'react';
+import { ColorFilter, allColors } from '../../../domain/filters';
 
 function getOptionLabel(color: ColorFilter) : string {
     switch (color) {

@@ -2,16 +2,12 @@ import * as fs from "fs";
 import { orderBy } from "lodash";
 import { parse } from "path";
 import { createDirIfMissing } from "./file-helpers";
-import {
-  AppSettings,
-  Box,
-  BoxInfo,
-  CardIndex,
-  FileBox,
-} from "leng-core/src/logic/model";
-import { InventoryReadProvider } from "leng-core/src/logic/interfaces";
-import { getBoxPath, getInventoryDir } from "./inventory-common";
-import { fromFileBox } from "leng-core/src/logic/inventory";
+import { AppSettings } from "leng-core/src/domain/config";
+import { CardIndex } from "leng-core/src/domain/encyclopedia";
+import { InventoryReadProvider } from "leng-core/src/domain/interfaces";
+import { Box, BoxInfo } from "leng-core/src/domain/inventory";
+import { FileBox, fromFileBox } from "leng-core/src/domain/inventory-files";
+import { getInventoryDir, getBoxPath } from "./inventory-common";
 
 const loadBoxInfos = async (settings: AppSettings): Promise<BoxInfo[]> => {
   const dir = getInventoryDir(settings);

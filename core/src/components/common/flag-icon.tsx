@@ -1,6 +1,6 @@
-import { Language } from "../../logic/model";
 import FlagIcons from "../../images/flags";
 import * as React from 'react';
+import { Language } from "../../domain/encyclopedia";
 
 type Props = {
   lang: Language;

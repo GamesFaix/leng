@@ -1,6 +1,6 @@
-import { ImagePathProvider } from "leng-core/src/logic/interfaces";
-import { AppSettings } from "leng-core/src/logic/model";
-import { Card, Set } from "scryfall-api";
+import { ImagePathProvider } from "leng-core/src/domain/interfaces";
+import { AppSettings } from "leng-core/src/domain/config";
+import { Card, Set } from "leng-core/src/domain/encyclopedia";
 
 const getSetSymbolPath = (_: AppSettings, set: Set): string => set.icon_svg_uri;
 

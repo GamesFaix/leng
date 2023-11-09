@@ -1,20 +1,11 @@
 import * as React from "react";
 import { icons } from "../../../ui/fontawesome";
 import {
-  AllLanguages,
-  BoxCard,
-  CardFinish,
-  getVersionLabel,
-  Language,
-  normalizeName,
-} from "../../../logic/model";
-import {
   Autocomplete,
   FilterOptionsState,
   IconButton,
   TextField,
 } from "@mui/material";
-import { Card, Set } from "scryfall-api";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { orderBy } from "lodash";
 import { useSelector } from "react-redux";
@@ -26,6 +17,16 @@ import {
   SetSymbol,
 } from "../../common";
 import { useExternalLinks } from "../../../hooks";
+import { normalizeName } from "../../../domain/names";
+import { BoxCard } from "../../../domain/inventory";
+import {
+  Card,
+  Set,
+  CardFinish,
+  Language,
+  getVersionLabel,
+  AllLanguages,
+} from "../../../domain/encyclopedia";
 
 type Props = {
   title: string;

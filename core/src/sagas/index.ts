@@ -15,7 +15,7 @@ import {
   InventoryWriteProvider,
   SettingsProvider,
   TappedOutCsvExportProvider,
-} from "../logic/interfaces";
+} from "../domain/interfaces";
 import { getInventoryWebExportSaga } from "./inventory-web-export";
 
 type SagaProviders = {

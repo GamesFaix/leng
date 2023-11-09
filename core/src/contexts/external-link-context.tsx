@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ExternalLinkProvider } from "../logic/interfaces";
+import { ExternalLinkProvider } from "../domain/interfaces";
 
 const defaultValue: ExternalLinkProvider = {
   openLink: (_) => { return; }

@@ -1,14 +1,6 @@
 import { orderBy } from "lodash";
-import {
-  asyncRequest,
-  AsyncRequest,
-  AsyncRequestStatus,
-  Box,
-  BoxInfo,
-  BoxState,
-  BoxTransferBulkRequest,
-  BoxTransferSingleRequest,
-} from "../logic/model";
+import { AsyncRequest, asyncRequest, AsyncRequestStatus } from "../domain/async-request";
+import { Box, BoxState, BoxInfo, BoxTransferBulkRequest, BoxTransferSingleRequest } from "../domain/inventory";
 
 export type InventoryState = {
   loading: boolean;

@@ -1,6 +1,6 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import { ColorFilterRule, allColorFilterRules } from '../../../logic/model';
 import * as React from 'react';
+import { ColorFilterRule, allColorFilterRules } from '../../../domain/filters';
 
 type Props = {
     value: ColorFilterRule,

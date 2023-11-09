@@ -1,11 +1,12 @@
 import { Card, Container, IconButton, Typography } from "@mui/material";
 import CardsTable from "./cards-table";
-import { BoxCard, CardFilter } from "../../../logic/model";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../../ui/fontawesome";
 import { CardFilterForm } from "../../common";
 import * as React from "react";
 import { useCapabilities } from "../../../hooks";
+import { CardFilter } from "../../../domain/filters";
+import { BoxCard } from "../../../domain/inventory";
 
 type Props = {
   cards: BoxCard[];

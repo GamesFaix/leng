@@ -2,7 +2,7 @@ import { Card, Checkbox, FormControlLabel } from '@mui/material';
 import { orderBy } from 'lodash';
 import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table, TableCellProps } from 'react-virtualized';
-import { BoxCard, BoxCardModule } from '../../../logic/model';
+import { BoxCard, getKey } from '../../../domain/inventory';
 import { FinishCell, NameCell, SetCell } from '../../common/card-table-cells';
 
 type Props = {
@@ -18,7 +18,7 @@ type SortArgs = {
 
 function MultiSelectCell (props: TableCellProps, tableProps: Props) {
     const card : BoxCard = props.rowData;
-    const key = BoxCardModule.getKey(card);
+    const key = getKey(card);
     const isSelected = tableProps.selectedKeys.includes(key);
 
     function onChange (e: React.ChangeEvent<HTMLInputElement>) {
@@ -81,7 +81,7 @@ const CardsTable = (props: Props) => {
     function selectOrDeselectAll(e: React.ChangeEvent<HTMLInputElement>) {
         const newSelection =
             e.target.checked
-                ? props.cards.map(BoxCardModule.getKey)
+                ? props.cards.map(getKey)
                 : [];
 
         props.onSelectionChanged(newSelection);

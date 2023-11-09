@@ -3,9 +3,10 @@ import * as React from "react";
 import { TableCellProps } from "react-virtualized";
 import { SetSymbol } from "./set-symbol";
 import { selectors } from "../../store";
-import { BoxCard, CardFinish } from "../../logic/model";
 import { CardImageTooltip } from "./card-image-tooltip";
 import { useSelector } from "react-redux";
+import { CardFinish } from "../../domain/encyclopedia";
+import { BoxCard } from "../../domain/inventory";
 
 export const CheckboxCell = (props: TableCellProps) => (
   <Checkbox checked={props.cellData} disabled />

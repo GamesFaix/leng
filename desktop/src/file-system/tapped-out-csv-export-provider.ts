@@ -1,7 +1,7 @@
 import { createObjectCsvWriter } from "csv-writer";
-import { TappedOutCsvExportProvider } from "leng-core/src/logic/interfaces";
-import { AppSettings } from "leng-core/src/logic/model";
-import { TappedOutCsvExportCard } from "leng-core/src/logic/tappedout-csv-export";
+import { AppSettings } from "leng-core/src/domain/config";
+import { TappedOutCsvExportCard } from "leng-core/src/domain/export/tappedout-csv-export";
+import { TappedOutCsvExportProvider } from "leng-core/src/domain/interfaces";
 import * as moment from "moment";
 
 const exportCards = async (

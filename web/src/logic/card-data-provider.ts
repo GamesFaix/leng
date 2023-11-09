@@ -1,5 +1,5 @@
-import { CardDataProvider } from "leng-core/src/logic/interfaces";
-import { Card, Set } from "scryfall-api";
+import { CardDataProvider } from "leng-core/src/domain/interfaces";
+import { Card, Set } from "leng-core/src/domain/encyclopedia";
 
 const getAllCards = async (): Promise<Card[]> => {
   const path = "../../data/cards.json";

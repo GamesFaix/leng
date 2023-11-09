@@ -1,9 +1,9 @@
 import * as fs from "fs";
-import { Card, Set } from "scryfall-api";
+import { Card, Set } from "leng-core/src/domain/encyclopedia";
 import { createDirForFileIfMissing } from "../file-system/file-helpers";
-import { AppSettings } from "leng-core/src/logic/model";
+import { AppSettings } from "leng-core/src/domain/config";
 import { imagePathProvider } from "../file-system";
-import { ImageDownloader } from "leng-core/src/logic/interfaces";
+import { ImageDownloader } from "leng-core/src/domain/interfaces";
 
 const downloadFile = async (fromUrl: string, toPath: string) => {
   const response = await fetch(fromUrl);

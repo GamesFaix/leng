@@ -1,6 +1,6 @@
 import { groupBy } from "lodash";
-import { Card } from "scryfall-api";
-import { BoxCard, CardFinish, CardIndex, Language } from "./model";
+import { BoxCard } from "../inventory";
+import { Card, Language, CardIndex, CardFinish } from "../encyclopedia";
 
 export type TappedOutCsvExportCard = {
   count: number;

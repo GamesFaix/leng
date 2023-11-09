@@ -1,4 +1,4 @@
-import { AppSettings } from "leng-core/src/logic/model";
+import { AppSettings } from "leng-core/src/domain/config";
 import { cardDataProvider } from "./card-data-provider";
 import * as fs from "fs";
 import * as path from "path";

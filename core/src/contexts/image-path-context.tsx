@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { ImagePathProvider } from "../logic/interfaces";
+import { ImagePathProvider } from "../domain/interfaces";
 
 const defaultValue: ImagePathProvider = {
   getCardImagePath: () => {

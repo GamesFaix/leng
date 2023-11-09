@@ -1,25 +1,20 @@
 import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import {
-  Box,
-  BoxCard,
-  BoxCardModule,
-  defaultCardFilter,
-} from "../../../logic/model";
 import "react-virtualized/styles.css";
 import { inventoryActions } from "../../../store/inventory";
 import BoxPage from "./box-page";
 import { selectors } from "../../../store";
 import { editingActions } from "../../../store/editing";
-import { getCards } from "../../../logic/card-filters";
 import { useCallback } from "react";
 import { searchActions } from "../../../store/search";
+import { defaultCardFilter, getCards } from "../../../domain/filters";
+import { Box, BoxCard, areSame, getKey } from "../../../domain/inventory";
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard): BoxCard[] {
-  const match = cards.find((c) => BoxCardModule.areSame(c, card));
+  const match = cards.find((c) => areSame(c, card));
   if (match) {
-    const others = cards.filter((c) => !BoxCardModule.areSame(c, card));
+    const others = cards.filter((c) => !areSame(c, card));
     const updated = {
       ...match,
       count: match.count + card.count,
@@ -91,10 +86,10 @@ export const BoxPageContainer = () => {
     if (!newBox?.cards) {
       return;
     }
-    const cards = newBox.cards.filter((c) => !BoxCardModule.areSame(c, card));
+    const cards = newBox.cards.filter((c) => !areSame(c, card));
     setNewBox({ ...newBox, cards });
     dispatch(editingActions.edit());
-    const key = BoxCardModule.getKey(card);
+    const key = getKey(card);
     if (selectedKeys.includes(key)) {
       setSelectedKeys(selectedKeys.filter((k) => k !== key));
     }
@@ -113,7 +108,7 @@ export const BoxPageContainer = () => {
 
   function singleTransferTo(count: number, boxName: string) {
     const card = newBox?.cards?.find(
-      (c) => BoxCardModule.getKey(c) === selectedKeys[0]
+      (c) => getKey(c) === selectedKeys[0]
     ) as BoxCard;
 
     setSelectedKeys([]);

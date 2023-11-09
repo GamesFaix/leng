@@ -1,6 +1,6 @@
-import { CardDataProvider } from "leng-core/src/logic/interfaces";
-import { AppSettings } from "leng-core/src/logic/model";
-import { Card, Set } from "scryfall-api";
+import { CardDataProvider } from "leng-core/src/domain/interfaces";
+import { AppSettings } from "leng-core/src/domain/config";
+import { Card, Set } from "leng-core/src/domain/encyclopedia";
 
 type BulkData = {
   object: string;

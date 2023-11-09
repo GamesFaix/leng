@@ -1,13 +1,15 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { AppSettings, AsyncRequestStatus, Box } from "../logic/model";
 import {
   inventoryActions,
   InventoryActionTypes,
   WebExportAction,
 } from "../store/inventory";
 import { selectors } from "../store";
-import { InventoryWebExportProvider } from "../logic/interfaces";
-import { Inventory, toFileBox } from "../logic/inventory";
+import { InventoryWebExportProvider } from "../domain/interfaces";
+import { Inventory, toFileBox } from "../domain/inventory-files";
+import { Box } from "../domain/inventory";
+import { AsyncRequestStatus } from "../domain/async-request";
+import { AppSettings } from "../domain/config";
 
 export const getInventoryWebExportSaga = (
   provider: InventoryWebExportProvider

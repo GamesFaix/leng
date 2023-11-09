@@ -1,6 +1,5 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { Card, Set } from "scryfall-api";
-import { AppSettings, AsyncRequestStatus } from "../logic/model";
+import { Card, Set } from "../domain/encyclopedia";
 import { RootState } from "../store";
 import {
   encyclopediaActions,
@@ -9,7 +8,9 @@ import {
   LoadSetSymbolAction,
 } from "../store/encyclopedia";
 import { selectors } from "../store";
-import { ImageDownloader } from "../logic/interfaces";
+import { ImageDownloader } from "../domain/interfaces";
+import { AsyncRequestStatus } from "../domain/async-request";
+import { AppSettings } from "../domain/config";
 
 export const getImagesSaga = (imageDownloader: ImageDownloader) => {
   function* loadSetSymbol(action: LoadSetSymbolAction) {

@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import { createFileAndDirectoryIfRequired } from "./file-helpers";
-import { AppSettings } from "leng-core/src/logic/model";
-import { SettingsProvider } from "leng-core/src/logic/interfaces";
+import { AppSettings } from "leng-core/src/domain/config";
+import { SettingsProvider } from "leng-core/src/domain/interfaces";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const dir = `${(process.env as any).USERPROFILE.replace("\\", "/")}/leng`;

@@ -21,7 +21,7 @@ import {
 } from "./logic";
 import * as Uuid from "uuid";
 import { imageDownloader } from "./logic/image-downloader";
-import { ClientCapabilities } from "leng-core/src/logic/model";
+import { ClientCapabilities } from "leng-core/src/domain/config";
 
 const capabilities: Partial<ClientCapabilities> = {
   view: {
