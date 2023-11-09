@@ -7,10 +7,11 @@ import { store } from "leng-core/src/store";
 import "./styles.scss";
 import { runSagas } from "leng-core/src/sagas";
 import {
+  ClientCapabilitiesContext,
   ExternalLinkContext,
   ImagePathContext,
-  darkTheme,
-} from "leng-core/src/ui";
+} from "leng-core/src/contexts";
+import { darkTheme } from "leng-core/src/ui";
 import {
   imagePathProvider,
   externalLinkProvider,
@@ -20,6 +21,16 @@ import {
 } from "./logic";
 import * as Uuid from "uuid";
 import { imageDownloader } from "./logic/image-downloader";
+import { ClientCapabilities } from "leng-core/src/logic/model";
+
+const capabilities: Partial<ClientCapabilities> = {
+  view: {
+    boxes: false,
+    collection: true,
+    reports: true,
+    settings: false,
+  },
+};
 
 const isSingletonRegistered = () => !!(window as any).lengId;
 const registerSingleton = (id: string) => {
@@ -32,7 +43,7 @@ const initReduxSaga = () => {
     settings: settingsProvider,
     cardData: cardDataProvider,
     inventoryRead: inventoryReadProvider,
-    images: imageDownloader
+    images: imageDownloader,
   });
 };
 
@@ -48,7 +59,9 @@ const initReact = () => {
       <ThemeProvider theme={darkTheme}>
         <ImagePathContext.Provider value={imagePathProvider}>
           <ExternalLinkContext.Provider value={externalLinkProvider}>
-            <App />
+            <ClientCapabilitiesContext.Provider value={capabilities}>
+              <App />
+            </ClientCapabilitiesContext.Provider>
           </ExternalLinkContext.Provider>
         </ImagePathContext.Provider>
       </ThemeProvider>

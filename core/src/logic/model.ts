@@ -2,6 +2,8 @@ import { Card, Color, Legalities, Set } from 'scryfall-api';
 import { groupBy } from 'lodash';
 import { Format } from './formats';
 
+// TODO: Break up this module into a whole subfolder
+
 export enum AsyncRequestStatus {
     NotStarted = 'NOT_STARTED',
     Started = 'STARTED',
@@ -288,4 +290,20 @@ export type BoxState = {
     // Deferred loading because file must be opened and deserialized
     description: string | null,
     cards: BoxCard[] | null
+}
+
+export type ClientCapabilities = {
+    export: {
+        tappedOutCsv: boolean;
+        webJson: boolean;
+    };
+    edit: {
+        boxes: boolean;
+    }
+    view: {
+        boxes: boolean;
+        collection: boolean;
+        reports: boolean;
+        settings: boolean;
+    }
 }

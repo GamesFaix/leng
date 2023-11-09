@@ -25,7 +25,7 @@ import {
   FlagIcon,
   SetSymbol,
 } from "../../common";
-import { ExternalLinkContext } from "../../../ui/external-link-context";
+import { useExternalLinks } from "../../../hooks";
 
 type Props = {
   title: string;
@@ -135,7 +135,7 @@ function filterCardNames(options: string[], state: FilterOptionsState<string>) {
 }
 
 const CardOption = (props: any, card: Card & { label: string }, state: any) => {
-  const provider = React.useContext(ExternalLinkContext);
+  const provider = useExternalLinks();
 
   const classes = state.selected
     ? ["autocomplete-option", "selected"]
