@@ -30,6 +30,13 @@ const NavBar = () => {
   return (
     <AppBar position="static">
       <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+        <IconButton
+          title="Home"
+          color="primary"
+          onClick={() => confirmIfUnsavedChangesThenNavigateTo("/")}
+        >
+          <FontAwesomeIcon icon={icons.home} />
+        </IconButton>
         {caps.view?.collection && (
           <IconButton
             title="Collection"
@@ -43,7 +50,7 @@ const NavBar = () => {
           <IconButton
             title="Boxes"
             color="primary"
-            onClick={() => confirmIfUnsavedChangesThenNavigateTo("/")}
+            onClick={() => confirmIfUnsavedChangesThenNavigateTo("/boxes")}
           >
             <FontAwesomeIcon icon={icons.box} />
           </IconButton>

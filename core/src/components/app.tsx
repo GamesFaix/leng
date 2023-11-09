@@ -6,6 +6,7 @@ import {
   SettingsPage,
   BoxPage,
   BoxesPage,
+  HomePage,
 } from "./pages";
 import SplashScreen from "./splash-screen";
 import { preloadActions } from "../store/preload";
@@ -44,7 +45,7 @@ export const App = () => {
           {caps.view?.reports && (
             <Route path="/reports" element={<ReportsPage />} />
           )}
-          <Route path="*" element={<span>Home page</span>} />
+          <Route path="*" element={<HomePage/>} />
         </Routes>
       ) : (
         <SplashScreen message={message} />

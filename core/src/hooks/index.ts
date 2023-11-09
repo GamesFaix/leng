@@ -13,7 +13,7 @@ export const useExternalLinks = () => useContext(ExternalLinkContext);
 
 export const useImagePaths = () => useContext(ImagePathContext);
 
-export const useAppDispatch = useDispatch<AppDispatch>;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
 
 export const useAppSelector = <T>(selector: (state: RootState) => T) =>
   useSelector(selector);
