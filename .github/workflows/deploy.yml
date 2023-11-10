@@ -1,5 +1,9 @@
 name: Web - Build & Deploy to S3
 
+# configure manual trigger
+on:
+  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
