@@ -1,0 +1,56 @@
+name: Web - Build & Deploy to S3
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Use Node.js [18.11.0]
+      uses: actions/setup-node@v3
+      with:
+        node-version: [18.11.0]
+    
+    - name: Install packages - Core
+      working-directory: './core'
+      run: npm install
+
+    - name: Lint - Core
+      working-directory: './core'
+      run: npm run lint
+
+    - name: Build - Core
+      working-directory: './core'
+      run: npm run build
+
+    - name: Install packages - Web
+      working-directory: './web'
+      run: npm install
+
+    - name: Re-link core library - Web
+      working-directory: './web'
+      run: npm run relink
+
+    - name: Lint - Web
+      working-directory: './web'
+      run: npm run lint
+
+    - name: Build - Web
+      working-directory: './web'
+      run: npm run build
+
+    - name: Download Encyclopedia
+      working-directory: './web'
+      run: npm run download-encyclopedia
+
+    - name: Deploy to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --delete
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        SOURCE_DIR: "web/dist"
