@@ -1,8 +1,11 @@
 import { CardDataProvider } from "leng-core/src/domain/interfaces";
 import { Card, Set } from "leng-core/src/domain/encyclopedia";
 
+export const cardsPath = "data/encyclopedia/cards.json";
+export const setsPath = "data/encyclopedia/sets.json";
+
 const getAllCards = async (): Promise<Card[]> => {
-  const path = "../../data/cards.json";
+  const path = `../../${cardsPath}`;
   console.log("getAllCards");
   const json = await fetch(path);
   console.log("decoding card JSON...");
@@ -12,7 +15,7 @@ const getAllCards = async (): Promise<Card[]> => {
 };
 
 const getAllSets = async (): Promise<Set[]> => {
-  const path = "../../data/sets.json";
+  const path = `../../${setsPath}`;
   console.log(path);
   const json = await fetch(path);
   console.log("decoding set JSON...");

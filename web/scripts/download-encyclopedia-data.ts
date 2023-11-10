@@ -1,34 +1,29 @@
-import { AppSettings } from "leng-core/src/domain/config";
-import { cardDataProvider } from "./card-data-provider";
 import * as fs from "fs";
-import * as path from "path";
+import { resolve } from "path";
+import { getAllCards, getAllSets } from "leng-core/src/domain/scryfall";
+import { cardsPath, setsPath } from "../src/logic/card-data-provider";
 
-const downloadCards = async (settings: AppSettings) => {
+const downloadCards = async () => {
   console.log("Downloading card data...");
-  const cards = await cardDataProvider.getAllCards(settings);
-  console.log("Saving card data...");
-  const path = `${settings.dataPath}/cards.json`;
+  const cards = await getAllCards();
+  const path = resolve(__dirname, `../${cardsPath}`);
+  console.log(`Saving card data to ${path}...`);
   const json = JSON.stringify(cards);
   fs.writeFileSync(path, json);
 };
 
-const downloadSets = async (settings: AppSettings) => {
+const downloadSets = async () => {
   console.log("Downloading set data...");
-  const sets = await cardDataProvider.getAllSets(settings);
-  console.log("Saving set data...");
-  const path = `${settings.dataPath}/sets.json`;
+  const sets = await getAllSets();
+  const path = resolve(__dirname, `../${setsPath}`);
+  console.log(`Saving set data to ${path}...`);
   const json = JSON.stringify(sets);
   fs.writeFileSync(path, json);
 };
 
 const downloadData = async () => {
-  console.log("Updating Scryfall data...");
-  const settings: AppSettings = {
-    dataPath: path.resolve(__dirname, "../data"),
-  };
-  console.log(`Settings ${JSON.stringify(settings)}`);
-  await downloadCards(settings);
-  await downloadSets(settings);
+  await downloadCards();
+  await downloadSets();
 };
 
 downloadData().catch(console.error);
