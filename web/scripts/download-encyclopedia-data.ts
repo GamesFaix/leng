@@ -2,7 +2,7 @@ import { writeFileSync, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 import { getAllCards, getAllSets } from "leng-core/src/domain/scryfall";
 
-const dir = "./dist/data/encyclopedia";
+const dir = resolve(__dirname, "../dist/data/encyclopedia");
 
 const downloadCards = async () => {
   console.log("Downloading card data...");
@@ -24,13 +24,27 @@ const downloadSets = async () => {
   writeFileSync(path, json);
 };
 
-const downloadData = async () => {
-  console.log(`Downloading encyclopedia to ${resolve(dir)}...`);
-  if (!existsSync(dir)) {
-    mkdirSync(dir);
+const makeDirIfMissing = (path: string) => {
+  if (existsSync(path)) {
+    console.log(`Directory ${path} already exists`);
+  } else {
+    console.log(`Creating directory ${path}`);
+    mkdirSync(path, { recursive: true });
   }
+
+  if (!existsSync(path)) {
+    console.error(`Directory ${path} still doesn't exist!`);
+  }
+};
+
+const downloadData = async () => {
+  console.log(`Downloading encyclopedia to ${dir}...`);
+  makeDirIfMissing(dir);
   await downloadCards();
   await downloadSets();
 };
 
-downloadData().catch(console.error);
+downloadData().catch((err) => {
+  console.error(err);
+  throw err;
+});
