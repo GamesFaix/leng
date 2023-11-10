@@ -7,7 +7,8 @@ const defaultSettings = {
 
 const load = () => {
   try {
-    const json = localStorage.getItem("settings")!;
+    const json = localStorage.getItem("settings");
+    if (!json) throw "";
     return JSON.parse(json);
   } catch {
     const json = JSON.stringify(defaultSettings);
