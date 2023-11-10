@@ -46,5 +46,5 @@ const downloadData = async () => {
 
 downloadData().catch((err) => {
   console.error(err);
-  return -1;
+  throw err;
 });
