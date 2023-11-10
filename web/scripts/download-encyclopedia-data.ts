@@ -29,7 +29,7 @@ const makeDirIfMissing = (path: string) => {
     console.log(`Directory ${path} already exists`);
   } else {
     console.log(`Creating directory ${path}`);
-    mkdirSync(path);
+    mkdirSync(path, { recursive: true });
   }
 
   if (!existsSync(path)) {
