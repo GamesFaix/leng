@@ -38,10 +38,13 @@ const makeDirIfMissing = (path: string) => {
 };
 
 const downloadData = async () => {
-  console.log(`Downloading encyclopedia to ${dir}...`);  
+  console.log(`Downloading encyclopedia to ${dir}...`);
   makeDirIfMissing(dir);
   await downloadCards();
   await downloadSets();
 };
 
-downloadData().catch(console.error);
+downloadData().catch((err) => {
+  console.error(err);
+  return -1;
+});
