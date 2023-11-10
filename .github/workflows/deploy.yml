@@ -3,7 +3,11 @@ name: Web - Build & Deploy to S3
 # configure manual trigger
 on:
   workflow_dispatch:
-
+    inputs:
+      branch:
+        description: 'The branch to build'
+        required: true
+        
 jobs:
   deploy:
     runs-on: ubuntu-latest
