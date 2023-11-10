@@ -20,6 +20,10 @@ jobs:
       with:
         node-version: 18.11.0
     
+    - name: Install packages - Core
+      working-directory: './core'
+      run: npm install
+
     - name: Install packages - Web
       working-directory: './web'
       run: npm install
