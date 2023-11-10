@@ -2,7 +2,7 @@ import { writeFileSync, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 import { getAllCards, getAllSets } from "leng-core/src/domain/scryfall";
 
-const dir = "./dist/data/encyclopedia";
+const dir = resolve(__dirname, "../dist/data/encyclopedia");
 
 const downloadCards = async () => {
   console.log("Downloading card data...");
