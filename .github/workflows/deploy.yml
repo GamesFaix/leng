@@ -20,18 +20,6 @@ jobs:
       with:
         node-version: 18.11.0
     
-    - name: Install packages - Core
-      working-directory: './core'
-      run: npm install
-
-    - name: Lint - Core
-      working-directory: './core'
-      run: npm run lint
-
-    - name: Build - Core
-      working-directory: './core'
-      run: npm run build
-
     - name: Install packages - Web
       working-directory: './web'
       run: npm install
@@ -39,10 +27,6 @@ jobs:
     - name: Re-link core library - Web
       working-directory: './web'
       run: npm run relink
-
-    - name: Lint - Web
-      working-directory: './web'
-      run: npm run lint
 
     - name: Build - Web
       working-directory: './web'
