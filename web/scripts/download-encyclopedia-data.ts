@@ -24,11 +24,22 @@ const downloadSets = async () => {
   writeFileSync(path, json);
 };
 
-const downloadData = async () => {
-  console.log(`Downloading encyclopedia to ${resolve(dir)}...`);
-  if (!existsSync(dir)) {
-    mkdirSync(dir);
+const makeDirIfMissing = (path: string) => {
+  if (existsSync(path)) {
+    console.log(`Directory ${path} already exists`);
+  } else {
+    console.log(`Creating directory ${path}`);
+    mkdirSync(path);
   }
+
+  if (!existsSync(path)) {
+    console.error(`Directory ${path} still doesn't exist!`);
+  }
+};
+
+const downloadData = async () => {
+  console.log(`Downloading encyclopedia to ${dir}...`);  
+  makeDirIfMissing(dir);
   await downloadCards();
   await downloadSets();
 };
