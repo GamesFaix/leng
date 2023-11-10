@@ -1,13 +1,5 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
 import {
-  AppSettings,
-  AsyncRequestStatus,
-  Box,
-  BoxCardModule,
-  CardIndex,
-  BoxState,
-} from "../logic/model";
-import {
   BoxCreateAction,
   BoxDeleteAction,
   BoxRenameAction,
@@ -18,7 +10,11 @@ import {
   InventoryActionTypes,
 } from "../store/inventory";
 import { selectors } from "../store";
-import { InventoryWriteProvider } from "../logic/interfaces";
+import { InventoryWriteProvider } from "../domain/interfaces";
+import { AsyncRequestStatus } from "../domain/async-request";
+import { AppSettings } from "../domain/config";
+import { CardIndex } from "../domain/encyclopedia";
+import { Box, BoxState, combineDuplicates, getKey, removeZeroes } from "../domain/inventory";
 
 export const getInventoryWriteSaga = (provider: InventoryWriteProvider) => {
   function* saveBox(action: BoxSaveAction) {
@@ -110,13 +106,13 @@ export const getInventoryWriteSaga = (provider: InventoryWriteProvider) => {
 
       const cardsToTransfer =
         fromBox.cards?.filter((c) =>
-          request.cardKeys.includes(BoxCardModule.getKey(c))
+          request.cardKeys.includes(getKey(c))
         ) ?? [];
       const fromBoxCards =
         fromBox.cards?.filter(
-          (c) => !request.cardKeys.includes(BoxCardModule.getKey(c))
+          (c) => !request.cardKeys.includes(getKey(c))
         ) ?? [];
-      const toBoxCards = BoxCardModule.combineDuplicates(
+      const toBoxCards = combineDuplicates(
         cardsToTransfer.concat(toBox.cards ?? [])
       );
 
@@ -160,17 +156,17 @@ export const getInventoryWriteSaga = (provider: InventoryWriteProvider) => {
         throw "Box not found.";
       }
 
-      const keyToTransfer = BoxCardModule.getKey(request.card);
-      const fromBoxCards = BoxCardModule.removeZeroes(
+      const keyToTransfer = getKey(request.card);
+      const fromBoxCards = removeZeroes(
         fromBox.cards?.map((c) => {
-          if (BoxCardModule.getKey(c) === keyToTransfer) {
+          if (getKey(c) === keyToTransfer) {
             return { ...c, count: c.count - request.card.count };
           } else {
             return c;
           }
         }) ?? []
       );
-      const toBoxCards = BoxCardModule.combineDuplicates(
+      const toBoxCards = combineDuplicates(
         [request.card].concat(toBox.cards ?? [])
       );
 

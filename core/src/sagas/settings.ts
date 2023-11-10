@@ -1,12 +1,12 @@
 import { put, takeEvery, takeLeading } from "redux-saga/effects";
-import { AsyncRequestStatus } from "../logic/model";
+import { AsyncRequestStatus } from "../domain/async-request";
 import {
   settingsActions,
   SettingsActionTypes,
   SettingsLoadAction,
   SettingsSaveAction,
 } from "../store/settings";
-import { SettingsProvider } from "../logic/interfaces";
+import { SettingsProvider } from "../domain/interfaces";
 
 export const getSettingsSaga = (provider: SettingsProvider) => {
   function* loadSettings(action: SettingsLoadAction) {

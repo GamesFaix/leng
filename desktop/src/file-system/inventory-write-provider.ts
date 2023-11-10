@@ -1,32 +1,11 @@
 import * as fs from "fs";
-import {
-  AppSettings,
-  Box,
-  CardFinish,
-  CardIndex,
-  FileBox,
-} from "leng-core/src/logic/model";
-import { InventoryWriteProvider } from "leng-core/src/logic/interfaces";
 import { getBoxPath } from "./inventory-common";
 import { inventoryReadProvider } from "./inventory-read-provider";
-
-const toFileBox = (box: Box): FileBox => ({
-  name: box.name,
-  lastModified: box.lastModified,
-  description: box.description,
-  cards: box.cards.map((c) => {
-    return {
-      name: c.name,
-      setAbbrev: c.setAbbrev,
-      scryfallId: c.scryfallId,
-      lang: c.lang,
-      finish: c.finish,
-      foil: c.finish !== CardFinish.Normal,
-      collectorsNumber: c.collectorsNumber,
-      count: c.count,
-    };
-  }),
-});
+import { AppSettings } from "leng-core/src/domain/config";
+import { CardIndex } from "leng-core/src/domain/encyclopedia";
+import { InventoryWriteProvider } from "leng-core/src/domain/interfaces";
+import { toFileBox } from "leng-core/src/domain/inventory-files";
+import { Box } from "leng-core/src/domain/inventory";
 
 const saveBox = async (
   settings: AppSettings,

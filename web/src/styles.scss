@@ -1,0 +1,53 @@
+body {
+    background-color: #111111;
+    color: gainsboro;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+}
+
+h2 {
+    font-family: Garamond;
+    font-style: italic;
+}
+
+.boxes-area {
+    min-height: 200px;
+    width: 500px;
+}
+
+.box-name {
+    font-style: italic;
+}
+
+.autocomplete-option {
+    div {
+        padding: 6px;
+    }
+
+    &:active {
+        background-color: gainsboro;
+    }
+
+    &.selected {
+        background-color: skyblue;
+    }
+}
+
+.form-row {
+    display: flex;
+
+    .control {
+        padding: 6px;
+    }
+}
+
+.set-container {
+    display: flex;
+    align-items: center;
+}
+
+.set-symbol {
+    height: 25px;
+    width: 25px;
+    filter: invert(100%) sepia(0%) saturate(5602%) hue-rotate(240deg) brightness(122%) contrast(73%);
+}

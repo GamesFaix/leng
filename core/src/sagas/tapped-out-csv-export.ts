@@ -1,20 +1,18 @@
-import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
-import { getCards } from "../logic/card-filters";
-import { toTappedOutCsvExportCards } from "../logic/tappedout-csv-export";
-import {
-  AppSettings,
-  AsyncRequestStatus,
-  Box,
-  CardIndex,
-  defaultCardFilter,
-} from "../logic/model";
+import { call, put, select, takeEvery } from "redux-saga/effects";
+import { getCards } from "../domain/filters";
+import { toTappedOutCsvExportCards } from "../domain/export/tappedout-csv-export";
 import {
   TappedOutCsvExportAction,
   inventoryActions,
   InventoryActionTypes,
 } from "../store/inventory";
 import { selectors } from "../store";
-import { TappedOutCsvExportProvider } from "../logic/interfaces";
+import { TappedOutCsvExportProvider } from "../domain/interfaces";
+import { Box } from "../domain/inventory";
+import { AsyncRequestStatus } from "../domain/async-request";
+import { AppSettings } from "../domain/config";
+import { CardIndex } from "../domain/encyclopedia";
+import { defaultCardFilter } from "../domain/filters";
 
 export const getTappedOutCsvExportSaga = (
   provider: TappedOutCsvExportProvider

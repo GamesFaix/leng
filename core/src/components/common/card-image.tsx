@@ -3,7 +3,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { encyclopediaActions } from "../../store/encyclopedia";
 import { selectors } from "../../store";
-import { ImagePathContext } from "../../ui/image-path-context";
+import { useImagePaths } from "../../hooks";
 
 type Props = {
   scryfallId: string;
@@ -12,7 +12,7 @@ type Props = {
 const LoadedImage = (props: Props) => {
   const card = useSelector(selectors.card(props.scryfallId));
   const settings = useSelector(selectors.settings);
-  const imagePathProvider = React.useContext(ImagePathContext);
+  const imagePathProvider = useImagePaths();
   const imagePath = React.useMemo(
     () => imagePathProvider.getCardImagePath(settings, card),
     [card, settings, imagePathProvider]

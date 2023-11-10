@@ -1,14 +1,6 @@
 import { orderBy } from "lodash";
-import {
-  asyncRequest,
-  AsyncRequest,
-  AsyncRequestStatus,
-  Box,
-  BoxInfo,
-  BoxState,
-  BoxTransferBulkRequest,
-  BoxTransferSingleRequest,
-} from "../logic/model";
+import { AsyncRequest, asyncRequest, AsyncRequestStatus } from "../domain/async-request";
+import { Box, BoxState, BoxInfo, BoxTransferBulkRequest, BoxTransferSingleRequest } from "../domain/inventory";
 
 export type InventoryState = {
   loading: boolean;
@@ -30,6 +22,7 @@ export enum InventoryActionTypes {
   BoxTransferBulk = "INVENTORY_BOX_TRANSFER_BULK",
   BoxTransferSingle = "INVENTORY_BOX_TRANSFER_SINGLE",
   TappedOutCsvExport = "INVENTORY_TAPPED_OUT_CSV_EXPORT",
+  WebExport = "INVENTORY_WEB_EXPORT"
 }
 
 export type BoxInfosLoadAction = {
@@ -76,6 +69,11 @@ export type TappedOutCsvExportAction = {
   type: InventoryActionTypes.TappedOutCsvExport;
   value: AsyncRequest<void, void>;
 };
+
+export type WebExportAction = {
+  type: InventoryActionTypes.WebExport;
+  value: AsyncRequest<void, void>;
+}
 
 export const inventoryActions = {
   boxInfosLoadStart(): BoxInfosLoadAction {
@@ -242,6 +240,24 @@ export const inventoryActions = {
       value: asyncRequest.failure(error),
     };
   },
+  webExportStart(): WebExportAction {
+    return {
+      type: InventoryActionTypes.WebExport,
+      value: asyncRequest.started(undefined),
+    };
+  },
+  webExportSuccess(): WebExportAction {
+    return {
+      type: InventoryActionTypes.WebExport,
+      value: asyncRequest.success(undefined),
+    };
+  },
+  webExportFailure(error: string): WebExportAction {
+    return {
+      type: InventoryActionTypes.WebExport,
+      value: asyncRequest.failure(error),
+    };
+  },
 };
 
 export type InventoryAction =
@@ -253,7 +269,8 @@ export type InventoryAction =
   | BoxRenameAction
   | BoxTransferBulkAction
   | BoxTransferSingleAction
-  | TappedOutCsvExportAction;
+  | TappedOutCsvExportAction
+  | WebExportAction;
 
 export function inventoryReducer(
   state: InventoryState = inventoryDefaultState,
@@ -375,6 +392,9 @@ export function inventoryReducer(
           return { ...state, boxes };
         }
         case InventoryActionTypes.TappedOutCsvExport: {
+          return state;
+        }
+        case InventoryActionTypes.WebExport: {
           return state;
         }
         default:

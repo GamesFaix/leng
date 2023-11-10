@@ -2,7 +2,7 @@ import { Icon } from "@mui/material";
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../store";
-import { ImagePathContext } from "../../ui/image-path-context";
+import { useImagePaths } from "../../hooks";
 
 type Props = {
   setAbbrev: string;
@@ -10,10 +10,11 @@ type Props = {
 
 export const SetSymbol = (props: Props) => {
   const settings = useSelector(selectors.settings);
-  const imagePathProvider = React.useContext(ImagePathContext);
+  const imagePathProvider = useImagePaths();
+  const set = useSelector(selectors.set(props.setAbbrev));
   const url = React.useMemo(
-    () => imagePathProvider.getSetSymbolPath(settings, props.setAbbrev),
-    [settings, imagePathProvider]
+    () => imagePathProvider.getSetSymbolPath(settings, set),
+    [settings, imagePathProvider, set]
   );
 
   return (

@@ -1,7 +1,8 @@
 import { Typography } from "@mui/material";
 import { orderBy } from "lodash";
 import * as React from "react";
-import { BoxCard, CardFinish, Language } from "../../logic/model";
+import { CardFinish, Language } from "../../domain/encyclopedia";
+import { BoxCard } from "../../domain/inventory";
 import { FlagIcon } from "../common";
 
 type Props = {

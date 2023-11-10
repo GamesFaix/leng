@@ -1,4 +1,5 @@
-import { AppSettings, asyncRequest, AsyncRequest, AsyncRequestStatus } from "../logic/model"
+import { asyncRequest, AsyncRequest, AsyncRequestStatus } from "../domain/async-request"
+import { AppSettings } from "../domain/config"
 
 export type SettingsState = {
     settings: AppSettings | null

@@ -3,7 +3,7 @@ import { IconButton, Typography } from '@mui/material';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from '../../../ui/fontawesome';
-import { BoxCard, BoxCardModule } from "../../../logic/model";
+import { BoxCard, getKey } from "../../../domain/inventory";
 import { selectors } from "../../../store";
 import CardTransferForm from './card-transfer-form';
 import { CollapsableCard } from '../../common';
@@ -22,13 +22,13 @@ const CardSelectionActionsForm = (props: Props) => {
 
     function startEdit() {
         const key = props.selectedKeys[0];
-        const card = props.cards.find(c => BoxCardModule.getKey(c) === key);
+        const card = props.cards.find(c => getKey(c) === key);
         props.startEdit(card!);
     }
 
     function deleteSelectedCards() {
         const cards = props.selectedKeys.map(k =>
-            props.cards.find(c => BoxCardModule.getKey(c) === k));
+            props.cards.find(c => getKey(c) === k));
         cards.forEach(c => props.delete(c!));
     }
 

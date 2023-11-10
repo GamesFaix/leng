@@ -11,11 +11,11 @@ import {
 } from "./encyclopedia";
 import { InventoryAction, inventoryReducer } from "./inventory";
 import { SettingsAction, settingsReducer } from "./settings";
-import { AsyncRequestStatus } from "../logic/model";
 import { PreloadAction, preloadReducer } from "./preload";
 import { EditingAction, editingReducer } from "./editing";
 import { SearchAction, searchReducer } from "./search";
 import createSagaMiddleware from "redux-saga";
+import { AsyncRequestStatus } from "../domain/async-request";
 
 type Action =
   | EncyclopediaAction
@@ -37,19 +37,27 @@ const reducer = combineReducers({
 // Large payloads break the devtools
 // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
 const actionSanitizer = (action: Action) => {
-  if (
-    (action.type === EncyclopediaActionTypes.LoadCardData ||
-      action.type === EncyclopediaActionTypes.LoadSetData) &&
+  if (action.type === EncyclopediaActionTypes.LoadCardData &&
     action.value.status === AsyncRequestStatus.Success
   ) {
     return {
       ...action,
       value: {
         ...action.value,
-        data: "<<LARGE BLOB>>",
+        data: `<<Omitting large blob. ${action.value.data.length} cards loaded.>>`,
       },
     };
-  } else {
+  } else if (action.type === EncyclopediaActionTypes.LoadSetData &&
+    action.value.status === AsyncRequestStatus.Success
+  ) {
+    return {
+      ...action,
+      value: {
+        ...action.value,
+        data: `<<Omitting large blob. ${action.value.data.length} sets loaded.>>`,
+      },
+    };
+  } else  {
     return action;
   }
 };
@@ -58,7 +66,7 @@ const actionSanitizer = (action: Action) => {
 const stateSanitizer = (state: any /* RootState is defined below */) => {
   return {
     ...state,
-    encyclopedia: "<<LARGE BLOB>>",
+    encyclopedia: `<<Omitting large blob. Encyclopedia contains ${state.encyclopedia.cards.length} cards and ${state.encyclopedia.sets.length} sets.>>`,
   };
 };
 

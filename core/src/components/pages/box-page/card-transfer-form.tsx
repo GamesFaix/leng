@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField } from '@mui/material';
 import * as React from 'react';
 import { icons } from '../../../ui/fontawesome';
-import { BoxCard, BoxCardModule } from "../../../logic/model";
+import { BoxCard, getKey } from "../../../domain/inventory";
 import TransferFormBoxSelector from './transfer-form-box-selector';
 
 type Props = {
@@ -33,7 +33,7 @@ const CardTransferForm = (props: Props) => {
     }
 
     if (isSingle) {
-        const card = props.cards.find(c => BoxCardModule.getKey(c) === props.selectedKeys[0]);
+        const card = props.cards.find(c => getKey(c) === props.selectedKeys[0]);
         const maxCount = card?.count ?? 0;
 
         return (

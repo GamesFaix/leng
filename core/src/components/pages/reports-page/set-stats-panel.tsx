@@ -9,9 +9,9 @@ import {
 import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
-import { Set, Card as ScryfallCard } from "scryfall-api";
-import { getCardsFromBoxes } from "../../../logic/card-filters";
-import { BoxCard } from "../../../logic/model";
+import { Set, Card as ScryfallCard } from "../../../domain/encyclopedia";
+import { getCardsFromBoxes } from "../../../domain/filters";
+import { BoxCard } from "../../../domain/inventory";
 import {
   CheckListVisibility,
   getRarity,
@@ -52,11 +52,12 @@ const createModel = (
     set
       ? {
           set,
-          allCards: encyclopediaCardsBySet[set.code]
-            .filter(c =>
-                // These are usually alternate Chinese arts
-                !c.collector_number.endsWith('s') &&
-                !c.collector_number.endsWith('†')),
+          allCards: encyclopediaCardsBySet[set.code].filter(
+            (c) =>
+              // These are usually alternate Chinese arts
+              !c.collector_number.endsWith("s") &&
+              !c.collector_number.endsWith("†")
+          ),
           ownedCards: ownedCards.filter((c) => c.setAbbrev === set.code),
         }
       : null;
@@ -81,27 +82,26 @@ const SetStatsPanel = (props: Props) => {
   const cardsBySet = useSelector(selectors.setsWithCards);
   const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
 
-  const model = React.useMemo(
-    () => {
-      const codes = [
-        props.parentSetCode,
-        ...sets
-          .filter((s) => s.parent_set_code === props.parentSetCode)
-          .map((s) => s.code),
-      ];
-      const selectedCards = getCardsFromBoxes(boxes).filter((c) => codes.includes(c.setAbbrev));
+  const model = React.useMemo(() => {
+    const codes = [
+      props.parentSetCode,
+      ...sets
+        .filter((s) => s.parent_set_code === props.parentSetCode)
+        .map((s) => s.code),
+    ];
+    const selectedCards = getCardsFromBoxes(boxes).filter((c) =>
+      codes.includes(c.setAbbrev)
+    );
 
-      const selectedSetGroup = setGroupsInBoxes.find(
-        (sg) => props.parentSetCode === sg.parent.code
-      );
-      const selectedSets = selectedSetGroup
-        ? [selectedSetGroup.parent, ...selectedSetGroup.children]
-        : [];
+    const selectedSetGroup = setGroupsInBoxes.find(
+      (sg) => props.parentSetCode === sg.parent.code
+    );
+    const selectedSets = selectedSetGroup
+      ? [selectedSetGroup.parent, ...selectedSetGroup.children]
+      : [];
 
-      return createModel(selectedSets, selectedCards, cardsBySet);
-    },
-    [props.parentSetCode, setGroupsInBoxes, boxes, sets, cardsBySet]
-  );
+    return createModel(selectedSets, selectedCards, cardsBySet);
+  }, [props.parentSetCode, setGroupsInBoxes, boxes, sets, cardsBySet]);
 
   const [visibility, setVisibility] = React.useState(CheckListVisibility.all);
 

@@ -1,7 +1,6 @@
-import { CardDataProvider } from "../logic/interfaces";
+import { CardDataProvider } from "../domain/interfaces";
 import { call, put, select, takeLeading } from "redux-saga/effects";
-import { Card, Set } from "scryfall-api";
-import { AppSettings, AsyncRequestStatus } from "../logic/model";
+import { Card, Set } from "../domain/encyclopedia";
 import {
   encyclopediaActions,
   EncyclopediaActionTypes,
@@ -9,6 +8,8 @@ import {
   LoadSetDataAction,
 } from "../store/encyclopedia";
 import { selectors } from "../store";
+import { AsyncRequestStatus } from "../domain/async-request";
+import { AppSettings } from "../domain/config";
 
 export const getCardDataSaga = (provider: CardDataProvider) => {
   function* loadCardData(action: LoadCardDataAction) {
@@ -19,6 +20,7 @@ export const getCardDataSaga = (provider: CardDataProvider) => {
     try {
       const settings: AppSettings = yield select(selectors.settings);
       const cards: Card[] = yield call(() => provider.getAllCards(settings));
+      console.log(`saga/cardData.getCardDataSaga - received ${cards.length} cards`)
       yield put(encyclopediaActions.loadCardDataSuccess(cards));
     } catch (error) {
       yield put(encyclopediaActions.loadCardDataError(`${error}`));

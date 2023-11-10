@@ -1,13 +1,13 @@
 import { Button, FormControlLabel, TextField } from "@mui/material";
 import * as React from "react";
-import { Format } from "../../../logic/formats";
-import { CardFilter, ColorFilter, ColorFilterRule } from "../../../logic/model";
 import BoxSelector from "./box-selector";
 import ColorRuleSelector from "./color-rule-selector";
 import ColorsSelector from "./color-selector";
 import FormatFilter from "./format-filter";
 import SetFilter from "./set-filter";
 import { CollapsableCard } from "../collapsable-card";
+import { CardFilter, ColorFilterRule, ColorFilter } from "../../../domain/filters";
+import { Format } from "../../../domain/formats";
 
 type Props = {
   filter: CardFilter;

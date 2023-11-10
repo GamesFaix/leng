@@ -1,5 +1,5 @@
-import { Card } from "scryfall-api";
-import { asyncRequest, AsyncRequest, AsyncRequestStatus } from "../logic/model";
+import { Card } from "../domain/encyclopedia";
+import { asyncRequest, AsyncRequest, AsyncRequestStatus } from "../domain/async-request";
 
 export type SearchState = {
   loading: boolean;

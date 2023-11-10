@@ -1,19 +1,16 @@
 import { call, put, select, takeEvery, takeLeading } from "redux-saga/effects";
 import {
-  AppSettings,
-  AsyncRequestStatus,
-  Box,
-  BoxInfo,
-  CardIndex,
-} from "../logic/model";
-import {
   BoxInfosLoadAction,
   BoxLoadAction,
   inventoryActions,
   InventoryActionTypes,
 } from "../store/inventory";
 import { selectors } from "../store";
-import { InventoryReadProvider } from "../logic/interfaces";
+import { InventoryReadProvider } from "../domain/interfaces";
+import { AsyncRequestStatus } from "../domain/async-request";
+import { AppSettings } from "../domain/config";
+import { CardIndex } from "../domain/encyclopedia";
+import { Box, BoxInfo } from "../domain/inventory";
 
 export const getInventoryReadSaga = (provider: InventoryReadProvider) => {
   function* loadBoxInfos(action: BoxInfosLoadAction) {

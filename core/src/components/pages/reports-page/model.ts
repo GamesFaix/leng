@@ -1,5 +1,5 @@
-import { Card, Set } from "scryfall-api";
-import { BoxCard, basicLandNames } from "../../../logic/model";
+import { Card, Set, basicLandNames } from "../../../domain/encyclopedia";
+import { BoxCard } from "../../../domain/inventory";
 
 export type CheckListItem = {
   card: Card;

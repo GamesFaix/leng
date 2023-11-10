@@ -22,7 +22,7 @@ module.exports = [
     // React renderer process
     {
         mode: 'development',
-        entry: './src/react.tsx',
+        entry: './src/main.tsx',
         target: 'electron-renderer',
         devtool: 'source-map',
         module: {
@@ -72,6 +72,7 @@ module.exports = [
         resolve: {
           extensions: ['.ts', '.tsx', '.js'],
           alias: {
+            '@emotion/react': path.resolve('./node_modules/@emotion/react'),
             '@mui/material': path.resolve('./node_modules/@mui/material'),
             react: path.resolve('./node_modules/react'),
             'react-dom': path.resolve('./node_modules/react-dom'),

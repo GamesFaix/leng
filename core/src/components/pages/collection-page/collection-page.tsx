@@ -1,49 +1,85 @@
 import { Card, Container, IconButton, Typography } from "@mui/material";
-import * as React from "react";
 import CardsTable from "./cards-table";
-import { BoxCard, CardFilter } from "../../../logic/model";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../../ui/fontawesome";
 import { CardFilterForm } from "../../common";
+import * as React from "react";
+import { useCapabilities } from "../../../hooks";
+import { CardFilter } from "../../../domain/filters";
+import { BoxCard } from "../../../domain/inventory";
 
 type Props = {
   cards: BoxCard[];
   cardCount: number;
   filter: CardFilter;
   setFilter: (filter: CardFilter) => void;
-  exportCsv: () => void;
+  exportTappedOutCsv: () => void;
+  exportWebJson: () => void;
   submitScryfallSearch: () => void;
 };
 
-const CollectionPage = (props: Props) => {
+const ExportButtons: React.FC<Partial<Props>> = ({
+  exportTappedOutCsv,
+  exportWebJson,
+}) => {
+  const caps = useCapabilities();
+
+  return (
+    <div>
+      {exportTappedOutCsv && caps.export?.tappedOutCsv && (
+        <IconButton
+          title="Export TappedOut CSV"
+          color="primary"
+          onClick={() => exportTappedOutCsv()}
+        >
+          <FontAwesomeIcon icon={icons.export} />
+        </IconButton>
+      )}
+      {exportWebJson && caps.export?.webJson && (
+        <IconButton
+          title="Export Leng-Web JSON"
+          color="primary"
+          onClick={() => exportWebJson()}
+        >
+          <FontAwesomeIcon icon={icons.export} />
+        </IconButton>
+      )}
+    </div>
+  );
+};
+
+const CollectionPage: React.FC<Props> = ({
+  exportTappedOutCsv,
+  exportWebJson,
+  cardCount,
+  filter,
+  setFilter,
+  submitScryfallSearch,
+  cards,
+}) => {
   return (
     <Container style={{ paddingTop: "12px" }}>
       <div style={{ display: "flex" }}>
         <div>
           <Typography variant="h4">Collection</Typography>
           <Typography sx={{ fontStyle: "italic" }}>
-            {props.cardCount} cards
+            {cardCount} cards
           </Typography>
         </div>
-        <div>
-          <IconButton
-            title="Export CSV"
-            color="primary"
-            onClick={() => props.exportCsv()}
-          >
-            <FontAwesomeIcon icon={icons.export} />
-          </IconButton>
-        </div>
+        <ExportButtons
+          exportTappedOutCsv={exportTappedOutCsv}
+          exportWebJson={exportWebJson}
+        />
       </div>
       <br />
       <CardFilterForm
-        filter={props.filter}
-        onChange={props.setFilter}
-        submitScryfallSearch={props.submitScryfallSearch}
+        filter={filter}
+        onChange={setFilter}
+        submitScryfallSearch={submitScryfallSearch}
       />
       <br />
       <Card sx={{ padding: 1 }}>
-        <CardsTable cards={props.cards} />
+        <CardsTable cards={cards} />
       </Card>
     </Container>
   );

@@ -1,10 +1,11 @@
-import { ImagePathProvider } from "leng-core/src/logic/interfaces";
-import { AppSettings, normalizeName } from "leng-core/src/logic/model";
-import { Card } from "scryfall-api";
+import { ImagePathProvider } from "leng-core/src/domain/interfaces";
+import { Card, Set } from "leng-core/src/domain/encyclopedia";
+import { AppSettings } from "leng-core/src/domain/config";
+import { normalizeName } from "leng-core/src/domain/names";
 
-const getSetSymbolPath = (settings: AppSettings, setCode: string): string =>
+const getSetSymbolPath = (settings: AppSettings, set: Set): string =>
   // Need "set-" prefix to avoid naming Conflux icon "con", which is a reserved name in Windows
-  `${settings.dataPath}/encyclopedia/setSymbols/set-${setCode}.svg`;
+  `${settings.dataPath}/encyclopedia/setSymbols/set-${set.code}.svg`;
 
 const getCardImagePath = (settings: AppSettings, card: Card): string => {
   const name = normalizeName(card.name);

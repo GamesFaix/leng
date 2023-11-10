@@ -2,8 +2,8 @@ import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import { Binder } from "../../virtual-binder";
-import { organizePages } from "../../../logic/binder-page-generator";
-import { getCardsFromBoxes } from "../../../logic/card-filters";
+import { organizePages } from "../../../domain/binder-report";
+import { getCardsFromBoxes } from "../../../domain/filters";
 
 type Props = {
   parentSetCode: string | null;

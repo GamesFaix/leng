@@ -1,7 +1,7 @@
 import { Card } from '@mui/material';
 import * as React from 'react';
 import { Grid, GridCellProps } from 'react-virtualized';
-import { BoxCard } from "../../logic/model";
+import { BoxCard } from "../../domain/inventory";
 import BinderPage from './binder-page';
 
 const scale = 60;
