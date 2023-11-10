@@ -21,7 +21,7 @@ const fetchInventoryCached = async (path: string): Promise<Inventory> => {
   }
 
   console.log("fetching inventory JSON file...");
-  const response = await fetch(path);
+  const response = await fetch(path, { cache: "force-cache" });
   console.log("decoding JSON...");
   const inventory: Inventory = await response.json();
   cachedPath = path;
