@@ -2,7 +2,7 @@ import { AppSettings } from "leng-core/src/domain/config";
 import { SettingsProvider } from "leng-core/src/domain/interfaces";
 
 const defaultSettings = {
-  dataPath: "",
+  dataPath: "./data/inventory.json",
 };
 
 const load = () => {
