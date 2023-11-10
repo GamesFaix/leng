@@ -10,7 +10,7 @@
         "start": "npm run build && npm run serve",
         "lint": "eslint . --ext .ts",
         "relink": "cd ../core && npm link && cd ../web && npm link leng-core",
-        "update-scryfall-data": "npx ts-node ./scripts/download-encyclopedia-data.ts"
+        "download-encyclopedia": "npx ts-node ./scripts/download-encyclopedia-data.ts"
     },
     "repository": {
         "type": "git",
