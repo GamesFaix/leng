@@ -11,16 +11,18 @@ const loadFile = async <T>(file: string): Promise<T[]> => {
 
   let lastModified = localStorage.getItem(storageKey);
   const request = new Request(path);
-  if (lastModified) { request.headers.set("If-Modified-Since", lastModified)}
+  if (lastModified) {
+    request.headers.set("If-Modified-Since", lastModified);
+  }
 
   const response = await fetch(request);
-  
+
   lastModified = response.headers.get("last-modified");
   if (lastModified) {
-    console.log("updating last modified date")
-    localStorage.setItem(storageKey, lastModified);    
+    console.log("updating last modified date");
+    localStorage.setItem(storageKey, lastModified);
   }
-  
+
   console.log(`decoding ${file} JSON...`);
   const data: T[] = await response.json();
 
@@ -28,11 +30,9 @@ const loadFile = async <T>(file: string): Promise<T[]> => {
   return data;
 };
 
-const getAllCards = async (): Promise<Card[]> => 
-  loadFile("cards");
+const getAllCards = () => loadFile<Card>("cards");
 
-const getAllSets = async (): Promise<Set[]> => 
-  loadFile("sets");
+const getAllSets = () => loadFile<Set>("sets");
 
 export const cardDataProvider: CardDataProvider = {
   getAllCards,
