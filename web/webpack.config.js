@@ -1,6 +1,7 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const path = require("path");
 const webpack = require("webpack");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   mode: "development",
@@ -47,7 +48,12 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./src/index.html",
     }),
-    new webpack.DefinePlugin({})
+    new webpack.DefinePlugin({}),
+    new CopyWebpackPlugin({
+      patterns: [
+        {from: "favicon.png", to: "images/favicon.png"}
+      ]
+    })
   ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
