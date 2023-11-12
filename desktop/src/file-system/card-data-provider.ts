@@ -52,22 +52,10 @@ async function readOrDownloadJsonFile<T>(
   }
 }
 
-const getAllCards = async (settings: AppSettings) => {
-  const cards = await readOrDownloadJsonFile<Card[]>(
-    settings,
-    "cards",
-    Scryfall.getAllCards
-  );
-  return cards.filter((c) => !c.digital); // Filter out MTGO sets
-};
-
-const getAllSets = async (settings: AppSettings) => {
-  return await readOrDownloadJsonFile<Set[]>(
-    settings,
-    "sets",
-    Scryfall.getAllSets
-  );
-};
+const getAllCards = (settings: AppSettings) =>
+  readOrDownloadJsonFile<Card[]>(settings, "cards", Scryfall.getAllCards);
+const getAllSets = (settings: AppSettings) =>
+  readOrDownloadJsonFile<Set[]>(settings, "sets", Scryfall.getAllSets);
 
 export const cardDataProvider: CardDataProvider = {
   getAllCards,

@@ -1,7 +1,7 @@
 import { Card } from "./types";
 
 export function getVersionLabel(card: Card): string {
-  const numberStr = `#${card.collector_number}`;
+  const numberStr = `#${card.num}`;
 
   let frameEffectsStr = "";
   if (card.frame_effects?.includes("showcase")) {

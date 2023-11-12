@@ -21,7 +21,7 @@ const getFinish = (finish: CardFinish, foil: boolean): CardFinish => {
         scryfallId: c.scryfallId,
         lang: c.lang ?? Language.English,
         finish: getFinish(c.finish, c.foil),
-        collectorsNumber: c.collectorsNumber ?? match.collector_number,
+        collectorsNumber: c.collectorsNumber ?? match.num,
         count: c.count,
         color: match?.colors ?? [],
         colorIdentity: match?.color_identity ?? [],

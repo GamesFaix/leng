@@ -1,6 +1,43 @@
-import { Card, Set } from "scryfall-api";
+import {
+  FrameEffect,
+  Legalities,
+  Color,
+  Rarity,
+  Layout,
+  ImageUris,
+  SetType,
+} from "scryfall-api";
 
-export { Card, Set, Color, Legalities } from "scryfall-api";
+export { Color, Legalities, FrameEffect } from "scryfall-api";
+
+// Partial scryfall card
+export type Card = {
+  num: string;
+  color_identity: Color[];
+  colors?: Color[];
+  foil: boolean;
+  frame_effects?: (keyof typeof FrameEffect)[];
+  id: string;
+  image_uri?: string;
+  layout: keyof typeof Layout;
+  legalities: Legalities;
+  name: string;
+  nonfoil: boolean;
+  rarity: keyof typeof Rarity;
+  scryfall_uri: string;
+  set: string;
+  set_name: string;
+};
+
+// Partial scryfall set
+export type Set = {
+  code: string;
+  icon_svg_uri: string;
+  name: string;
+  parent_set_code?: string;
+  released_at?: string;
+  set_type: keyof typeof SetType;
+};
 
 export type SetIndex = {
   [abbrev: string]: Set;
