@@ -55,8 +55,8 @@ const createModel = (
           allCards: encyclopediaCardsBySet[set.code].filter(
             (c) =>
               // These are usually alternate Chinese arts
-              !c.collector_number.endsWith("s") &&
-              !c.collector_number.endsWith("†")
+              !c.num.endsWith("s") &&
+              !c.num.endsWith("†")
           ),
           ownedCards: ownedCards.filter((c) => c.setAbbrev === set.code),
         }

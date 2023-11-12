@@ -1,5 +1,11 @@
-import { Card, SearchOptions, Set, Cards } from "scryfall-api";
+import {
+  Card as ScryCard,
+  SearchOptions,
+  Set as ScrySet,
+  Cards,
+} from "scryfall-api";
 import { BulkData, ScryfallResponse } from "./types";
+import { Card, Set } from "../encyclopedia";
 
 const baseUrl = "https://api.scryfall.com";
 
@@ -16,17 +22,52 @@ const getBulkData = async () => {
   return defaultCardsInfo;
 };
 
+const removeExtraCardProperties = (c: ScryCard): Card => ({
+  num: c.collector_number,
+  color_identity: c.color_identity,
+  colors: c.colors,
+  foil: c.foil,
+  frame_effects: c.frame_effects,
+  id: c.id,
+  image_uri:
+    c.image_uris?.small ??
+    c.image_uris?.normal ??
+    c.image_uris?.large ??
+    c.image_uris?.png,
+  layout: c.layout,
+  legalities: c.legalities,
+  name: c.name,
+  nonfoil: c.nonfoil,
+  rarity: c.rarity,
+  scryfall_uri: c.scryfall_uri,
+  set: c.set,
+  set_name: c.set_name,
+});
+
+// Filters out MTGO and Alchemy
+const nonDigital = (c: ScryCard) => !c.digital;
+
 export const getAllCards = async (): Promise<Card[]> => {
   const bulkData = await getBulkData();
   const httpResponse2 = await fetch(bulkData.download_uri);
-  const cards: Card[] = await httpResponse2.json();
-  return cards.filter((c) => !c.digital); // Filter out MTGO sets
+  const cards: ScryCard[] = await httpResponse2.json();
+  return cards.filter(nonDigital).map(removeExtraCardProperties);
 };
 
-export const getAllSets = async () : Promise<Set[]> => {
+const removeExtraSetProperties = (s: ScrySet): Set => ({
+  code: s.code,
+  icon_svg_uri: s.icon_svg_uri,
+  name: s.name,
+  parent_set_code: s.parent_set_code,
+  released_at: s.released_at,
+  set_type: s.set_type,
+});
+
+export const getAllSets = async (): Promise<Set[]> => {
   const httpResponse = await fetch(`${baseUrl}/sets`);
-  const scryfallResponse: ScryfallResponse<Set[]> = await httpResponse.json();
-  return scryfallResponse.data;
+  const scryfallResponse: ScryfallResponse<ScrySet[]> =
+    await httpResponse.json();
+  return scryfallResponse.data.map(removeExtraSetProperties);
 };
 
 const options: SearchOptions = {
@@ -35,5 +76,6 @@ const options: SearchOptions = {
 };
 
 export async function searchScryfall(query: string): Promise<Card[]> {
-  return await Cards.search(query, options).all();
+  const results = await Cards.search(query, options).all();
+  return results.filter(nonDigital).map(removeExtraCardProperties);
 }

@@ -92,8 +92,8 @@ function getFoilOptions(card: Card | null) {
 
 function compareCards(a: Card, b: Card) {
   const pattern = /(\d+)(.*)/;
-  const matchA = pattern.exec(a.collector_number);
-  const matchB = pattern.exec(b.collector_number);
+  const matchA = pattern.exec(a.num);
+  const matchB = pattern.exec(b.num);
   const numA = Number(matchA![1]);
   const numB = Number(matchB![1]);
   if (numA < numB) {
@@ -316,7 +316,7 @@ const CardForm = (props: Props) => {
       count: state.count,
       scryfallId: state.scryfallId,
       lang: state.lang,
-      collectorsNumber: selectedCard.collector_number,
+      collectorsNumber: selectedCard.num,
       color: selectedCard.colors ?? [],
       colorIdentity: selectedCard.color_identity,
       versionLabel: getVersionLabel(selectedCard),

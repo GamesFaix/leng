@@ -5,13 +5,9 @@ import { Card, Set } from "leng-core/src/domain/encyclopedia";
 const getSetSymbolPath = (_: AppSettings, set: Set): string => set.icon_svg_uri;
 
 const getCardImagePath = (_: AppSettings, card: Card): string =>
-  card.image_uris?.small ??
-  card.image_uris?.normal ??
-  card.image_uris?.large ??
-  card.image_uris?.png ??
-  "";
+  card.image_uri ?? "";
 
-export const imagePathProvider : ImagePathProvider = {
+export const imagePathProvider: ImagePathProvider = {
   getSetSymbolPath,
   getCardImagePath,
 };

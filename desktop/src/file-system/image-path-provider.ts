@@ -9,7 +9,7 @@ const getSetSymbolPath = (settings: AppSettings, set: Set): string =>
 
 const getCardImagePath = (settings: AppSettings, card: Card): string => {
   const name = normalizeName(card.name);
-  return `${settings.dataPath}/encyclopedia/cardImages/set-${card.set}/${name}-${card.collector_number}.jpg`;
+  return `${settings.dataPath}/encyclopedia/cardImages/set-${card.set}/${name}-${card.num}.jpg`;
 };
 
 export const imagePathProvider: ImagePathProvider = {

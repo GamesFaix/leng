@@ -11,7 +11,7 @@ const createChecklist = (model: SetCompletionModel): CheckListItem[] =>
   model.allCards.map((c) => ({
     card: c,
     has: model.ownedCards.some(
-      (bc) => bc.collectorsNumber === c.collector_number
+      (bc) => bc.collectorsNumber === c.num
     ),
   }));
 

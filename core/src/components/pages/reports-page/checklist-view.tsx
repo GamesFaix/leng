@@ -21,7 +21,7 @@ const ChecklistView = (props: Props) => {
         break;
     }
     return orderBy(filtered, (x) =>
-      normalizeCollectorsNumber(x.card.collector_number)
+      normalizeCollectorsNumber(x.card.num)
     );
   }, [props]);
 
@@ -30,7 +30,7 @@ const ChecklistView = (props: Props) => {
       {items.map((item) => (
         <li key={item.card.id} style={{ display: "flex" }}>
           <Checkbox checked={item.has} readOnly disabled />
-          <Typography variant="body2">{`${item.card.name} (${item.card.collector_number})`}</Typography>
+          <Typography variant="body2">{`${item.card.name} (${item.card.num})`}</Typography>
         </li>
       ))}
     </ul>

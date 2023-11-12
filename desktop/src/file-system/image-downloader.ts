@@ -37,12 +37,7 @@ const downloadCardImage = async (
   card: Card
 ): Promise<void> => {
   const path = imagePathProvider.getCardImagePath(settings, card);
-  const uri =
-    card.image_uris?.small ??
-    card.image_uris?.normal ??
-    card.image_uris?.large ??
-    card.image_uris?.png ??
-    "";
+  const uri = card.image_uri ?? "";
   return downloadFileIfMissing(path, uri);
 };
 
