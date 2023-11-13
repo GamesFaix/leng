@@ -1,6 +1,4 @@
 import { ThemeProvider } from "@mui/material";
-import * as React from "react";
-import * as ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from "leng-core/src/components/app";
 import { store } from "leng-core/src/store";
@@ -22,6 +20,7 @@ import {
 import * as Uuid from "uuid";
 import { imageDownloader } from "./logic/image-downloader";
 import { ClientCapabilities } from "leng-core/src/domain/config";
+import { createRoot } from "react-dom/client";
 
 const capabilities: Partial<ClientCapabilities> = {
   view: {
@@ -50,9 +49,7 @@ const initReduxSaga = () => {
 const initReact = () => {
   console.log("initReact");
 
-  const root = ReactDOM.createRoot(
-    document.getElementById("root") as HTMLElement
-  );
+  const root = createRoot(document.getElementById("root") as HTMLElement);
 
   root.render(
     <Provider store={store}>

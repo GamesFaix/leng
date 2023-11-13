@@ -1,9 +1,9 @@
-import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import { Binder } from "../../virtual-binder";
 import { organizePages } from "../../../domain/binder-report";
 import { getCardsFromBoxes } from "../../../domain/filters";
+import { useMemo } from "react";
 
 type Props = {
   parentSetCode: string | null;
@@ -14,7 +14,7 @@ const SetBinderPanel = (props: Props) => {
   const sets = useSelector(selectors.sets);
   const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
 
-  const pages = React.useMemo(() => {
+  const pages = useMemo(() => {
     if (!props.parentSetCode) {
       return [];
     }

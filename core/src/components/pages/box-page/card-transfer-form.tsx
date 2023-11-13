@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField } from '@mui/material';
-import * as React from 'react';
 import { icons } from '../../../ui/fontawesome';
 import { BoxCard, getKey } from "../../../domain/inventory";
 import TransferFormBoxSelector from './transfer-form-box-selector';
+import { useState } from 'react';
 
 type Props = {
     disabled: boolean,
@@ -14,8 +14,8 @@ type Props = {
 }
 
 const CardTransferForm = (props: Props) => {
-    const [boxName, setBoxName] = React.useState<string | null>(null);
-    const [count, setCount] = React.useState(1);
+    const [boxName, setBoxName] = useState<string | null>(null);
+    const [count, setCount] = useState(1);
     const isSingle = props.selectedKeys.length === 1;
     const disabled = props.disabled || !boxName || props.selectedKeys.length === 0;
 

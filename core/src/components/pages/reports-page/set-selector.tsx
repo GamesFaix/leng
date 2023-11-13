@@ -1,9 +1,9 @@
 import { Autocomplete, TextField } from "@mui/material";
-import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import { Set } from "../../../domain/encyclopedia";
 import { SetSymbol } from "../../common";
+import { SyntheticEvent, useCallback, useMemo } from "react";
 
 type SetSelectorOption = {
   label: string;
@@ -32,7 +32,7 @@ const SetSelector = (props: {
   setSelectedSetCode: (code: string | null) => void;
 }) => {
   const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
-  const options = React.useMemo<SetSelectorOption[]>(
+  const options = useMemo<SetSelectorOption[]>(
     () =>
       setGroupsInBoxes.map((s) => ({ label: s.parent.name, parent: s.parent })),
     [setGroupsInBoxes]
@@ -40,8 +40,9 @@ const SetSelector = (props: {
   const selectedOption =
     options.find((o) => o.parent.code === props.selectedSetCode) ?? null;
 
-  const onSelection = React.useCallback(
-    (e: React.SyntheticEvent<Element, Event>, value: SetSelectorOption | null) => props.setSelectedSetCode(value?.parent.code ?? null),
+  const onSelection = useCallback(
+    (e: SyntheticEvent<Element, Event>, value: SetSelectorOption | null) =>
+      props.setSelectedSetCode(value?.parent.code ?? null),
     [props.setSelectedSetCode]
   );
 

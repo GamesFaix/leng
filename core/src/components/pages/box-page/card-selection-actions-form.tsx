@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, Typography } from '@mui/material';
-import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { icons } from '../../../ui/fontawesome';
 import { BoxCard, getKey } from "../../../domain/inventory";

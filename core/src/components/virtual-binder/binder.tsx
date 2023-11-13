@@ -1,8 +1,8 @@
 import { Card } from '@mui/material';
-import * as React from 'react';
 import { Grid, GridCellProps } from 'react-virtualized';
 import { BoxCard } from "../../domain/inventory";
 import BinderPage from './binder-page';
+import { useCallback } from 'react';
 
 const scale = 60;
 
@@ -11,7 +11,7 @@ type Props = {
 }
 
 export const Binder = (props: Props) => {
-    const renderCell = React.useCallback(({ columnIndex, style }: GridCellProps) => {
+    const renderCell = useCallback(({ columnIndex, style }: GridCellProps) => {
         const page = props.pages[columnIndex];
         return (
             <BinderPage

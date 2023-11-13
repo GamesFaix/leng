@@ -1,9 +1,9 @@
 import { CircularProgress } from "@mui/material";
-import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { encyclopediaActions } from "../../store/encyclopedia";
 import { selectors } from "../../store";
 import { useImagePaths } from "../../hooks";
+import { useEffect, useMemo } from "react";
 
 type Props = {
   scryfallId: string;
@@ -13,7 +13,7 @@ const LoadedImage = (props: Props) => {
   const card = useSelector(selectors.card(props.scryfallId));
   const settings = useSelector(selectors.settings);
   const imagePathProvider = useImagePaths();
-  const imagePath = React.useMemo(
+  const imagePath = useMemo(
     () => imagePathProvider.getCardImagePath(settings, card),
     [card, settings, imagePathProvider]
   );
@@ -35,7 +35,7 @@ export const CardImage = (props: Props) => {
     selectors.isCardImageLoaded(props.scryfallId)
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isImageLoaded) {
       dispatch(encyclopediaActions.loadCardImageStart(props.scryfallId));
     }

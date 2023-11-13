@@ -1,10 +1,10 @@
 import { Tooltip } from "@mui/material";
-import * as React from "react";
 import { CardImage } from "./card-image";
+import { ReactElement } from "react";
 
 type Props = {
   scryfallId: string;
-  children: React.ReactElement;
+  children: ReactElement;
 };
 
 export const CardImageTooltip = (props: Props) => (

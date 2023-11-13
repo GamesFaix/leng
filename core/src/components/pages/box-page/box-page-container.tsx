@@ -1,4 +1,3 @@
-import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import "react-virtualized/styles.css";
@@ -6,7 +5,7 @@ import { inventoryActions } from "../../../store/inventory";
 import BoxPage from "./box-page";
 import { selectors } from "../../../store";
 import { editingActions } from "../../../store/editing";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { searchActions } from "../../../store/search";
 import { defaultCardFilter, getCards } from "../../../domain/filters";
 import { Box, BoxCard, areSame, getKey } from "../../../domain/inventory";
@@ -32,17 +31,17 @@ export const BoxPageContainer = () => {
   const lastSavedBoxState = useSelector(selectors.box(name!));
   const allCardsBySet = useSelector(selectors.setsWithCards);
 
-  const [oldBox, setOldBox] = React.useState(lastSavedBoxState);
-  const [newBox, setNewBox] = React.useState(lastSavedBoxState);
-  const [cardToEdit, setCardToEdit] = React.useState<BoxCard | null>(null);
-  const [selectedKeys, setSelectedKeys] = React.useState<string[]>([]);
-  const [filter, setFilter] = React.useState(defaultCardFilter);
+  const [oldBox, setOldBox] = useState(lastSavedBoxState);
+  const [newBox, setNewBox] = useState(lastSavedBoxState);
+  const [cardToEdit, setCardToEdit] = useState<BoxCard | null>(null);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [filter, setFilter] = useState(defaultCardFilter);
 
   const cardCount = (newBox?.cards ?? [])
     .map((c) => c.count)
     .reduce((a, b) => a + b, 0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     // Updated data after transfer saga finishes
     if (oldBox !== lastSavedBoxState) {
       setOldBox(lastSavedBoxState);

@@ -1,5 +1,4 @@
 import { MenuItem, Select, SelectChangeEvent } from "@mui/material";
-import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import {
@@ -8,6 +7,7 @@ import {
   customFormats,
   emptyFormat,
 } from "../../../domain/formats";
+import { useCallback, useMemo } from "react";
 
 type Props = {
   value: Format | null;
@@ -81,13 +81,13 @@ const FormatFilter = (props: Props) => {
     (name) => ({ type: FormatType.Standard, name })
   );
 
-  const sortedFormats = React.useMemo(
+  const sortedFormats = useMemo(
     () =>
       sortFormats([emptyFormat].concat(standardFormats).concat(customFormats)),
     [standardFormats]
   );
 
-  const onSelect = React.useCallback(
+  const onSelect = useCallback(
     (e: SelectChangeEvent<string>) => {
       const name = e.target.value === "" ? null : e.target.value;
       const format = sortedFormats.find((f) => f.name === name) ?? null;

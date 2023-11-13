@@ -1,5 +1,4 @@
 import { Button, FormControlLabel, TextField } from "@mui/material";
-import * as React from "react";
 import BoxSelector from "./box-selector";
 import ColorRuleSelector from "./color-rule-selector";
 import ColorsSelector from "./color-selector";

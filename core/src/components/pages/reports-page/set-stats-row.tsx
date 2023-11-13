@@ -1,18 +1,16 @@
 import { LinearProgress, TableCell, TableRow, Typography } from "@mui/material";
-import * as React from "react";
 import ChecklistView from "./checklist-view";
 import {
   CheckListItem,
   CheckListVisibility,
   SetCompletionModel,
 } from "./model";
+import { useState } from "react";
 
 const createChecklist = (model: SetCompletionModel): CheckListItem[] =>
   model.allCards.map((c) => ({
     card: c,
-    has: model.ownedCards.some(
-      (bc) => bc.collectorsNumber === c.num
-    ),
+    has: model.ownedCards.some((bc) => bc.collectorsNumber === c.num),
   }));
 
 const CompletionCell = (props: { checkList: CheckListItem[] }) => {
@@ -34,7 +32,10 @@ const CompletionCell = (props: { checkList: CheckListItem[] }) => {
   );
 };
 
-const ChecklistCell = (props: { checklist: CheckListItem[], visibility: CheckListVisibility }) => {
+const ChecklistCell = (props: {
+  checklist: CheckListItem[];
+  visibility: CheckListVisibility;
+}) => {
   return (
     <TableCell>
       <ChecklistView
@@ -46,9 +47,9 @@ const ChecklistCell = (props: { checklist: CheckListItem[], visibility: CheckLis
 };
 
 type Props = {
-    label: string;
-    model: SetCompletionModel | null;
-    visibility: CheckListVisibility;
+  label: string;
+  model: SetCompletionModel | null;
+  visibility: CheckListVisibility;
 };
 
 const SetStatsRow = (props: Props) => {
@@ -58,7 +59,7 @@ const SetStatsRow = (props: Props) => {
 
   const checklist = createChecklist(props.model);
 
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <TableRow onClick={() => setExpanded(!expanded)}>
@@ -66,7 +67,7 @@ const SetStatsRow = (props: Props) => {
         {props.label}
       </TableCell>
       {expanded ? (
-        <ChecklistCell checklist={checklist} visibility={props.visibility}/>
+        <ChecklistCell checklist={checklist} visibility={props.visibility} />
       ) : (
         <CompletionCell checkList={checklist} />
       )}

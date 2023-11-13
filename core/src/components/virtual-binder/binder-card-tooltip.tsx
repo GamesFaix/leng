@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 import { orderBy } from "lodash";
-import * as React from "react";
 import { CardFinish, Language } from "../../domain/encyclopedia";
 import { BoxCard } from "../../domain/inventory";
 import { FlagIcon } from "../common";
+import { Fragment } from "react";
 
 type Props = {
   cardGroup: BoxCard[];
@@ -25,12 +25,12 @@ function getCardLabel(card: BoxCard) {
   const langHint = getLanguageHint(card.lang);
 
   return (
-    <React.Fragment key={card.scryfallId}>
+    <Fragment key={card.scryfallId}>
       <br />
       <span>
         {card.count} <FlagIcon lang={card.lang} /> {langHint} {finish}
       </span>
-    </React.Fragment>
+    </Fragment>
   );
 }
 

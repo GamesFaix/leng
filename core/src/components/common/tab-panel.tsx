@@ -1,8 +1,8 @@
 import { Box, Typography } from "@mui/material";
-import * as React from "react";
+import { ReactElement } from "react";
 
 type Props = {
-  children: React.ReactElement;
+  children: ReactElement;
   hidden?: boolean;
 };
 

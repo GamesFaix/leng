@@ -1,5 +1,4 @@
 import { ThemeProvider } from "@mui/material";
-import * as React from "react";
 import * as ReactDOM from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from "leng-core/src/components/app";

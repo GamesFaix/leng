@@ -1,8 +1,8 @@
 import { orderBy } from 'lodash';
-import * as React from 'react';
 import { Column, SortDirection, SortDirectionType, Table } from 'react-virtualized';
 import { BoxCard } from "../../../domain/inventory";
 import { SetCell, NameCell, FinishCell } from '../../common/card-table-cells';
+import { useEffect, useState } from 'react';
 
 type Props = {
     cards: BoxCard[],
@@ -25,12 +25,12 @@ function sortInner(cards: BoxCard[], by: string, dir: SortDirectionType) : BoxCa
 }
 
 const CardsTable = (props: Props) => {
-    const [sortBy, setSortBy] = React.useState('name');
-    const [sortDirection, setSortDirection] = React.useState<SortDirectionType>(SortDirection.ASC);
-    const [unsortedList, setUnsortedList] = React.useState(props.cards);
-    const [sortedList, setSortedList] = React.useState(props.cards);
+    const [sortBy, setSortBy] = useState('name');
+    const [sortDirection, setSortDirection] = useState<SortDirectionType>(SortDirection.ASC);
+    const [unsortedList, setUnsortedList] = useState(props.cards);
+    const [sortedList, setSortedList] = useState(props.cards);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (props.cards !== unsortedList) {
             setUnsortedList(props.cards);
             setSortedList(sortInner(props.cards, sortBy, sortDirection));
