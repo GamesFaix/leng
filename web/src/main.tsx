@@ -17,7 +17,7 @@ import {
   cardDataProvider,
   inventoryReadProvider,
 } from "./logic";
-import * as Uuid from "uuid";
+import { v4 as createUuid } from "uuid";
 import { imageDownloader } from "./logic/image-downloader";
 import { ClientCapabilities } from "leng-core/src/domain/config";
 import { createRoot } from "react-dom/client";
@@ -67,7 +67,7 @@ const initReact = () => {
 };
 
 const init = () => {
-  const id = Uuid.v4();
+  const id = createUuid();
   console.log(`initializing leng instance ${id}`);
 
   if (isSingletonRegistered()) {

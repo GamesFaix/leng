@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { promises, existsSync } from "fs";
 import { Card, Set } from "leng-core/src/domain/encyclopedia";
 import { createDirForFileIfMissing } from "../file-system/file-helpers";
 import { AppSettings } from "leng-core/src/domain/config";
@@ -10,14 +10,14 @@ const downloadFile = async (fromUrl: string, toPath: string) => {
   const buffer = await response.arrayBuffer();
   const data = new Uint8Array(buffer);
   createDirForFileIfMissing(toPath);
-  await fs.promises.writeFile(toPath, data);
+  await promises.writeFile(toPath, data);
 };
 
 const downloadFileIfMissing = async (
   localPath: string,
   sourceUrl: string
 ): Promise<void> => {
-  if (!fs.existsSync(localPath)) {
+  if (!existsSync(localPath)) {
     // createDirForFileIfMissing(localPath); // TODO: This isn't working, folder must pre-exist!
     await downloadFile(sourceUrl, localPath);
   }

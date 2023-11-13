@@ -1,5 +1,5 @@
 import { Card, Set } from "leng-core/src/domain/encyclopedia";
-import * as fs from "fs";
+import { promises } from "fs";
 import { createFileAndDirectoryIfRequired } from "../file-system/file-helpers";
 import { AppSettings } from "leng-core/src/domain/config";
 import { CardDataProvider } from "leng-core/src/domain/interfaces";
@@ -7,7 +7,7 @@ import * as Scryfall from "leng-core/src/domain/scryfall";
 
 async function getFileCreatedDate(path: string): Promise<Date | null> {
   try {
-    const stats = await fs.promises.stat(path);
+    const stats = await promises.stat(path);
     return stats.mtime;
   } catch {
     return null;
@@ -29,7 +29,7 @@ function isExpired(createdDate: Date | null) {
 }
 
 async function readFile(path: string): Promise<string> {
-  const buffer = await fs.promises.readFile(path);
+  const buffer = await promises.readFile(path);
   return buffer.toString();
 }
 
