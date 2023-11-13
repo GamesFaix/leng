@@ -4,7 +4,7 @@ import { Card, Set } from "leng-core/src/domain/encyclopedia";
 const dir = "../../data/encyclopedia";
 
 const loadFile = async <T>(file: string): Promise<T[]> => {
-  const path = `${dir}/${file}.json`;
+  const path = `${dir}/${file}.json.gz`;
   console.log(`loadFile ${file}`);
 
   // TODO: Fix caching
