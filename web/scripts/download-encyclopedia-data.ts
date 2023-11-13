@@ -1,33 +1,31 @@
 import { writeFileSync, existsSync, mkdirSync } from "fs";
 import { resolve } from "path";
 import { getAllCards, getAllSets } from "leng-core/src/domain/scryfall";
-import { Card, Set } from "leng-core/src/domain/encyclopedia";
+import { gzip } from "node-gzip";
 
 const dir = resolve(__dirname, "../dist/data/encyclopedia");
 
-const downloadCards = async () => {
-  console.log("Downloading card data...");
-  const cards: Card[] = await getAllCards();
-  console.log(`Found ${cards.length} cards.`);
+const downloadFile = async <T>(
+  fileName: string,
+  getData: () => Promise<T[]>
+) => {
+  console.log(`Downloading ${fileName} data...`);
+  const data = await getData();
+  console.log(`Found ${data.length} ${fileName}.`);
 
-  const path = resolve(`${dir}/cards.json`);
-  console.log(`Saving card data to ${path}...`);
-  const json = JSON.stringify(cards);
+  const file = resolve(`${dir}/${fileName}`);
+  console.log(`Saving ${fileName} data to ${file}.json...`);
+  const json = JSON.stringify(data);
+  writeFileSync(`${file}.json`, json);
 
-  writeFileSync(path, json);
+  console.log("Saving zipped");
+  const zip = await gzip(json);
+  writeFileSync(`${file}.json.gz`, zip);
 };
 
-const downloadSets = async () => {
-  console.log("Downloading set data...");
-  const sets: Set[] = await getAllSets();
-  console.log(`Found ${sets.length} sets.`);
+const downloadCards = () => downloadFile("cards", getAllCards);
 
-  const path = resolve(`${dir}/sets.json`);
-  console.log(`Saving set data to ${path}...`);
-  const json = JSON.stringify(sets);
-
-  writeFileSync(path, json);
-};
+const downloadSets = () => downloadFile("sets", getAllSets);
 
 const makeDirIfMissing = (path: string) => {
   if (existsSync(path)) {

@@ -7,21 +7,22 @@ const loadFile = async <T>(file: string): Promise<T[]> => {
   const path = `${dir}/${file}.json`;
   console.log(`loadFile ${file}`);
 
-  const storageKey = `encyclopedia-${file}-last-modified`;
+  // TODO: Fix caching
+  // const storageKey = `encyclopedia-${file}-last-modified`;
 
-  let lastModified = localStorage.getItem(storageKey);
+  // let lastModified = localStorage.getItem(storageKey);
   const request = new Request(path);
-  if (lastModified) {
-    request.headers.set("If-Modified-Since", lastModified);
-  }
+  // if (lastModified) {
+  //   request.headers.set("If-Modified-Since", lastModified);
+  // }
 
   const response = await fetch(request);
 
-  lastModified = response.headers.get("last-modified");
-  if (lastModified) {
-    console.log("updating last modified date");
-    localStorage.setItem(storageKey, lastModified);
-  }
+  // lastModified = response.headers.get("last-modified");
+  // if (lastModified) {
+  //   console.log("updating last modified date");
+  //   localStorage.setItem(storageKey, lastModified);
+  // }
 
   console.log(`decoding ${file} JSON...`);
   const data: T[] = await response.json();
