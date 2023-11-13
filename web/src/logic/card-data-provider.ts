@@ -7,7 +7,8 @@ const loadFile = async <T>(file: string): Promise<T[]> => {
   const path = `${dir}/${file}.json`;
   console.log(`loadFile ${file}`);
 
-  const storageKey = `encyclopedia-${file}-last-modified`;
+  // TODO: Fix caching
+  // const storageKey = `encyclopedia-${file}-last-modified`;
 
   // let lastModified = localStorage.getItem(storageKey);
   const request = new Request(path);
