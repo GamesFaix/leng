@@ -25,7 +25,9 @@ const setGzipEncoding = async (file: string) => {
     Bucket: AWS_S3_BUCKET,
     Key: file,
     CopySource: `${AWS_S3_BUCKET}/${file}`,
-    ContentEncoding: "gzip",
+    Metadata: {
+        "Content-Encoding": "gzip"
+    }
   };
   const cmd = new CopyObjectCommand(param);
   console.log(`updating metadata on ${file}`);
