@@ -25,6 +25,8 @@ const setGzipEncoding = async (file: string) => {
     Bucket: AWS_S3_BUCKET,
     Key: file,
     CopySource: `${AWS_S3_BUCKET}/${file}`,
+
+    // TODO: Header not getting set
     Metadata: {
         "Content-Encoding": "gzip"
     }

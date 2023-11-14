@@ -32,37 +32,38 @@ jobs:
       working-directory: './web'
       run: npm run relink
 
-    # - name: Build - Web
-    #   working-directory: './web'
-    #   run: npm run build:prod
-
-    # - name: Download Encyclopedia
-    #   working-directory: './web'
-    #   run: npm run download-encyclopedia
-
-    # - name: Predeploy
-    #   working-directory: './web'
-    #   run: npm run pre-deploy
-    #   env:
-    #     AWS_REGION: ${{ secrets.AWS_REGION }}
-    #     AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-
-    # - name: Deploy to S3
-    #   uses: jakejarvis/s3-sync-action@master
-    #   with:
-    #     args: --acl public-read --delete
-    #   env:
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    #     AWS_REGION: ${{ secrets.AWS_REGION }}
-    #     AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-    #     SOURCE_DIR: "web/dist"
-
-    - name: Postdeploy
+    - name: Build - Web
       working-directory: './web'
-      run: npm run post-deploy
+      run: npm run build:prod
+
+    - name: Download Encyclopedia
+      working-directory: './web'
+      run: npm run download-encyclopedia
+
+    - name: Predeploy
+      working-directory: './web'
+      run: npm run pre-deploy
+      env:
+        AWS_REGION: ${{ secrets.AWS_REGION }}
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+
+    - name: Deploy to S3
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --acl public-read --delete
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: ${{ secrets.AWS_REGION }}
         AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+        SOURCE_DIR: "web/dist"
+
+    # TODO: Fix this step
+    # - name: Postdeploy
+    #   working-directory: './web'
+    #   run: npm run post-deploy
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    #     AWS_REGION: ${{ secrets.AWS_REGION }}
+    #     AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
