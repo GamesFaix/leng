@@ -1,5 +1,4 @@
 import { CircularProgress } from "@mui/material";
-import * as React from 'react';
 
 type Props = {
   message: string;

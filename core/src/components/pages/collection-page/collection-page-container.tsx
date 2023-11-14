@@ -1,5 +1,4 @@
-import * as React from "react";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState } from "react";
 import CollectionPage from "./collection-page";
 import { useDispatch, useSelector } from "react-redux";
 import { selectors } from "../../../store";
@@ -13,7 +12,7 @@ function getCount(cards: BoxCard[]): number {
 }
 
 export const CollectionPageContainer = () => {
-  const [filter, setFilter] = React.useState(defaultCardFilter);
+  const [filter, setFilter] = useState(defaultCardFilter);
   const dispatch = useDispatch();
   const boxes = useSelector(selectors.boxes);
   const setsWithCards = useSelector(selectors.setsWithCards);

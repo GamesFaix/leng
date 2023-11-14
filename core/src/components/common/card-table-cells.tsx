@@ -1,5 +1,4 @@
 import { Checkbox } from "@mui/material";
-import * as React from "react";
 import { TableCellProps } from "react-virtualized";
 import { SetSymbol } from "./set-symbol";
 import { selectors } from "../../store";
@@ -7,12 +6,13 @@ import { CardImageTooltip } from "./card-image-tooltip";
 import { useSelector } from "react-redux";
 import { CardFinish } from "../../domain/encyclopedia";
 import { BoxCard } from "../../domain/inventory";
+import { FC } from "react";
 
 export const CheckboxCell = (props: TableCellProps) => (
   <Checkbox checked={props.cellData} disabled />
 );
 
-export const SetCell: React.FC<TableCellProps> = (props: TableCellProps) => {
+export const SetCell: FC<TableCellProps> = (props: TableCellProps) => {
   const abbrev = props.cellData;
   const set = useSelector(selectors.set(abbrev));
   return (
@@ -23,7 +23,7 @@ export const SetCell: React.FC<TableCellProps> = (props: TableCellProps) => {
   );
 };
 
-export const NameCell: React.FC<TableCellProps> = (props: TableCellProps) => {
+export const NameCell: FC<TableCellProps> = (props: TableCellProps) => {
   const card: BoxCard = props.rowData;
   return (
     <CardImageTooltip scryfallId={card.scryfallId}>
@@ -32,7 +32,7 @@ export const NameCell: React.FC<TableCellProps> = (props: TableCellProps) => {
   );
 };
 
-export const FinishCell: React.FC<TableCellProps> = (props: TableCellProps) => {
+export const FinishCell: FC<TableCellProps> = (props: TableCellProps) => {
   function format(finish: CardFinish) {
     if (finish === CardFinish.Normal) return "";
     const head = finish.slice(0, 1).toUpperCase();

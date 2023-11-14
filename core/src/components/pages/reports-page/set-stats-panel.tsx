@@ -6,7 +6,6 @@ import {
   TableBody,
   TableContainer,
 } from "@mui/material";
-import * as React from "react";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import { Set, Card as ScryfallCard } from "../../../domain/encyclopedia";
@@ -20,6 +19,7 @@ import {
   SetCompletionModel,
 } from "./model";
 import SetStatsRow from "./set-stats-row";
+import { useCallback, useMemo, useState } from "react";
 
 const ofRarity = (
   rarity: Rarity,
@@ -55,8 +55,7 @@ const createModel = (
           allCards: encyclopediaCardsBySet[set.code].filter(
             (c) =>
               // These are usually alternate Chinese arts
-              !c.num.endsWith("s") &&
-              !c.num.endsWith("†")
+              !c.num.endsWith("s") && !c.num.endsWith("†")
           ),
           ownedCards: ownedCards.filter((c) => c.setAbbrev === set.code),
         }
@@ -82,7 +81,7 @@ const SetStatsPanel = (props: Props) => {
   const cardsBySet = useSelector(selectors.setsWithCards);
   const setGroupsInBoxes = useSelector(selectors.setGroupsInBoxes);
 
-  const model = React.useMemo(() => {
+  const model = useMemo(() => {
     const codes = [
       props.parentSetCode,
       ...sets
@@ -103,9 +102,9 @@ const SetStatsPanel = (props: Props) => {
     return createModel(selectedSets, selectedCards, cardsBySet);
   }, [props.parentSetCode, setGroupsInBoxes, boxes, sets, cardsBySet]);
 
-  const [visibility, setVisibility] = React.useState(CheckListVisibility.all);
+  const [visibility, setVisibility] = useState(CheckListVisibility.all);
 
-  const onVisibilityChanged = React.useCallback(
+  const onVisibilityChanged = useCallback(
     (e: SelectChangeEvent<string>) => {
       const value = e.target.value as CheckListVisibility;
       setVisibility(value);

@@ -1,4 +1,3 @@
-import * as React from "react";
 import { icons } from "../../../ui/fontawesome";
 import {
   Autocomplete,
@@ -27,6 +26,7 @@ import {
   getVersionLabel,
   AllLanguages,
 } from "../../../domain/encyclopedia";
+import { useEffect, useRef, useState } from "react";
 
 type Props = {
   title: string;
@@ -199,7 +199,7 @@ const FinishOption = (props: any, value: CardFinish, state: any) => {
 const CardForm = (props: Props) => {
   const sets = useSelector(selectors.sets);
   const startingState = stateFromCard(props.card, sets);
-  const [state, setState] = React.useState(startingState);
+  const [state, setState] = useState(startingState);
   const allCardNames = useSelector(selectors.cardNames);
   const setOptions = useSelector(selectors.setsOfCard(state.cardName)).map(
     (s) => {
@@ -218,7 +218,7 @@ const CardForm = (props: Props) => {
     cardVersionOptions.find((c) => c.id === state.scryfallId) ?? null;
   const finishOptions = (selectedCard as any)?.finishes ?? [];
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (setOptions.length === 1 && !state.setName) {
       setSetName(setOptions[0].name);
     } else if (cardVersionOptions.length === 1 && !state.scryfallId) {
@@ -228,7 +228,7 @@ const CardForm = (props: Props) => {
     }
   });
 
-  const formStartRef = React.useRef<HTMLInputElement>(null);
+  const formStartRef = useRef<HTMLInputElement>(null);
 
   const isSubmitButtonDisabled =
     state.cardName === null ||

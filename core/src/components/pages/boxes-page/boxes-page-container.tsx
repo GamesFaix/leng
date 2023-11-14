@@ -1,13 +1,13 @@
-import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { inventoryActions } from '../../../store/inventory';
 import { selectors } from "../../../store";
 import BoxesPage from './boxes-page';
+import { useState } from 'react';
 
 export const BoxesPageContainer = () => {
     const boxes = useSelector(selectors.boxes);
     const dispatch = useDispatch();
-    const [isNewBoxFormVisible, setIsNewBoxFormVisible] = React.useState(false);
+    const [isNewBoxFormVisible, setIsNewBoxFormVisible] = useState(false);
 
     function deleteBox(name: string) {
         dispatch(inventoryActions.boxDeleteStart(name));

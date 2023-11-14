@@ -1,7 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Card, CircularProgress, IconButton } from '@mui/material';
 import * as moment from 'moment';
-import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { Column, Table, TableCellProps } from 'react-virtualized';
 import { icons } from '../../../ui/fontawesome';

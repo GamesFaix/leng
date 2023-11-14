@@ -1,10 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField, Typography } from '@mui/material';
-import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { icons } from '../../../ui/fontawesome';
 import { inventoryActions } from '../../../store/inventory';
 import { selectors } from "../../../store";
+import { useLayoutEffect, useState } from 'react';
 
 type Props = {
     name: string
@@ -17,7 +17,7 @@ type EditModeProps = {
 }
 
 function EditMode(props: EditModeProps) {
-    const [newName, setNewName] = React.useState(props.oldName);
+    const [newName, setNewName] = useState(props.oldName);
 
     return (<div style={{ display: 'flex' }}>
         <TextField
@@ -63,9 +63,9 @@ function ReadMode(props: ReadModeProps) {
 }
 
 const BoxTitle = (props: Props) => {
-    const [oldName, setOldName] = React.useState(props.name);
-    const [newName, setNewName] = React.useState<string | null>(null);
-    const [isEditing, setIsEditing] = React.useState(false);
+    const [oldName, setOldName] = useState(props.name);
+    const [newName, setNewName] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
     const dispatch = useDispatch();
     const oldBox = useSelector(selectors.box(oldName));
     const newBox = useSelector(selectors.box(newName));
@@ -81,7 +81,7 @@ const BoxTitle = (props: Props) => {
         setNewName(null);
     }
 
-    React.useLayoutEffect(() => {
+    useLayoutEffect(() => {
         if (newBox && !oldBox) {
             renameFinish();
         }

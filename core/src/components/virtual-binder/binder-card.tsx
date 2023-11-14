@@ -1,13 +1,13 @@
 import { Badge, Tooltip } from "@mui/material";
 import { sumBy } from "lodash";
-import * as React from "react";
 import { BoxCard } from "../../domain/inventory";
 import BinderCardTooltip from "./binder-card-tooltip";
 import { CardImage } from "../common";
+import { CSSProperties } from "react";
 
 type Props = {
   cardGroup: BoxCard[]; // Group of cards with same name/set/collectors number, but different foil or language
-  style?: React.CSSProperties;
+  style?: CSSProperties;
 };
 
 const BinderCard = (props: Props) => {

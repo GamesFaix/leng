@@ -1,7 +1,7 @@
 import { Card, Collapse, SxProps, Typography } from "@mui/material";
 import { Theme } from "@mui/system";
-import * as React from "react";
 import ExpandCollapseButton from "./expand-collapse-button";
+import { useState } from "react";
 
 type Props = {
   title: string;
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export const CollapsableCard = ({ title, sx, children }: Props) => {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   return (
     <Card sx={{ padding: 1, ...sx }}>

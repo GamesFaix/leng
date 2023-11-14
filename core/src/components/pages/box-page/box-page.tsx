@@ -1,5 +1,4 @@
 import { Container } from "@mui/material";
-import * as React from "react";
 import CardsTable from "./cards-table";
 import "react-virtualized/styles.css";
 import { AddCardForm, EditCardForm } from "./card-form";

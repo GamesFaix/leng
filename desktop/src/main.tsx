@@ -1,6 +1,5 @@
 import { ThemeProvider } from "@mui/material";
-import * as React from "react";
-import * as ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
 import { App } from "leng-core/src/components/app";
 import { store } from "leng-core/src/store";
@@ -51,9 +50,7 @@ runSagas({
   webExport: inventoryWebExportProvider,
 });
 
-const root = ReactDOM.createRoot(
-  document.getElementById("root") as HTMLElement
-);
+const root = createRoot(document.getElementById("root") as HTMLElement);
 
 root.render(
   <Provider store={store}>

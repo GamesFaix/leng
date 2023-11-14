@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { readFileSync } from "fs";
 import { createFileAndDirectoryIfRequired } from "./file-helpers";
 import { AppSettings } from "leng-core/src/domain/config";
 import { SettingsProvider } from "leng-core/src/domain/interfaces";
@@ -13,7 +13,7 @@ const defaultSettings = {
 
 const load = () => {
   try {
-    const json = fs.readFileSync(settingsPath).toString();
+    const json = readFileSync(settingsPath).toString();
     return JSON.parse(json);
   } catch {
     const json = JSON.stringify(defaultSettings);

@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { existsSync, promises, rmSync } from "fs";
 import { getBoxPath } from "./inventory-common";
 import { inventoryReadProvider } from "./inventory-read-provider";
 import { AppSettings } from "leng-core/src/domain/config";
@@ -13,10 +13,10 @@ const saveBox = async (
   overwrite: boolean
 ): Promise<void> => {
   const path = getBoxPath(settings, box.name);
-  const exists = fs.existsSync(path);
+  const exists = existsSync(path);
   if (exists) {
     if (overwrite) {
-      await fs.promises.rm(path);
+      await promises.rm(path);
     } else {
       throw Error(`Box already exists: ${box.name}`);
     }
@@ -24,7 +24,7 @@ const saveBox = async (
 
   const fileBox = toFileBox(box);
   const json = JSON.stringify(fileBox);
-  await fs.promises.writeFile(path, json);
+  await promises.writeFile(path, json);
 };
 
 const renameBox = async (
@@ -36,7 +36,7 @@ const renameBox = async (
   const oldPath = getBoxPath(settings, oldName);
   const newPath = getBoxPath(settings, newName);
 
-  if (fs.existsSync(newPath)) {
+  if (existsSync(newPath)) {
     throw `Box named ${newName} already exists.`;
   }
 
@@ -49,7 +49,7 @@ const renameBox = async (
 
   await saveBox(settings, box, true);
 
-  fs.rmSync(oldPath);
+  rmSync(oldPath);
 };
 
 const deleteBox = async (
@@ -57,8 +57,8 @@ const deleteBox = async (
   name: string
 ): Promise<void> => {
   const path = getBoxPath(settings, name);
-  if (fs.existsSync(path)) {
-    fs.rmSync(path);
+  if (existsSync(path)) {
+    rmSync(path);
   }
 };
 

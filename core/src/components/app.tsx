@@ -1,4 +1,3 @@
-import * as React from "react";
 import { Route, HashRouter, Routes } from "react-router-dom";
 import {
   CollectionPage,
@@ -13,13 +12,14 @@ import { preloadActions } from "../store/preload";
 import { selectors } from "../store";
 import NavBar from "./navbar";
 import { useAppDispatch, useAppSelector, useCapabilities } from "../hooks";
+import { useLayoutEffect } from "react";
 
 export const App = () => {
   const dispatch = useAppDispatch();
   const { ready, message } = useAppSelector(selectors.preload);
   const caps = useCapabilities();
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (!ready && message === "") {
       dispatch(preloadActions.start());
     }

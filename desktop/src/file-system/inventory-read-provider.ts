@@ -1,4 +1,4 @@
-import * as fs from "fs";
+import { existsSync, promises } from "fs";
 import { orderBy } from "lodash";
 import { parse } from "path";
 import { createDirIfMissing } from "./file-helpers";
@@ -12,18 +12,18 @@ import { getInventoryDir, getBoxPath } from "./inventory-common";
 const loadBoxInfos = async (settings: AppSettings): Promise<BoxInfo[]> => {
   const dir = getInventoryDir(settings);
   createDirIfMissing(dir);
-  let files = await fs.promises.readdir(dir);
+  let files = await promises.readdir(dir);
   files = orderBy(files, (f) => f.toLowerCase());
 
-  const promises = files.map(async (f) => {
-    const stats = await fs.promises.stat(`${dir}/${f}`);
+  const ps = files.map(async (f) => {
+    const stats = await promises.stat(`${dir}/${f}`);
     return {
       name: parse(f).name,
       lastModified: stats.mtime,
     };
   });
 
-  return Promise.all(promises);
+  return Promise.all(ps);
 };
 
 const loadBox = async (
@@ -32,13 +32,13 @@ const loadBox = async (
   cardIndex: CardIndex
 ): Promise<Box> => {
   const path = getBoxPath(settings, name);
-  const exists = fs.existsSync(path);
+  const exists = existsSync(path);
 
   if (!exists) {
     throw Error(`Box not found: ${name}`);
   }
 
-  const buffer = await fs.promises.readFile(path);
+  const buffer = await promises.readFile(path);
   const json = buffer.toString();
   const box: FileBox = JSON.parse(json);
   return fromFileBox(box, cardIndex);

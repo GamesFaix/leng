@@ -1,5 +1,4 @@
 import { MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import * as React from 'react';
 import { ColorFilter, allColors } from '../../../domain/filters';
 
 function getOptionLabel(color: ColorFilter) : string {

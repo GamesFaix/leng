@@ -1,6 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Container, IconButton, Typography } from '@mui/material';
-import * as React from 'react';
 import { icons } from '../../../ui/fontawesome';
 import BoxesTable from './boxes-table';
 import NewBoxForm from './new-box-form';

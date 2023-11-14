@@ -1,7 +1,7 @@
 import { chunk } from 'lodash';
-import * as React from 'react';
 import { BoxCard } from "../../domain/inventory";
 import BinderCard from './binder-card';
+import { CSSProperties } from 'react';
 
 const cardAspectRatio = [2.5, 3.5];
 const rowsPerPage = 3;
@@ -11,7 +11,7 @@ const cardMargin = 3;
 
 type Props = {
     cardGroups: BoxCard[][],
-    style: React.CSSProperties,
+    style: CSSProperties,
     scale: number
 }
 

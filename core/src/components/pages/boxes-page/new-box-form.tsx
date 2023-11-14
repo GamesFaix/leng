@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconButton, TextField } from '@mui/material';
-import * as React from 'react';
 import { useDispatch } from 'react-redux';
 import { icons } from '../../../ui/fontawesome';
 import { inventoryActions } from '../../../store/inventory';
+import { useState } from 'react';
 
 type Props = {
     close: () => void
@@ -11,7 +11,7 @@ type Props = {
 
 const NewBoxForm = (props: Props) => {
     const dispatch = useDispatch();
-    const [newBoxName, setNewBoxName] = React.useState('');
+    const [newBoxName, setNewBoxName] = useState('');
 
     function submit() {
         dispatch(inventoryActions.boxCreateStart(newBoxName));

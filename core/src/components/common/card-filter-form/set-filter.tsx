@@ -1,5 +1,4 @@
 import { MenuItem, Select } from '@mui/material';
-import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { selectors } from "../../../store";
 import { SetSymbol } from '../../common';

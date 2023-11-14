@@ -1,8 +1,8 @@
 import { Checkbox, Typography } from "@mui/material";
-import * as React from "react";
 import { normalizeCollectorsNumber } from "../../../domain/binder-report";
 import { orderBy } from "lodash";
 import { CheckListItem, CheckListVisibility } from "./model";
+import { useMemo } from "react";
 
 type Props = {
   checklist: CheckListItem[];
@@ -10,7 +10,7 @@ type Props = {
 };
 
 const ChecklistView = (props: Props) => {
-  const items = React.useMemo(() => {
+  const items = useMemo(() => {
     let filtered = props.checklist;
     switch (props.visibility) {
       case CheckListVisibility.owned:

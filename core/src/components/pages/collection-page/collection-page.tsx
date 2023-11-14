@@ -3,10 +3,10 @@ import CardsTable from "./cards-table";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../../ui/fontawesome";
 import { CardFilterForm } from "../../common";
-import * as React from "react";
 import { useCapabilities } from "../../../hooks";
 import { CardFilter } from "../../../domain/filters";
 import { BoxCard } from "../../../domain/inventory";
+import { FC } from "react";
 
 type Props = {
   cards: BoxCard[];
@@ -18,7 +18,7 @@ type Props = {
   submitScryfallSearch: () => void;
 };
 
-const ExportButtons: React.FC<Partial<Props>> = ({
+const ExportButtons: FC<Partial<Props>> = ({
   exportTappedOutCsv,
   exportWebJson,
 }) => {
@@ -48,7 +48,7 @@ const ExportButtons: React.FC<Partial<Props>> = ({
   );
 };
 
-const CollectionPage: React.FC<Props> = ({
+const CollectionPage: FC<Props> = ({
   exportTappedOutCsv,
   exportWebJson,
   cardCount,
