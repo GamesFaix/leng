@@ -37,7 +37,8 @@ const reducer = combineReducers({
 // Large payloads break the devtools
 // https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
 const actionSanitizer = (action: Action) => {
-  if (action.type === EncyclopediaActionTypes.LoadCardData &&
+  if (
+    action.type === EncyclopediaActionTypes.LoadCardData &&
     action.value.status === AsyncRequestStatus.Success
   ) {
     return {
@@ -47,7 +48,8 @@ const actionSanitizer = (action: Action) => {
         data: `<<Omitting large blob. ${action.value.data.length} cards loaded.>>`,
       },
     };
-  } else if (action.type === EncyclopediaActionTypes.LoadSetData &&
+  } else if (
+    action.type === EncyclopediaActionTypes.LoadSetData &&
     action.value.status === AsyncRequestStatus.Success
   ) {
     return {
@@ -57,7 +59,7 @@ const actionSanitizer = (action: Action) => {
         data: `<<Omitting large blob. ${action.value.data.length} sets loaded.>>`,
       },
     };
-  } else  {
+  } else {
     return action;
   }
 };
@@ -70,11 +72,11 @@ const stateSanitizer = (state: any /* RootState is defined below */) => {
   };
 };
 
-const devToolsEnhancer =
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (window as any).__REDUX_DEVTOOLS_EXTENSION__({
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const reduxDevTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__;
+
+const getReduxDevToolsEnhancer = () =>
+  reduxDevTools({
     actionSanitizer,
     stateSanitizer,
   });
@@ -83,7 +85,9 @@ export const sagaMiddleware = createSagaMiddleware();
 
 const middlewareEnhancer = applyMiddleware(sagaMiddleware);
 
-const enhancers = compose(middlewareEnhancer, devToolsEnhancer);
+const enhancers = reduxDevTools
+  ? compose(middlewareEnhancer, getReduxDevToolsEnhancer())
+  : middlewareEnhancer;
 
 export const store = createStore(reducer, enhancers);
 
@@ -91,4 +95,4 @@ export type RootState = ReturnType<typeof store.getState>;
 
 export type AppDispatch = typeof store.dispatch;
 
-export { selectors } from './selectors';
+export { selectors } from "./selectors";
