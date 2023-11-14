@@ -34,7 +34,7 @@ jobs:
 
     - name: Build - Web
       working-directory: './web'
-      run: npm run build
+      run: npm run build:prod
 
     - name: Download Encyclopedia
       working-directory: './web'
