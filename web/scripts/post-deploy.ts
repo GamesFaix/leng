@@ -28,7 +28,9 @@ const setGzipEncoding = async (file: string) => {
     ContentEncoding: "gzip",
   };
   const cmd = new CopyObjectCommand(param);
-  await client.send(cmd);
+  console.log(`updating metadata on ${file}`);
+  const response = await client.send(cmd);
+  console.log(response);
 };
 
 const updateFileMetadata = async () => {
