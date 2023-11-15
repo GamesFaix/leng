@@ -3,6 +3,7 @@ import { Inventory } from "./inventory-files";
 import { AppSettings } from "./config";
 import { Box, BoxInfo } from "./inventory";
 import { CardIndex, Card, Set } from "./encyclopedia";
+import { FormatGroup } from "./formats";
 
 export interface InventoryReadProvider {
   loadBoxInfos: (settings: AppSettings) => Promise<BoxInfo[]>;
@@ -61,4 +62,8 @@ export interface ExternalLinkProvider {
 
 export interface InventoryWebExportProvider {
   exportCards: (settings: AppSettings, inventory: Inventory) => Promise<void>;
+}
+
+export interface FormatProvider {
+  getFormats: (settings: AppSettings) => Promise<FormatGroup[]>
 }

@@ -1,10 +1,12 @@
 import { uniq } from "lodash";
 import { AsyncRequest, asyncRequest, AsyncRequestStatus } from "../domain/async-request";
 import { Card, Set, CardIndex, SetIndex } from "../domain/encyclopedia";
+import { FormatGroup } from "../domain/formats";
 
 export type EncyclopediaState = {
   cards: Card[];
   sets: Set[];
+  formats: FormatGroup[];
   cardNames: string[];
   cardIndex: CardIndex;
   setIndex: SetIndex;
@@ -15,6 +17,7 @@ export type EncyclopediaState = {
 const encyclopediaDefaultState: EncyclopediaState = {
   cards: [],
   sets: [],
+  formats: [],
   cardNames: [],
   cardIndex: {},
   setIndex: {},
@@ -25,6 +28,7 @@ const encyclopediaDefaultState: EncyclopediaState = {
 export enum EncyclopediaActionTypes {
   LoadCardData = "ENCYCLOPEDIA_LOAD_CARD_DATA",
   LoadSetData = "ENCYCLOPEDIA_LOAD_SET_DATA",
+  LoadFormatData = "ENCYCLOPEDIA_LOAD_FORMAT_DATA",
   LoadSetSymbol = "ENCYCLOPEDIA_LOAD_SET_ICON",
   LoadCardImage = "ENCYCLOPEDIA_LOAD_CARD_IMAGE",
 }
@@ -37,6 +41,11 @@ export type LoadCardDataAction = {
 export type LoadSetDataAction = {
   type: EncyclopediaActionTypes.LoadSetData;
   value: AsyncRequest<void, Set[]>;
+};
+
+export type LoadFormatDataAction = {
+  type: EncyclopediaActionTypes.LoadFormatData;
+  value: AsyncRequest<void, FormatGroup[]>;
 };
 
 export type LoadSetSymbolAction = {
@@ -52,6 +61,7 @@ export type LoadCardImageAction = {
 export type EncyclopediaAction =
   | LoadCardDataAction
   | LoadSetDataAction
+  | LoadFormatDataAction
   | LoadSetSymbolAction
   | LoadCardImageAction;
 
@@ -89,6 +99,24 @@ export const encyclopediaActions = {
   loadSetDataError(error: string): LoadSetDataAction {
     return {
       type: EncyclopediaActionTypes.LoadSetData,
+      value: asyncRequest.failure(error),
+    };
+  },
+  loadFormatDataStart(): LoadFormatDataAction {
+    return {
+      type: EncyclopediaActionTypes.LoadFormatData,
+      value: asyncRequest.started(undefined),
+    };
+  },
+  loadFormatDataSuccess(formats: FormatGroup[]): LoadFormatDataAction {
+    return {
+      type: EncyclopediaActionTypes.LoadFormatData,
+      value: asyncRequest.success(formats),
+    };
+  },
+  loadFormatDataError(error: string): LoadFormatDataAction {
+    return {
+      type: EncyclopediaActionTypes.LoadFormatData,
       value: asyncRequest.failure(error),
     };
   },
@@ -173,6 +201,19 @@ export function encyclopediaReducer(
             ...state,
             sets,
             setIndex,
+          };
+        }
+        default:
+          return state;
+      }
+    }
+    case EncyclopediaActionTypes.LoadFormatData: {
+      switch (action.value.status) {
+        case AsyncRequestStatus.Success: {
+          const formats = action.value.data;
+          return {
+            ...state,
+            formats,
           };
         }
         default:

@@ -16,6 +16,7 @@ import {
   settingsProvider,
   cardDataProvider,
   inventoryReadProvider,
+  formatProvider
 } from "./logic";
 import { v4 as createUuid } from "uuid";
 import { imageDownloader } from "./logic/image-downloader";
@@ -43,6 +44,7 @@ const initReduxSaga = () => {
     cardData: cardDataProvider,
     inventoryRead: inventoryReadProvider,
     images: imageDownloader,
+    format: formatProvider
   });
 };
 

@@ -1,0 +1,384 @@
+[
+  {
+    "name": "Eternal 60-card",
+    "formats": [
+      {
+        "name": "Vintage",
+        "type": "SCRYFALL",
+        "scryfallKey": "vintage"
+      },
+      {
+        "name": "Legacy",
+        "type": "SCRYFALL",
+        "scryfallKey": "legacy"
+      },
+      {
+        "name": "Modern",
+        "type": "SCRYFALL",
+        "scryfallKey": "modern"
+      },
+      {
+        "name": "Pioneer",
+        "type": "SCRYFALL",
+        "scryfallKey": "pioneer"
+      }
+    ]
+  },
+  {
+    "name": "Rotating",
+    "formats": [
+      {
+        "name": "Standard",
+        "type": "SCRYFALL",
+        "scryfallKey": "standard"
+      },
+      {
+        "name": "Future Standard",
+        "type": "SCRYFALL",
+        "scryfallKey": "future"
+      }
+    ]
+  },
+  {
+    "name": "Commander-ish",
+    "formats": [
+      {
+        "name": "Commander",
+        "type": "SCRYFALL",
+        "scryfallKey": "commander"
+      },
+      {
+        "name": "Brawl",
+        "type": "SCRYFALL",
+        "scryfallKey": "brawl"
+      },
+      {
+        "name": "Duel",
+        "type": "SCRYFALL",
+        "scryfallKey": "duel"
+      },
+      {
+        "name": "Oathbreaker",
+        "type": "SCRYFALL",
+        "scryfallKey": "oathbreaker"
+      },
+      {
+        "name": "Pauper Commander",
+        "type": "SCRYFALL",
+        "scryfallKey": "paupercommander"
+      },
+      {
+        "name": "PreDH",
+        "type": "SCRYFALL",
+        "scryfallKey": "predh"
+      }
+    ]
+  },
+  {
+    "name": "Budget",
+    "formats": [
+      {
+        "name": "Pauper",
+        "type": "SCRYFALL",
+        "scryfallKey": "pauper"
+      },
+      {
+        "name": "Penny",
+        "type": "SCRYFALL",
+        "scryfallKey": "penny"
+      }
+    ]
+  },
+  {
+    "name": "Period",
+    "formats": [
+      {
+        "name": "Old School",
+        "type": "SCRYFALL",
+        "scryfallKey": "oldschool"
+      },
+      {
+        "name": "Pre-block (Old School + FE)",
+        "type": "CUSTOM",
+        "setCodes": ["leb", "arn", "atq", "leg", "drk", "fem"]
+      },
+      {
+        "name": "Pre-modern",
+        "type": "SCRYFALL",
+        "scryfallKey": "premodern"
+      }
+    ]
+  },
+  {
+    "name": "Block",
+    "formats": [
+      {
+        "name": "Ice Age Block (w/ HML)",
+        "type": "CUSTOM",
+        "setCodes": ["ice", "all", "hml"]
+      },
+      {
+        "name": "Ice Age Block (w/ CSP)",
+        "type": "CUSTOM",
+        "setCodes": ["ice", "all", "csp"]
+      },
+      {
+        "name": "Ice Age Block (w/ both)",
+        "type": "CUSTOM",
+        "setCodes": ["ice", "all", "hml", "csp"]
+      },
+      {
+        "name": "Mirage Block",
+        "type": "CUSTOM",
+        "setCodes": ["mir", "vis", "wth"]
+      },
+      {
+        "name": "Tempest Block",
+        "type": "CUSTOM",
+        "setCodes": ["tmp", "sth", "exo"]
+      },
+      {
+        "name": "Urza Block",
+        "type": "CUSTOM",
+        "setCodes": ["usg", "ulg", "uds"]
+      },
+      {
+        "name": "Mercadian Block",
+        "type": "CUSTOM",
+        "setCodes": ["mmq", "nem", "pcy"]
+      },
+      {
+        "name": "Invasion Block",
+        "type": "CUSTOM",
+        "setCodes": ["inv", "pls", "apc"]
+      },
+      {
+        "name": "Odyssey Block",
+        "type": "CUSTOM",
+        "setCodes": ["ody", "tor", "jud"]
+      },
+      {
+        "name": "Onslaught Block",
+        "type": "CUSTOM",
+        "setCodes": ["ons", "lgn", "scg"]
+      },
+      {
+        "name": "Mirrodin Block",
+        "type": "CUSTOM",
+        "setCodes": ["mrd", "dst", "5dn"]
+      },
+      {
+        "name": "Kamigawa Block",
+        "type": "CUSTOM",
+        "setCodes": ["chk", "bok", "sok"]
+      },
+      {
+        "name": "Ravnica: City of Guilds Block",
+        "type": "CUSTOM",
+        "setCodes": ["rav", "gpt", "dis"]
+      },
+      {
+        "name": "Time Spiral Block",
+        "type": "CUSTOM",
+        "setCodes": ["tsp", "plc", "fut"]
+      },
+      {
+        "name": "Time Spiral Block + CSP",
+        "type": "CUSTOM",
+        "setCodes": ["tsp", "plc", "fut", "csp"]
+      },
+      {
+        "name": "Lorwyn / Shadowmoor Block",
+        "type": "CUSTOM",
+        "setCodes": ["lrw", "mor", "shm", "eve"]
+      },
+      {
+        "name": "Alara Block",
+        "type": "CUSTOM",
+        "setCodes": ["ala", "con", "arb"]
+      },
+      {
+        "name": "Zendikar Block",
+        "type": "CUSTOM",
+        "setCodes": ["zen", "wwk", "roe"]
+      },
+      {
+        "name": "Scars of Mirrodin Block",
+        "type": "CUSTOM",
+        "setCodes": ["som", "mbs", "nph"]
+      },
+      {
+        "name": "Innistrad Block",
+        "type": "CUSTOM",
+        "setCodes": ["isd", "dka", "avr"]
+      },
+      {
+        "name": "Return to Ravnica Block",
+        "type": "CUSTOM",
+        "setCodes": ["rtr", "gtc", "dgm"]
+      },
+      {
+        "name": "Theros Block",
+        "type": "CUSTOM",
+        "setCodes": ["ths", "bng", "jou"]
+      },
+      {
+        "name": "Tarkir Block",
+        "type": "CUSTOM",
+        "setCodes": ["ktk", "frf", "dtk"]
+      },
+      {
+        "name": "Battle for Zendikar Block",
+        "type": "CUSTOM",
+        "setCodes": ["bfz", "ogw"]
+      },
+      {
+        "name": "Shadows over Innistrad Block",
+        "type": "CUSTOM",
+        "setCodes": ["soi", "emn"]
+      },
+      {
+        "name": "Kaladesh Block",
+        "type": "CUSTOM",
+        "setCodes": ["kld", "aer"]
+      },
+      {
+        "name": "Amonkhet Block",
+        "type": "CUSTOM",
+        "setCodes": ["akh", "hou"]
+      },
+      {
+        "name": "Ixalan Block",
+        "type": "CUSTOM",
+        "setCodes": ["xln", "rix"]
+      },
+      {
+        "name": "War of the Spark 'Block'",
+        "type": "CUSTOM",
+        "setCodes": ["grn", "rna", "war"]
+      }
+    ]
+  },
+  {
+    "name": "Block + Core",
+    "formats": [
+      {
+        "name": "Mirage Block + 5ED",
+        "type": "CUSTOM",
+        "setCodes": ["mir", "vis", "wth", "5ed"]
+      },
+      {
+        "name": "Tempest Block + 5ED",
+        "type": "CUSTOM",
+        "setCodes": ["tmp", "sth", "exo", "5ed"]
+      },
+      {
+        "name": "Urza Block + 6ED",
+        "type": "CUSTOM",
+        "setCodes": ["usg", "ulg", "uds", "6ed"]
+      },
+      {
+        "name": "Mercadian Block + 6ED",
+        "type": "CUSTOM",
+        "setCodes": ["mmq", "nem", "pcy", "6ed"]
+      },
+      {
+        "name": "Invasion Block + 7ED",
+        "type": "CUSTOM",
+        "setCodes": ["inv", "pls", "apc", "7ed"]
+      }
+    ]
+  },
+  {
+    "name": "Planar",
+    "formats": [
+      {
+        "name": "Dominaria Planar",
+        "type": "CUSTOM",
+        "setCodes": [
+          "leb",
+          "atq",
+          "leg",
+          "drk",
+          "fem",
+          "ice",
+          "all",
+          "csp",
+          "mir",
+          "vis",
+          "wth",
+          "usg",
+          "ulg",
+          "uds",
+          "pcy",
+          "ody",
+          "tor",
+          "jud",
+          "ons",
+          "lgn",
+          "scg",
+          "dom",
+          "dmu",
+          "bro",
+          "mom"
+        ]
+      },
+      {
+        "name": "Innistrad Planar",
+        "type": "CUSTOM",
+        "setCodes": ["isd", "dka", "avr", "soi", "emn", "mid", "vow", "mom"]
+      },
+      {
+        "name": "Mirrodin Planar",
+        "type": "CUSTOM",
+        "setCodes": ["mrd", "dst", "5dn", "som", "mbs", "nph", "one", "mom"]
+      },
+      {
+        "name": "Rath Planar",
+        "type": "CUSTOM",
+        "setCodes": ["tmp", "sth", "exo", "nem", "tsp", "plc", "fut"]
+      },
+      {
+        "name": "Ravnica Planar",
+        "type": "CUSTOM",
+        "setCodes": [
+          "rav",
+          "gpt",
+          "dis",
+          "rtr",
+          "gtc",
+          "dgm",
+          "grn",
+          "rna",
+          "war",
+          "mom"
+        ]
+      },
+      {
+        "name": "Theros Planar",
+        "type": "CUSTOM",
+        "setCodes": ["ths", "bng", "jou", "thb", "mom"]
+      },
+      {
+        "name": "Ulgrotha Planar",
+        "type": "CUSTOM",
+        "setCodes": ["leb", "hml", "mom"]
+      },
+      {
+        "name": "Zendikar Planar",
+        "type": "CUSTOM",
+        "setCodes": ["zen", "wwk", "roe", "bfz", "ogw", "znr", "mom"]
+      }
+    ]
+  },
+  {
+    "name": "Casual",
+    "formats": [
+      {
+        "name": "Funlimited",
+        "type": "CUSTOM",
+        "setCodes": ["2ed", "ugl", "unh", "ust", "und", "unf"]
+      }
+    ]
+  }
+]

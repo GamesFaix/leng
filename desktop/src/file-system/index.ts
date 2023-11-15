@@ -5,4 +5,5 @@ export { tappedOutCsvExportProvider } from "./tapped-out-csv-export-provider";
 export { cardDataProvider } from "./card-data-provider";
 export { imagePathProvider } from "./image-path-provider";
 export { imageDownloader } from "./image-downloader";
-export { inventoryWebExportProvider } from './web-export-provider'
+export { inventoryWebExportProvider } from "./web-export-provider";
+export { formatProvider } from "./format-provider";

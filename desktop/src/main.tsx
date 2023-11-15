@@ -14,6 +14,7 @@ import {
   settingsProvider,
   tappedOutCsvExportProvider,
   inventoryWebExportProvider,
+  formatProvider,
 } from "./file-system";
 import { darkTheme } from "leng-core/src/ui";
 import {
@@ -48,6 +49,7 @@ runSagas({
   inventoryWrite: inventoryWriteProvider,
   tappedOut: tappedOutCsvExportProvider,
   webExport: inventoryWebExportProvider,
+  format: formatProvider
 });
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
