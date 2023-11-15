@@ -1,14 +1,16 @@
 import {
   FrameEffect,
-  Legalities,
   Color,
   Rarity,
   Layout,
-  ImageUris,
   SetType,
+  Legality as ScryfallLegality,
 } from "scryfall-api";
 
-export { Color, Legalities, FrameEffect } from "scryfall-api";
+export { Color, FrameEffect } from "scryfall-api";
+
+export type Legality = keyof typeof ScryfallLegality
+export type Legalities =  Record<string, Legality>;
 
 // Partial scryfall card
 export type Card = {

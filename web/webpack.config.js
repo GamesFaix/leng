@@ -51,9 +51,10 @@ module.exports = {
     new webpack.DefinePlugin({}),
     new CopyWebpackPlugin({
       patterns: [
-        {from: "favicon.png", to: "images/favicon.png"}
-      ]
-    })
+        { from: "favicon.png", to: "images/favicon.png" },
+        { from: "data", to: "data" },
+      ],
+    }),
   ],
   resolve: {
     extensions: [".ts", ".tsx", ".js"],

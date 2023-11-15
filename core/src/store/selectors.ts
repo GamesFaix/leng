@@ -62,10 +62,7 @@ export const selectors = {
     };
   },
   unsavedChanges: (state: RootState) => state.editing.unsavedChanges,
-  formats(state: RootState) {
-    const anyCard = state.encyclopedia.cards[0];
-    return Object.keys(anyCard.legalities);
-  },
+  formats: (state: RootState) => state.encyclopedia.formats,
   boxCardsOfParentSet(code: string | null) {
     return (state: RootState) => {
       if (!code) return [];

@@ -9,6 +9,7 @@ import { getImagesSaga } from "./images";
 import { sagaMiddleware } from "../store";
 import {
   CardDataProvider,
+  FormatProvider,
   ImageDownloader,
   InventoryReadProvider,
   InventoryWebExportProvider,
@@ -22,6 +23,7 @@ type SagaProviders = {
   settings: SettingsProvider;
   images: ImageDownloader;
   cardData: CardDataProvider;
+  format: FormatProvider;
   inventoryRead: InventoryReadProvider;
   inventoryWrite: InventoryWriteProvider;
   tappedOut: TappedOutCsvExportProvider;
@@ -38,8 +40,8 @@ export const runSagas = (providers: Partial<SagaProviders>) => {
   if (providers.images) {
     sagas.push(getImagesSaga(providers.images));
   }
-  if (providers.cardData) {
-    sagas.push(getCardDataSaga(providers.cardData));
+  if (providers.cardData && providers.format) {
+    sagas.push(getCardDataSaga(providers.cardData, providers.format));
   }
   if (providers.inventoryRead) {
     sagas.push(getInventoryReadSaga(providers.inventoryRead));

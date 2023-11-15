@@ -1,11 +1,12 @@
 export enum FormatType {
-  Standard,
-  Custom,
+  Scryfall = "SCRYFALL", // Provided by Scryfall API
+  Custom = "CUSTOM",
 }
 
-export type StandardFormat = {
-  type: FormatType.Standard;
+export type ScryfallFormat = {
+  type: FormatType.Scryfall;
   name: string;
+  scryfallKey: string;
 };
 
 export type CustomFormat = {
@@ -14,10 +15,18 @@ export type CustomFormat = {
   setCodes: string[];
 };
 
-export type Format = StandardFormat | CustomFormat;
+export type FormatGroup = {
+  name: string;
+  formats: Format[];
+};
 
-// Equivalent to "anything goes"
-export const emptyFormat: Format = { type: FormatType.Standard, name: "" };
+export type Format = ScryfallFormat | CustomFormat;
+
+export const emptyFormat: Format = {
+  type: FormatType.Custom,
+  name: "No cards allowed",
+  setCodes: [],
+};
 
 export const customFormat = (name: string, setCodes: string[]) => ({
   type: FormatType.Custom,

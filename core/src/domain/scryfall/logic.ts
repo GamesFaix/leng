@@ -3,9 +3,10 @@ import {
   SearchOptions,
   Set as ScrySet,
   Cards,
+  Legalities as ScryfallLegalities,
 } from "scryfall-api";
 import { BulkData, ScryfallResponse } from "./types";
-import { Card, Set } from "../encyclopedia";
+import { Card, Legalities, Set } from "../encyclopedia";
 
 const baseUrl = "https://api.scryfall.com";
 
@@ -22,6 +23,34 @@ const getBulkData = async () => {
   return defaultCardsInfo;
 };
 
+const removeDigitalFormatLegalities = (l: ScryfallLegalities): Legalities => ({
+  brawl: l.brawl,
+  commander: l.commander,
+  duel: l.duel,
+  future: l.future,
+  legacy: l.legacy,
+  modern: l.modern,
+  oldschool: l.oldschool,
+  pauper: l.pauper,
+  penny: l.penny,
+  pioneer: l.pioneer,
+  standard: l.standard,
+  vintage: l.vintage,
+  
+  // Scryfall library type defs are behind
+  oathbreaker: (l as any).oathbreaker,
+  paupercommander: (l as any).paupercommander,
+  premodern: (l as any).premodern,
+  predh: (l as any).predh,
+
+  // Skip digital formats
+  // * alchemy
+  // * explorer
+  // * gladiator
+  // * historic
+  // * historicbrawl
+});
+
 const removeExtraCardProperties = (c: ScryCard): Card => ({
   num: c.collector_number,
   color_identity: c.color_identity,
@@ -35,7 +64,7 @@ const removeExtraCardProperties = (c: ScryCard): Card => ({
     c.image_uris?.large ??
     c.image_uris?.png,
   layout: c.layout,
-  legalities: c.legalities,
+  legalities: removeDigitalFormatLegalities(c.legalities),
   name: c.name,
   nonfoil: c.nonfoil,
   rarity: c.rarity,

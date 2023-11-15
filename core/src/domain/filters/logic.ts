@@ -83,34 +83,43 @@ function filterCards(
   allCardsBySet: Record<string, Card[]>,
   searchResults: Card[]
 ): BoxCard[] {
-  if (filter.nameQuery.length > 0) {
-    const normalizedQuery = normalizeName(filter.nameQuery);
+  const { nameQuery, colors, colorRule, format, setAbbrevs, scryfallQuery } =
+    filter;
+
+  if (nameQuery.length > 0) {
+    const normalizedQuery = normalizeName(nameQuery);
     cards = cards.filter((c) => c.normalizedName.includes(normalizedQuery));
   }
 
-  if (filter.setAbbrevs.length > 0) {
-    cards = cards.filter((c) =>
-      filter.setAbbrevs.find((s) => c.setAbbrev === s)
-    );
+  if (setAbbrevs.length > 0) {
+    cards = cards.filter((c) => setAbbrevs.find((s) => c.setAbbrev === s));
   }
 
-  if (filter.colors.length > 0) {
-    cards = filterCardsByColor(cards, filter.colors, filter.colorRule);
+  if (colors.length > 0) {
+    cards = filterCardsByColor(cards, colors, colorRule);
   }
 
-  if (filter.format !== null) {
-    if (filter.format.type === FormatType.Standard) {
-      const key = filter.format.name;
+  if (format !== null) {
+    if (format.type === FormatType.Scryfall) {
+      const key = format.scryfallKey;
       cards = cards.filter((c) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const legality = c.legalities[key as any];
+        const legality = c.legalities[key];
         return legality === "legal" || legality === "restricted";
       });
     }
-    if (filter.format.type === FormatType.Custom) {
+    if (format.type === FormatType.Custom) {
       const legalCardNames = uniq(
-        filter.format.setCodes
-          .map((set) => allCardsBySet[set].map((c) => c.name))
+        format.setCodes
+          .map((set) => {
+            try {
+              return allCardsBySet[set].map((c) => c.name);
+            } catch (ex) {
+              console.error(
+                `No cards found from set ${set} in format ${format.name}. Double check set code.`
+              );
+              return [];
+            }
+          })
           .reduce((a, b) => a.concat(b))
       );
       cards = cards.filter((c) => legalCardNames.includes(c.name));
@@ -120,7 +129,7 @@ function filterCards(
     cards = cards.filter((x) => !basicLandNames.includes(x.name));
   }
 
-  if (filter.scryfallQuery.length > 0) {
+  if (scryfallQuery.length > 0) {
     cards = cards.filter((c) =>
       searchResults.find((result) => c.scryfallId === result.id)
     );
@@ -140,16 +149,10 @@ function combineBoxes(boxes: BoxState[], filter: CardFilter): BoxCard[] {
       ? boxes.filter((b) => filter.exceptBoxes.includes(b.name))
       : [];
 
-  const includeCards = combineDuplicates(
-    getCardsFromBoxes(includeBoxes)
-  );
-  const exceptKeys = uniq(
-    getCardsFromBoxes(exceptBoxes).map(getKey)
-  );
+  const includeCards = combineDuplicates(getCardsFromBoxes(includeBoxes));
+  const exceptKeys = uniq(getCardsFromBoxes(exceptBoxes).map(getKey));
 
-  return includeCards.filter(
-    (c) => !exceptKeys.includes(getKey(c))
-  );
+  return includeCards.filter((c) => !exceptKeys.includes(getKey(c)));
 }
 
 export function getCardsFromBoxes(boxes: BoxState[]): BoxCard[] {
