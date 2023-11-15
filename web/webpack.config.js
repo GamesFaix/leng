@@ -52,7 +52,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         { from: "favicon.png", to: "images/favicon.png" },
-        { from: "data", to: "data" },
+        { from: "../data", to: "data" },
       ],
     }),
   ],
