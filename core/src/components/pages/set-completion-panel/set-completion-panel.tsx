@@ -75,7 +75,7 @@ type Props = {
   parentSetCode: string | null;
 };
 
-const SetStatsPanel = (props: Props) => {
+export const SetCompletionPanel = (props: Props) => {
   const boxes = useSelector(selectors.boxes);
   const sets = useSelector(selectors.sets);
   const cardsBySet = useSelector(selectors.setsWithCards);
@@ -188,4 +188,3 @@ const SetStatsPanel = (props: Props) => {
     </div>
   );
 };
-export default SetStatsPanel;

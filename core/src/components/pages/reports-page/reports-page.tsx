@@ -1,5 +1,5 @@
 import { Card, Container, Typography } from "@mui/material";
-import SetStatsPanel from "./set-stats-panel";
+import { SetCompletionPanel } from "../set-completion-panel/";
 import SetBinderPanel from "./set-binder-panel";
 import SetSelector from "./set-selector";
 import { useCallback, useState } from "react";
@@ -13,7 +13,7 @@ const someSetView = (selectedParentSetCode: string | null) => (
     <br />
     <Card style={{ padding: "6px" }}>
       <Typography variant="h5">Stats</Typography>
-      <SetStatsPanel parentSetCode={selectedParentSetCode} />
+      <SetCompletionPanel parentSetCode={selectedParentSetCode} />
     </Card>
   </>
 );
