@@ -1,5 +1,5 @@
 import { Card, Container, Typography } from "@mui/material";
-import { SetCompletionPanel } from "../set-completion-panel/";
+import { SetCompletionPanel } from "../../set-completion-panel";
 import SetBinderPanel from "./set-binder-panel";
 import SetSelector from "./set-selector";
 import { useCallback, useState } from "react";

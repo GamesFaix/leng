@@ -1,5 +1,5 @@
-import { Card, Set, basicLandNames } from "../../../domain/encyclopedia";
-import { BoxCard } from "../../../domain/inventory";
+import { Card, Set, basicLandNames } from "../../domain/encyclopedia";
+import { BoxCard } from "../../domain/inventory";
 
 export type CheckListItem = {
   card: Card;
