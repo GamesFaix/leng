@@ -5,7 +5,8 @@ import { selectors } from "../../../store";
 import { inventoryActions } from "../../../store/inventory";
 import { searchActions } from "../../../store/search";
 import { BoxCard } from "../../../domain/inventory";
-import { defaultCardFilter, getCards } from "../../../domain/filters";
+import { defaultCardFilter } from "../../../domain/filters";
+import { CardSortFields, search } from "../../../domain/inventory-search";
 
 function getCount(cards: BoxCard[]): number {
   return cards.map((c) => c.count).reduce((a, b) => a + b, 0);
@@ -16,14 +17,30 @@ export const CollectionPageContainer = () => {
   const dispatch = useDispatch();
   const boxes = useSelector(selectors.boxes);
   const setsWithCards = useSelector(selectors.setsWithCards);
-  const searchResults = useSelector(selectors.searchResults);
-  const cards = useMemo(
-    () => getCards(boxes, filter, setsWithCards, searchResults),
-    [boxes, setsWithCards, searchResults, filter]
+  const scryfallResults = useSelector(selectors.searchResults);
+  const results = useMemo(
+    () =>
+      search(
+        boxes,
+        {
+          filter,
+          grouping: {
+            combineSets: true,
+            combineArts: false,
+            combineFinishes: true,
+            combineLanguages: true,
+          },
+          sorting: { field: CardSortFields.ColorThenName, direction: "asc" },
+        },
+        setsWithCards,
+        scryfallResults
+      ),
+    [boxes, setsWithCards, scryfallResults, filter]
   );
+  const cards = useMemo(() => results.flatMap(r => r.cards), [results]);
   const cardCount = useMemo(() => getCount(cards), [cards]);
 
-  const search = useCallback(
+  const searchScryfall = useCallback(
     () => dispatch(searchActions.searchStart(filter.scryfallQuery)),
     [filter.scryfallQuery, dispatch]
   );
@@ -34,7 +51,7 @@ export const CollectionPageContainer = () => {
       cardCount={cardCount}
       filter={filter}
       setFilter={setFilter}
-      submitScryfallSearch={search}
+      submitScryfallSearch={searchScryfall}
       exportTappedOutCsv={() => dispatch(inventoryActions.csvExportStart())}
       exportWebJson={() => dispatch(inventoryActions.webExportStart())}
     />

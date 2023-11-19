@@ -29,6 +29,7 @@ export type Card = {
   scryfall_uri: string;
   set: string;
   set_name: string;
+  type: string;
 };
 
 // Partial scryfall set

@@ -1,5 +1,5 @@
 import { Dictionary, groupBy, chunk, orderBy } from "lodash";
-import { Set } from "../encyclopedia";
+import { Set, normalizeCollectorsNumber } from "../encyclopedia";
 import { innerJoin } from "../array";
 import { BoxCard } from "../inventory";
 
@@ -36,20 +36,6 @@ function getSetBase(setName: string): string {
   }
 
   return setName;
-}
-
-export function normalizeCollectorsNumber(x: string) {
-  const pattern = /([a-zA-Z]*)(\d+)(.*)/;
-  const match = pattern.exec(x);
-  if (!match) {
-    throw new Error("Invalid collector's number");
-  }
-  const prefix = match[1];
-  const num = match[2];
-  const msc = match[3];
-  return `${prefix.padEnd(1, "_")}|${num
-    .toString()
-    .padStart(4, "0")}|${msc.replace("★", "")}`;
 }
 
 function compareCollectorsNumbers(a: string, b: string): number {

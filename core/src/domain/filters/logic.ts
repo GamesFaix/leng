@@ -159,7 +159,7 @@ export function getCardsFromBoxes(boxes: BoxState[]): BoxCard[] {
   return boxes.map((b) => b.cards ?? []).reduce((a, b) => a.concat(b), []);
 }
 
-export function getCards(
+export function filterInventory(
   inventory: BoxState[],
   filter: CardFilter,
   allCardsBySet: Record<string, Card[]>,

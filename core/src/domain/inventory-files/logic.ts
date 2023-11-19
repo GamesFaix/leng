@@ -28,6 +28,7 @@ const getFinish = (finish: CardFinish, foil: boolean): CardFinish => {
         normalizedName: normalizeName(c.name),
         versionLabel: match ? getVersionLabel(match) : "",
         legalities: match.legalities,
+        type: match.type
       };
     }),
   });

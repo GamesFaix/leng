@@ -7,7 +7,7 @@ import { selectors } from "../../../store";
 import { editingActions } from "../../../store/editing";
 import { useCallback, useEffect, useState } from "react";
 import { searchActions } from "../../../store/search";
-import { defaultCardFilter, getCards } from "../../../domain/filters";
+import { defaultCardFilter, filterInventory } from "../../../domain/filters";
 import { Box, BoxCard, areSame, getKey } from "../../../domain/inventory";
 
 function addOrIncrememnt(cards: BoxCard[], card: BoxCard): BoxCard[] {
@@ -133,7 +133,7 @@ export const BoxPageContainer = () => {
     }
   }
 
-  const cards = getCards(newBox ? [newBox] : [], filter, allCardsBySet, []);
+  const cards = filterInventory(newBox ? [newBox] : [], filter, allCardsBySet, []);
 
   const search = useCallback(
     () => dispatch(searchActions.searchStart(filter.scryfallQuery)),

@@ -71,6 +71,7 @@ const removeExtraCardProperties = (c: ScryCard): Card => ({
   scryfall_uri: c.scryfall_uri,
   set: c.set,
   set_name: c.set_name,
+  type: c.type_line
 });
 
 // Filters out MTGO and Alchemy
