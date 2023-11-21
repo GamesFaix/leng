@@ -1,5 +1,5 @@
 import { Checkbox, FormControlLabel } from "@mui/material";
-import { ChangeEvent, FC, useCallback } from "react";
+import { ChangeEvent, FC, useCallback, useState } from "react";
 import { CardGroupingOptions } from "../../../domain/inventory-search";
 
 type Props = {
@@ -8,84 +8,127 @@ type Props = {
 };
 
 export const GroupingSelector: FC<Props> = ({ value, onChange }) => {
-  const onCombineSetsChanges = useCallback(
+  const [all, setAll] = useState(
+    value.combineArts &&
+      value.combineFinishes &&
+      value.combineLanguages &&
+      value.combineSets
+  );
+
+  const onCombineSetsChanged = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
+      const { checked } = e.target;
       onChange({
         ...value,
-        combineSets: e.target.checked,
+        combineSets: checked,
         // It doesn't make sense to combine sets but not arts
-        combineArts: e.target.checked ? true : value.combineArts,
+        combineArts: checked ? true : value.combineArts,
       });
+      if (all && !checked) {
+        setAll(false);
+      }
     },
     [value, onChange]
   );
 
-  const onCombineArtsChanges = useCallback(
+  const onCombineArtsChanged = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
+      const { checked } = e.target;
       onChange({
         ...value,
-        combineArts: e.target.checked,
-        combineSets: e.target.checked ? value.combineSets : false,
+        combineArts: checked,
+        combineSets: checked ? value.combineSets : false,
       });
+      if (all && !checked) {
+        setAll(false);
+      }
     },
     [value, onChange]
   );
 
-  const onCombineFinishesChanges = useCallback(
+  const onCombineFinishesChanged = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      onChange({ ...value, combineFinishes: e.target.checked });
+      const { checked } = e.target;
+      onChange({ ...value, combineFinishes: checked });
+      if (all && !checked) {
+        setAll(false);
+      }
     },
     [value, onChange]
   );
 
-  const onCombineLangsChanges = useCallback(
+  const onCombineLangsChanged = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
-      onChange({ ...value, combineLanguages: e.target.checked });
+      const { checked } = e.target;
+      onChange({ ...value, combineLanguages: checked });
+      if (all && !checked) {
+        setAll(false);
+      }
+    },
+    [value, onChange]
+  );
+
+  const onCombineAllChanged = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const { checked } = e.target;
+      onChange({
+        combineSets: checked,
+        combineArts: checked,
+        combineFinishes: checked,
+        combineLanguages: checked,
+      });
+      setAll(checked);
     },
     [value, onChange]
   );
 
   return (
     <div>
+      Combine
       <FormControlLabel
-        label="Combine sets"
+        label="Sets"
         labelPlacement="end"
         control={
           <Checkbox
             checked={value.combineSets}
-            onChange={onCombineSetsChanges}
+            onChange={onCombineSetsChanged}
           />
         }
       />
       <FormControlLabel
-        label="Combine arts"
+        label="Arts"
         labelPlacement="end"
         control={
           <Checkbox
             checked={value.combineArts}
-            onChange={onCombineArtsChanges}
+            onChange={onCombineArtsChanged}
           />
         }
       />
       <FormControlLabel
-        label="Combine finishes"
+        label="Finishes"
         labelPlacement="end"
         control={
           <Checkbox
             checked={value.combineFinishes}
-            onChange={onCombineFinishesChanges}
+            onChange={onCombineFinishesChanged}
           />
         }
       />
       <FormControlLabel
-        label="Combine languages"
+        label="Languages"
         labelPlacement="end"
         control={
           <Checkbox
             checked={value.combineLanguages}
-            onChange={onCombineLangsChanges}
+            onChange={onCombineLangsChanged}
           />
         }
+      />
+      <FormControlLabel
+        label="(All))"
+        labelPlacement="end"
+        control={<Checkbox checked={all} onChange={onCombineAllChanged} />}
       />
     </div>
   );
