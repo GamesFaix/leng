@@ -1,9 +1,8 @@
-import { Card, Container, Typography } from "@mui/material";
-import { InventoryQueryForm, InventoryResultsTable } from "../../inventory";
+import { Container, Typography } from "@mui/material";
+import { InventoryQueryForm } from "../../inventory";
 import { defaultCardFilter } from "../../../domain/filters";
 import {
   CardSortFields,
-  CardSortOptions,
   InventoryQuery,
   getCardCount,
   search,
@@ -14,6 +13,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import { inventoryActions } from "../../../store/inventory";
 import { searchActions } from "../../../store/search";
+import { ResultsSection } from "./results-section";
 
 const startingQuery: InventoryQuery = {
   filter: defaultCardFilter,
@@ -43,11 +43,6 @@ export const CollectionPage: FC = () => {
     [query.filter.scryfallQuery, dispatch]
   );
 
-  const setSort = useCallback(
-    (sorting: CardSortOptions) => setQuery({ ...query, sorting }),
-    [query, setQuery]
-  );
-
   return (
     <Container style={{ paddingTop: "12px" }}>
       <div style={{ display: "flex" }}>
@@ -69,13 +64,7 @@ export const CollectionPage: FC = () => {
         submitScryfallSearch={searchScryfall}
       />
       <br />
-      <Card sx={{ padding: 1 }}>
-        <InventoryResultsTable
-          query={query}
-          results={results}
-          updateSortOptions={setSort}
-        />
-      </Card>
+      <ResultsSection query={query} setQuery={setQuery} results={results} />
     </Container>
   );
 };
