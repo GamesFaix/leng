@@ -1,4 +1,4 @@
-import { Checkbox, FormControlLabel } from "@mui/material";
+import { Checkbox, FormControlLabel, FormGroup } from "@mui/material";
 import { ChangeEvent, FC, useCallback, useState } from "react";
 import { CardGroupingOptions } from "../../../domain/inventory-search";
 
@@ -84,7 +84,7 @@ export const GroupingSelector: FC<Props> = ({ value, onChange }) => {
 
   return (
     <div>
-      Combine
+      <span>Combine</span>
       <FormControlLabel
         label="Sets"
         labelPlacement="end"
@@ -126,7 +126,7 @@ export const GroupingSelector: FC<Props> = ({ value, onChange }) => {
         }
       />
       <FormControlLabel
-        label="(All))"
+        label="(All)"
         labelPlacement="end"
         control={<Checkbox checked={all} onChange={onCombineAllChanged} />}
       />

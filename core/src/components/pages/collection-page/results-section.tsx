@@ -39,11 +39,7 @@ export const ResultsSection: FC<Props> = ({ query, results, setQuery }) => {
 
   return (
     <Card sx={{ padding: 1 }}>
-      <RadioGroup
-        value={view}
-        onChange={onViewChanged}
-        row
-      >
+      <RadioGroup value={view} onChange={onViewChanged} row>
         <FormControlLabel value="grid" control={<Radio />} label="Grid" />
         <FormControlLabel value="table" control={<Radio />} label="Table" />
       </RadioGroup>

@@ -13,7 +13,12 @@ export const InventoryResultsGrid: FC<Props> = ({ results }) => {
 
   const renderCell = useCallback(
     ({ columnIndex, rowIndex, style }: GridCellProps) => {
-      return <ResultCard result={rows[rowIndex][columnIndex]} style={style} />;
+      const result = rows[rowIndex][columnIndex];
+      return result ? (
+        <ResultCard result={result} style={style} key={`${columnIndex},${rowIndex}`}/>
+      ) : (
+        <span></span>
+      );
     },
     [rows]
   );
@@ -27,7 +32,7 @@ export const InventoryResultsGrid: FC<Props> = ({ results }) => {
       columnWidth={300}
       width={900}
       height={600}
-      rowCount={3}
+      rowCount={rows.length}
       rowHeight={200}
     />
   );

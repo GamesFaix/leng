@@ -7,6 +7,7 @@ import { LanguageCell } from "./language-cell";
 import { orderBy } from "lodash";
 import { Language } from "../../../domain/encyclopedia";
 import { BoxCard } from "../../../domain/inventory";
+import { VersionCell } from "./version-cell";
 
 type Props = {
   result: InventoryResult;
@@ -30,32 +31,37 @@ export const ResultDetailsTable: FC<Props> = ({ result }) => {
 
   return (
     <Table
-      width={900}
-      height={600}
-      headerHeight={20}
+      width={500}
+      height={100}
+      headerHeight={0}
       rowHeight={30}
       rowCount={cards.length}
       rowGetter={({ index }) => cards[index]}
     >
-      <Column label="Ct." dataKey="count" width={50} />
+      <Column label="Ct." dataKey="count" width={10} />
       <Column
-        width={200}
+        width={150}
         label="Set"
         dataKey="setAbbrev"
         cellRenderer={(props) => <SetCell {...props} />}
       />
-      <Column width={100} label="Version" dataKey="version" />
       <Column
-        width={50}
-        label="Finish"
-        dataKey="finish"
-        cellRenderer={(props) => <FinishCell {...props} />}
+        width={40}
+        label="Version"
+        dataKey="collectorsNumber"
+        cellRenderer={(props) => <VersionCell {...props} />}
       />
       <Column
-        width={100}
+        width={20}
         label="Lang."
         dataKey="lang"
         cellRenderer={(props) => <LanguageCell {...props} />}
+      />
+      <Column
+        width={35}
+        label="Finish"
+        dataKey="finish"
+        cellRenderer={(props) => <FinishCell {...props} />}
       />
     </Table>
   );
