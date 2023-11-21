@@ -1,6 +1,6 @@
 import { Card, Container, Typography } from "@mui/material";
-import { CardQueryForm } from "../../common";
-import { CardFilter, defaultCardFilter } from "../../../domain/filters";
+import { InventoryQueryForm } from "../../common";
+import { defaultCardFilter } from "../../../domain/filters";
 import {
   CardSortFields,
   CardSortOptions,
@@ -44,14 +44,9 @@ export const CollectionPage: FC = () => {
     [query.filter.scryfallQuery, dispatch]
   );
 
-  const setFilter = useCallback(
-    (filter: CardFilter) => setQuery({ ...query, filter }),
-    [query]
-  );
-
   const setSort = useCallback(
-    (options: CardSortOptions) => setQuery({ ...query, sorting: options }),
-    [query]
+    (sorting: CardSortOptions) => setQuery({ ...query, sorting }),
+    [query, setQuery]
   );
 
   return (
@@ -69,9 +64,9 @@ export const CollectionPage: FC = () => {
         />
       </div>
       <br />
-      <CardQueryForm
-        filter={query.filter}
-        onChange={setFilter}
+      <InventoryQueryForm
+        value={query}
+        onChange={setQuery}
         submitScryfallSearch={searchScryfall}
       />
       <br />

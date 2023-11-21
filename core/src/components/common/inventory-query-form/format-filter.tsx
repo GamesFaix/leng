@@ -7,7 +7,7 @@ import {
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
 import { Format, FormatGroup } from "../../../domain/formats";
-import { useCallback } from "react";
+import { FC, useCallback } from "react";
 
 type Props = {
   value: Format | null;
@@ -19,27 +19,31 @@ const getAllMenuItems = (groups: FormatGroup[]): JSX.Element[] => {
   groups.forEach((g) => {
     results.push(<ListSubheader key={g.name}>{g.name}</ListSubheader>);
     g.formats.forEach((f) => {
-      results.push(<MenuItem key={f.name} value={f.name}>{f.name}</MenuItem>);
+      results.push(
+        <MenuItem key={f.name} value={f.name}>
+          {f.name}
+        </MenuItem>
+      );
     });
   });
   return results;
 };
 
-const FormatFilter = (props: Props) => {
+export const FormatFilter: FC<Props> = ({ value, onChange }) => {
   const formats = useSelector(selectors.formats);
 
-  const onSelect = useCallback(
+  const onChangeInner = useCallback(
     (e: SelectChangeEvent<string>) => {
       const name = e.target.value === "" ? null : e.target.value;
-      console.log(`FormatFilter.onSelect ${name}`)
+      console.log(`FormatFilter.onSelect ${name}`);
       const format = name
         ? formats
             .flatMap((group) => group.formats)
             .find((f) => f.name === name) ?? null
         : null;
-      props.onChange(format);
+      onChange(format);
     },
-    [formats, props.onChange]
+    [formats, onChange]
   );
 
   return (
@@ -47,11 +51,10 @@ const FormatFilter = (props: Props) => {
       sx={{
         width: 200,
       }}
-      value={props.value?.name ?? ""}
-      onChange={onSelect}
+      value={value?.name ?? ""}
+      onChange={onChangeInner}
     >
       {getAllMenuItems(formats)}
     </Select>
   );
 };
-export default FormatFilter;

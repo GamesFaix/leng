@@ -5,4 +5,4 @@ export { FlagIcon } from "./flag-icon";
 export { LoadingMessage } from "./loading-message";
 export { SetSymbol } from "./set-symbol";
 export { TabPanel } from "./tab-panel";
-export { CardQueryForm } from "./card-query-form";
+export { InventoryQueryForm } from "./inventory-query-form";

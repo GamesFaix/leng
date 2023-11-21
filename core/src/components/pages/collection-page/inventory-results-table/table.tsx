@@ -61,7 +61,7 @@ export const InventoryResultsTable: FC<Props> = ({
         width={50}
         label="Finish"
         dataKey="finish"
-        cellRenderer={FinishCell}
+        cellRenderer={(props) => <FinishCell {...props} />}
       />
       <Column width={100} label="Lang." dataKey="lang" />
     </Table>
