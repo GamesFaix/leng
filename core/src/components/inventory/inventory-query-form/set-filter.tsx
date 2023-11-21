@@ -1,7 +1,7 @@
 import { MenuItem, Select } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectors } from "../../../store";
-import { SetSymbol } from "..";
+import { SetSymbol } from "../../common";
 import { FC } from "react";
 
 type Props = {

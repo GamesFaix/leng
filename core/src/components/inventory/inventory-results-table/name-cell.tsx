@@ -1,5 +1,5 @@
 import { TableCellProps } from "react-virtualized";
-import { CardImageTooltip } from "../../../common";
+import { CardImageTooltip } from "../../common";
 import { FC } from "react";
 import { InventoryResultRowModel } from "./model";
 

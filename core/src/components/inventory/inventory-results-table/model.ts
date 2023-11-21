@@ -1,7 +1,7 @@
-import { InventoryResult } from "../../../../domain/inventory-search";
-import { CardFinish, Language } from "../../../../domain/encyclopedia";
+import { InventoryResult } from "../../../domain/inventory-search";
+import { CardFinish, Language } from "../../../domain/encyclopedia";
 import { sumBy, uniq } from "lodash";
-import { BoxCard } from "../../../../domain/inventory";
+import { BoxCard } from "../../../domain/inventory";
 
 export type InventoryResultRowModel = {
   name: string;

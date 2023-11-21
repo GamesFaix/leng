@@ -4,7 +4,7 @@ import {
   CardSortOptions,
   InventoryQuery,
   InventoryResult,
-} from "../../../../domain/inventory-search";
+} from "../../../domain/inventory-search";
 import { toRowModel } from "./model";
 import { NameCell } from "./name-cell";
 import { SetCell } from "./set-cell";

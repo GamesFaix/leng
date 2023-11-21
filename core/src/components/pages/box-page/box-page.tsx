@@ -4,7 +4,7 @@ import "react-virtualized/styles.css";
 import { AddCardForm, EditCardForm } from "./card-form";
 import BoxHeaderCard from "./box-header-card";
 import CardSelectionActionsForm from "./card-selection-actions-form";
-import { InventoryQueryForm } from "../../common";
+import { InventoryQueryForm } from "../../inventory";
 import { FC, useMemo } from "react";
 import {
   CardSortFields,

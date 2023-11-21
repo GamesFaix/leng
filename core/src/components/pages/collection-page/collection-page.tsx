@@ -1,5 +1,5 @@
 import { Card, Container, Typography } from "@mui/material";
-import { InventoryQueryForm } from "../../common";
+import { InventoryQueryForm, InventoryResultsTable } from "../../inventory";
 import { defaultCardFilter } from "../../../domain/filters";
 import {
   CardSortFields,
@@ -8,7 +8,6 @@ import {
   getCardCount,
   search,
 } from "../../../domain/inventory-search";
-import { InventoryResultsTable } from "./inventory-results-table";
 import { ExportButtons } from "./export-buttons";
 import { FC, useMemo, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";

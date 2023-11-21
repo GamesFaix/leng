@@ -4,7 +4,7 @@ import { ColorRuleSelector } from "./color-rule-selector";
 import { ColorsSelector } from "./color-selector";
 import { FormatFilter } from "./format-filter";
 import { SetFilter } from "./set-filter";
-import { CollapsableCard } from "../collapsable-card";
+import { CollapsableCard } from "../../common/collapsable-card";
 import { ColorFilterRule, ColorFilter } from "../../../domain/filters";
 import { Format } from "../../../domain/formats";
 import { GroupingSelector } from "./grouping-selector";

@@ -1,5 +1,5 @@
 import { SortDirectionType } from "react-virtualized";
-import { CardSortFields } from "../../../../domain/inventory-search";
+import { CardSortFields } from "../../../domain/inventory-search";
 
 export type ReactVirtualizedSortArgs = {
   sortBy: string;

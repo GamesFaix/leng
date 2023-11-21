@@ -1,8 +1,8 @@
 import { TableCellProps } from "react-virtualized";
-import { SetSymbol } from "../../../common";
-import { selectors } from "../../../../store";
+import { SetSymbol } from "../../common";
+import { selectors } from "../../../store";
 import { useSelector } from "react-redux";
-import { Set } from "../../../../domain/encyclopedia";
+import { Set } from "../../../domain/encyclopedia";
 import { FC } from "react";
 
 const SetCellContents: FC<{ set: Set }> = ({ set }) => (
