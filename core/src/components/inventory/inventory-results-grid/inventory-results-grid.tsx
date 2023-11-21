@@ -8,6 +8,8 @@ type Props = {
   results: InventoryResult[];
 };
 
+const scale = 100;
+
 export const InventoryResultsGrid: FC<Props> = ({ results }) => {
   const rows = useMemo(() => chunk(results, 3), [results]);
 
@@ -15,7 +17,11 @@ export const InventoryResultsGrid: FC<Props> = ({ results }) => {
     ({ columnIndex, rowIndex, style }: GridCellProps) => {
       const result = rows[rowIndex][columnIndex];
       return result ? (
-        <ResultCard result={result} style={style} key={`${columnIndex},${rowIndex}`}/>
+        <ResultCard
+          result={result}
+          style={style}
+          key={`${columnIndex},${rowIndex}`}
+        />
       ) : (
         <span></span>
       );
@@ -25,15 +31,20 @@ export const InventoryResultsGrid: FC<Props> = ({ results }) => {
 
   // TODO: Add sort controls
 
+  const colWidth = scale * 2.5;
+  const rowHeight = scale * 3.5;
+  const width = colWidth * 3;
+  const height = rowHeight * 3;
+
   return (
     <Grid
       cellRenderer={renderCell}
       columnCount={3}
-      columnWidth={300}
-      width={900}
-      height={600}
+      columnWidth={colWidth}
+      width={width}
+      height={height}
       rowCount={rows.length}
-      rowHeight={200}
+      rowHeight={rowHeight}
     />
   );
 };
