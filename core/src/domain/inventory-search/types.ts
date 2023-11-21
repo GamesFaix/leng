@@ -1,4 +1,4 @@
-import { Card, CardFinish } from "../encyclopedia";
+import { CardFinish } from "../encyclopedia";
 import { CardFilter } from "../filters";
 import { BoxCard } from "../inventory/types";
 
@@ -13,11 +13,14 @@ export enum CardSortFields {
   Name = "Name",
   Number = "Number",
   ColorThenName = "ColorThenName",
+  Count = "Count",
 }
+
+export type SortDirection = "ASC" | "DESC";
 
 export type CardSortOptions = {
   field: CardSortFields;
-  direction: "asc" | "desc";
+  direction: SortDirection;
 };
 
 export type InventoryQuery = {

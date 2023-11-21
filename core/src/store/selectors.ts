@@ -51,6 +51,11 @@ export const selectors = {
       return state.encyclopedia.setIndex[abbrev] ?? null;
     };
   },
+  setOrNull(abbrev: string | null) {
+    return (state: RootState) => {
+      return abbrev ? state.encyclopedia.setIndex[abbrev] : null ?? null;
+    };
+  },
   card(scryfallId: string) {
     return (state: RootState) => {
       return state.encyclopedia.cardIndex[scryfallId] ?? null;

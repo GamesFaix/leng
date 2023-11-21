@@ -8,7 +8,7 @@ import {
   InventoryResultKey,
 } from "./types";
 import { Card, normalizeCollectorsNumber } from "../encyclopedia";
-import { groupBy, sortBy } from "lodash";
+import { groupBy, sortBy, sumBy } from "lodash";
 import { filterInventory } from "../filters";
 
 const getResultKey = (
@@ -91,15 +91,17 @@ const getCollectorsNumberSortKey = (card: BoxCard): string => {
   }
 };
 
-const sort = (
+const sortAsc = (
   results: InventoryResult[],
   options: CardSortOptions
 ): InventoryResult[] => {
   switch (options.field) {
     case CardSortFields.Name:
-      return sortBy(results, (r) => r.key.name, options.direction);
+      return sortBy(results, (r) => r.key.name);
     case CardSortFields.Number:
       return sortBy(results, (r) => r.key.collectorsNumber);
+    case CardSortFields.Count:
+      return sortBy(results, (r) => sumBy(r.cards, (c) => c.count));
     case CardSortFields.ColorThenName:
       return sortBy(
         results,
@@ -123,6 +125,13 @@ export const search = (
     encyclopedia,
     scryfallSearchResults
   );
-  const results = groupResults(filtered, query.grouping);
-  return sort(results, query.sorting);
+  let results = groupResults(filtered, query.grouping);
+  results = sortAsc(results, query.sorting);
+  if (query.sorting.direction === "DESC") {
+    results = results.reverse();
+  }
+  return results;
 };
+
+export const getCardCount = (results: InventoryResult[]): number =>
+  sumBy(results, (r) => sumBy(r.cards, (c) => c.count));
