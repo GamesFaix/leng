@@ -18,10 +18,10 @@ import { ResultsSection } from "./results-section";
 const startingQuery: InventoryQuery = {
   filter: defaultCardFilter,
   grouping: {
-    combineSets: false,
-    combineArts: false,
-    combineFinishes: false,
-    combineLanguages: false,
+    combineSets: true,
+    combineArts: true,
+    combineFinishes: true,
+    combineLanguages: true,
   },
   sorting: { field: CardSortFields.ColorThenName, direction: "ASC" },
 };
