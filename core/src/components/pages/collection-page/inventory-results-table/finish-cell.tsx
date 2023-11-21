@@ -16,6 +16,6 @@ const format = (finish: CardFinish | null): string => {
   }
 };
 
-export const FinishCell: FC<TableCellProps> = (props: TableCellProps) => (
-  <div>{format(props.cellData)}</div>
+export const FinishCell: FC<TableCellProps> = ({ cellData }) => (
+  <div>{format(cellData)}</div>
 );

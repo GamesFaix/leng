@@ -14,8 +14,8 @@ const SetCellContents: FC<{ set: Set }> = ({ set }) => (
 
 const SetCellEmptyContents: FC = () => <>{`(Multiple)`}</>;
 
-export const SetCell: FC<TableCellProps> = (props: TableCellProps) => {
-  const set = useSelector(selectors.setOrNull(props.cellData));
+export const SetCell: FC<TableCellProps> = ({ cellData }) => {
+  const set = useSelector(selectors.setOrNull(cellData));
   return (
     <div className="set-container">
       {set ? <SetCellContents set={set} /> : <SetCellEmptyContents />}

@@ -10,6 +10,8 @@ import { NameCell } from "./name-cell";
 import { SetCell } from "./set-cell";
 import { FinishCell } from "./finish-cell";
 import { ReactVirtualizedSortArgs, fromSortBy, toSortBy } from "./sorting";
+import { VersionCell } from "./version-cell";
+import { LanguageCell } from "./language-cell";
 
 type Props = {
   query: InventoryQuery;
@@ -56,14 +58,24 @@ export const InventoryResultsTable: FC<Props> = ({
         dataKey="setAbbrev"
         cellRenderer={(props) => <SetCell {...props} />}
       />
-      <Column width={100} label="Version" dataKey="version" />
+      <Column
+        width={100}
+        label="Version"
+        dataKey="version"
+        cellRenderer={(props) => <VersionCell {...props} />}
+      />
       <Column
         width={50}
         label="Finish"
         dataKey="finish"
         cellRenderer={(props) => <FinishCell {...props} />}
       />
-      <Column width={100} label="Lang." dataKey="lang" />
+      <Column
+        width={100}
+        label="Lang."
+        dataKey="lang"
+        cellRenderer={(props) => <LanguageCell {...props} />}
+      />
     </Table>
   );
 };
