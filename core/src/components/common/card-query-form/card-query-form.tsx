@@ -14,7 +14,7 @@ type Props = {
   submitScryfallSearch: () => void;
 };
 
-export const CardFilterForm = (props: Props) => {
+export const CardQueryForm = (props: Props) => {
   function updateNameQuery(e: React.ChangeEvent<HTMLInputElement>) {
     props.onChange({ ...props.filter, nameQuery: e.target.value });
   }

@@ -1,5 +1,5 @@
 import { Card, Container, Typography } from "@mui/material";
-import { CardFilterForm } from "../../common";
+import { CardQueryForm } from "../../common";
 import { CardFilter, defaultCardFilter } from "../../../domain/filters";
 import {
   CardSortFields,
@@ -69,7 +69,7 @@ export const CollectionPage: FC = () => {
         />
       </div>
       <br />
-      <CardFilterForm
+      <CardQueryForm
         filter={query.filter}
         onChange={setFilter}
         submitScryfallSearch={searchScryfall}

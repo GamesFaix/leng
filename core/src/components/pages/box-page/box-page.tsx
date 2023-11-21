@@ -4,7 +4,7 @@ import "react-virtualized/styles.css";
 import { AddCardForm, EditCardForm } from "./card-form";
 import BoxHeaderCard from "./box-header-card";
 import CardSelectionActionsForm from "./card-selection-actions-form";
-import { CardFilterForm } from "../../common";
+import { CardQueryForm } from "../../common";
 import { CardFilter } from "../../../domain/filters";
 import { BoxCard } from "../../../domain/inventory";
 
@@ -38,7 +38,7 @@ const BoxPage = (props: Props) => {
         save={props.save}
       />
       <br />
-      <CardFilterForm
+      <CardQueryForm
         filter={props.filter}
         onChange={props.setFilter}
         submitScryfallSearch={props.submitScryfallSearch}
