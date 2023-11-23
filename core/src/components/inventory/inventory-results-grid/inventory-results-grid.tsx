@@ -33,7 +33,11 @@ export const InventoryResultsGrid: FC<Props> = ({
         const result = rows[rowIndex][columnIndex];
         return (
           <Cell
-            key={result ? getResultKeyString(result.key) : ""}
+            key={
+              result
+                ? getResultKeyString(result.key)
+                : `(${columnIndex}, ${rowIndex})`
+            }
             result={result}
             inspected={inspected}
             setInspected={setInspected}

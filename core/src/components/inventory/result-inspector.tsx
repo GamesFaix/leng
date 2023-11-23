@@ -1,8 +1,9 @@
-import { Card } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import { FC } from "react";
 import { InventoryResult } from "../../domain/inventory-search";
 import { ResultDetailsTable } from "./result-details-table/result-details-table";
 import { CardImage } from "../common";
+import { sumBy } from "lodash";
 
 type Props = {
   result: InventoryResult;
@@ -11,10 +12,12 @@ type Props = {
 };
 
 export const ResultInspector: FC<Props> = ({ result, close, showImage }) => {
+  const count = sumBy(result.cards, c => c.count);
+
   return (
     <Card sx={{ padding: 1 }}>
-      {result.key.name}
-      <br />
+      <Typography variant="h6">{result.key.name}</Typography>
+      <Typography variant="body2">{`${count} copies / ${result.cards.length} variants`}</Typography>
       <ResultDetailsTable result={result} />
       <br />
       {showImage && <CardImage scryfallId={result.cards[0].scryfallId} />}
