@@ -16,9 +16,7 @@ const getResultKey = (
   options: CardGroupingOptions
 ): InventoryResultKey => {
   const setCode = options.combineSets ? null : card.setAbbrev;
-  const collectorsNumber = options.combineArts
-    ? null
-    : normalizeCollectorsNumber(card.collectorsNumber);
+  const collectorsNumber = options.combineArts ? null : card.collectorsNumber;
   const finish = options.combineFinishes ? null : card.finish;
   const lang = options.combineLanguages ? null : card.lang;
   return {
@@ -31,9 +29,13 @@ const getResultKey = (
 };
 
 export const getResultKeyString = (key: InventoryResultKey): string =>
-  `${key.name}|${key.setCode}|${key.collectorsNumber}|${key.finish}|${key.lang}`;
+  `${key.name}|${key.setCode}|${
+    key.collectorsNumber
+      ? normalizeCollectorsNumber(key.collectorsNumber)
+      : null
+  }|${key.finish}|${key.lang}`;
 
-export const haveMatchingKeys = (r1: InventoryResult, r2: InventoryResult) => 
+export const haveMatchingKeys = (r1: InventoryResult, r2: InventoryResult) =>
   getResultKeyString(r1.key) === getResultKeyString(r2.key);
 
 const groupResults = (

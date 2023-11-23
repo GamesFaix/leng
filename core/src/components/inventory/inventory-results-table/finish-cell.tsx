@@ -1,9 +1,7 @@
 import { TableCellProps } from "react-virtualized";
 import { CardFinish } from "../../../domain/encyclopedia";
 import { FC } from "react";
-
-const capitalize = (str: string) =>
-  str.slice(0, 1).toUpperCase() + str.slice(1);
+import { capitalize } from "lodash";
 
 const format = (finish: CardFinish | null): string => {
   switch (finish) {

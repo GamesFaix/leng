@@ -1,17 +1,38 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import { CSSProperties, FC } from "react";
-import { InventoryResult } from "../../domain/inventory-search";
+import {
+  InventoryResult,
+  InventoryResultKey,
+} from "../../domain/inventory-search";
 import { ResultDetailsTable } from "./result-details-table/result-details-table";
 import { CardImage } from "../common";
-import { sumBy } from "lodash";
+import { capitalize, sumBy } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../ui";
+import { CardFinish } from "../../domain/encyclopedia";
 
 type Props = {
   result: InventoryResult;
   showImage: boolean;
   close: () => void;
   style?: CSSProperties;
+};
+
+const getResultKeyDescription = (key: InventoryResultKey) => {
+  let desc = "";
+  if (key.setCode) {
+    desc += `${key.setCode.toUpperCase()} `;
+  }
+  if (key.collectorsNumber) {
+    desc += `#${key.collectorsNumber} `;
+  }
+  if (key.finish) {
+    desc += `${capitalize(key.finish)} `;
+  }
+  if (key.lang) {
+    desc += key.lang;
+  }
+  return desc;
 };
 
 export const ResultInspector: FC<Props> = ({
@@ -34,6 +55,9 @@ export const ResultInspector: FC<Props> = ({
           </IconButton>
         </Box>
       </Box>
+      <Typography variant="body2">
+        {getResultKeyDescription(result.key)}
+      </Typography>
       <Typography variant="body2">{`${count} copies / ${result.cards.length} variants`}</Typography>
       <ResultDetailsTable result={result} />
       <br />
