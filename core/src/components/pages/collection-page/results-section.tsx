@@ -58,7 +58,11 @@ export const ResultsSection: FC<Props> = ({ query, results, setQuery }) => {
         )}
       </Card>
       {inspected !== null && (
-        <ResultInspector result={inspected} close={() => setInspected(null)} />
+        <ResultInspector
+          result={inspected}
+          close={() => setInspected(null)}
+          showImage={view === "table"}
+        />
       )}
     </div>
   );
