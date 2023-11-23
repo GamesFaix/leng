@@ -1,5 +1,5 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
-import { FC } from "react";
+import { CSSProperties, FC } from "react";
 import { InventoryResult } from "../../domain/inventory-search";
 import { ResultDetailsTable } from "./result-details-table/result-details-table";
 import { CardImage } from "../common";
@@ -11,13 +11,19 @@ type Props = {
   result: InventoryResult;
   showImage: boolean;
   close: () => void;
+  style?: CSSProperties;
 };
 
-export const ResultInspector: FC<Props> = ({ result, close, showImage }) => {
+export const ResultInspector: FC<Props> = ({
+  result,
+  close,
+  showImage,
+  style,
+}) => {
   const count = sumBy(result.cards, (c) => c.count);
 
   return (
-    <Card sx={{ padding: 1 }}>
+    <Card sx={{ padding: 1 }} style={style}>
       <Box display="flex" alignItems="center">
         <Box flexGrow={1}>
           <Typography variant="h6">{result.key.name}</Typography>

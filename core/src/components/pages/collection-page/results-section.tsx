@@ -34,7 +34,7 @@ export const ResultsSection: FC<Props> = ({ query, results, setQuery }) => {
   );
 
   return (
-    <div style={{ display: "flex" }}>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
       <Card sx={{ padding: 1 }}>
         <RadioGroup value={view} onChange={onViewChanged} row>
           <FormControlLabel value="grid" control={<Radio />} label="Grid" />
@@ -62,6 +62,7 @@ export const ResultsSection: FC<Props> = ({ query, results, setQuery }) => {
           result={inspected}
           close={() => setInspected(null)}
           showImage={view === "table"}
+          style={{ marginLeft: "6px" }}
         />
       )}
     </div>
