@@ -31,7 +31,7 @@ export const ResultDetailsTable: FC<Props> = ({ result }) => {
 
   return (
     <Table
-      width={500}
+      width={255}
       height={100}
       headerHeight={0}
       rowHeight={30}

@@ -3,14 +3,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { encyclopediaActions } from "../../store/encyclopedia";
 import { selectors } from "../../store";
 import { useImagePaths } from "../../hooks";
-import { useEffect, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 
 type Props = {
   scryfallId: string;
+  onClick?: () => void;
 };
 
-const LoadedImage = (props: Props) => {
-  const card = useSelector(selectors.card(props.scryfallId));
+const LoadedImage: FC<Props> = ({ scryfallId, onClick }) => {
+  const card = useSelector(selectors.card(scryfallId));
   const settings = useSelector(selectors.settings);
   const imagePathProvider = useImagePaths();
   const imagePath = useMemo(
@@ -25,11 +26,12 @@ const LoadedImage = (props: Props) => {
         width: "100%",
         height: "100%",
       }}
+      onClick={onClick}
     />
   );
 };
 
-export const CardImage = (props: Props) => {
+export const CardImage: FC<Props> = (props) => {
   const dispatch = useDispatch();
   const isImageLoaded = useSelector(
     selectors.isCardImageLoaded(props.scryfallId)

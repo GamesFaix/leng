@@ -1,9 +1,10 @@
-import { InventoryResult } from "../../../domain/inventory-search";
+import { InventoryResult, InventoryResultKey } from "../../../domain/inventory-search";
 import { CardFinish, Language } from "../../../domain/encyclopedia";
 import { sumBy, uniq } from "lodash";
 import { BoxCard } from "../../../domain/inventory";
 
 export type InventoryResultRowModel = {
+  key: InventoryResultKey;
   name: string;
   count: number;
 
@@ -24,6 +25,7 @@ export const toRowModel = (
   result: InventoryResult
 ): InventoryResultRowModel => {
   return {
+    key: result.key,
     name: result.key.name,
     count: sumBy(result.cards, (c) => c.count),
     version: uniqueOrNull(result.cards, (c) => c.collectorsNumber),

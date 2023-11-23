@@ -30,8 +30,11 @@ const getResultKey = (
   };
 };
 
-const getResultKeyString = (key: InventoryResultKey): string =>
+export const getResultKeyString = (key: InventoryResultKey): string =>
   `${key.name}|${key.setCode}|${key.collectorsNumber}|${key.finish}|${key.lang}`;
+
+export const haveMatchingKeys = (r1: InventoryResult, r2: InventoryResult) => 
+  getResultKeyString(r1.key) === getResultKeyString(r2.key);
 
 const groupResults = (
   cards: BoxCard[],

@@ -4,6 +4,7 @@ import {
   CardSortOptions,
   InventoryQuery,
   InventoryResult,
+  haveMatchingKeys,
 } from "../../../domain/inventory-search";
 import { toRowModel } from "./model";
 import { NameCell } from "./name-cell";
@@ -17,12 +18,16 @@ type Props = {
   query: InventoryQuery;
   results: InventoryResult[];
   updateSortOptions: (options: CardSortOptions) => void;
+  inspected: InventoryResult | null;
+  setInspected: (result: InventoryResult | null) => void;
 };
 
 export const InventoryResultsTable: FC<Props> = ({
   query,
   results,
   updateSortOptions,
+  inspected,
+  setInspected,
 }) => {
   const sortInner = useCallback(
     (args: ReactVirtualizedSortArgs) => {
@@ -35,6 +40,18 @@ export const InventoryResultsTable: FC<Props> = ({
   );
 
   const rows = useMemo(() => results.map(toRowModel), [results]);
+
+  const toggleInspected = useCallback(
+    (result: InventoryResult) => {
+      console.log(result);
+      if (inspected && haveMatchingKeys(result, inspected)) {
+        setInspected(null);
+      } else {
+        setInspected(result);
+      }
+    },
+    [inspected]
+  );
 
   return (
     <Table
@@ -49,7 +66,17 @@ export const InventoryResultsTable: FC<Props> = ({
       sortDirection={query.sorting.direction}
     >
       <Column label="Ct." dataKey="count" width={50} />
-      <Column label="Name" dataKey="name" width={300} cellRenderer={NameCell} />
+      <Column
+        label="Name"
+        dataKey="name"
+        width={300}
+        cellRenderer={(props) => (
+          <NameCell
+            onClick={() => toggleInspected(props.rowData)}
+            {...props}
+          />
+        )}
+      />
 
       {/* Can't inline <SetCell/>, or you'll get an invalid hooks error */}
       <Column

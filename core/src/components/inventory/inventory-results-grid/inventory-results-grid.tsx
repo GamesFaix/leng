@@ -1,33 +1,24 @@
 import { Grid, GridCellProps } from "react-virtualized";
-import { FC, useCallback, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { InventoryResult } from "../../../domain/inventory-search";
-import { ResultCard } from "./result-card";
 import { chunk } from "lodash";
+import { getResultKeyString } from "../../../domain/inventory-search";
+import { Cell } from "./cell";
 
 type Props = {
   results: InventoryResult[];
+  inspected: InventoryResult | null;
+  setInspected: (result: InventoryResult | null) => void;
 };
 
 const scale = 100;
 
-export const InventoryResultsGrid: FC<Props> = ({ results }) => {
+export const InventoryResultsGrid: FC<Props> = ({
+  results,
+  inspected,
+  setInspected,
+}) => {
   const rows = useMemo(() => chunk(results, 3), [results]);
-
-  const renderCell = useCallback(
-    ({ columnIndex, rowIndex, style }: GridCellProps) => {
-      const result = rows[rowIndex][columnIndex];
-      return result ? (
-        <ResultCard
-          result={result}
-          style={style}
-          key={`${columnIndex},${rowIndex}`}
-        />
-      ) : (
-        <span></span>
-      );
-    },
-    [rows]
-  );
 
   // TODO: Add sort controls
 
@@ -38,7 +29,18 @@ export const InventoryResultsGrid: FC<Props> = ({ results }) => {
 
   return (
     <Grid
-      cellRenderer={renderCell}
+      cellRenderer={({ columnIndex, rowIndex, style }: GridCellProps) => {
+        const result = rows[rowIndex][columnIndex];
+        return (
+          <Cell
+            key={result ? getResultKeyString(result.key) : ""}
+            result={result}
+            inspected={inspected}
+            setInspected={setInspected}
+            style={style}
+          />
+        );
+      }}
       columnCount={3}
       columnWidth={colWidth}
       width={width}
