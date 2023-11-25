@@ -9,7 +9,6 @@ import { CardImage } from "../common";
 import { capitalize, sumBy } from "lodash";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icons } from "../../ui";
-import { CardFinish } from "../../domain/encyclopedia";
 
 type Props = {
   result: InventoryResult;
