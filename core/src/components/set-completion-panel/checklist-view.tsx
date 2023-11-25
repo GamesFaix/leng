@@ -1,8 +1,8 @@
 import { Checkbox, Typography } from "@mui/material";
-import { normalizeCollectorsNumber } from "../../../domain/binder-report";
 import { orderBy } from "lodash";
 import { CheckListItem, CheckListVisibility } from "./model";
 import { useMemo } from "react";
+import { normalizeCollectorsNumber } from "../../domain/encyclopedia";
 
 type Props = {
   checklist: CheckListItem[];

@@ -1,5 +1,5 @@
 import { call, put, select, takeEvery } from "redux-saga/effects";
-import { getCards } from "../domain/filters";
+import { filterInventory } from "../domain/filters";
 import { toTappedOutCsvExportCards } from "../domain/export/tappedout-csv-export";
 import {
   TappedOutCsvExportAction,
@@ -25,7 +25,7 @@ export const getTappedOutCsvExportSaga = (
     try {
       const settings: AppSettings = yield select(selectors.settings);
       const boxes: Box[] = yield select(selectors.boxes);
-      const cards = getCards(boxes, defaultCardFilter, {}, []);
+      const cards = filterInventory(boxes, defaultCardFilter, {}, []);
       const cardIndex: CardIndex = yield select(selectors.cardIndex);
       const csvCards = toTappedOutCsvExportCards(cards, cardIndex);
       yield call(() => provider.exportCards(settings, csvCards));

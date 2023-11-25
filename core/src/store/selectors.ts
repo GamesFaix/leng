@@ -2,7 +2,7 @@ import { groupBy, orderBy, uniq } from "lodash";
 import { RootState } from ".";
 import { organizePages } from "../domain/binder-report";
 import { getCardsFromBoxes } from "../domain/filters";
-import { SetGroup } from "../domain/encyclopedia";
+import { Card, SetGroup } from "../domain/encyclopedia";
 
 export const selectors = {
   preload: (state: RootState) => state.preload,
@@ -18,7 +18,7 @@ export const selectors = {
       return orderBy(sets, (s) => s.name);
     };
   },
-  setsWithCards: (state: RootState) => {
+  setsWithCards: (state: RootState) : Record<string, Card[]>=> {
     const allCards = state.encyclopedia.cards;
     const bySet = groupBy(allCards, (c) => c.set);
     return bySet;
@@ -49,6 +49,11 @@ export const selectors = {
   set(abbrev: string) {
     return (state: RootState) => {
       return state.encyclopedia.setIndex[abbrev] ?? null;
+    };
+  },
+  setOrNull(abbrev: string | null) {
+    return (state: RootState) => {
+      return abbrev ? state.encyclopedia.setIndex[abbrev] : null ?? null;
     };
   },
   card(scryfallId: string) {

@@ -15,6 +15,7 @@ export type BoxCard = {
     versionLabel: string;
     normalizedName: string;
     legalities: Legalities;
+    type: string;
   };
   
   /** A group of cards in a collection, saved in a single box file. (It could represent a binder, bulk box, deck, etc.) */

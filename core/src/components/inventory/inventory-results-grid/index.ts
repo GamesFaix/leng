@@ -1,0 +1,1 @@
+export { InventoryResultsGrid } from './inventory-results-grid';

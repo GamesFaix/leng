@@ -1,87 +1,70 @@
-import { Card, Container, IconButton, Typography } from "@mui/material";
-import CardsTable from "./cards-table";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { icons } from "../../../ui/fontawesome";
-import { CardFilterForm } from "../../common";
-import { useCapabilities } from "../../../hooks";
-import { CardFilter } from "../../../domain/filters";
-import { BoxCard } from "../../../domain/inventory";
-import { FC } from "react";
+import { Container, Typography } from "@mui/material";
+import { InventoryQueryForm } from "../../inventory";
+import { defaultCardFilter } from "../../../domain/filters";
+import {
+  CardSortFields,
+  InventoryQuery,
+  getCardCount,
+  search,
+} from "../../../domain/inventory-search";
+import { ExportButtons } from "./export-buttons";
+import { FC, useMemo, useCallback, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { selectors } from "../../../store";
+import { inventoryActions } from "../../../store/inventory";
+import { searchActions } from "../../../store/search";
+import { ResultsSection } from "./results-section";
 
-type Props = {
-  cards: BoxCard[];
-  cardCount: number;
-  filter: CardFilter;
-  setFilter: (filter: CardFilter) => void;
-  exportTappedOutCsv: () => void;
-  exportWebJson: () => void;
-  submitScryfallSearch: () => void;
+const startingQuery: InventoryQuery = {
+  filter: defaultCardFilter,
+  grouping: {
+    combineSets: true,
+    combineArts: true,
+    combineFinishes: true,
+    combineLanguages: true,
+  },
+  sorting: { field: CardSortFields.ColorThenName, direction: "ASC" },
 };
 
-const ExportButtons: FC<Partial<Props>> = ({
-  exportTappedOutCsv,
-  exportWebJson,
-}) => {
-  const caps = useCapabilities();
+export const CollectionPage: FC = () => {
+  const [query, setQuery] = useState(startingQuery);
+  const dispatch = useDispatch();
+  const boxes = useSelector(selectors.boxes);
+  const setsWithCards = useSelector(selectors.setsWithCards);
+  const scryfallResults = useSelector(selectors.searchResults);
 
-  return (
-    <div>
-      {exportTappedOutCsv && caps.export?.tappedOutCsv && (
-        <IconButton
-          title="Export TappedOut CSV"
-          color="primary"
-          onClick={() => exportTappedOutCsv()}
-        >
-          <FontAwesomeIcon icon={icons.export} />
-        </IconButton>
-      )}
-      {exportWebJson && caps.export?.webJson && (
-        <IconButton
-          title="Export Leng-Web JSON"
-          color="primary"
-          onClick={() => exportWebJson()}
-        >
-          <FontAwesomeIcon icon={icons.export} />
-        </IconButton>
-      )}
-    </div>
+  const results = useMemo(
+    () => search(boxes, query, setsWithCards, scryfallResults),
+    [boxes, setsWithCards, scryfallResults, query]
   );
-};
 
-const CollectionPage: FC<Props> = ({
-  exportTappedOutCsv,
-  exportWebJson,
-  cardCount,
-  filter,
-  setFilter,
-  submitScryfallSearch,
-  cards,
-}) => {
+  const searchScryfall = useCallback(
+    () => dispatch(searchActions.searchStart(query.filter.scryfallQuery)),
+    [query.filter.scryfallQuery, dispatch]
+  );
+
   return (
     <Container style={{ paddingTop: "12px" }}>
       <div style={{ display: "flex" }}>
         <div>
           <Typography variant="h4">Collection</Typography>
           <Typography sx={{ fontStyle: "italic" }}>
-            {cardCount} cards
+            {getCardCount(results)} cards
           </Typography>
         </div>
         <ExportButtons
-          exportTappedOutCsv={exportTappedOutCsv}
-          exportWebJson={exportWebJson}
+          exportTappedOutCsv={() => dispatch(inventoryActions.csvExportStart())}
+          exportWebJson={() => dispatch(inventoryActions.webExportStart())}
         />
       </div>
       <br />
-      <CardFilterForm
-        filter={filter}
-        onChange={setFilter}
-        submitScryfallSearch={submitScryfallSearch}
+      <InventoryQueryForm
+        value={query}
+        onChange={setQuery}
+        submitScryfallSearch={searchScryfall}
       />
       <br />
-      <Card sx={{ padding: 1 }}>
-        <CardsTable cards={cards} />
-      </Card>
+      <ResultsSection query={query} setQuery={setQuery} results={results} />
     </Container>
   );
 };
-export default CollectionPage;

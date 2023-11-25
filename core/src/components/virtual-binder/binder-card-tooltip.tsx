@@ -3,13 +3,13 @@ import { orderBy } from "lodash";
 import { CardFinish, Language } from "../../domain/encyclopedia";
 import { BoxCard } from "../../domain/inventory";
 import { FlagIcon } from "../common";
-import { Fragment } from "react";
+import { FC, Fragment } from "react";
 
 type Props = {
   cardGroup: BoxCard[];
 };
 
-function getLanguageHint(lang: Language) {
+const getLanguageHint = (lang: Language) => {
   switch (lang) {
     case Language.ChineseSimplified:
       return "(Simp.)";
@@ -20,7 +20,7 @@ function getLanguageHint(lang: Language) {
   }
 }
 
-function getCardLabel(card: BoxCard) {
+const getCardLabel = (card: BoxCard) => {
   const finish = card.finish === CardFinish.Normal ? "" : card.finish; // TODO: Capitalize
   const langHint = getLanguageHint(card.lang);
 
@@ -34,7 +34,7 @@ function getCardLabel(card: BoxCard) {
   );
 }
 
-function sortCardGroup(cardGroup: BoxCard[]): BoxCard[] {
+const sortCardGroup = (cardGroup: BoxCard[]): BoxCard[] => {
   // English first, then alphabetical by language; foil after non-foil per language
   const englishCards = cardGroup.filter((c) => c.lang === Language.English);
   const nonEnglishCards = cardGroup.filter((c) => c.lang !== Language.English);
@@ -47,10 +47,10 @@ function sortCardGroup(cardGroup: BoxCard[]): BoxCard[] {
   return sortedEnglish.concat(sortedNonEnglish);
 }
 
-const BinderCardTooltip = (props: Props) => {
-  const aCard = props.cardGroup[0];
-  const sortedCards = sortCardGroup(props.cardGroup);
-
+export const BinderCardTooltip : FC<Props> = ({ cardGroup }) => {
+  const aCard = cardGroup[0];
+  const sortedCards = sortCardGroup(cardGroup);
+  
   return (
     <Typography>
       {aCard.name}
@@ -60,4 +60,3 @@ const BinderCardTooltip = (props: Props) => {
     </Typography>
   );
 };
-export default BinderCardTooltip;

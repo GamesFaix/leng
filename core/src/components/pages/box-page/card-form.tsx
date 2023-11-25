@@ -322,6 +322,7 @@ const CardForm = (props: Props) => {
       versionLabel: getVersionLabel(selectedCard),
       normalizedName: normalizeName(state.cardName),
       legalities: selectedCard.legalities,
+      type: selectedCard.type
     };
 
     props.onSubmit(card);

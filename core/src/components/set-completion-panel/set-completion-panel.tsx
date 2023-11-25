@@ -7,10 +7,10 @@ import {
   TableContainer,
 } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectors } from "../../../store";
-import { Set, Card as ScryfallCard } from "../../../domain/encyclopedia";
-import { getCardsFromBoxes } from "../../../domain/filters";
-import { BoxCard } from "../../../domain/inventory";
+import { selectors } from "../../store";
+import { Set, Card as ScryfallCard } from "../../domain/encyclopedia";
+import { getCardsFromBoxes } from "../../domain/filters";
+import { BoxCard } from "../../domain/inventory";
 import {
   CheckListVisibility,
   getRarity,
@@ -75,7 +75,7 @@ type Props = {
   parentSetCode: string | null;
 };
 
-const SetStatsPanel = (props: Props) => {
+export const SetCompletionPanel = (props: Props) => {
   const boxes = useSelector(selectors.boxes);
   const sets = useSelector(selectors.sets);
   const cardsBySet = useSelector(selectors.setsWithCards);
@@ -188,4 +188,3 @@ const SetStatsPanel = (props: Props) => {
     </div>
   );
 };
-export default SetStatsPanel;
