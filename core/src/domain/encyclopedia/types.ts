@@ -17,6 +17,7 @@ export type Card = {
   num: string;
   color_identity: Color[];
   colors?: Color[];
+  finishes: CardFinish[];
   foil: boolean;
   frame_effects?: (keyof typeof FrameEffect)[];
   id: string;

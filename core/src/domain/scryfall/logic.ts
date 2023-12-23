@@ -55,6 +55,7 @@ const removeExtraCardProperties = (c: ScryCard): Card => ({
   num: c.collector_number,
   color_identity: c.color_identity,
   colors: c.colors,
+  finishes: (c as any).finishes,
   foil: c.foil,
   frame_effects: c.frame_effects,
   id: c.id,

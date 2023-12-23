@@ -45,6 +45,8 @@ type State = {
   lang: Language;
 };
 
+type CardViewModel = Card & { label: string }
+
 enum SubmitMode {
   ClearAll,
   ClearAllButName,
@@ -206,7 +208,7 @@ const CardForm = (props: Props) => {
       return { ...s, label: `${s.name} (${s.code.toUpperCase()})` };
     }
   );
-  const cardVersionOptions = useSelector(
+  const cardVersionOptions : CardViewModel[] = useSelector(
     selectors.cardsOfNameAndSetName(state.cardName, state.setName)
   )
     .map((c) => {
@@ -214,9 +216,9 @@ const CardForm = (props: Props) => {
     })
     .sort(compareCards);
   const selectedSet = setOptions.find((s) => s.name === state.setName) ?? null;
-  const selectedCard =
+  const selectedCard : CardViewModel | null =
     cardVersionOptions.find((c) => c.id === state.scryfallId) ?? null;
-  const finishOptions = (selectedCard as any)?.finishes ?? [];
+  const finishOptions = selectedCard?.finishes ?? [];
 
   useEffect(() => {
     if (setOptions.length === 1 && !state.setName) {
